@@ -15042,7 +15042,7 @@ strong~p {
 }
 
 .login-card {
-    background-color: rgba(36, 105, 92, 0.1);
+    background-color:#006A4E;
     height: 100vh;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -15061,6 +15061,7 @@ strong~p {
 .login-form {
     padding: 30px;
     width: 450px;
+    border-radius:20px;
     background-color: #fff;
     -webkit-box-pack: center;
     -ms-flex-pack: center;
