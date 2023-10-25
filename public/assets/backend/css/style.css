@@ -14594,7 +14594,7 @@ thead, tbody, tfoot, tr, td, th {
       top: 55px; }
 
 .peity-charts svg {
-  width: 100%;
+  /* width: 100%; */
   height: 250px; }
 
 .peity-charts.peity-chart-primary svg polygon {
