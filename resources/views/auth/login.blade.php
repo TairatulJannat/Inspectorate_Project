@@ -32,13 +32,16 @@
             <div class="loader-p"></div>
         </div>
     </div>
-    <section>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-5"><img class="bg-img-cover bg-center" src="{{ asset('assets/backend/images/logo/army_background.jpg') }}" alt="looginpage">
-                </div>
-                <div class="col-xl-7 p-0">
-                    <div class="login-card">
+
+</div>
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6"><img class="bg-img-cover bg-center" src="{{ asset('assets/backend/images/logo/bg_3.jpg') }}" alt="looginpage">
+            </div>
+            <div class="col-xl-6 p-0">
+                <div class="login-card">
+
 
                         <form class="theme-form login-form" action="{{ route('login') }}" method="post">
                             @csrf
@@ -79,9 +82,12 @@
                                 <button class="btn btn-primary btn-block" type="submit">Login</button>
                             </div>
 
+
+
                             {{-- <div class="login-social-title">--}}
                             {{-- <h5>Security Through Knowledge</h5>--}}
                             {{-- </div>--}}
+
 
 
                             <div class="form-group">
