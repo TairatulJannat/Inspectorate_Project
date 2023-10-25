@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('title') - {{ config('app.name', 'Hall Booking') }}</title>
+    <title>@yield('title') - {{ config('app.name', 'Inspectorate') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('assets/backend/images/logo/AWT Logo.png') }}" type="image/x-icon">
