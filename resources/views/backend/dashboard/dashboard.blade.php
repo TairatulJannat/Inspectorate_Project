@@ -738,7 +738,7 @@
                         </rect>
 
                         <!-- Text for column names -->
-                        <text x="30" y="100" font-family="Arial"  fill="#000"> IE &amp; I</text>
+                        <text x="30" y="100" font-family="Arial" font-size="12" fill="#000"> IE &amp; I</text>
                         <text x="100" y="155" font-family="Arial" font-size="12" fill="#000">IV &amp; EE</text>
                         <text x="170" y="10" font-family="Arial" font-size="12" fill="#000">IGS &amp; C</text>
                         <text x="240" y="73" font-family="Arial" font-size="12" fill="#000">IA &amp; E</text>
