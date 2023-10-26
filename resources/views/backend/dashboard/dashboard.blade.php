@@ -20,7 +20,7 @@
                 <div class="card-body" style="position: relative;">
                     <div id="basic-bar" style="min-height: 0px;">
                         <div id="apexchartspadqzjhq" class="apexcharts-canvas apexchartspadqzjhq light"
-                            style="width: 580px; height: 350px;"><svg id="SvgjsSvg5416" width="580" height="350"
+                            style="width: 580px; height: 350px;"><svg id="SvgjsSvg5416" width="500" height="350"
                                 xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
                                 xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS"
                                 transform="translate(0, 0)" style="background: transparent;">
@@ -58,62 +58,50 @@
                                                 font-family="Helvetica, Arial, sans-serif" x="-15" y="70.59767272727274"
                                                 text-anchor="end" dominant-baseline="auto" font-size="11px"
                                                 font-weight="regular" fill="#373d3f" class="apexcharts-yaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">Prelim.
-                                                Spec.</text><text id="SvgjsText5461"
+                                                style="font-family: Helvetica, Arial, sans-serif;"></text><text id="SvgjsText5461"
                                                 font-family="Helvetica, Arial, sans-serif" x="-15" y="98.33247272727274"
                                                 text-anchor="end" dominant-baseline="auto" font-size="11px"
                                                 font-weight="regular" fill="#373d3f" class="apexcharts-yaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">Gen. Spec.</text><text
+                                                style="font-family: Helvetica, Arial, sans-serif;">Prelim.
+                                                Spec.</text><text
                                                 id="SvgjsText5462" font-family="Helvetica, Arial, sans-serif" x="-15"
                                                 y="126.06727272727275" text-anchor="end" dominant-baseline="auto"
                                                 font-size="11px" font-weight="regular" fill="#373d3f"
                                                 class="apexcharts-yaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">Model Spec.</text><text
+                                                style="font-family: Helvetica, Arial, sans-serif;">Gen. Spec.</text><text
                                                 id="SvgjsText5463" font-family="Helvetica, Arial, sans-serif" x="-15"
                                                 y="153.80207272727276" text-anchor="end" dominant-baseline="auto"
                                                 font-size="11px" font-weight="regular" fill="#373d3f"
                                                 class="apexcharts-yaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">Indent</text><text
+                                                style="font-family: Helvetica, Arial, sans-serif;">Model Spec.</text><text
                                                 id="SvgjsText5464" font-family="Helvetica, Arial, sans-serif" x="-15"
                                                 y="181.53687272727277" text-anchor="end" dominant-baseline="auto"
                                                 font-size="11px" font-weight="regular" fill="#373d3f"
                                                 class="apexcharts-yaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">Offer</text><text
+                                                style="font-family: Helvetica, Arial, sans-serif;">Indent</text><text
                                                 id="SvgjsText5465" font-family="Helvetica, Arial, sans-serif" x="-15"
                                                 y="209.27167272727277" text-anchor="end" dominant-baseline="auto"
                                                 font-size="11px" font-weight="regular" fill="#373d3f"
                                                 class="apexcharts-yaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">Contact
+                                                style="font-family: Helvetica, Arial, sans-serif;">Offer
                                             </text><text id="SvgjsText5466" font-family="Helvetica, Arial, sans-serif"
                                                 x="-15" y="237.00647272727278" text-anchor="end" dominant-baseline="auto"
                                                 font-size="11px" font-weight="regular" fill="#373d3f"
                                                 class="apexcharts-yaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">China</text><text
+                                                style="font-family: Helvetica, Arial, sans-serif;">Contract</text><text
                                                 id="SvgjsText5467" font-family="Helvetica, Arial, sans-serif" x="-15"
                                                 y="264.74127272727276" text-anchor="end" dominant-baseline="auto"
                                                 font-size="11px" font-weight="regular" fill="#373d3f"
                                                 class="apexcharts-yaxis-label "
                                                 style="font-family: Helvetica, Arial, sans-serif;">I-Note</text></g>
-                                        <line id="SvgjsLine5468" x1="0" y1="278.348" x2="442.3671875"
+                                        <line id="SvgjsLine5468" x1="0" y1="278.348" x2="330"
                                             y2="278.348" stroke="#78909c" stroke-dasharray="0" stroke-width="1">
                                         </line>
                                     </g>
                                     <g id="SvgjsG5442" class="apexcharts-xaxis apexcharts-yaxis-inversed">
                                         <g id="SvgjsG5443" class="apexcharts-xaxis-texts-g" transform="translate(0, -8)">
-                                            <text id="SvgjsText5444" font-family="Helvetica, Arial, sans-serif"
-                                                x="442.3671875" y="307.348" text-anchor="middle" dominant-baseline="auto"
-                                                font-size="12px" font-weight="regular" fill="#373d3f"
-                                                class="apexcharts-xaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">
-                                                <tspan id="SvgjsTspan5445">1500</tspan>
-                                                <title>1500</title>
-                                            </text><text id="SvgjsText5446" font-family="Helvetica, Arial, sans-serif"
-                                                x="353.79375" y="307.348" text-anchor="middle" dominant-baseline="auto"
-                                                font-size="12px" font-weight="regular" fill="#373d3f"
-                                                class="apexcharts-xaxis-label "
-                                                style="font-family: Helvetica, Arial, sans-serif;">
-                                                <tspan id="SvgjsTspan5447">1200</tspan>
-                                                <title>1200</title>
+                                            
+                                            
                                             </text><text id="SvgjsText5448" font-family="Helvetica, Arial, sans-serif"
                                                 x="265.22031250000003" y="307.348" text-anchor="middle"
                                                 dominant-baseline="auto" font-size="12px" font-weight="regular"
@@ -150,16 +138,6 @@
                                         <g id="SvgjsG5430" class="apexcharts-series" rel="1"
                                             seriesName="seriesx1" data:realIndex="0">
 
-                                            <path id="SvgjsPath5434"
-                                                d="M 0.1 59.62982L 132.22033333333334 59.62982L 132.22033333333334 79.04418L 0.1 79.04418L 0.1 59.62982"
-                                                fill="rgba(36,105,92,0.85)" fill-opacity="1" stroke-opacity="1"
-                                                stroke-linecap="butt" stroke-width="0" stroke-dasharray="0"
-                                                class="apexcharts-bar-area" index="0"
-                                                clip-path="url(#gridRectMaskpadqzjhq)"
-                                                pathTo="M 0.1 59.62982L 132.22033333333334 59.62982L 132.22033333333334 79.04418L 0.1 79.04418L 0.1 59.62982"
-                                                pathFrom="M 0.1 59.62982L 0.1 59.62982L 0.1 79.04418L 0.1 79.04418L 0.1 59.62982"
-                                                cy="87.36462" cx="132.22033333333334" j="2" val="448"
-                                                barHeight="19.41436" barWidth="132.12033333333335"></path>
                                             <path id="SvgjsPath5435"
                                                 d="M 0.1 87.36462L 138.70838541666666 87.36462L 138.70838541666666 106.77898L 0.1 106.77898L 0.1 87.36462"
                                                 fill="rgba(36,105,92,0.85)" fill-opacity="1" stroke-opacity="1"
@@ -203,7 +181,7 @@
                                                 cy="198.30382000000003" cx="203.58890625" j="6" val="690"
                                                 barHeight="19.41436" barWidth="203.48890625"></path>
                                             <path id="SvgjsPath5439"
-                                                d="M 0.1 198.30382000000003L 324.5026041666667 198.30382000000003L 324.5026041666667 217.71818000000002L 0.1 217.71818000000002L 0.1 198.30382000000003"
+                                                d="M 0.1 198.30382000000003L 280 198.30382000000003L 280 217.71818000000002L 0.1 217.71818000000002L 0.1 198.30382000000003"
                                                 fill="rgba(36,105,92,0.85)" fill-opacity="1" stroke-opacity="1"
                                                 stroke-linecap="butt" stroke-width="0" stroke-dasharray="0"
                                                 class="apexcharts-bar-area" index="0"
@@ -214,17 +192,17 @@
                                                 barHeight="19.41436" barWidth="324.40260416666666">
                                             </path>
                                             <path id="SvgjsPath5440"
-                                                d="M 0.1 226.03862000000004L 353.99375000000003 226.03862000000004L 353.99375000000003 245.45298000000003L 0.1 245.45298000000003L 0.1 226.03862000000004"
+                                                d="M 0.1 226.03862000000004L 250 226.03862000000004L 250 245.45298000000003L 0.1 245.45298000000003L 0.1 226.03862000000004"
                                                 fill="rgba(36,105,92,0.85)" fill-opacity="1" stroke-opacity="1"
                                                 stroke-linecap="butt" stroke-width="0" stroke-dasharray="0"
                                                 class="apexcharts-bar-area" index="0"
                                                 clip-path="url(#gridRectMaskpadqzjhq)"
-                                                pathTo="M 0.1 226.03862000000004L 353.99375000000003 226.03862000000004L 353.99375000000003 245.45298000000003L 0.1 245.45298000000003L 0.1 226.03862000000004"
+                                                pathTo="M 0.1 226.03862000000004L 250 226.03862000000004L 250 245.45298000000003L 0.1 245.45298000000003L 0.1 226.03862000000004"
                                                 pathFrom="M 0.1 226.03862000000004L 0.1 226.03862000000004L 0.1 245.45298000000003L 0.1 245.45298000000003L 0.1 226.03862000000004"
-                                                cy="253.77342000000004" cx="353.99375000000003" j="8" val="1200"
+                                                cy="253.77342000000004" cx="250" j="8" val="1200"
                                                 barHeight="19.41436" barWidth="353.89375"></path>
                                             <path id="SvgjsPath5441"
-                                                d="M 0.1 253.77342000000004L 407.07781250000005 253.77342000000004L 407.07781250000005 273.18778000000003L 0.1 273.18778000000003L 0.1 253.77342000000004"
+                                                d="M 0.1 253.77342000000004L 300 253.77342000000004L 300 273.18778000000003L 0.1 273.18778000000003L 0.1 253.77342000000004"
                                                 fill="rgba(36,105,92,0.85)" fill-opacity="1" stroke-opacity="1"
                                                 stroke-linecap="butt" stroke-width="0" stroke-dasharray="0"
                                                 class="apexcharts-bar-area" index="0"
@@ -824,37 +802,37 @@
                                             <g>
                                                 <g><text text-anchor="middle" x="112.5" y="343.05" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#444444">8</text></g>
+                                                        fill="#444444">20</text></g>
                                                 <g><text text-anchor="middle" x="203" y="343.05" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#444444">10</text></g>
+                                                        fill="#444444">40</text></g>
                                                 <g><text text-anchor="middle" x="293.5" y="343.05" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#444444">12</text></g>
+                                                        fill="#444444">60</text></g>
                                                 <g><text text-anchor="middle" x="384" y="343.05" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#444444">14</text></g>
+                                                        fill="#444444">80</text></g>
                                                 <g><text text-anchor="middle" x="474.5" y="343.05" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#444444">16</text></g>
+                                                        fill="#444444">100</text></g>
                                                 <g><text text-anchor="end" x="99" y="112.8" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#222222">Copper</text></g>
+                                                        fill="#fff">IE & I</text></g>
                                                 <g><text text-anchor="end" x="99" y="174.3" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#222222">Silver</text></g>
+                                                        fill="#fff">IV & EE</text></g>
                                                 <g><text text-anchor="end" x="99" y="235.8" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#222222">Gold</text></g>
+                                                        fill="#fff">IGS & C</text></g>
                                                 <g><text text-anchor="end" x="99" y="297.3" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
-                                                        fill="#222222">Platinum</text></g>
+                                                        fill="#fff">IA & E</text></g>
                                             </g>
                                             <g>
                                                 <g>
                                                     <g><text text-anchor="end" x="199" y="112.55" font-family="Arial"
                                                             font-size="13" stroke="none" stroke-width="0"
-                                                            fill="#ffffff">10</text>
+                                                            fill="#ffffff">40</text>
                                                         <rect x="184" y="101.5" width="15" height="13"
                                                             stroke="none" stroke-width="0" fill-opacity="0"
                                                             fill="#ffffff"></rect>
@@ -863,7 +841,7 @@
                                                 <g>
                                                     <g><text text-anchor="end" x="289" y="174.55" font-family="Arial"
                                                             font-size="13" stroke="none" stroke-width="0"
-                                                            fill="#ffffff">12</text>
+                                                            fill="#ffffff">60</text>
                                                         <rect x="274" y="163.5" width="15" height="13"
                                                             stroke="none" stroke-width="0" fill-opacity="0"
                                                             fill="#ffffff"></rect>
@@ -872,7 +850,7 @@
                                                 <g>
                                                     <g><text text-anchor="end" x="380" y="235.55" font-family="Arial"
                                                             font-size="13" stroke="none" stroke-width="0"
-                                                            fill="#ffffff">14</text>
+                                                            fill="#ffffff">80</text>
                                                         <rect x="365" y="224.5" width="15" height="13"
                                                             stroke="none" stroke-width="0" fill-opacity="0"
                                                             fill="#ffffff"></rect>
@@ -881,7 +859,7 @@
                                                 <g>
                                                     <g><text text-anchor="end" x="470" y="297.55" font-family="Arial"
                                                             font-size="13" stroke="none" stroke-width="0"
-                                                            fill="#ffffff">16</text>
+                                                            fill="#ffffff">100</text>
                                                         <rect x="455" y="286.5" width="15" height="13"
                                                             stroke="none" stroke-width="0" fill-opacity="0"
                                                             fill="#ffffff"></rect>
