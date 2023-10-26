@@ -30,7 +30,7 @@ $currentControllerName = Request::segment(2);
                     </li>
 
 
-                    <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
+                    {{-- <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                 data-feather="list"></i><span>Indent</span></a>
                         <ul class="nav-submenu menu-content">
                             <li><a href="" class="{{ Request::is('*/*/all_role') ? 'active' : '' }}">Option</a>
@@ -101,7 +101,7 @@ $currentControllerName = Request::segment(2);
                                 class=""> <span>Additional Documents</span></a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
 
 
 
