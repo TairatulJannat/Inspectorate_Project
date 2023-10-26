@@ -7,10 +7,10 @@ $currentControllerName = Request::segment(2);
                 data-feather="settings"></i></a><img class="img-90 rounded-circle"
             src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt="">
         <div class="badge-bottom"><span class="badge badge-primary">New</span></div>
-        <a href="">
+        <a href="" style="color: #fff">
             <h6 class="mt-3 f-14 f-w-600">{{ \Illuminate\Support\Facades\Auth::user()->name }}</h6>
         </a>
-        <p class="mb-0 font-roboto">IE&I</p>
+        <p class="mb-0 font-roboto" style="color: #fff">IE&I</p>
     </div>
     <nav>
         <div class="main-navbar">
@@ -78,7 +78,7 @@ $currentControllerName = Request::segment(2);
                     <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                 data-feather="list"></i><span>Settings</span></a>
                         <ul class="nav-submenu menu-content">
-                            
+
                             <li><a href=""
                                 class=""> <span>Document Type</span></a>
                             </li>
@@ -127,6 +127,7 @@ $currentControllerName = Request::segment(2);
                     @if (count(menu_check('Route')) !== 0)
                         <li class="dropdown"><a
                                 class="nav-link menu-title link-nav {{ Request::is('*/dynamic_route') ? 'active' : '' }}"
+                                style="color: #fff"
                                 href="{{ route('admin.dynamic_route') }}"><i
                                     data-feather="home"></i><span>Module/Route</span></a>
                         </li>
@@ -135,11 +136,14 @@ $currentControllerName = Request::segment(2);
                     @if (count(menu_check('Role')) !== 0)
                         <li class="dropdown"><a
                                 class="nav-link menu-title {{ Request::is('*/role/*') ? 'active' : '' }}"
+                                style="color: #fff"
                                 href="javascript:void(0)"><i data-feather="list"></i><span>Roles</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ route('admin.role/all_role') }}"
+                                    style="color: #fff"
                                         class="{{ Request::is('*/*/all_role') ? 'active' : '' }}">All role</a></li>
                                 <li><a href="{{ route('admin.role/add_role') }}"
+                                    style="color: #fff"
                                         class="{{ Request::is('*/*/add_role') ? 'active' : '' }}">Add role</a></li>
                             </ul>
                         </li>
@@ -148,6 +152,7 @@ $currentControllerName = Request::segment(2);
                     @if (count(menu_check('User')) !== 0)
                         <li class="dropdown"><a
                                 class="nav-link menu-title link-nav {{ Request::is('*/all_user') ? 'active' : '' }}"
+                                style="color: #fff"
                                 href="{{ route('admin.all_user') }}"><i data-feather="home"></i><span>Admin
                                     Users</span></a>
                         </li>
