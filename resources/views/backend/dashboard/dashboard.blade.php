@@ -100,8 +100,8 @@
                                     </g>
                                     <g id="SvgjsG5442" class="apexcharts-xaxis apexcharts-yaxis-inversed">
                                         <g id="SvgjsG5443" class="apexcharts-xaxis-texts-g" transform="translate(0, -8)">
-                                            
-                                            
+
+
                                             </text><text id="SvgjsText5448" font-family="Helvetica, Arial, sans-serif"
                                                 x="265.22031250000003" y="307.348" text-anchor="middle"
                                                 dominant-baseline="auto" font-size="12px" font-weight="regular"
@@ -710,21 +710,32 @@
                         <rect fill="#E2C636" x="170" y="20" width="50" height="250"></rect>
                         <rect fill="#717171" x="240" y="83.33333333333334" width="50" height="166.66666666666666">
                         </rect>
-                        <rect fill="#717171" x="310" y="83.33333333333334" width="50" height="166.66666666666666">
-                        </rect>
-                        <rect fill="#717171" x="380" y="83.33333333333334" width="50" height="166.66666666666666">
+                        <rect fill="#717100" x="310" y="83.33333333333334" width="50" height="166.66666666666666">
                         </rect>
 
+
                         <!-- Text for column names -->
-                        <text x="30" y="100" font-family="Arial" font-size="12" fill="#000"> IE &amp; I</text>
-                        <text x="100" y="155" font-family="Arial" font-size="12" fill="#000">IV &amp; EE</text>
-                        <text x="170" y="10" font-family="Arial" font-size="12" fill="#000">IGS &amp; C</text>
-                        <text x="240" y="73" font-family="Arial" font-size="12" fill="#000">IA &amp; E</text>
-                        <text x="310" y="73" font-family="Arial" font-size="12" fill="#000">IA &amp; E</text>
-                        <text x="380" y="73" font-family="Arial" font-size="12" fill="#000">IA &amp; E</text>
+                        <text x="30" y="100" font-family="Arial" font-size="12" fill="#000"> EM</text>
+                        <text x="100" y="155" font-family="Arial" font-size="12" fill="#000">SIG</text>
+                        <text x="170" y="10" font-family="Arial" font-size="12" fill="#000">ENG</text>
+                        <text x="240" y="73" font-family="Arial" font-size="12" fill="#000">DEV</text>
+                        <text x="310" y="73" font-family="Arial" font-size="12" fill="#000">ACF</text>
+
 
 
                     </svg>
+                </div>
+                <div class="resize-triggers">
+                    <div class="expand-trigger">
+                        <div style="width: 441px; min-height: 100px;">
+                            <div class="apexcharts-legend center position-bottom" xmlns="http://www.w3.org/1999/xhtml" style="inset: auto 0px 40px; position: absolute;">
+                                <div class="apexcharts-legend-series" rel="1" data:collapsed="false" style="margin: 0px 5px;"><span class="apexcharts-legend-marker" rel="1" data:collapsed="false" style="background: rgb(36, 105, 92); color: rgb(36, 105, 92); height: 12px; width: 12px; left: 0px; top: 0px; border-width: 0px; border-color: rgb(255, 255, 255); border-radius: 2px;"></span><span class="apexcharts-legend-text" rel="1" i="0" data:default-text="Net%20Profit" data:collapsed="false" style="color: rgb(55, 61, 63); font-size: 12px; font-family: Helvetica, Arial, sans-serif;">
+                                    Document Received Yearly Report </span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contract-trigger"></div>
                 </div>
 
             </div>
@@ -734,7 +745,7 @@
                 <div class="card-header">
                     <h5>Department Wise Document Received</h5>
                 </div>
-                <div class="card-body chart-block">
+                <div class="card-body chart-block" style="padding:0px 30px  ">
                     <div id="bar-chart2">
                         <div style="position: relative;">
                             <div dir="ltr" style="position: relative; width: 587px; height: 400px;">
@@ -815,7 +826,7 @@
                                                 <g><text text-anchor="middle" x="474.5" y="343.05" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
                                                         fill="#444444">100</text></g>
-                                                <g><text text-anchor="end" x="99" y="112.8" font-family="Arial"
+                                                <g><text text-anchor="end" x="82" y="112.8" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
                                                         fill="#fff">IE & I</text></g>
                                                 <g><text text-anchor="end" x="99" y="174.3" font-family="Arial"
@@ -824,7 +835,7 @@
                                                 <g><text text-anchor="end" x="99" y="235.8" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
                                                         fill="#fff">IGS & C</text></g>
-                                                <g><text text-anchor="end" x="99" y="297.3" font-family="Arial"
+                                                <g><text text-anchor="end" x="85" y="297.3" font-family="Arial"
                                                         font-size="13" stroke="none" stroke-width="0"
                                                         fill="#fff">IA & E</text></g>
                                             </g>
