@@ -3,11 +3,20 @@
         <div class="modal-content">
             <form action="{{ route('admin.dynamic_route') }}" method="post">
                 @csrf
+               
                 <div class="modal-header">
                     <h5 class="modal-title" id="add_buttonLabel">Route Details</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inspectorate">Inspectorate</label>
+                        <select class="form-control" id="inspectorate" name="method">
+                            @foreach ($inspectorates as $ins)
+                            <option value={{$ins->id}}>{{$ins->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="Route_name">Route name</label>+
                         <input type="text" class="form-control" id="Route name" aria-describedby="emailHelp"

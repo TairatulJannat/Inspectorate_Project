@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Inspectorate;
 use Illuminate\Database\Eloquent\Model;
 
 class dynamic_route extends Model
@@ -14,4 +15,9 @@ class dynamic_route extends Model
     public function menu() {
         return $this->belongsTo(ModelMenu::class,'id','menu_dynamic_route_id') ;
     }
+    public function inspectorate()
+    {
+        return $this->belongsTo(Inspectorate::class, 'inspectorate_id');
+    }
+    
 }

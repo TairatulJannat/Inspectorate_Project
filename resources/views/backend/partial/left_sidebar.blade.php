@@ -29,8 +29,8 @@ $currentControllerName = Request::segment(2);
                         </a>
                     </li>
 
-
-                    {{-- <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
+                    @if (count(menu_check('Indent')) !== 0)
+                     <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                 data-feather="list"></i><span>Indent</span></a>
                         <ul class="nav-submenu menu-content">
                             <li><a href="" class="{{ Request::is('*/*/all_role') ? 'active' : '' }}">Option</a>
@@ -39,7 +39,8 @@ $currentControllerName = Request::segment(2);
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
+                    @endif
+                   {{-- <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                 data-feather="list"></i><span>Tender</span></a>
                         <ul class="nav-submenu menu-content">
                             <li><a href="" class="{{ Request::is('*/*/all_role') ? 'active' : '' }}">Option</a>

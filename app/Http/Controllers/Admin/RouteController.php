@@ -4,24 +4,35 @@ namespace App\Http\Controllers\Admin;
 
 use App\dynamic_route;
 use App\Http\Controllers\Controller;
+use App\Models\Inspectorate;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RouteController extends Controller
 {
     public function dynamic_route()
     {
-        $route = dynamic_route::all();
+        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
+        $inspectorate_ids=[0,  $auth_inspectorate_id];
+        // dd($auth_inspectorate_id);
+        $route =  dynamic_route::leftJoin('inspectorates', 'dynamic_routes.inspectorate_id', '=', 'inspectorates.id')
+        ->whereIn('inspectorate_id', $inspectorate_ids)
+        ->select('dynamic_routes.*',"inspectorates.name as insp_name")
+        ->get();
+        $inspectorates=Inspectorate::all();
         $page_data = [
             'add_menu' => 'yes',
             'modal' => 'yes',
         ];
-        return view('backend.dynamic_route.dynamic_route', compact('route', 'page_data'));
+        return view('backend.dynamic_route.dynamic_route', compact('route', 'page_data', 'inspectorates'));
     }
 
     public function save_dynamic_route(Request $request)
     {
+        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
         $route = new dynamic_route();
+        $route->inspectorate_id = $auth_inspectorate_id;
         $route->title = $request->title;
         $route->model_name = $request->model_name;
         $route->controller_action = $request->controller_action;

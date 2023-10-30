@@ -17,8 +17,9 @@ class UserController extends Controller
 
     public function all_user()
     {
-        $users = Admin::where('status_id','!=',2)->get();
-        $role = role::all();
+         $auth_inspectorate_id =  Auth::user()->inspectorate_id;
+        $users = Admin::where('inspectorate_id', $auth_inspectorate_id)->where('status_id','!=',2)->get();
+        $role = role::where('inspectorate_id', $auth_inspectorate_id)->get();
         $page_data = [
             'add_menu' => 'yes',
             'modal' => 'yes',
@@ -28,6 +29,7 @@ class UserController extends Controller
 
     public function save_user(Request $request)
     {
+        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -37,6 +39,7 @@ class UserController extends Controller
 
         $user = new Admin();
         $user->name = $request->name;
+        $user->inspectorate_id = $auth_inspectorate_id;
         $user->email = $request->email;
         $user->role_id = $request->role_id;
         $user->role_id = $request->role_id;
@@ -52,7 +55,8 @@ class UserController extends Controller
 
     public function edit_user($id)
     {
-        $role = role::all();
+        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
+        $role = role::where('inspectorate_id', $auth_inspectorate_id)->get();
         $user = Admin::find($id);
 
         $output = '';
@@ -75,8 +79,9 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $request->user_id],
             'role_id' => ['required'],
         ]);
-
+        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
         $user = Admin::find($request->user_id);
+        $user->inspectorate_id = $auth_inspectorate_id;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->role_id = $request->role_id;

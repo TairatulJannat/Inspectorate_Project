@@ -14,7 +14,7 @@
             <form action="{{route('admin.update_role',$role->id)}}" method="post">
                 @csrf
                 <div class="form-group">
-                    <label for="Route_name">Roel name</label>
+                    <label for="Route_name">Role name</label>
                     <input type="text" class="form-control" id="Role name"
                            value="{{$role->name}}" name="name">
                 </div>

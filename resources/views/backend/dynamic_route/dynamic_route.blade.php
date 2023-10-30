@@ -21,6 +21,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Route Name</th>
+                    <th>Inspectorate</th>
                     <th>Model Name</th>
                     <th>Route Url</th>
                     <th>Route Action</th>
@@ -38,6 +39,7 @@
                     <tr>
                         <td>{{$key+1}}</td>
                         <td>{{$data->title}}</td>
+                        <td>{{$data->insp_name }}</td>
                         <td>{{$data->model_name}}</td>
                         <td>{{$data->url}}</td>
                         <td>{{$data->controller_action}}</td>
@@ -84,6 +86,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Route Name</th>
+                    <th>Inspectorate</th>
                     <th>Model Name</th>
                     <th>Route Url</th>
                     <th>Route Action</th>
