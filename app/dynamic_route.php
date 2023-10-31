@@ -17,7 +17,7 @@ class dynamic_route extends Model
     }
     public function inspectorate()
     {
-        return $this->belongsTo(Inspectorate::class, 'inspectorate_id');
+        return $this->hasMany(Inspectorate::class, 'inspectorate_id', 'id');
     }
     
 }

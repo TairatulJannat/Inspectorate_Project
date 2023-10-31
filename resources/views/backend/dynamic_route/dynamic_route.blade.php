@@ -39,7 +39,7 @@
                     <tr>
                         <td>{{$key+1}}</td>
                         <td>{{$data->title}}</td>
-                        <td>{{$data->insp_name }}</td>
+                        <td>{{$data->ins_name}}</td>
                         <td>{{$data->model_name}}</td>
                         <td>{{$data->url}}</td>
                         <td>{{$data->controller_action}}</td>

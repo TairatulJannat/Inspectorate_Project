@@ -17,33 +17,46 @@ class UserController extends Controller
 
     public function all_user()
     {
-         $auth_inspectorate_id =  Auth::user()->inspectorate_id;
-        $users = Admin::where('inspectorate_id', $auth_inspectorate_id)->where('status_id','!=',2)->get();
-        $role = role::where('inspectorate_id', $auth_inspectorate_id)->get();
-        $page_data = [
-            'add_menu' => 'yes',
-            'modal' => 'yes',
-        ];
-        return view('backend.user.all_user', compact('users', 'page_data', 'role'));
+        if (Auth::user()->id == 92) {
+            $auth_inspectorate_id =  Auth::user()->inspectorate_id;
+            $users = Admin::where('status_id', '!=', 2)->get();
+            $role = role::all();
+            $page_data = [
+                'add_menu' => 'yes',
+                'modal' => 'yes',
+            ];
+            return view('backend.user.all_user', compact('users', 'page_data', 'role'));
+        } else {
+
+            $auth_inspectorate_id =  Auth::user()->inspectorate_id;
+            $users = Admin::where('inspectorate_id', $auth_inspectorate_id)->where('status_id', '!=', 2)->get();
+            $role = role::where('inspectorate_id', $auth_inspectorate_id)->get();
+            $page_data = [
+                'add_menu' => 'yes',
+                'modal' => 'yes',
+            ];
+            return view('backend.user.all_user', compact('users', 'page_data', 'role'));
+
+        }
     }
 
     public function save_user(Request $request)
     {
-        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
+        
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:3', 'confirmed'],
             'role_id' => ['required'],
         ]);
-
+        $auth_inspectorate_id = Auth::user()->inspectorate_id;
         $user = new Admin();
         $user->name = $request->name;
         $user->inspectorate_id = $auth_inspectorate_id;
         $user->email = $request->email;
         $user->role_id = $request->role_id;
-        $user->role_id = $request->role_id;
         $user->type = "admin";
+        $user->admin_type = "inspe_admin";
         $user->mobile = $request->mobile;
         $user->created_by = Auth::user()->id;
         $user->password = Hash::make($request->password);
@@ -55,15 +68,21 @@ class UserController extends Controller
 
     public function edit_user($id)
     {
+        
         $auth_inspectorate_id =  Auth::user()->inspectorate_id;
-        $role = role::where('inspectorate_id', $auth_inspectorate_id)->get();
+        if(Auth::user()->id){
+            $role = role::all();
+        }else {
+            $role = role::where('inspectorate_id', $auth_inspectorate_id)->get();
+        }
+        
         $user = Admin::find($id);
 
         $output = '';
         $role_loop = '';
         foreach ($role as $data) {
             $role_loop .= '<option value="' . $data->id . '" ' . (($data->id == $user->role_id) ? 'selected="selected"'
-                    : "") . '>' . $data->name . '</option>';
+                : "") . '>' . $data->name . '</option>';
         }
 
         $output .= '<div class="form-group"> <label for="Route_name">user name</label> <input type="text" class="form-control" name="name" value="' . $user->name . '"> </div><div class="form-group"> <label for="mobile">Mobile</label> <input type="text" class="form-control" name="mobile" value="' . $user->mobile . '"> </div><input type="hidden" name="user_id" value="' . $id . '"> <div class="form-group"> <label for="Route_name">user Email</label> <input id="email" type="email" class="form-control" name="email" value="' . $user->email . '" required autocomplete="email"> </div><div class="form-group"> <label for="status">Role</label> <select class="form-control" id="status" name="role_id"> ' . $role_loop . ' </select> </div>';
@@ -89,7 +108,7 @@ class UserController extends Controller
         $user->type = "admin";
         $user->status_id = 1;
         $user->mobile = $request->mobile;
-//        $user->password = Hash::make(123456);
+        //        $user->password = Hash::make(123456);
         $user->update();
 
         Toastr::success('User Created Successfully', 'Created');
