@@ -48,8 +48,8 @@ class RouteController extends Controller
     public function save_dynamic_route(Request $request)
     {
         $auth_inspectorate_id =  Auth::user()->inspectorate_id;
-        $route = new dynamic_route();
-        $route->inspectorate_id = $auth_inspectorate_id;
+        $route = new dynamic_route(); 
+        $route->inspectorate_id = Auth::user()->id==92 ? $request->inspectorate : $auth_inspectorate_id;
         $route->title = $request->title;
         $route->model_name = $request->model_name;
         $route->controller_action = $request->controller_action;

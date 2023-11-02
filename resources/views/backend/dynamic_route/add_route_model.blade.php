@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inspectorate">Inspectorate</label>
-                        <select class="form-control" id="inspectorate" name="method">
+                        <select class="form-control" id="inspectorate" name="inspectorate">
                             @foreach ($inspectorates as $ins)
                             <option value={{$ins->id}}>{{$ins->name}}</option>
                             @endforeach

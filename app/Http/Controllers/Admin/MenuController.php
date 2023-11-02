@@ -25,7 +25,8 @@ class MenuController extends Controller
 
     public function create_menu()
     {
-        $master_menu = ModelMenu::select('menu_name', 'id')->get();
+        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
+        $master_menu = ModelMenu::select('menu_name', 'id')->where('inspectorate_id', $auth_inspectorate_id)->get();
         $route = dynamic_route::select('title', 'id')->get();
         return view('backend.menu.menu_create_form', compact('master_menu', 'route'));
     }
@@ -40,6 +41,7 @@ class MenuController extends Controller
 
         $menu = new ModelMenu();
         $menu->menu_name = $request->menu_name;
+        $menu->admin_id = 4;
         $menu->menu_dynamic_route_id = $request->route_id;
         $menu->menu_is_active = $request->active_status;
         $menu->menu_icon_class = $request->icon_class;
@@ -54,6 +56,7 @@ class MenuController extends Controller
 
     public function all_menu()
     {
+        
         $data = ['title' => 'Menu Tree'];
         return view('backend.menu.all_menu', compact('data'));
     }
@@ -95,8 +98,9 @@ class MenuController extends Controller
 
     public function edit_menu($id)
     {
+        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
         $menu = ModelMenu::find($id);
-        $master_menu = ModelMenu::select('menu_name', 'id')->get();
+        $master_menu = ModelMenu::select('menu_name', 'id')->where('inspectorate_id', $auth_inspectorate_id)->get();
         $route = dynamic_route::select('title', 'id')->get();
         return view('backend.menu.menu_edit', compact('menu', 'master_menu', 'route'));
     }
@@ -116,6 +120,7 @@ class MenuController extends Controller
 
         $menu = ModelMenu::find($id);
         $menu->menu_name = $request->menu_name;
+        $menu->admin_id = 4;
         $menu->menu_dynamic_route_id = $request->route_id;
         $menu->menu_is_active = $request->active_status;
         $menu->menu_icon_class = $request->icon_class;

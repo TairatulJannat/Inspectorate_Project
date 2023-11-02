@@ -35,6 +35,12 @@ function menu_check($value)
     $total_access = $route->where('role_id', role_id())->where('show_in_menu', 1)->where('model_name', '=', $value)->get();
     return $total_access;
 }
+function sub_menu_check($value){
+    $route = \Illuminate\Support\Facades\DB::table('permission_roles')->get();
+
+    $sub_menu_access = $route->where('role_id', role_id())->where('url', '=', $value)->first();
+    return $sub_menu_access;
+}
 
 function get_parent_menu()
 {

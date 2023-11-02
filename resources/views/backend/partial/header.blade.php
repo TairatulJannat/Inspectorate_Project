@@ -1,7 +1,7 @@
 <div class="page-main-header">
     <div class="main-header-right row m-0">
         <div class="main-header-left" style=" background-color:#338b7b;">
-            <div class="logo-wrapper ><a href="#"><img class="img-fluid" src=" " alt=""
+            <div class="logo-wrapper ><a href=""><img  class="img-fluid" src="{{asset('assets/backend/images/logo/army_logo.png')}} " alt=""
                     style="margin-left: 70px;
                     height: 80px; padding:5px;"></a>
             </div>

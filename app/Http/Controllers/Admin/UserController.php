@@ -20,6 +20,7 @@ class UserController extends Controller
         if (Auth::user()->id == 92) {
             $auth_inspectorate_id =  Auth::user()->inspectorate_id;
             $users = Admin::where('status_id', '!=', 2)->get();
+            // dd($users);
             $role = role::all();
             $page_data = [
                 'add_menu' => 'yes',
