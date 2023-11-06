@@ -7,10 +7,10 @@
     <title>@yield('title') - {{ config('app.name', 'Inspectorate') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ asset('assets/backend/images/logo/AWT Logo.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('assets/backend/images/logo/AWT Logo.png') }}" type="image/x-icon">
-    <meta name="description" content="Army Job Faire">
-    <meta name="keywords" content="Army Job Fair">
+    <link rel="icon" href="{{ asset('assets/backend/images/logo/army_logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/backend/images/logo/army_logo.png') }}" type="image/x-icon">
+    <meta name="description" content="Army Inspectorate">
+    <meta name="keywords" content="Army Inspectorate">
     <meta name="author" content="Trust Innovation Limited">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/fontawesome.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/icofont.css') }}">

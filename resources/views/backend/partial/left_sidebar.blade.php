@@ -67,6 +67,25 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li> --}}
                     @endif
+
+                    @if (count(menu_check('PrelimGeneral')) !== 0)
+                    <li class="dropdown"><a
+                            class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
+                            href="javascript:void(0)"><i data-feather="book-open"
+                                class="text-light"></i><span>Specification</span></a>
+                        <ul class="nav-submenu menu-content {{ Request::is('*/Indent/*') ? 'open_menu' : '' }}">
+                            @if (sub_menu_check('indent/view') !== null)
+                                <li><a class="text-light" href="{{ route('admin.prelimgeneral/view') }}" class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Prelim/General</a>
+                                </li>
+                            @endif
+                            @if (sub_menu_check('indent/views') !== null)
+                                <li><a href=""
+                                        class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Received
+                                        Indent</a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
                     {{-- @if (count(menu_check('Tender')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Tender</span></a>
@@ -84,8 +103,8 @@ $currentControllerName = Request::segment(2);
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Specification</span></a>
                             <ul class="nav-submenu menu-content">
-                                <li><a href=""
-                                        class="{{ Request::is('*/*/all_role') ? 'active' : '' }}">Option</a>
+                                <li><a href="{{ route('admin.prelimgeneral/view') }}"
+                                        class="{{ Request::is('*/*/all_role') ? 'active' : '' }}">PrelimGeneral</a>
                                 </li>
                                 <li><a href=""
                                         class="{{ Request::is('*/*/add_role') ? 'active' : '' }}">Option</a>

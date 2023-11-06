@@ -354,7 +354,7 @@ pre {
 
 a:hover {
     text-decoration: none;
-    color: #24695c;
+    color: #e4f8f4;
 }
 
 .typography .blockquote-footer {
@@ -7219,7 +7219,7 @@ table tbody .border-bottom-warning td {
     z-index: 8;
     height: 100%;
     line-height: inherit;
-    background: #338B7B;
+    background: #006A4E;
     border-right: 1px solid #e6edef;
     width: 290px;
     text-align: left;
@@ -7438,7 +7438,7 @@ table tbody .border-bottom-warning td {
 }
 
 .page-wrapper.compact-wrapper .page-body-wrapper header.main-nav .main-navbar .nav-menu>li span {
-    font-weight: 600;
+    /* font-weight: 600; */
 }
 
 .page-wrapper.compact-wrapper .page-body-wrapper header.main-nav .main-navbar .nav-menu>li a {
