@@ -1,7 +1,8 @@
 <div class="page-main-header">
     <div class="main-header-right row m-0">
         <div class="main-header-left" style=" background-color:#006A4E;">
-            <div class="logo-wrapper ><a href=""><img  class="img-fluid" src="{{asset('assets/backend/images/logo/army_logo.png')}} " alt=""
+            <div class="logo-wrapper ><a href=""><img class="img-fluid"
+                    src="{{ asset('assets/backend/images/logo/army_logo.png') }} " alt=""
                     style="margin-left: 70px;
                     height: 80px; padding:5px;"></a>
             </div>
@@ -89,15 +90,33 @@
                 {{-- <li class="text-center"> <a class="f-w-700" href="javascript:void(0)">See All     </a></li> --}}
                 {{-- </ul> --}}
                 {{-- </li> --}}
-                <li class="onhover-dropdown p-0">
-                    <button
+                <li class="onhover-dropdown p-0 d-flex justify-content-center align-item center" >
+                    {{-- <div class="sidebar-user text-center"><img class="img-90 rounded-circle"
+                            src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt="" height=70%>  
+                    </div> --}}
+                    <div class=" dropdown-basic">
+                        <div class="dropdown">
+                            <button class="dropbtn btn-primary" type="button" data-bs-original-title=""
+                                title="">{{ \Illuminate\Support\Facades\Auth::user()->name }} <span><i
+                                        class="icofont icofont-arrow-down"></i></span></button>
+                            <div class="dropdown-content"><a href=""
+                                    onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();"
+                                    type='button'>Log out</a></div>
+                        </div>
+                        <form id="logout-form" action="{{ route('admin_logout') }}" method="POST"
+                            style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                    {{-- <button
                         onclick="event.preventDefault();
                 document.getElementById('logout-form').submit();"
-                        class="btn btn-primary" type="button"><a href="login_two.html" style="text-decoration: none;"><i
-                                data-feather="log-out"></i>Log out</a></button>
+                        class="btn btn-primary" type="button"><a href="login_two.html"
+                            style="text-decoration: none;"><i data-feather="log-out"></i>Log out</a></button>
                     <form id="logout-form" action="{{ route('admin_logout') }}" method="POST" style="display: none;">
                         @csrf
-                    </form>
+                    </form> --}}
                 </li>
             </ul>
         </div>

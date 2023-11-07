@@ -33,7 +33,7 @@ $currentControllerName = Request::segment(2);
                     <li>
                         <a class="nav-link menu-title link-nav {{ $currentControllerName == 'adminDashboard' ? 'active_menu' : '' }}"
                             href="{{ route('admin.adminDashboard') }}">
-                            <i data-feather="home"   class="text-light"></i>
+                            <i data-feather="home" class="text-light"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -45,7 +45,8 @@ $currentControllerName = Request::segment(2);
                                     class="text-light"></i><span>Indent</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Indent/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('indent/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.indent/view') }}" class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Indent</a>
+                                    <li><a class="text-light" href="{{ route('admin.indent/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Indent</a>
                                     </li>
                                 @endif
                                 @if (sub_menu_check('indent/views') !== null)
@@ -69,23 +70,25 @@ $currentControllerName = Request::segment(2);
                     @endif
 
                     @if (count(menu_check('PrelimGeneral')) !== 0)
-                    <li class="dropdown"><a
-                            class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
-                            href="javascript:void(0)"><i data-feather="book-open"
-                                class="text-light"></i><span>Specification</span></a>
-                        <ul class="nav-submenu menu-content {{ Request::is('*/Indent/*') ? 'open_menu' : '' }}">
-                            @if (sub_menu_check('indent/view') !== null)
-                                <li><a class="text-light" href="{{ route('admin.prelimgeneral/view') }}" class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Prelim/General</a>
-                                </li>
-                            @endif
-                            @if (sub_menu_check('indent/views') !== null)
-                                <li><a href=""
-                                        class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Received
-                                        Indent</a></li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="book-open"
+                                    class="text-light"></i><span>Specification</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Indent/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('indent/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.prelimgeneral/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                            Prelim/General</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('indent/views') !== null)
+                                    <li><a href=""
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Received
+                                            Indent</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                     {{-- @if (count(menu_check('Tender')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Tender</span></a>
