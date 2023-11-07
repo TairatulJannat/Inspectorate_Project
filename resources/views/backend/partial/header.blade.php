@@ -22,83 +22,20 @@
             <ul class="nav-menus">
                 <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i
                             data-feather="maximize"></i></a></li>
-                {{-- <li class="onhover-dropdown"> --}}
-                {{-- <div class="notification-box"><i data-feather="bell"></i><span class="dot-animated"></span></div> --}}
-                {{-- <ul class="notification-dropdown onhover-show-div"> --}}
-                {{-- <li> --}}
-                {{-- <p class="f-w-700 mb-0">You have 3 Pending Appllicant<span class="pull-right badge badge-primary badge-pill">4</span></p> --}}
-                {{-- </li> --}}
-                {{-- <li class="noti-primary"> --}}
-                {{-- <div class="media"><span class="notification-bg bg-light-primary"><i data-feather="check-circle"> </i></span> --}}
-                {{-- <div class="media-body"> --}}
-                {{-- <p>Applicant name </p><span>10 minutes ago</span> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- </li> --}}
-                {{-- <li class="noti-secondary"> --}}
-                {{-- <div class="media"><span class="notification-bg bg-light-secondary"><i data-feather="check-circle"> </i></span> --}}
-                {{-- <div class="media-body"> --}}
-                {{-- <p>Applicant name</p><span>1 hour ago</span> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- </li> --}}
-                {{-- <li class="noti-success"> --}}
-                {{-- <div class="media"><span class="notification-bg bg-light-success"><i data-feather="check-circle"> </i></span> --}}
-                {{-- <div class="media-body"> --}}
-                {{-- <p>Applicant name</p><span>3 hour ago</span> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- </li> --}}
-                {{-- <li class="noti-danger"> --}}
-                {{-- <div class="media"><span class="notification-bg bg-light-danger"><i data-feather="check-circle"> </i></span> --}}
-                {{-- <div class="media-body"> --}}
-                {{-- <p>>Applicant name</p><span>6 hour ago</span> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- </li> --}}
-                {{-- </ul> --}}
-                {{-- </li> --}}
-                {{-- <li>
-          <div class="mode"><i class="fa fa-moon-o"></i></div>
-        </li> --}}
-                {{-- <li class="onhover-dropdown"><i data-feather="message-square"></i> --}}
-                {{-- <ul class="chat-dropdown onhover-show-div"> --}}
-                {{-- <li> --}}
-                {{-- <div class="media"><img class="img-fluid rounded-circle me-3" src="../assets/images/user/4.jpg" alt=""> --}}
-                {{-- <div class="media-body"><span>Ain Chavez</span> --}}
-                {{-- <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p> --}}
-                {{-- </div> --}}
-                {{-- <p class="f-12">32 mins ago</p> --}}
-                {{-- </div> --}}
-                {{-- </li> --}}
-                {{-- <li> --}}
-                {{-- <div class="media"><img class="img-fluid rounded-circle me-3" src="../assets/images/user/1.jpg" alt=""> --}}
-                {{-- <div class="media-body"><span>Erica Hughes</span> --}}
-                {{-- <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p> --}}
-                {{-- </div> --}}
-                {{-- <p class="f-12">58 mins ago</p> --}}
-                {{-- </div> --}}
-                {{-- </li> --}}
-                {{-- <li> --}}
-                {{-- <div class="media"><img class="img-fluid rounded-circle me-3" src="../assets/images/user/2.jpg" alt=""> --}}
-                {{-- <div class="media-body"><span>Kori Thomas</span> --}}
-                {{-- <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p> --}}
-                {{-- </div> --}}
-                {{-- <p class="f-12">1 hr ago</p> --}}
-                {{-- </div> --}}
-                {{-- </li> --}}
-                {{-- <li class="text-center"> <a class="f-w-700" href="javascript:void(0)">See All     </a></li> --}}
-                {{-- </ul> --}}
-                {{-- </li> --}}
-                <li class="onhover-dropdown p-0 d-flex justify-content-center align-item center" >
-                    {{-- <div class="sidebar-user text-center"><img class="img-90 rounded-circle"
-                            src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt="" height=70%>  
-                    </div> --}}
+
+                <li class="onhover-dropdown p-0 d-flex justify-content-center align-item center">
+
                     <div class=" dropdown-basic">
+
                         <div class="dropdown">
-                            <button class="dropbtn btn-primary" type="button" data-bs-original-title=""
-                                title="">{{ \Illuminate\Support\Facades\Auth::user()->name }} <span><i
-                                        class="icofont icofont-arrow-down"></i></span></button>
+                            <button class="dropbtn btn-primary" type="button" data-bs-original-title="" title="">
+                               <img class="img-90 rounded-circle"
+                                        src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt=""
+                                        height='30px' width="30px">
+
+                                {{ \Illuminate\Support\Facades\Auth::user()->name }} <span><i
+                                        class="icofont icofont-arrow-down"></i></span>
+                            </button>
                             <div class="dropdown-content"><a href=""
                                     onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();"
