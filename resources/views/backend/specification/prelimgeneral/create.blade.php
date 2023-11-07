@@ -70,8 +70,33 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="hall_id">Aditional Document</label>
-                                <select class="form-control" id="hall_id" name="hall_id">
-                                    <option value="">Please Select </option>
+                                <select class="form-control " id="document_id" name="document_id">
+
+                                    <option value="">Please Select</option>
+                                    
+                                    @foreach ($additional_documnets as $additional_documnet)
+
+                                        <option value="{{ $additional_documnet->id }}">{{ $additional_documnet->name }}</option>
+
+                                    @endforeach
+
+                                </select>
+                                <span id="error_hall_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="hall_id">Item</label>
+                                <select class="form-control " id="item_id" name="item_id">
+
+                                    <option value="">Please Select</option>
+                                    
+                                    @foreach ($items as $item)
+
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+
+                                    @endforeach
 
                                 </select>
                                 <span id="error_hall_id" class="text-danger error_field"></span>
@@ -82,24 +107,18 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="hall_id">Item Type</label>
-                                <select class="form-control" id="hall_id" name="hall_id">
+                                <select class="form-control" id="item_type_id" name="item_type_id">
+
                                     <option value="">Please Select </option>
+                                    <option value="0"> Light vehicle</option>
+                                    <option value="1">Heavy vehicle </option>
 
                                 </select>
                                 <span id="error_hall_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="hall_id">Item</label>
-                                <select class="form-control" id="hall_id" name="hall_id">
-                                    <option value="">Please Select </option>
-
-                                </select>
-                                <span id="error_hall_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
+                       
 
                         <div class="col-md-4">
                             <div class="form-group">
