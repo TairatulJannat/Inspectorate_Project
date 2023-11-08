@@ -72,12 +72,12 @@
     colors:[vihoAdminConfig.primary, vihoAdminConfig.secondary, '#222222', '#717171', '#e2c636']
 }
 
-var chart8 = new ApexCharts(
-    document.querySelector("#mypiechart"),
-    options8
-);
+// var chart8 = new ApexCharts(
+//     document.querySelector("#mypiechart"),
+//     options8
+// );
 
-chart8.render();
+// chart8.render();
 
 </script>
 @stack('js')

@@ -23,11 +23,19 @@ class PrelimGeneralController extends Controller
         $additional_documnets=Additional_document::where('status',1)->get();
         $item_types=Item_type::where('status',1)->get();
         // dd($item_types);
-        $items = Items::leftJoin('item_types', 'items.item_type_id', '=', 'item_types.id')
-        ->select('items.*', 'item_types.name as item_type_name')
-        ->get();
+        // $items = Items::leftJoin('item_types', 'items.item_type_id', '=', 'item_types.id')
+        // ->select('items.*', 'item_types.name as item_type_name')
+        // ->get();
         // dd($items);
         return view('backend.specification.prelimgeneral.create' , compact('dte_managments','additional_documnets','item_types'));
         
     }
+    public function item_name($id)
+    {
+        $items = Items::where('item_type_id', $id)->get();
+        return response()->json($items);
+    }
+    
+
+    
 }

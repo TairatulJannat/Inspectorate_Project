@@ -7347,7 +7347,7 @@ table tbody .border-bottom-warning td {
 
 .page-wrapper.compact-wrapper .page-body-wrapper header.main-nav .main-navbar .nav-menu {
     border-radius: 0;
-    height: calc(100vh - 355px);
+   
     left: -300px;
     z-index: 99;
     -webkit-transition: color 1s ease;
