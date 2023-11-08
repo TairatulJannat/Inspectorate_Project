@@ -1475,7 +1475,7 @@ a:hover {
 }
 
 .img-90 {
-    width: 90px !important;
+    width: 30px ;
 }
 
 .img-100 {
@@ -6642,7 +6642,7 @@ table tbody .border-bottom-warning td {
 }
 
 .onhover-show-div {
-    top: 80px;
+    top: 70px;
     position: absolute;
     z-index: 8;
     background-color: #fff;
@@ -15049,6 +15049,8 @@ strong~p {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    flex-direction: column;
+    row-gap: 20px;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
@@ -15058,6 +15060,10 @@ strong~p {
     min-height: 100vh;
     margin: 0 auto;
     padding: 30px 12px;
+}
+.login-card h3{
+    color: #FFCC01;
+    font-weight: 600;
 }
 
 .login-form {
@@ -18553,9 +18559,10 @@ ul.pro-services li:nth-child(n+2) {
 
 .dropdown-basic .dropdown .dropbtn {
     color: #fff;
-    padding: 12px 35px;
+    padding: 7px 15px;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .dropdown-basic .dropdown .dropdown-content {
@@ -18564,10 +18571,10 @@ ul.pro-services li:nth-child(n+2) {
     right: 0;
     background-color: #fff;
     border: 1px solid #e6edef;
-    min-width: 175px;
+    min-width: 162px;
     z-index: 1;
     left: 0;
-    top: 45px;
+    top: 40px;
 }
 
 .dropdown-basic .dropdown .dropdown-content a {
