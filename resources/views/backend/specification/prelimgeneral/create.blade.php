@@ -158,13 +158,17 @@
 
                 if (itemtype_id > 0) {
                     $.ajax({
-                        url: "{{ url('admin/prelimgeneral/item_name') }}" + '/' + itemtype_id,
+                        url: "http://localhost/ie&i/Inspectorate_Project/super_admin/prelimgeneral/item_name" +
+                            '/' + itemtype_id,
+                        type: 'GET', 
+                        dataType: 'json',
                         success: function(res) {
                             console.log(res);
 
                             var _html = '<option value="">Select an item</option>';
                             $.each(res, function(index, item) {
-                                _html += '<option value="' + item.id + '">' + item.name + '</option>';
+                                _html += '<option value="' + item.id + '">' + item
+                                    .name + '</option>';
                             });
                             $('#item_id').html(_html);
                         }
