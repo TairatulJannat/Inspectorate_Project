@@ -28,14 +28,16 @@ class PrelimGeneralController extends Controller
         // ->get();
         // dd($items);
         return view('backend.specification.prelimgeneral.create' , compact('dte_managments','additional_documnets','item_types'));
-        
+
     }
     public function item_name($id)
     {
         $items = Items::where('item_type_id', $id)->get();
         return response()->json($items);
     }
-    
+     public function store(){
+        
+     }
 
-    
+
 }
