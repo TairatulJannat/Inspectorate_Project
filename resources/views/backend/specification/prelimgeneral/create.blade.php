@@ -158,7 +158,7 @@
 
                 if (itemtype_id > 0) {
                     $.ajax({
-                        url: "http://localhost/ie&i/Inspectorate_Project/super_admin/prelimgeneral/item_name" +
+                        url: "{{url('admin/prelimgeneral/item_name')}}" +
                             '/' + itemtype_id,
                         type: 'GET', 
                         dataType: 'json',
