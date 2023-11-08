@@ -87,14 +87,14 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="hall_id">Item</label>
+                                <label for="hall_id">Item Type</label>
                                 <select class="form-control " id="item_id" name="item_id">
 
                                     <option value="">Please Select</option>
                                     
-                                    @foreach ($items as $item)
+                                    @foreach ($item_types as $item_type)
 
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
 
                                     @endforeach
 
@@ -103,10 +103,10 @@
                             </div>
                         </div>
 
-
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="hall_id">Item Type</label>
+                                <label for="hall_id">Item</label>
+                             
                                 <select class="form-control" id="item_type_id" name="item_type_id">
 
                                     <option value="">Please Select </option>
@@ -117,8 +117,6 @@
                                 <span id="error_hall_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-
-                       
 
                         <div class="col-md-4">
                             <div class="form-group">
