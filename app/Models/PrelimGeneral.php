@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PrelimGeneral extends Model
 {
     use HasFactory;
+    protected $table = 'prelim_gen_specs';
+    protected $fillable = [];
 }
