@@ -1,15 +1,15 @@
 @extends('backend.app')
-@section('title', 'Hall Pricing Managemnent')
+@section('title', 'Prelim/general')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
 @endpush
-@section('main_menu', 'Hall Pricing')
-@section('active_menu', 'All Hall Pricing')
+@section('main_menu', 'Prelim/general')
+@section('active_menu', 'Prelim/general')
 @section('content')
 
     <div class="panel-heading">
         <div class="invoice_date_filter" style="">
-         
+
         </div>
 
     </div>
@@ -34,11 +34,11 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Name of Eqpt</th>
-                                <th>User Directorate</th>
+                                {{-- <th>User Directorate</th>
                                 <th>Receive Dt</th>
                                 <th>Present State of Spec</th>
                                 <th>Remarks</th>
-                                <th>Action</th>
+                                <th>Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -56,5 +56,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.hallPrice.index_js') --}}
+    @include('backend.specification.prelimgeneral.index_js')
 @endpush

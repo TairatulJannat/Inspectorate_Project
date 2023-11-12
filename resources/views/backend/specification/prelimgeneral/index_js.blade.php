@@ -26,7 +26,7 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-                url: "{{ url('admin/hall_price/all_data') }}",
+                url: "{{ url('prelimgeneral/alldata') }}",
                 type: 'POST',
                 data: function(d) {
 
@@ -39,75 +39,13 @@
                     searchable: false
                 },
                 {
-                    data: 'hall_name',
-                    name: 'hall_name',
+                    data: 'item_id',
+                    name: 'item_id',
                     orderable: false
                 },
-                {
-                    data: 'floor',
-                    name: 'floor',
-                    orderable: false
-                },
-                {
-                    data: 'user_category',
-                    name: 'user_category',
-                    orderable: false
-                },
-                {
-                    data: 'specify_event',
-                    name: 'specify_event',
-                    orderable: true
-                },
-                // {
-                //     data: 'event_name',
-                //     name: 'event_name',
-                //     orderable: true
-                // },
-                {
-                    data: 'specify_month',
-                    name: 'specify_month',
-                    orderable: true
-                },
-                // {
-                //     data: 'months',
-                //     name: 'months',
-                //     orderable: true
-                // },
-                {
-                    data: 'specify_ramadan',
-                    name: 'specify_ramadan',
-                    orderable: true
-                },
-                {
-                    data: 'specify_holiday',
-                    name: 'specify_holiday',
-                    orderable: true
-                },
-                {
-                    data: 'specify_shift_charge',
-                    name: 'specify_shift_charge',
-                    orderable: true
-                },
-                {
-                    data: 'shift_name',
-                    name: 'shift_name',
-                    orderable: true
-                },
-                {
-                    data: 'price',
-                    name: 'price',
-                    orderable: true
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                    orderable: true
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: true
-                },
+                
+
+
 
             ],
             dom: 'lBfrtip',
