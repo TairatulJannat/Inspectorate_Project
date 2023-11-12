@@ -17,15 +17,22 @@ class PrelimGeneral extends Model
     //     return $this->belongsTo(Inspection::class, 'insp_id');
     // }
 
-    // public function item()
+    public function item_type()
+    {
+        return $this->belongsTo(Item_type::class);
+    }
+
+    // public function itemType()
     // {
-    //     return $this->belongsTo(Item::class, 'item_id');
+    //     return $this->belongsTo(ItemType::class, 'item_type_id', 'id');
     // }
 
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class);
+    // }
     // public function itemType()
     // {
     //     return $this->belongsTo(ItemType::class, 'item_type_id');
     // }
 }
-
-

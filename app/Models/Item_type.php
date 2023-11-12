@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Item_type extends Model
 {
     use HasFactory;
+
+    protected $table = 'item_types';
+    
+    // public function prelimgeneral()
+    // {
+    //     return $this->belongsTo(PrelimGeneral::class);
+    // }
+    public function prelimgenerals()
+    {
+        return $this->hasMany(PrelimGeneral::class);
+    }
 }

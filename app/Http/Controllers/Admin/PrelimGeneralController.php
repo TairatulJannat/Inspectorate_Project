@@ -22,12 +22,10 @@ class PrelimGeneralController extends Controller
     }
     public function all_data(Request $request)
     {
-
-     
         if ($request->ajax()) {
-            $query = PrelimGeneral::all();
+            $query = PrelimGeneral::with('item_type')->where('status', 1);
             dd($query);
-            $query->orderBy('id', 'asc');
+            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -60,7 +58,7 @@ class PrelimGeneralController extends Controller
                 //     $url = asset("uploads/member_Photograph/$data->photo");
                 //     return '<img src=' . $url . ' border="0" width="40" class="img-rounded" align="center" />';
                 // })
-                ->rawColumns([ 'action'])
+                ->rawColumns(['action'])
                 ->make(true);
         }
     }
@@ -71,11 +69,6 @@ class PrelimGeneralController extends Controller
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->get();
-        // dd($item_types);
-        // $items = Items::leftJoin('item_types', 'items.item_type_id', '=', 'item_types.id')
-        // ->select('items.*', 'item_types.name as item_type_name')
-        // ->get();
-        // dd($items);
         return view('backend.specification.prelimgeneral.create', compact('dte_managments', 'additional_documnets', 'item_types'));
     }
     public function item_name($id)
