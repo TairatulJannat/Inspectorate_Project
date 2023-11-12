@@ -29,7 +29,7 @@
             ajax: {
 
                 url: "{{ url('admin/prelimgeneral/alldata') }}",
-                type: 'POST',
+                type: 'GET',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
                 }
