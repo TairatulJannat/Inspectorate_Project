@@ -22,6 +22,7 @@ class PrelimGeneralController extends Controller
     }
     public function all_data(Request $request)
     {
+
         if ($request->ajax()) {
             $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')

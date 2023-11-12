@@ -27,7 +27,7 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-                // url: "{{ url('admin/hall_price/all_data') }}",
+
                 url: "{{ url('admin/prelimgeneral/alldata') }}",
                 type: 'POST',
                 data: function(d) {
