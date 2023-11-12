@@ -23,11 +23,12 @@ class PrelimGeneralController extends Controller
     public function all_data(Request $request)
     {
 
-
         if ($request->ajax()) {
-            $query = PrelimGeneral::all();
-            dd($query);
-            $query->orderBy('id', 'asc');
+            $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
+            ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
+            ->get();
+            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -40,14 +41,17 @@ class PrelimGeneralController extends Controller
                 //     }
                 //     return '<img src=' . $url . ' border="0" width="70" class="img-rounded" align="center" />';
                 // })
-                // ->addColumn('status', function ($data) {
-                //     if ($data->status == '1') {
-                //         return '<button class="btn btn-success btn-sm">Active</button>';
-                //     }
-                //     if ($data->status == '0') {
-                //         return '<button class="btn btn-danger btn-sm">Inactive</button>';
-                //     }
-                // })
+                ->addColumn('status', function ($data) {
+                    if ($data->status == '0') {
+                        return '<button class="btn btn-success btn-sm">New</button>';
+                    }
+                    if ($data->status == '1') {
+                        return '<button class="btn btn-waring btn-sm">Seen</button>';
+                    }
+                    if ($data->status == '2') {
+                        return '<button class="btn btn-danger btn-sm">Delivered</button>';
+                    }
+                })
                 ->addColumn('action', function ($data) {
 
                     $actionBtn = '<div class="btn-group" role="group">
@@ -60,7 +64,7 @@ class PrelimGeneralController extends Controller
                 //     $url = asset("uploads/member_Photograph/$data->photo");
                 //     return '<img src=' . $url . ' border="0" width="40" class="img-rounded" align="center" />';
                 // })
-                ->rawColumns([ 'action'])
+                ->rawColumns(['action' ,'status'])
                 ->make(true);
         }
     }
@@ -71,11 +75,6 @@ class PrelimGeneralController extends Controller
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->get();
-        // dd($item_types);
-        // $items = Items::leftJoin('item_types', 'items.item_type_id', '=', 'item_types.id')
-        // ->select('items.*', 'item_types.name as item_type_name')
-        // ->get();
-        // dd($items);
         return view('backend.specification.prelimgeneral.create', compact('dte_managments', 'additional_documnets', 'item_types'));
     }
     public function item_name($id)

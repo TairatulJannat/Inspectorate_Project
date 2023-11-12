@@ -35,9 +35,10 @@
                                 <th>SL No</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
-                                <th>Receive Dt</th>
-                                <th>Present State of Spec</th>
-                                <th>Remarks</th>
+                                <th>Receive Date</th>
+                                <th>Present state of spec</th>
+                                <th>Remark</th>
+
                                 <th>Action</th>
                             </tr>
                         </thead>
