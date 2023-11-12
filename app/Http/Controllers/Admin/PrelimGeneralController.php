@@ -11,6 +11,7 @@ use App\Models\PrelimGeneral;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class PrelimGeneralController extends Controller
 {
@@ -19,6 +20,51 @@ class PrelimGeneralController extends Controller
     {
         return view('backend.specification.prelimgeneral.index');
     }
+    public function all_data(Request $request)
+    {
+
+     
+        if ($request->ajax()) {
+            $query = PrelimGeneral::all();
+            dd($query);
+            $query->orderBy('id', 'asc');
+
+            return DataTables::of($query)
+                ->setTotalRecords($query->count())
+                ->addIndexColumn()
+                // ->addColumn('photo', function ($data) {
+                //     if ($data->image_one) {
+                //         $url = asset("assets/backend/images/hall/$data->image_one");
+                //     } else {
+                //         $url = asset("assets/backend/images/no.jpg");
+                //     }
+                //     return '<img src=' . $url . ' border="0" width="70" class="img-rounded" align="center" />';
+                // })
+                // ->addColumn('status', function ($data) {
+                //     if ($data->status == '1') {
+                //         return '<button class="btn btn-success btn-sm">Active</button>';
+                //     }
+                //     if ($data->status == '0') {
+                //         return '<button class="btn btn-danger btn-sm">Inactive</button>';
+                //     }
+                // })
+                ->addColumn('action', function ($data) {
+
+                    $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/prelimgeneral/edit/' . $data->id) . '" class="edit btn btn-outline-success btn-sm">Edit</a>
+
+                           <a class="btn btn-outline-danger btn-sm " type="button" href="javascript:void(0)" onclick="delete_data(' . $data->id . ')">Delete</a>';
+                    return $actionBtn;
+                })
+                // ->addColumn('photo', function ($data) {
+                //     $url = asset("uploads/member_Photograph/$data->photo");
+                //     return '<img src=' . $url . ' border="0" width="40" class="img-rounded" align="center" />';
+                // })
+                ->rawColumns([ 'action'])
+                ->make(true);
+        }
+    }
+
 
     public function create()
     {
@@ -40,8 +86,8 @@ class PrelimGeneralController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-        	'sender' => 'required',
-        	'reference_no' => 'required',
+            'sender' => 'required',
+            'reference_no' => 'required',
             'spec_type' => 'required',
             'additional_documents' => 'required',
             'item_type_id' => 'required',
