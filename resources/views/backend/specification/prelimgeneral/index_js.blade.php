@@ -26,7 +26,7 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-                url: "{{ url('prelimgeneral/alldata') }}",
+                url: "{{ url('admin/prelimgeneral/alldata') }}",
                 type: 'POST',
                 data: function(d) {
 
@@ -43,7 +43,7 @@
                     name: 'item_id',
                     orderable: false
                 },
-                
+
 
 
 

@@ -23,7 +23,7 @@ class PrelimGeneralController extends Controller
     public function all_data(Request $request)
     {
 
-     
+
         if ($request->ajax()) {
             $query = PrelimGeneral::all();
             dd($query);

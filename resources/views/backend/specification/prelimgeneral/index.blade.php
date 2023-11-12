@@ -34,11 +34,11 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Name of Eqpt</th>
-                                {{-- <th>User Directorate</th>
+                                <th>User Directorate</th>
                                 <th>Receive Dt</th>
                                 <th>Present State of Spec</th>
                                 <th>Remarks</th>
-                                <th>Action</th> --}}
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
