@@ -40,12 +40,12 @@
                     searchable: false
                 },
                 {
-                    data: 'item_type_id',
+                    data: 'item_type_name',
                     name: 'item_type_id',
                     orderable: false
                 },
                 {
-                    data: 'sender',
+                    data: 'dte_managment_name',
                     name: 'sender',
                     orderable: false
                 },
@@ -58,6 +58,12 @@
                 {
                     data: 'remark',
                     name: 'remark',
+                    orderable: false
+                },
+
+                {
+                    data: 'status',
+                    name: 'status',
                     orderable: false
                 },
             
