@@ -23,8 +23,8 @@ class PrelimGeneralController extends Controller
     public function all_data(Request $request)
     {
         if ($request->ajax()) {
-            $query = PrelimGeneral::with('item_type')->where('status', 1);
-            dd($query);
+            $query = PrelimGeneral::all();
+            // dd($query);
             // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)

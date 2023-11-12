@@ -44,7 +44,23 @@
                     name: 'item_type_id',
                     orderable: false
                 },
-
+                {
+                    data: 'sender',
+                    name: 'sender',
+                    orderable: false
+                },
+              
+                {
+                    data: 'spec_received_date',
+                    name: 'spec_received_date',
+                    orderable: false
+                },
+                {
+                    data: 'remark',
+                    name: 'remark',
+                    orderable: false
+                },
+            
                 {
                     data: 'action',
                     name: 'action',
