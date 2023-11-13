@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
+use App\Models\AdminSection;
 use App\Models\DocType;
 use App\Models\Designation;
+use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\Item_type;
 use App\Models\Items;
@@ -25,27 +27,32 @@ class PrelimGeneralController extends Controller
         // dd( $doc_type);
         return view('backend.specification.prelimgeneral.index');
     }
+    public function outgoing()
+    {
+        return view('backend.specification.prelimgeneral.outgoing');
+    }
     public function all_data(Request $request)
     {
 
         if ($request->ajax()) {
+
+            $insp_id = Auth::user()->inspectorate_id;
+            $admin_id = Auth::user()->id;
+            $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
             $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
-            ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
-            ->get();
+                ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
+                ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
+                ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name','sections.name as section_name')
+                ->where('prelim_gen_specs.insp_id', $insp_id)
+                ->whereIn('prelim_gen_specs.sec_id', $section_ids)
+                ->get();
             // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
-                // ->addColumn('photo', function ($data) {
-                //     if ($data->image_one) {
-                //         $url = asset("assets/backend/images/hall/$data->image_one");
-                //     } else {
-                //         $url = asset("assets/backend/images/no.jpg");
-                //     }
-                //     return '<img src=' . $url . ' border="0" width="70" class="img-rounded" align="center" />';
-                // })
+               
                 ->addColumn('status', function ($data) {
                     if ($data->status == '0') {
                         return '<button class="btn btn-success btn-sm">New</button>';
@@ -67,21 +74,54 @@ class PrelimGeneralController extends Controller
                 //     $url = asset("uploads/member_Photograph/$data->photo");
                 //     return '<img src=' . $url . ' border="0" width="40" class="img-rounded" align="center" />';
                 // })
-                ->rawColumns(['action' ,'status'])
+                ->rawColumns(['action', 'status'])
                 ->make(true);
         }
     }
     public function details($id)
     {
 
-        $details = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
-        ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
-        ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
-        ->where('prelim_gen_specs.id', $id)
-        ->first();
 
-        $designations=Designation::all();
-        return view('backend.specification.prelimgeneral.details', compact('details','designations'));
+        $details = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
+            ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
+            ->where('prelim_gen_specs.id', $id)
+            ->first();
+
+        $designations = Designation::all();
+        return view('backend.specification.prelimgeneral.details', compact('details', 'designations'));
+    }
+
+    public function prelimGenTracking(Request $request)
+    {
+
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $doc_type_id = $request->doc_type_id;
+        $doc_ref_id = $request->doc_ref_id;
+        $reciever_desig_id = $request->reciever_desig_id;
+        $section_id = $section_ids[0];
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+        $data = new DocumentTrack();
+        $data->ins_id = $ins_id;
+        $data->section_id = $section_id;
+        $data->doc_type_id = $doc_type_id;
+        $data->doc_ref_id = $doc_ref_id;
+        $data->reciever_desig_id = $reciever_desig_id;
+        $data->status = 1;
+        $data->sender_designation_id = $sender_designation_id;
+
+        $data->created_at = Carbon::now();
+        $data->updated_at = Carbon::now();
+
+        $data->save();
+
+
+
+
+        return response()->json(['success' => 'Done']);
     }
 
 

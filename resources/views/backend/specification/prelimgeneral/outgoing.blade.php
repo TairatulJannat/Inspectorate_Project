@@ -11,7 +11,7 @@
     </style>
 @endpush
 @section('main_menu', 'Prelim/general')
-@section('active_menu', 'Incoming')
+@section('active_menu', 'Outgoing')
 @section('content')
 
     <div class="panel-heading">
@@ -50,10 +50,8 @@
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
-                                <th>Section Name</th>
-
-                                <th>Remark</th>
                                 <th>Present state of spec</th>
+                                <th>Remark</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
