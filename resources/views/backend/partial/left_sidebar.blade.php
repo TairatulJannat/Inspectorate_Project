@@ -12,7 +12,7 @@ $currentControllerName = Request::segment(2);
     }
 </style>
 <header class="main-nav">
-    
+
     <nav>
         <div class="main-navbar">
             <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
@@ -81,6 +81,7 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+
                     {{-- @if (count(menu_check('Tender')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Tender</span></a>
@@ -94,8 +95,9 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif --}}
+
                     @if (count(menu_check('Specification')) !== 0)
-                        <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
+                        <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Specification</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ route('admin.prelimgeneral/view') }}"
@@ -107,6 +109,24 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+
+                    {{-- Side Menu Button Links for Items --}}
+                    @if (count(menu_check('Items')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Items</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/items/index') }}"
+                                        class="{{ Request::is('*/*/index') ? 'active' : '' }} text-white">Items
+                                        Index</a>
+                                </li>
+                                <li><a href="{{ url('admin/item_types/index') }}"
+                                        class="{{ Request::is('*/*/index') ? 'active' : '' }} text-white">Item Types
+                                        Index</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
                     @if (count(menu_check('Contact')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Contact</span></a>
@@ -196,11 +216,6 @@ $currentControllerName = Request::segment(2);
                             </li>
                         </ul>
                     </li> --}}
-
-
-
-
-
 
                     <li class="sidebar-main-title">
                         <div>

@@ -10,7 +10,7 @@ class Item_type extends Model
     use HasFactory;
 
     protected $table = 'item_types';
-    
+
     // public function prelimgeneral()
     // {
     //     return $this->belongsTo(PrelimGeneral::class);
@@ -18,5 +18,10 @@ class Item_type extends Model
     public function prelimgenerals()
     {
         return $this->hasMany(PrelimGeneral::class);
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Items::class, 'item_id');
     }
 }
