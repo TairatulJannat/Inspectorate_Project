@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\DocType;
+use App\Models\Designation;
 use App\Models\Dte_managment;
 use App\Models\Item_type;
 use App\Models\Items;
@@ -59,9 +60,7 @@ class PrelimGeneralController extends Controller
                 ->addColumn('action', function ($data) {
 
                     $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/prelimgeneral/edit/' . $data->id) . '" class="edit btn btn-outline-success btn-sm">Edit</a>
-
-                           <a class="btn btn-outline-danger btn-sm " type="button" href="javascript:void(0)" onclick="delete_data(' . $data->id . ')">Delete</a>';
+                            <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Details</a>';
                     return $actionBtn;
                 })
                 // ->addColumn('photo', function ($data) {
@@ -71,6 +70,18 @@ class PrelimGeneralController extends Controller
                 ->rawColumns(['action' ,'status'])
                 ->make(true);
         }
+    }
+    public function details($id)
+    {
+
+        $details = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
+        ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
+        ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
+        ->where('prelim_gen_specs.id', $id)
+        ->first();
+
+        $designations=Designation::all();
+        return view('backend.specification.prelimgeneral.details', compact('details','designations'));
     }
 
 
