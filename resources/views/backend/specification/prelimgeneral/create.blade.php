@@ -41,7 +41,7 @@
                                 <select class="form-control" id="spec_type" name="spec_type">
 
                                     <option value="">Please Select </option>
-                                    <option value="0"> General Spec</option>
+                                    <option value="2"> General Spec</option>
                                     <option value="1">Prelim Spec </option>
 
                                 </select>
