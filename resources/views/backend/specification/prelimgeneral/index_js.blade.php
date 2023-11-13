@@ -4,7 +4,7 @@
     });
 
 
-    // Start:: All Data 
+    // Start:: All Data
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
@@ -49,10 +49,16 @@
                     name: 'sender',
                     orderable: false
                 },
-              
+
+
                 {
                     data: 'spec_received_date',
                     name: 'spec_received_date',
+                    orderable: false
+                },
+                {
+                    data: 'section_name',
+                    name: 'section_name',
                     orderable: false
                 },
                 {
@@ -66,7 +72,7 @@
                     name: 'status',
                     orderable: false
                 },
-            
+
                 {
                     data: 'action',
                     name: 'action',
@@ -84,7 +90,7 @@
             table.draw(true);
         });
     });
-    // End:: All Data 
+    // End:: All Data
 
     // Start:: save information
     $('#save_info').off().on('submit', function(event) {
