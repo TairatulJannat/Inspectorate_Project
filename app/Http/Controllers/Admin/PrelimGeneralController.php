@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
+use App\Models\DocType;
 use App\Models\Dte_managment;
 use App\Models\Item_type;
 use App\Models\Items;
@@ -18,6 +19,9 @@ class PrelimGeneralController extends Controller
     //
     public function index()
     {
+        // $doc_type = DocType::where('name', 'Indent')->first();
+        // $doc_type =  $doc_type->id;
+        // dd( $doc_type);
         return view('backend.specification.prelimgeneral.index');
     }
     public function all_data(Request $request)
@@ -95,7 +99,8 @@ class PrelimGeneralController extends Controller
         ]);
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = Auth::user()->section_id;
-
+      
+        
         $data = new PrelimGeneral();
         $data->insp_id = $insp_id;
         $data->sec_id = $sec_id;
