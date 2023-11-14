@@ -11,17 +11,6 @@
                     <input type="hidden" name="edit_item_type_id" id="edit_item_type_id">
 
                     <div class="mb-3">
-                        <label for="editItemId" class="form-label">Item</label><br>
-                        <select class="form-control select2 editItemId" id="editItemId" name="edit_item_id"
-                            style="width: 100% !important;">
-                            <option value="" selected disabled>Select an item</option>
-                            @foreach ($items as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                        <span class="text-danger error-text edit_item_id_error"></span>
-                    </div>
-                    <div class="mb-3">
                         <label for="editItemTypeName" class="form-label">Item Type Name</label>
                         <input type="text" class="form-control" id="editItemTypeName" name="edit_name">
                         <span class="text-danger error-text edit_name_error"></span>

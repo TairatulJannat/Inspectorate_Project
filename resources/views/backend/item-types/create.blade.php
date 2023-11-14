@@ -10,17 +10,6 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="itemId" class="form-label">Item</label><br>
-                        <select class="form-control select2 itemId" id="itemId" name="item_id"
-                            style="width: 100% !important;">
-                            <option value="" selected disabled>Select an item</option>
-                            @foreach ($items as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                        <span class="text-danger error-text item_id_error"></span>
-                    </div>
-                    <div class="mb-3">
                         <label for="itemTypeName" class="form-label">Item Type Name</label>
                         <input type="text" class="form-control" id="itemTypeName" name="name">
                         <span class="text-danger error-text name_error"></span>

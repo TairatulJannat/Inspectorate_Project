@@ -30,8 +30,7 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Item Name</th>
-                                <th>Item Type</th>
+                                <th>Item Type Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -48,6 +47,8 @@
     @include('backend.item-types.create')
     {{-- Edit Item Type --}}
     @include('backend.item-types.edit')
+    {{-- Show Item Type --}}
+    @include('backend.item-types.show')
 @endsection
 
 @push('custom-scripts')
