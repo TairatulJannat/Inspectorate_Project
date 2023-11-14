@@ -6,6 +6,7 @@ use App\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminSection;
 use App\Models\Designation;
+use App\Models\Inspectorate;
 use App\Models\Section;
 use App\role;
 use App\User;
@@ -24,13 +25,14 @@ class UserController extends Controller
         if (Auth::user()->id == 92) {
             $auth_inspectorate_id =  Auth::user()->inspectorate_id;
             $users = Admin::where('status_id', '!=', 2)->get();
-            // dd($users);
+
             $role = role::all();
+            $inspectorates = Inspectorate::all();
             $page_data = [
                 'add_menu' => 'yes',
                 'modal' => 'yes',
             ];
-            return view('backend.user.all_user', compact('users', 'page_data', 'role'));
+            return view('backend.user.all_user', compact('users', 'page_data', 'role', 'inspectorates'));
         } else {
 
             $auth_inspectorate_id =  Auth::user()->inspectorate_id;
@@ -54,7 +56,8 @@ class UserController extends Controller
             'role_id' => ['required'],
         ]);
         if (Auth::user()->id == 92) {
-            $auth_inspectorate_id = 0;
+            $auth_inspectorate_id = $request->insp_id;
+
 
             $user = new Admin();
             $user->name = $request->name;
