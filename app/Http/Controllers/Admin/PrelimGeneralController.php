@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\DocType;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
@@ -22,6 +23,9 @@ class PrelimGeneralController extends Controller
     //
     public function index()
     {
+        // $doc_type = DocType::where('name', 'Indent')->first();
+        // $doc_type =  $doc_type->id;
+        // dd( $doc_type);
         return view('backend.specification.prelimgeneral.index');
     }
     public function outgoing()
