@@ -191,30 +191,6 @@
         });
     });
 
-    function form_reset() {
-        document.getElementById("search_form").reset();
-        $('.select2').val(null).trigger('change');
-        $('.yajra-datatable').DataTable().ajax.reload(null, false);
-    }
-
-    function clear_error_field() {
-        $('#error_name').text('');
-        $('#error_holiday_date').text('');
-    }
-
-    function disableButton() {
-        var btn = document.getElementById('form_submission_button');
-        btn.disabled = true;
-        btn.innerText = 'Saving....';
-    }
-
-    function enableeButton() {
-        var btn = document.getElementById('form_submission_button');
-        btn.disabled = false;
-        btn.innerText = 'Save'
-    }
-
-    
     function error_notification(message) {
         var notify = $.notify('<i class="fa fa-bell-o"></i><strong>' + message + '</strong> ', {
             type: 'theme',

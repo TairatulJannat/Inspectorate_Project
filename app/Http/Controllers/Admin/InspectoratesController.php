@@ -4,27 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Items;
+use App\Models\Inspectorate;
 use DataTables;
 use Validator;
 
-class ItemsController extends Controller
+class InspectoratesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('backend.items.index');
+        return view('backend.inspectorates.index');
     }
 
     public function getAllData()
     {
-        $items = Items::select('id', 'name', 'attribute');
+        $inspectorates = Inspectorate::select('id', 'name', 'slag');
 
-        return DataTables::of($items)
-            ->addColumn('DT_RowIndex', function ($item) {
-                return $item->id; // You can use any unique identifier here
+        return DataTables::of($inspectorates)
+            ->addColumn('DT_RowIndex', function ($inspectorate) {
+                return $inspectorate->id; // You can use any unique identifier here
             })
             ->make(true);
     }
@@ -44,34 +44,31 @@ class ItemsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'attribute' => ['required', 'string', 'max:255'],
+            'slag' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->passes()) {
 
-            $item = new Items();
+            $inspectorate = new Inspectorate();
 
-            $item->name = $request->name;
-            $item->attribute = $request->attribute;
+            $inspectorate->name = $request->name;
+            $inspectorate->slag = $request->slag;
 
-            if ($item->save()) {
+            if ($inspectorate->save()) {
                 return response()->json([
                     'isSuccess' => true,
-                    'Message' => "Item Saved successfully!",
-                    'code' => 1,
+                    'Message' => "Inspectorate Saved successfully!"
                 ], 200);
             } else {
                 return response()->json([
                     'isSuccess' => false,
-                    'Message' => "Something went wrong!",
-                    'code' => 0,
+                    'Message' => "Something went wrong!"
                 ], 200);
             }
         } else {
             return response()->json([
                 'isSuccess' => false,
                 'Message' => "Please check the inputs!",
-                'code' => 0,
                 'error' => $validator->errors()->toArray()
             ], 200);
         }
@@ -92,10 +89,10 @@ class ItemsController extends Controller
     {
         try {
             $id = $request->id;
-            $item = Items::findOrFail($id);
-            return response()->json($item);
+            $inspectorate = Inspectorate::findOrFail($id);
+            return response()->json($inspectorate);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Item not found'], 404);
+            return response()->json(['error' => 'Inspectorate not found'], 404);
         }
     }
 
@@ -106,42 +103,38 @@ class ItemsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'edit_name' => ['required', 'string', 'max:255'],
-            'edit_attribute' => ['required', 'string', 'max:255'],
+            'edit_slag' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->passes()) {
             try {
-                $id = $request->edit_item_id;
-                $item = Items::findOrFail($id);
+                $id = $request->edit_inspectorate_id;
+                $inspectorate = Inspectorate::findOrFail($id);
 
-                $item->name = $request->edit_name;
-                $item->attribute = $request->edit_attribute;
+                $inspectorate->name = $request->edit_name;
+                $inspectorate->slag = $request->edit_slag;
 
-                if ($item->save()) {
+                if ($inspectorate->save()) {
                     return response()->json([
                         'isSuccess' => true,
-                        'Message' => "Item updated successfully!",
-                        'code' => 1,
+                        'Message' => "Inspectorate updated successfully!"
                     ], 200);
                 } else {
                     return response()->json([
                         'isSuccess' => false,
-                        'Message' => "Something went wrong while updating!",
-                        'code' => 0,
+                        'Message' => "Something went wrong while updating!"
                     ], 200);
                 }
             } catch (\Exception $e) {
                 return response()->json([
                     'isSuccess' => false,
-                    'Message' => "Item not found!",
-                    'code' => 0,
+                    'Message' => "Inspectorate not found!"
                 ], 404);
             }
         } else {
             return response()->json([
                 'isSuccess' => false,
                 'Message' => "Please check the inputs!",
-                'code' => 0,
                 'error' => $validator->errors()->toArray(),
             ], 200);
         }
@@ -150,8 +143,29 @@ class ItemsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+
+        $inspectorate = Inspectorate::find($id);
+
+        if ($inspectorate) {
+            if ($inspectorate->delete()) {
+                return response()->json([
+                    'isSuccess' => true,
+                    'Message' => 'Inspectorate deleted successfully!'
+                ], 200); // Status code here
+            } else {
+                return response()->json([
+                    'isSuccess' => false,
+                    'Message' => 'Failed to delete Inspectorate!'
+                ], 200); // Status code here
+            }
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => 'Inspectorate not found!'
+            ], 200); // Status code here
+        }
     }
 }
