@@ -9,6 +9,18 @@
                 </div>
                 <div class="modal-body">
 
+                    @if (   \Illuminate\Support\Facades\Auth::user()->id ==92)
+                    <div class="form-group">
+                        <label for="Route_name">Inspectorate</label>
+                        <select name="insp_id" id="insp_id"  class="form-control" >\
+                            <option value="">Select Inspectorate</option>
+                            @foreach ($inspectorates as $inspectorate )
+                            <option value="{{$inspectorate->id}}">{{$inspectorate->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
+
                     <div class="form-group">
                         <label for="Route_name">username</label>
                         <input type="text" class="form-control" id="Route name" name="name">

@@ -12,6 +12,7 @@ use App\Models\Dte_managment;
 use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\PrelimGeneral;
+use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,19 +41,29 @@ class PrelimGeneralController extends Controller
             $admin_id = Auth::user()->id;
             $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
-            $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
+            if(Auth::user()->id==92){
+                $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
+                ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
+                ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
+                ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name','sections.name as section_name')
+                ->get();
+            }else{
+                $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
                 ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
                 ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
                 ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name','sections.name as section_name')
                 ->where('prelim_gen_specs.insp_id', $insp_id)
                 ->whereIn('prelim_gen_specs.sec_id', $section_ids)
                 ->get();
+            }
+
+
             // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
-               
+
                 ->addColumn('status', function ($data) {
                     if ($data->status == '0') {
                         return '<button class="btn btn-success btn-sm">New</button>';
@@ -127,10 +138,14 @@ class PrelimGeneralController extends Controller
 
     public function create()
     {
+        $admin_id=Auth::user()->id;
+        $section_ids=$section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $sections=Section::whereIn('id',$section_ids)->get();
+
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->get();
-        return view('backend.specification.prelimgeneral.create', compact('dte_managments', 'additional_documnets', 'item_types'));
+        return view('backend.specification.prelimgeneral.create', compact('dte_managments', 'additional_documnets', 'item_types','sections'));
     }
     public function item_name($id)
     {
@@ -141,6 +156,7 @@ class PrelimGeneralController extends Controller
     {
         $this->validate($request, [
             'sender' => 'required',
+            'admin_section' => 'required',
             'reference_no' => 'required',
             'spec_type' => 'required',
             'additional_documents' => 'required',
@@ -149,9 +165,8 @@ class PrelimGeneralController extends Controller
 
         ]);
         $insp_id = Auth::user()->inspectorate_id;
-        $sec_id = Auth::user()->section_id;
-      
-        
+        $sec_id = $request->admin_section;
+
         $data = new PrelimGeneral();
         $data->insp_id = $insp_id;
         $data->sec_id = $sec_id;
