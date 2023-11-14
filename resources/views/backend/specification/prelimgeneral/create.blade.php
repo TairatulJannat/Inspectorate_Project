@@ -56,8 +56,9 @@
                                 <select class="form-control" id="spec_type" name="spec_type">
 
                                     <option value="">Please Select </option>
-                                    <option value="2"> General Spec</option>
                                     <option value="1">Prelim Spec </option>
+                                    <option value="2"> General Spec</option>
+                                    
 
                                 </select>
                                 <span id="error_spec_type" class="text-danger error_field"></span>

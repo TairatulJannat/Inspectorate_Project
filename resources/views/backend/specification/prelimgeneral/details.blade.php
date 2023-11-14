@@ -46,9 +46,14 @@
                 <div class="card-body col-3" style="margin: 10px;">
                     <h4>Forward Status</h4>
                     <ul>
-                        <li><i class="fa fa-check ps-2 text-success" aria-hidden="true"></i>CR</li>
-                        <li><i class="fa fa-check ps-2 text-success" aria-hidden="true"></i>Head Clark</li>
-                        <li><i class="fa fa-check ps-2 text-success" aria-hidden="true"></i>AO</li>
+                        @if ($document_tracks !== null && $desig_id !== 1 )
+                            @foreach ($document_tracks as $document_track )
+                            <li><i class="fa fa-check ps-2 text-success" aria-hidden="true"></i>{{$document_track->designations_name}}</li>
+                            @endforeach
+                        @endif
+                        
+                        
+                        
                     </ul>
                 </div>
                 <div class="card-body col-2" style="margin: 10px;">

@@ -100,7 +100,23 @@ class PrelimGeneralController extends Controller
             ->first();
 
         $designations = Designation::all();
-        return view('backend.specification.prelimgeneral.details', compact('details', 'designations'));
+
+        $admin_id=Auth::user()->id;
+        $section_ids=$section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        
+        $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)->leftJoin('designations', 'document_tracks.sender_designation_id', '=', 'designations.id')
+        ->select('document_tracks.*', 'designations.name as designations_name')->get();
+        
+        $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
+        if ($auth_designation_id) {
+            $desig_id = $auth_designation_id->desig_id;
+        
+            // Now you can use $desig_id as needed
+        }
+    //    dd($auth_designation_id);
+        
+        
+        return view('backend.specification.prelimgeneral.details', compact('details', 'designations','document_tracks','desig_id'));
     }
 
     public function prelimGenTracking(Request $request)
@@ -154,16 +170,16 @@ class PrelimGeneralController extends Controller
     }
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'sender' => 'required',
-            'admin_section' => 'required',
-            'reference_no' => 'required',
-            'spec_type' => 'required',
-            'additional_documents' => 'required',
-            'item_type_id' => 'required',
-            'spec_received_date' => 'required',
+        // $this->validate($request, [
+        //     'sender' => 'required',
+        //     'admin_section' => 'required',
+        //     'reference_no' => 'required',
+        //     'spec_type' => 'required',
+        //     'additional_documents' => 'required',
+        //     'item_type_id' => 'required',
+        //     'spec_received_date' => 'required',
 
-        ]);
+        // ]);
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = $request->admin_section;
 
