@@ -141,6 +141,19 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
+                    {{-- Side Menu Button Links for Parameter Groups --}}
+                    @if (count(menu_check('ParameterGroup')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Parameter Groups</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/parameter_groups/index') }}"
+                                        class="{{ Request::is('*/admin/parameter_groups/index') ? 'active' : '' }} text-white">Parameter
+                                        Groups Index</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
                     @if (count(menu_check('Contact')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Contact</span></a>

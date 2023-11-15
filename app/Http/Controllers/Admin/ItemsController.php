@@ -20,7 +20,6 @@ class ItemsController extends Controller
         try {
             $item_types = Item_type::all();
         } catch (\Exception $e) {
-            // Handle the exception (e.g., log it or show a user-friendly error message)
             return back()->withError('Failed to retrieve Item Type.');
         }
 

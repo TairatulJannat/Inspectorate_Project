@@ -30,7 +30,7 @@ class ItemTypesController extends Controller
                 return $item_type->name;
             })
             ->addColumn('status', function ($item_type) {
-                return $item_type->status == 1 ? 'Active' : 'Inactive';
+                return $item_type->status;
             })
             ->make(true);
     }
@@ -135,7 +135,7 @@ class ItemTypesController extends Controller
                 $itemType = Item_type::findOrFail($id);
 
                 $itemType->name = $request->edit_name;
-                $itemType->status = $request->has('status') ? 1 : 0;
+                $itemType->status = $request->has('edit_status') ? 1 : 0;
 
                 if ($itemType->save()) {
                     return response()->json([

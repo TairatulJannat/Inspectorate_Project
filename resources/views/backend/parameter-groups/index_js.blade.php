@@ -2,23 +2,31 @@
     $(document).ready(function() {
         $('.select2').select2();
 
+        $('.sectionId').select2({
+            dropdownParent: $('#createParameterGroupModal')
+        });
+
+        $('.editSectionId').select2({
+            dropdownParent: $('#editParameterGroupModal')
+        });
+
         toastr.options.preventDuplicates = true;
 
         // Get All Data 
         $(function() {
             var table = $('.yajra-datatable').DataTable({
                 searching: true,
-                "order": [
-                    [1, 'desc']
-                ],
-                "columnDefs": [{
-                    "className": "dt-center",
-                    "targets": "_all"
+                // order: [
+                //     [0, 'desc']
+                // ],
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
                 }],
-                "bDestroy": true,
+                bDestroy: true,
                 processing: true,
                 serverSide: true,
-                "language": {
+                language: {
                     processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
                 },
                 drawCallback: function(settings) {
@@ -26,7 +34,7 @@
                     $('#total_data').html(api.ajax.json().recordsTotal);
                 },
                 ajax: {
-                    url: "{{ url('admin/item_types/get_all_data') }}",
+                    url: "{{ url('admin/parameter_groups/get_all_data') }}",
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -40,13 +48,27 @@
                         searchable: false,
                         orderable: false,
                         render: function(data, type, row, meta) {
-                            // Use meta.row + meta.settings._iDisplayStart + 1 for the row index
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
                     {
                         data: 'name',
                         name: 'name',
+                        orderable: false
+                    },
+                    {
+                        data: 'inspectorate_id',
+                        name: 'inspectorate_id',
+                        orderable: false
+                    },
+                    {
+                        data: 'section_id',
+                        name: 'section_id',
+                        orderable: false
+                    },
+                    {
+                        data: 'description',
+                        name: 'description',
                         orderable: false
                     },
                     {
@@ -67,14 +89,13 @@
                         searchable: false,
                         orderable: false,
                         render: function(data, type, row) {
-                            // Add your action buttons here, e.g., edit and delete
-                            return '<button class="btn btn-sm me-2 show_item_type" id="' +
+                            return '<button class="btn btn-sm me-2 show_parameter_group" id="' +
                                 row.id +
                                 '" >Show</button>' +
-                                '<button class="btn btn-secondary btn-sm me-2 edit_item_type" id="' +
+                                '<button class="btn btn-secondary btn-sm me-2 edit_parameter_group" id="' +
                                 row.id +
                                 '" >Edit</button>' +
-                                '<button class="btn btn-danger btn-sm delete_item_type"id="' +
+                                '<button class="btn btn-danger btn-sm delete_parameter_group"id="' +
                                 row.id +
                                 '" >Delete</button>';
                         }
@@ -89,8 +110,9 @@
             });
         });
 
-        // Create Item Type
-        $("#createItemTypeForm").on("submit", function(e) {
+
+        // Create Parameter Group
+        $("#createParameterGroupForm").on("submit", function(e) {
             e.preventDefault();
             var form = this;
             var createButton = $("#createButton");
@@ -116,10 +138,10 @@
                         createButton.prop('disabled', false).text('Create');
                     } else if (response.isSuccess === true) {
                         $(form)[0].reset();
-                        $("#createItemTypeModal").modal("hide");
+                        $("#createParameterGroupModal").modal("hide");
                         Swal.fire(
                             'Added!',
-                            'Item Type Added Successfully!',
+                            'Parameter Group Added Successfully!',
                             'success'
                         )
                         toastr.success(response.Message);
@@ -134,29 +156,32 @@
             });
         });
 
-        // Edit Item Type
-        $(document).on('click', '.edit_item_type', function(e) {
+        // Edit Parameter Group
+        $(document).on('click', '.edit_parameter_group', function(e) {
             e.preventDefault();
             let id = $(this).attr('id');
             $.ajax({
-                url: '{{ url('admin/item_types/edit') }}',
+                url: '{{ url('admin/parameter_groups/edit') }}',
                 method: 'post',
                 data: {
                     id: id,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    $("#edit_item_type_id").val(id);
-                    $("#editItemTypeName").val(response.name);
-                    $("#editItemTypeStatus").prop('checked', response.status == 1);
+                    $("#editParameterGroupId").val(id);
+                    $("#editInspectorateId").val(response.inspectorate_id);
+                    $("#editParameterGroupName").val(response.name);
+                    $("#editSectionId").val(response.section_id).change();
+                    $("#editParameterGroupDescription").val(response.description);
+                    $("#editParameterGroupStatus").prop('checked', response.status == 1);
 
-                    $('#editItemTypeModal').modal('show');
+                    $('#editParameterGroupModal').modal('show');
                 }
             });
         });
 
-        // Update Item Type
-        $("#editItemTypeForm").on("submit", function(e) {
+        // Update Parameter Group
+        $("#editParameterGroupForm").on("submit", function(e) {
             e.preventDefault();
             var form = this;
             var editButton = $("#editButton");
@@ -182,10 +207,10 @@
                         editButton.prop('disabled', false).text('Update');
                     } else if (response.isSuccess === true) {
                         $(form)[0].reset();
-                        $("#editItemTypeModal").modal("hide");
+                        $("#editParameterGroupModal").modal("hide");
                         Swal.fire(
                             'Updated!',
-                            'Item Type Edited Successfully!',
+                            'Parameter Group Edited Successfully!',
                             'success'
                         )
                         toastr.success(response.Message);
@@ -200,8 +225,8 @@
             });
         });
 
-        // Delete Item Type ajax request
-        $(document).on('click', '.delete_item_type', function(e) {
+        // Delete Parameter Group ajax request
+        $(document).on('click', '.delete_parameter_group', function(e) {
             e.preventDefault();
             let id = $(this).attr('id');
             let csrf = '{{ csrf_token() }}';
@@ -216,7 +241,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: '{{ url('admin/item_types/destroy') }}',
+                        url: '{{ url('admin/parameter_groups/destroy') }}',
                         method: 'post',
                         data: {
                             id: id,
@@ -227,7 +252,7 @@
                             if (response.isSuccess === true) {
                                 Swal.fire(
                                     'Deleted!',
-                                    'Item Type has been deleted.',
+                                    'Parameter Group has been deleted.',
                                     'success'
                                 );
                                 toastr.success(response.Message);
@@ -245,7 +270,7 @@
                             console.error(error);
                             Swal.fire(
                                 'Error!',
-                                'Failed to delete Item Type.',
+                                'Failed to delete Parameter Group.',
                                 'error'
                             );
                         }
@@ -254,22 +279,25 @@
             });
         });
 
-        // Show Item Type
-        $(document).on('click', '.show_item_type', function(e) {
+        // Show Parameter Group
+        $(document).on('click', '.show_parameter_group', function(e) {
             e.preventDefault();
             let id = $(this).attr('id');
             $.ajax({
-                url: '{{ url('admin/item_types/show') }}',
+                url: '{{ url('admin/parameter_groups/show') }}',
                 method: 'post',
                 data: {
                     id: id,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    $("#showItemTypeName").text(response.name);
-                    $("#showItemTypeStatus").prop('checked', response.status == 1);
+                    $("#showParameterGroupName").text(response.name);
+                    $("#showInspectorateId").text(response.inspectorate_id);
+                    $("#showSectionId").text(response.section_id);
+                    $("#showDescription").text(response.description);
+                    $("#showStatus").prop('checked', response.status == 1);
 
-                    $('#showItemTypeModal').modal('show');
+                    $('#showParameterGroupModal').modal('show');
                 }
             });
         });

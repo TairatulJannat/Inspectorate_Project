@@ -18,7 +18,7 @@
                     <div class="mb-3">
                         <label for="editItemTypeStatus" class="form-label">Status</label>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="editItemTypeStatus" name="status">
+                            <input class="form-check-input" type="checkbox" id="editItemTypeStatus" name="edit_status">
                             <label class="form-check-label" for="editItemTypeStatus"></label>
                         </div>
                         <span class="text-danger error-text edit_status_error"></span>
