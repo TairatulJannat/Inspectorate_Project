@@ -8,12 +8,24 @@
             <form action="{{ url('admin/items/update') }}" method="POST" id="editItemForm" autocomplete="off">
                 @csrf
                 <div class="modal-body">
-                    <input type="hidden" name="edit_item_id" id="edit_item_id">
+                    <input type="hidden" name="edit_item_id" id="editItemId">
+                    <input type="hidden" name="edit_item_inspectorate_id" id="editItemInspectorateId">
 
                     <div class="mb-3">
                         <label for="editItemName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="editItemName" name="edit_name">
                         <span class="text-danger error-text edit_name_error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editItemTypeId" class="form-label">Item Type</label><br>
+                        <select class="form-control select2 editItemTypeId" id="editItemTypeId" name="edit_item_type_id"
+                            style="width: 100% !important;">
+                            <option value="" selected disabled>Select an item type</option>
+                            @foreach ($item_types as $item_type)
+                                <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger error-text edit_item_type_id_error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="editItemAttribute" class="form-label">Attribute</label>

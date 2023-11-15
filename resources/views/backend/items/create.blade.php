@@ -9,9 +9,20 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="itemName" class="form-label">Name</label>
+                        <label for="itemName" class="form-label">Item Name</label>
                         <input type="text" class="form-control" id="itemName" name="name">
                         <span class="text-danger error-text name_error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="itemTypeId" class="form-label">Item Type</label><br>
+                        <select class="form-control select2 itemTypeId" id="itemTypeId" name="item_type_id"
+                            style="width: 100% !important;">
+                            <option value="" selected disabled>Select an item</option>
+                            @foreach ($item_types as $item_type)
+                                <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger error-text item_type_id_error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="itemAttribute" class="form-label">Attribute</label>

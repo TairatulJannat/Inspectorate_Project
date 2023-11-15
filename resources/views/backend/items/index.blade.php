@@ -2,6 +2,7 @@
 @section('title', 'Items')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.min.css') }}">
 @endpush
 @section('main_menu', 'Items')
 @section('active_menu', 'Items Index')
@@ -30,6 +31,7 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Item Name</th>
+                                <th>Item Type</th>
                                 <th>Item Attribute</th>
                                 <th>Action</th>
                             </tr>
@@ -46,6 +48,8 @@
     @include('backend.items.create')
     {{-- Edit Item Modal --}}
     @include('backend.items.edit')
+    {{-- Show Item Type --}}
+    @include('backend.items.show')
 @endsection
 
 @push('custom-scripts')

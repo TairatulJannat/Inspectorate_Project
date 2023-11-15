@@ -11,6 +11,6 @@ class Items extends Model
 
     public function item_type()
     {
-        return $this->hasOne(Item_type::class, 'item_id');
+        return $this->belongsTo(Item_type::class, 'item_type_id');
     }
 }
