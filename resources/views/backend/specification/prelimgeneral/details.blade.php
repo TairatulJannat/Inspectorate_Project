@@ -46,14 +46,15 @@
                 <div class="card-body col-3" style="margin: 10px;">
                     <h4>Forward Status</h4>
                     <ul>
-                        @if ($document_tracks !== null && $desig_id !== 1 )
-                            @foreach ($document_tracks as $document_track )
-                            <li><i class="fa fa-check ps-2 text-success" aria-hidden="true"></i>{{$document_track->designations_name}}</li>
+                        @if ($document_tracks !== null && $desig_id !== 1)
+                            @foreach ($document_tracks as $document_track)
+                                <li><i class="fa fa-check ps-2 text-success"
+                                        aria-hidden="true"></i>{{ $document_track->designations_name }}</li>
                             @endforeach
                         @endif
-                        
-                        
-                        
+
+
+
                     </ul>
                 </div>
                 <div class="card-body col-2" style="margin: 10px;">
@@ -85,6 +86,13 @@
 
     <script>
         $(document).ready(function() {
+            var reciever_desig_text
+            $('#designations').on('change', function() {
+
+                 reciever_desig_text = $(this).find('option:selected').text();
+                
+            });
+
 
             $('#submitBtn').off('click').on('click', function(event) {
 
@@ -95,9 +103,8 @@
                 var doc_type_id = {{ $details->spec_type }}
 
 
-
                 swal({
-                    title: 'Are you sure?',
+                    title: `Are you sure to forward <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -117,8 +124,8 @@
                             url: '{{ url('admin/prelimgeneral/prelim_gen_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
-                                'doc_ref_id':doc_ref_id,
-                                'doc_type_id':doc_type_id,
+                                'doc_ref_id': doc_ref_id,
+                                'doc_type_id': doc_type_id,
 
                             },
                             headers: {
@@ -133,7 +140,7 @@
                                             'Permission Denied');
                                     } else {
                                         toastr.success('Forward Successful',
-                                        response.success);
+                                            response.success);
                                     }
                                 }
                             },
