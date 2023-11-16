@@ -87,7 +87,7 @@ class PrelimGeneralController extends Controller
                         return '<button class="btn btn-success btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-waring btn-sm">Vatted</button>';
+                        return '<button class="btn btn-danger  btn-sm">Vatted</button>';
                     }
                     if ($data->status == '2') {
                         return '<button class="btn btn-danger btn-sm">Delivered</button>';
@@ -99,10 +99,6 @@ class PrelimGeneralController extends Controller
                             <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Forward</a>';
                     return $actionBtn;
                 })
-                // ->addColumn('photo', function ($data) {
-                //     $url = asset("uploads/member_Photograph/$data->photo");
-                //     return '<img src=' . $url . ' border="0" width="40" class="img-rounded" align="center" />';
-                // })
                 ->rawColumns(['action', 'status'])
                 ->make(true);
         }
