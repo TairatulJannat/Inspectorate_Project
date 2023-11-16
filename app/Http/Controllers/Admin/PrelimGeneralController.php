@@ -26,10 +26,10 @@ class PrelimGeneralController extends Controller
 
         return view('backend.specification.prelimgeneral.index');
     }
-    public function outgoing()
-    {
-        return view('backend.specification.prelimgeneral.outgoing');
-    }
+    // public function outgoing()
+    // {
+    //     return view('backend.specification.prelimgeneral.outgoing');
+    // }
     public function all_data(Request $request)
     {
 
@@ -94,9 +94,16 @@ class PrelimGeneralController extends Controller
                     }
                 })
                 ->addColumn('action', function ($data) {
+                    if($data->status == '2'){
+                        $actionBtn = '<div class="btn-group" role="group">
+                        <button href="" class="edit btn btn-success btn-lg" disable>Completed</button>';
+                    }else{
+                        $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Forward</a>';
+                        
+                    }
 
-                    $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Forward</a>';
+                   
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])

@@ -21,6 +21,7 @@
 
     </div>
     <br>
+
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
@@ -51,7 +52,6 @@
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-
                                 <th>Remark</th>
                                 <th>Present state of spec</th>
                                 <th>Action</th>
