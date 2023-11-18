@@ -24,4 +24,9 @@ class Item_type extends Model
     {
         return $this->hasOne(Items::class, 'item_type_id');
     }
+
+    public function parameterGroup()
+    {
+        return $this->hasOne(ParameterGroup::class, 'item_type_id');
+    }
 }

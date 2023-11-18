@@ -10,34 +10,44 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="parameterGroupName" class="form-label">Parameter Group Name</label>
-                        <input type="text" class="form-control" id="parameterGroupName" name="name">
-                        <span class="text-danger error-text name_error"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="sectionId" class="form-label">Section</label><br>
-                        <select class="form-control select2 sectionId" id="sectionId" name="section_id"
+                        <label for="itemTypeId" class="form-label">Item Type</label><br>
+                        <select class="form-control select2 item-type-id" id="itemTypeId" name="item-type-id"
                             style="width: 100% !important;">
-                            <option value="" selected disabled>Select an section</option>
-                            @foreach ($sections as $section)
-                                <option value="{{ $section->id }}">{{ $section->name }}</option>
+                            <option value="" selected disabled>Select Item Type</option>
+                            @foreach ($itemTypes as $itemType)
+                                <option value="{{ $itemType->id }}">{{ $itemType->name }}</option>
                             @endforeach
                         </select>
-                        <span class="text-danger error-text section_id_error"></span>
+                        <span class="text-danger error-text item-type-id-error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="parameterGroupDescription" class="form-label">Parameter Group Description</label>
-                        <textarea class="form-control" id="parameterGroupDescription" name="description"></textarea>
-                        <span class="text-danger error-text description_error"></span>
+                        <label for="itemId" class="form-label">Item</label><br>
+                        <select class="form-control select2 item-id" id="itemId" name="item-id"
+                            style="width: 100% !important;">
+                            <option value="" selected disabled>Select an item</option>
+                            @foreach ($items as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger error-text item-id-error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="parameterGroupStatus" class="form-label">Status (Default Active)</label>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="parameterGroupStatus" name="status"
-                                checked>
-                            <label class="form-check-label" for="parameterGroupStatus"></label>
+                        <label for="parameterGroupName" class="form-label">Parameter Group Name</label>
+                        <div class="container">
+                            <div class="field_wrapper">
+                                <div class="row mb-2">
+                                    <div class="col-10 ps-0">
+                                        <input type="text" class="form-control parameter-group-name"
+                                            id="parameterGroupName" name="parameter-group-name[]">
+                                        <span class="text-danger error-text parameter-group-name-error"></span>
+                                    </div>
+                                    <div class="col-2">
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-success-gradien float-end add_button" title="Add field">+</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-danger error-text status_error"></span>
                     </div>
                 </div>
                 <div class="modal-footer">

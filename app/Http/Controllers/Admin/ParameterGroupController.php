@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ParameterGroup;
 use App\Models\Section;
+use App\Models\Items;
+use App\Models\Item_type;
 use DataTables;
 use Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ParameterGroupController extends Controller
 {
@@ -19,16 +22,17 @@ class ParameterGroupController extends Controller
     {
         try {
             $sections = Section::all();
+            $items = Items::all();
+            $itemTypes = Item_type::all();
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve Sections.');
         }
-
-        return view('backend.parameter-groups.index', compact('sections'));
+        return view('backend.parameter-groups.index', compact('sections', 'items', 'itemTypes'));
     }
 
     public function getAllData()
     {
-        $parameter_groups = ParameterGroup::select('id', 'inspectorate_id', 'section_id', 'name', 'description', 'status');
+        $parameter_groups = ParameterGroup::select('id', 'name', 'item_type_id', 'item_id', 'status')->with('itemType', 'item')->get();
 
         return DataTables::of($parameter_groups)
             ->addColumn('DT_RowIndex', function ($parameter_group) {
@@ -37,14 +41,11 @@ class ParameterGroupController extends Controller
             ->addColumn('name', function ($parameter_group) {
                 return $parameter_group->name;
             })
-            ->addColumn('inspectorate_id', function ($parameter_group) {
-                return $parameter_group->inspectorate_id;
+            ->addColumn('item_type_id_name', function ($parameter_group) {
+                return $parameter_group->itemType ? $parameter_group->itemType->name : '';
             })
-            ->addColumn('section_id', function ($parameter_group) {
-                return $parameter_group->section_id;
-            })
-            ->addColumn('description', function ($parameter_group) {
-                return $parameter_group->description;
+            ->addColumn('item_id_name', function ($parameter_group) {
+                return $parameter_group->item ? $parameter_group->item->name : '';
             })
             ->addColumn('status', function ($parameter_group) {
                 return $parameter_group->status;
@@ -63,33 +64,58 @@ class ParameterGroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
+        $customMessages = [
+            'item-type-id.required' => 'Please select an Item Type.',
+            'item-id.required' => 'Please select an Item.',
+            'parameter-group-name.*.required' => 'Please enter a Parameter Group Name.',
+        ];
+
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'section_id' => ['required', 'exists:sections,id'],
-            'description' => ['required', 'string', 'max:255'],
-        ]);
+            'item-type-id' => ['required', 'exists:item_types,id'],
+            'item-id' => ['required', 'exists:items,id'],
+            'parameter-group-name.*' => ['required', 'string', 'max:255'],
+        ], $customMessages);
 
         if ($validator->passes()) {
+            try {
+                DB::beginTransaction();
 
-            $parameterGroup = new ParameterGroup();
+                $parameterNames = $request->input('parameter-group-name');
 
-            $parameterGroup->name = $request->name;
-            $parameterGroup->inspectorate_id = Auth::user()->inspectorate_id;
-            $parameterGroup->section_id = $request->section_id;
-            $parameterGroup->description = $request->description;
-            $parameterGroup->status = $request->has('status') ? 1 : 0;
+                foreach ($parameterNames as $parameterName) {
+                    $parameterGroup = new ParameterGroup();
 
-            if ($parameterGroup->save()) {
+                    $parameterGroup->item_type_id = $request->input('item-type-id');
+                    $parameterGroup->item_id = $request->input('item-id');
+                    $parameterGroup->inspectorate_id = Auth::user()->inspectorate_id;
+                    $parameterGroup->section_id = 1;
+                    $parameterGroup->status = $request->has('status') ? 1 : 0;
+                    $parameterGroup->name = $parameterName;
+
+                    if (!$parameterGroup->save()) {
+                        DB::rollBack();
+
+                        return response()->json([
+                            'isSuccess' => false,
+                            'Message' => "Something went wrong while storing data!",
+                        ], 200);
+                    }
+                }
+
+                DB::commit();
+
                 return response()->json([
                     'isSuccess' => true,
-                    'Message' => "Parameter Group Saved successfully!"
+                    'Message' => "Parameter Groups saved successfully!"
                 ], 200);
-            } else {
+            } catch (\Exception $e) {
                 return response()->json([
                     'isSuccess' => false,
-                    'Message' => "Something went wrong!"
+                    'Message' => "Something went wrong!",
+                    'Error' => $e,
                 ], 200);
             }
         } else {

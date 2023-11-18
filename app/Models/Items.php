@@ -13,4 +13,9 @@ class Items extends Model
     {
         return $this->belongsTo(Item_type::class, 'item_type_id');
     }
+
+    public function parameterGroup()
+    {
+        return $this->hasOne(ParameterGroup::class, 'item_id');
+    }
 }

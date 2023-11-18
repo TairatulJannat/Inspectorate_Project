@@ -57,18 +57,13 @@
                         orderable: false
                     },
                     {
-                        data: 'inspectorate_id',
-                        name: 'inspectorate_id',
+                        data: 'item_type_id_name',
+                        name: 'item_type_id_name',
                         orderable: false
                     },
                     {
-                        data: 'section_id',
-                        name: 'section_id',
-                        orderable: false
-                    },
-                    {
-                        data: 'description',
-                        name: 'description',
+                        data: 'item_id_name',
+                        name: 'item_id_name',
                         orderable: false
                     },
                     {
@@ -110,7 +105,6 @@
             });
         });
 
-
         // Create Parameter Group
         $("#createParameterGroupForm").on("submit", function(e) {
             e.preventDefault();
@@ -132,7 +126,7 @@
                     console.log(response);
                     if (response.isSuccess === false) {
                         $.each(response.error, function(prefix, val) {
-                            $(form).find("span." + prefix + "_error").text(val[0]);
+                            $(form).find("span." + prefix + "-error").text(val[0]);
                         });
                         toastr.error(response.Message);
                         createButton.prop('disabled', false).text('Create');
@@ -300,6 +294,43 @@
                     $('#showParameterGroupModal').modal('show');
                 }
             });
+        });
+
+        // Populate Items Dropdown
+        var itemsData = {!! $items !!};
+        populateItemsDropdown(itemsData);
+
+        $('#itemTypeId').on('change', function() {
+            var itemTypeId = $(this).val();
+
+            var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
+
+            populateItemsDropdown(filteredItems);
+        });
+
+        function populateItemsDropdown(items) {
+            $('#itemId').empty();
+            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
+
+            $.each(items, function(key, value) {
+                $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
+            });
+        }
+
+        var addButton = $('.add_button');
+        var wrapper = $('.field_wrapper');
+        var fieldHTML =
+            '<div class="row mb-2"><div class="col-10 ps-0"><input type="text" class="form-control parameter-group-name" id="parameterGroupName" name="parameter-group-name[]"><span class="text-danger error-text parameter-group-name-error"></span></div><div class="col-2 ps-0"><a href="javascript:void(0);" class="btn btn-danger-gradien float-end remove_button" title="Remove field">-</a></div></div>';
+
+        // Once add button is clicked
+        $(addButton).click(function() {
+            $(wrapper).append(fieldHTML);
+        });
+
+        // Once remove button is clicked
+        $(wrapper).on('click', '.remove_button', function(e) {
+            e.preventDefault();
+            $(this).closest('.row').remove();
         });
     });
 </script>

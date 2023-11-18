@@ -31,9 +31,8 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Parameter Group Name</th>
-                                <th>Inspectorate ID</th>
-                                <th>Section ID</th>
-                                <th>Description</th>
+                                <th>Item Type</th>
+                                <th>Item</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
