@@ -9,22 +9,26 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="showInspectorateId" class="form-label">Inspectorate ID</label>
-                            <div id="showInspectorateId"></div>
-                        </div>
-                        <div class="mb-3">
                             <label for="showParameterGroupName" class="form-label">Parameter Group Name</label>
                             <div id="showParameterGroupName"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="showSectionId" class="form-label">Section ID</label>
-                            <div id="showSectionId"></div>
+                            <label for="showItemType" class="form-label">Item Type</label>
+                            <div id="showItemType"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="showSection" class="form-label">Section</label>
+                            <div id="showSection"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="showDescription" class="form-label">Description</label>
-                            <div id="showDescription"></div>
+                            <label for="showItem" class="form-label">Item</label>
+                            <div id="showItem"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="showInspectorate" class="form-label">Inspectorate</label>
+                            <div id="showInspectorate"></div>
                         </div>
                         <div class="mb-3">
                             <label for="showStatus" class="form-label">Status</label>

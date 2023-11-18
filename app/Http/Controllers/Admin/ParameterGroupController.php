@@ -21,13 +21,12 @@ class ParameterGroupController extends Controller
     public function index()
     {
         try {
-            $sections = Section::all();
             $items = Items::all();
             $itemTypes = Item_type::all();
         } catch (\Exception $e) {
-            return back()->withError('Failed to retrieve Sections.');
+            return back()->withError('Failed to retrieve from Database.');
         }
-        return view('backend.parameter-groups.index', compact('sections', 'items', 'itemTypes'));
+        return view('backend.parameter-groups.index', compact('items', 'itemTypes'));
     }
 
     public function getAllData()
@@ -92,7 +91,7 @@ class ParameterGroupController extends Controller
                     $parameterGroup->item_id = $request->input('item-id');
                     $parameterGroup->inspectorate_id = Auth::user()->inspectorate_id;
                     $parameterGroup->section_id = 1;
-                    $parameterGroup->status = $request->has('status') ? 1 : 0;
+                    $parameterGroup->status = 1;
                     $parameterGroup->name = $parameterName;
 
                     if (!$parameterGroup->save()) {
@@ -136,14 +135,7 @@ class ParameterGroupController extends Controller
             $id = $request->id;
             $parameterGroup = ParameterGroup::findOrFail($id);
 
-            return response()->json([
-                'id' => $parameterGroup->id,
-                'name' => $parameterGroup->name,
-                'inspectorate_id' => $parameterGroup->inspectorate_id,
-                'section_id' => $parameterGroup->section_id,
-                'description' => $parameterGroup->description,
-                'status' => $parameterGroup->status,
-            ]);
+            return response()->json($parameterGroup);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Parameter Group not found'], 404);
         }
@@ -158,14 +150,7 @@ class ParameterGroupController extends Controller
             $id = $request->id;
             $parameterGroup = ParameterGroup::findOrFail($id);
 
-            return response()->json([
-                'id' => $parameterGroup->id,
-                'name' => $parameterGroup->name,
-                'inspectorate_id' => $parameterGroup->inspectorate_id,
-                'section_id' => $parameterGroup->section_id,
-                'description' => $parameterGroup->description,
-                'status' => $parameterGroup->status,
-            ]);
+            return response()->json($parameterGroup);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Parameter Group not found'], 404);
         }
@@ -176,22 +161,28 @@ class ParameterGroupController extends Controller
      */
     public function update(Request $request)
     {
+        $customMessages = [
+            'edit-item-type-id.required' => 'Please select an Item Type.',
+            'edit-item-id.required' => 'Please select an Item.',
+            'edit-parameter-group-name.required' => 'Please enter a Parameter Group Name.',
+        ];
+
         $validator = Validator::make($request->all(), [
-            'edit_name' => ['required', 'string', 'max:255'],
-            'edit_section_id' => ['required', 'exists:sections,id'],
-            'edit_description' => ['required', 'string', 'max:255'],
-        ]);
+            'edit-item-type-id' => ['required', 'exists:item_types,id'],
+            'edit-item-id' => ['required', 'exists:items,id'],
+            'edit-parameter-group-name' => ['required', 'string', 'max:255'],
+        ], $customMessages);
 
         if ($validator->passes()) {
             try {
-                $id = $request->edit_parameter_group_id;
+                $id = $request->input('edit-parameter-group-id');
+
                 $parameterGroup = ParameterGroup::findOrFail($id);
 
-                $parameterGroup->name = $request->edit_name;
-                $parameterGroup->inspectorate_id = $request->edit_inspectorate_id;
-                $parameterGroup->section_id = $request->edit_section_id;
-                $parameterGroup->description = $request->edit_description;
-                $parameterGroup->status = $request->has('edit_status') ? 1 : 0;
+                $parameterGroup->item_type_id = $request->input('edit-item-type-id');
+                $parameterGroup->item_id = $request->input('edit-item-id');
+                $parameterGroup->name = $request->input('edit-parameter-group-name');
+                $parameterGroup->status = $request->has('edit-parameter-group-status') ? 1 : 0;
 
                 if ($parameterGroup->save()) {
                     return response()->json([

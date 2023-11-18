@@ -168,10 +168,9 @@
                 },
                 success: function(response) {
                     $("#editParameterGroupId").val(id);
-                    $("#editInspectorateId").val(response.inspectorate_id);
+                    $("#editItemTypeId").val(response.item_type_id).change();
+                    $("#editItemId").val(response.item_id).change();
                     $("#editParameterGroupName").val(response.name);
-                    $("#editSectionId").val(response.section_id).change();
-                    $("#editParameterGroupDescription").val(response.description);
                     $("#editParameterGroupStatus").prop('checked', response.status == 1);
 
                     $('#editParameterGroupModal').modal('show');
@@ -199,7 +198,7 @@
                 success: function(response) {
                     if (response.isSuccess === false) {
                         $.each(response.error, function(prefix, val) {
-                            $(form).find("span." + prefix + "_error").text(val[0]
+                            $(form).find("span." + prefix + "-error").text(val[0]
                                 .replace("edit ", ""));
                         });
                         toastr.error(response.Message);
@@ -297,9 +296,10 @@
                 },
                 success: function(response) {
                     $("#showParameterGroupName").text(response.name);
-                    $("#showInspectorateId").text(response.inspectorate_id);
-                    $("#showSectionId").text(response.section_id);
-                    $("#showDescription").text(response.description);
+                    $("#showItem").text(response.item_id);
+                    $("#showItemType").text(response.item_type_id);
+                    $("#showInspectorate").text(response.inspectorate_id);
+                    $("#showSection").text(response.section_id);
                     $("#showStatus").prop('checked', response.status == 1);
 
                     $('#showParameterGroupModal').modal('show');
@@ -309,22 +309,38 @@
 
         // Populate Items Dropdown: Begins here
         var itemsData = {!! $items !!};
-        populateItemsDropdown(itemsData);
+        populateItemsDropdownCreate(itemsData);
+        populateItemsDropdownEdit(itemsData);
 
         $('#itemTypeId').on('change', function() {
             var itemTypeId = $(this).val();
-
             var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
 
-            populateItemsDropdown(filteredItems);
+            populateItemsDropdownCreate(filteredItems);
         });
 
-        function populateItemsDropdown(items) {
+        function populateItemsDropdownCreate(items) {
             $('#itemId').empty();
             $('#itemId').append('<option value="" selected disabled>Select an item</option>');
 
             $.each(items, function(key, value) {
                 $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
+            });
+        }
+
+        $('#editItemTypeId').on('change', function() {
+            var editItemTypeId = $(this).val();
+            var filteredItems = itemsData.filter(item => item.item_type_id == editItemTypeId);
+
+            populateItemsDropdownEdit(filteredItems);
+        });
+
+        function populateItemsDropdownEdit(items) {
+            $('#editItemId').empty();
+            $('#editItemId').append('<option value="" selected disabled>Select an item</option>');
+
+            $.each(items, function(key, value) {
+                $('#editItemId').append('<option value="' + value.id + '">' + value.name + '</option>');
             });
         }
         // Creating dynamic input fields: Ends here
