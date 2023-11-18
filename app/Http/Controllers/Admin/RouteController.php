@@ -13,26 +13,8 @@ class RouteController extends Controller
 {
     public function dynamic_route()
     {
-        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
-        $inspectorate_ids=[0,  $auth_inspectorate_id];
-       
-        if(Auth::user()->id==92){
+      
             $route =  dynamic_route::where('route_status', 1)
-            ->leftJoin('inspectorates', 'dynamic_routes.inspectorate_id', '=', 'inspectorates.id')
-            ->select('dynamic_routes.*', 'inspectorates.name as ins_name')
-            ->get();
-            $inspectorates=Inspectorate::all();
-            $page_data = [
-                'add_menu' => 'yes',
-                'modal' => 'yes',
-            ];
-            return view('backend.dynamic_route.dynamic_route', compact('route', 'page_data', 'inspectorates'));
-        }else{
-
-            $route =  dynamic_route::where('route_status', 1)
-            ->where('inspectorate_id', $auth_inspectorate_id)
-            ->leftJoin('inspectorates', 'dynamic_routes.inspectorate_id', '=', 'inspectorates.id')
-            ->select('dynamic_routes.*', 'inspectorates.name as ins_name')
             ->get();
         
             $inspectorates=Inspectorate::all();
@@ -41,15 +23,13 @@ class RouteController extends Controller
                 'modal' => 'yes',
             ];
             return view('backend.dynamic_route.dynamic_route', compact('route', 'page_data', 'inspectorates'));
-        }
+
     
     }
 
     public function save_dynamic_route(Request $request)
     {
-        $auth_inspectorate_id =  Auth::user()->inspectorate_id;
         $route = new dynamic_route(); 
-        $route->inspectorate_id = Auth::user()->id==92 ? $request->inspectorate : $auth_inspectorate_id;
         $route->title = $request->title;
         $route->model_name = $request->model_name;
         $route->controller_action = $request->controller_action;
