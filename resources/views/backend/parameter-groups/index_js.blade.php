@@ -137,9 +137,12 @@
                             'Added!',
                             'Parameter Group Added Successfully!',
                             'success'
-                        )
+                        );
                         toastr.success(response.Message);
                         createButton.prop('disabled', false).text('Create');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
