@@ -1,5 +1,6 @@
 <script>
     $(document).ready(function() {
+        // Initial Setup: Begins here
         $('.select2').select2();
 
         $('.sectionId').select2({
@@ -11,6 +12,7 @@
         });
 
         toastr.options.preventDuplicates = true;
+        // Initial Setup: Ends here
 
         // Get All Data 
         $(function() {
@@ -209,9 +211,12 @@
                             'Updated!',
                             'Parameter Group Edited Successfully!',
                             'success'
-                        )
+                        );
                         toastr.success(response.Message);
                         editButton.prop('disabled', false).text('Update');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -253,6 +258,9 @@
                                     'success'
                                 );
                                 toastr.success(response.Message);
+
+                                // Reload the DataTable
+                                $('.yajra-datatable').DataTable().ajax.reload();
                             } else if (response.isSuccess === false) {
                                 Swal.fire(
                                     'Caution!',
@@ -299,7 +307,7 @@
             });
         });
 
-        // Populate Items Dropdown
+        // Populate Items Dropdown: Begins here
         var itemsData = {!! $items !!};
         populateItemsDropdown(itemsData);
 
@@ -319,7 +327,9 @@
                 $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
             });
         }
+        // Creating dynamic input fields: Ends here
 
+        // Creating dynamic input fields: Begins here
         var addButton = $('.add_button');
         var wrapper = $('.field_wrapper');
         var fieldHTML =
@@ -335,5 +345,6 @@
             e.preventDefault();
             $(this).closest('.row').remove();
         });
+        // Creating dynamic input fields: Ends here
     });
 </script>
