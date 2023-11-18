@@ -8,6 +8,18 @@
             border-bottom: 1px solid rgba(182, 182, 182 , .6);
 
         }
+        .table{
+            border-radius:10px !important; 
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+        }
+        .table thead{
+            background: #006A4E;
+            color: #ffff
+        }
+        .table thead tr th{
+         
+            color: #ffff
+        }
     </style>
 @endpush
 @section('main_menu', 'Prelim/general')
