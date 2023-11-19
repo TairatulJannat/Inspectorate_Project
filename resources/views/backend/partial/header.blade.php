@@ -1,9 +1,9 @@
 <div class="page-main-header">
     <div class="main-header-right row m-0">
         <div class="main-header-left" style=" background-color:#006A4E;">
-            <div class="logo-wrapper ><a href=""><img class="img-fluid"
-                    src="{{ asset('assets/backend/images/logo/army_logo.png') }} " alt=""
-                    style="margin-left: 70px;
+            <div class="logo-wrapper"><a href=""><img class="img-fluid"
+                        src="{{ asset('assets/backend/images/logo/army_logo.png') }} " alt=""
+                        style="margin-left: 70px;
                     height: 80px; padding:5px;"></a>
             </div>
             <div class="dark-logo-wrapper"><a href="#"><img class="img-fluid" src="" alt=""
@@ -29,9 +29,9 @@
 
                         <div class="dropdown">
                             <button class="dropbtn btn-primary" type="button" data-bs-original-title="" title="">
-                               <img class="img-90 rounded-circle"
-                                        src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt=""
-                                        height='30px' width="30px">
+                                <img class="img-90 rounded-circle"
+                                    src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt=""
+                                    height='30px' width="30px">
 
                                 {{ \Illuminate\Support\Facades\Auth::user()->name }} <span><i
                                         class="icofont icofont-arrow-down"></i></span>
