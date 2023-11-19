@@ -16,9 +16,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color:  #006A4E!important;
+            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color:  #ffff;
+            color: #ffff;
         }
 
         .card-body {
@@ -49,8 +49,8 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background-color: #ffffff !important;
-            color: #006a4e8c;
+            background-color: #006a4ef !important;
+            color:#ffff;
             cursor: pointer;
         }
 
@@ -74,7 +74,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
-
+                <h2>Details of Specification</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-6" style="margin: 10px">
@@ -118,15 +118,15 @@
                     <h4>Vetted</h4>
                     <form action="">
 
+                        @if ($desig_position->position != 7)
+                            <select name="designation" id="designations" class="form-control">
 
-                        <select name="designation" id="designations" class="form-control">
+                                @foreach ($designations as $d)
+                                    <option value={{ $d->id }}>{{ $d->name }}</option>
+                                @endforeach
 
-                            @foreach ($designations as $d)
-                                <option value={{ $d->id }}>{{ $d->name }}</option>
-                            @endforeach
-
-                        </select>
-
+                            </select>
+                        @endif
                         @if ($desig_position->position == 3)
                             <div class='mt-2'>
                                 <label for='delivery_date'>Delivery Date </label>

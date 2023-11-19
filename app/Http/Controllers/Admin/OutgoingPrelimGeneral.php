@@ -80,7 +80,7 @@ class OutgoingPrelimGeneral extends Controller
                         return '<button class="btn btn-success btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-danger  btn-sm">Vatted</button>';
+                        return '<button class="btn btn-danger  btn-sm">Under Vatted</button>';
                     }
                     if ($data->status == '2') {
                         return '<button class="btn btn-danger btn-sm">Delivered</button>';
@@ -89,7 +89,7 @@ class OutgoingPrelimGeneral extends Controller
                 ->addColumn('action', function ($data) {
 
                     $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/outgoing_prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Vetted</a>';
+                            <a href="' . url('admin/outgoing_prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Vatted</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])
@@ -129,7 +129,7 @@ class OutgoingPrelimGeneral extends Controller
         $admin_id = Auth::user()->id;
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-        
+
         // delay cause for sec IC start
 
         return view('backend.specification.prelimgeneral.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position'));
