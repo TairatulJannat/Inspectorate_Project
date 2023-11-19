@@ -39,6 +39,21 @@
 
 
 
+    
+        var options = {
+        chart: {
+            type: 'pie'
+        },
+        series: [44, 55, 13, 33],
+            labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
+    
+        }
+    
+        var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
+    
+        chart.render();
+
+
     // var options = {
     // chart: {
     //     type: 'pie'

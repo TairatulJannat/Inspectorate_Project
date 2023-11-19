@@ -67,16 +67,16 @@ $currentControllerName = Request::segment(2);
                                 href="javascript:void(0)"><i data-feather="book-open"
                                     class="text-light"></i><span>Specification</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Indent/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('indent/view') !== null)
+                                @if (sub_menu_check('prelimgeneral/view') !== null)
                                     <li><a class="text-light" href="{{ route('admin.prelimgeneral/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
                                             Prelim/General</a>
                                     </li>
                                 @endif
-                                @if (sub_menu_check('indent/views') !== null)
-                                    <li><a href=""
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Received
-                                            Indent</a></li>
+                                @if (sub_menu_check('prelimgeneral/create') !== null)
+                                    <li><a  class="text-light" href="{{ route('admin.prelimgeneral/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            Prelim/General</a></li>
                                 @endif
                             </ul>
                         </li>

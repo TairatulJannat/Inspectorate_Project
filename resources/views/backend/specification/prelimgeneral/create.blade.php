@@ -17,7 +17,22 @@
         <div class="card">
             <form action="" method="POST" id="save_info" enctype="multipart/form-data">
                 @csrf
+
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="additional_documents">Select Section</label>
+                                <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
+                                    @foreach ($sections as $section)
+                                        <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_admin_section" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
 
                         <div class="col-md-4">
@@ -41,8 +56,9 @@
                                 <select class="form-control" id="spec_type" name="spec_type">
 
                                     <option value="">Please Select </option>
-                                    <option value="0"> General Spec</option>
                                     <option value="1">Prelim Spec </option>
+                                    <option value="2"> General Spec</option>
+                                    
 
                                 </select>
                                 <span id="error_spec_type" class="text-danger error_field"></span>
@@ -52,7 +68,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="spec_received_date">Spec. Received Date</label>
-                                <input type="date" class="form-control" id="spec_received_date" name="spec_received_date">
+                                <input type="date" class="form-control" id="spec_received_date"
+                                    name="spec_received_date">
                                 <span id="error_spec_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -118,7 +135,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="received_by">Received By</label>
-                                <input type="text" value="{{ \Illuminate\Support\Facades\Auth::user()->name }}" readonly class="form-control" id="received_by" name="received_by">
+                                <input type="text" value="{{ \Illuminate\Support\Facades\Auth::user()->name }}" readonly
+                                    class="form-control" id="received_by" name="received_by">
                                 <span id="error_received_by" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -148,7 +166,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-      @include('backend.specification.prelimgeneral.index_js')
+    @include('backend.specification.prelimgeneral.index_js')
     <script>
         $(document).ready(function() {
 
@@ -159,7 +177,7 @@
 
                 if (itemtype_id > 0) {
                     $.ajax({
-                        url: "{{url('admin/prelimgeneral/item_name')}}" +
+                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
                             '/' + itemtype_id,
                         type: 'GET',
                         dataType: 'json',

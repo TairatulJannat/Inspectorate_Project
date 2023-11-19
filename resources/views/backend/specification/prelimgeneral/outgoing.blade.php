@@ -5,6 +5,12 @@
     <style>
         .card .card-header {
             padding: 0px;
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
+
+        }
+        <style>
+        .card .card-header {
+            padding: 0px;
             border-bottom: 1px solid rgba(182, 182, 182 , .6);
 
         }
@@ -21,6 +27,7 @@
             color: #ffff
         }
     </style>
+    </style>
 @endpush
 @section('main_menu', 'Prelim/general')
 @section('active_menu', 'Incoming')
@@ -33,7 +40,6 @@
 
     </div>
     <br>
-
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
@@ -67,7 +73,6 @@
                                 <th>Remark</th>
                                 <th>Present state of spec</th>
                                 <th>Action</th>
-                            </tr>
                         </thead>
                         <tbody>
                         </tbody>
@@ -84,5 +89,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.specification.prelimgeneral.index_js')
+    @include('backend.specification.prelimgeneral.outgoing_index_js')
 @endpush
