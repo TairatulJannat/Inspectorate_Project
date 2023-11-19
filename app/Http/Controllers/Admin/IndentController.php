@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Dte_managment;
+use App\Models\FinancialYear;
 use App\Models\Indent;
+use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\Section;
 use Illuminate\Http\Request;
@@ -207,15 +209,16 @@ class IndentController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
-        // $item_types = Item_type::where('status', 1)->get();
+        $item_types = Item_type::where('status', 1)->get();
         $item=Items::all();
-        return view('backend.indent.create',compact('sections', 'item','dte_managments', 'additional_documnets'));
+        $fin_years=FinancialYear::all();
+        return view('backend.indent.create',compact('sections', 'item','dte_managments', 'additional_documnets','item_types','fin_years'));
     }
-    // public function item_name($id)
-    // {
-    //     $items = Items::where('item_type_id', $id)->get();
-    //     return response()->json($items);
-    // }
+    public function item_name($id)
+    {
+        $items = Items::where('item_type_id', $id)->get();
+        return response()->json($items);
+    }
     // public function store(Request $request)
     // {
     //     // $this->validate($request, [
