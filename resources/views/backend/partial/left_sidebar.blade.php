@@ -81,6 +81,7 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+
                     {{-- @if (count(menu_check('Tender')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Tender</span></a>
@@ -94,8 +95,9 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif --}}
+
                     @if (count(menu_check('Specification')) !== 0)
-                        <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
+                        <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Specification</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ route('admin.prelimgeneral/view') }}"
@@ -107,6 +109,51 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+
+                    {{-- Side Menu Button Links for Items --}}
+                    @if (count(menu_check('Items')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Items</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/items/index') }}"
+                                        class="{{ Request::is('*/admin/items/index') ? 'active' : '' }} text-white">Items
+                                        Index</a>
+                                </li>
+                                <li><a href="{{ url('admin/item_types/index') }}"
+                                        class="{{ Request::is('*/admin/item_types/index') ? 'active' : '' }} text-white">Item
+                                        Types
+                                        Index</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Side Menu Button Links for Inspectorates --}}
+                    @if (count(menu_check('Inspectorate')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Inspectorates</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/inspectorates/index') }}"
+                                        class="{{ Request::is('*/admin/inspectorates/index') ? 'active' : '' }} text-white">Inspectorates
+                                        Index</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Side Menu Button Links for Parameter Groups --}}
+                    @if (count(menu_check('ParameterGroup')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Parameter Groups</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/parameter_groups/index') }}"
+                                        class="{{ Request::is('*/admin/parameter_groups/index') ? 'active' : '' }} text-white">Parameter
+                                        Groups Index</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
                     @if (count(menu_check('Contact')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Contact</span></a>
@@ -196,11 +243,6 @@ $currentControllerName = Request::segment(2);
                             </li>
                         </ul>
                     </li> --}}
-
-
-
-
-
 
                     <li class="sidebar-main-title">
                         <div>

@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-     protected $redirectTo = '/admin/adminDashboard';
+    protected $redirectTo = '/admin/adminDashboard';
 
     /**
      * Create a new controller instance.
@@ -37,10 +37,10 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        if (Auth::check() && Auth::user()->type=='admin'){
-            $this->redirectTo=route('admin.adminDashboard');
+        if (Auth::check() && Auth::user()->type == 'admin') {
+            $this->redirectTo = route('admin.adminDashboard');
         }
-//      Toastr::error('you dont have that Permission', 'Permission Denied');
+        //      Toastr::error('you dont have that Permission', 'Permission Denied');
         $this->middleware('guest')->except('logout');
     }
 }
