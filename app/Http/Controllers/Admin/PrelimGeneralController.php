@@ -39,6 +39,10 @@ class PrelimGeneralController extends Controller
             $admin_id = Auth::user()->id;
             $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
+            $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+            $desig_position = Designation::where('id', $designation_id)->first();
+
 
 
 
@@ -48,7 +52,15 @@ class PrelimGeneralController extends Controller
                     ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
                     ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
-            } else {
+            } elseif($desig_position->id==1){
+                
+                $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
+                ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
+                ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
+                ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                ->get();
+            }
+            else {
 
                 $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
@@ -87,23 +99,22 @@ class PrelimGeneralController extends Controller
                         return '<button class="btn btn-success btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-danger  btn-sm">Vatted</button>';
+                        return '<button class="btn btn-danger  btn-sm">Under Vatted</button>';
                     }
                     if ($data->status == '2') {
                         return '<button class="btn btn-danger btn-sm">Delivered</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
-                    if($data->status == '2'){
+                    if ($data->status == '2') {
                         $actionBtn = '<div class="btn-group" role="group">
                         <button href="" class="edit btn btn-success btn-lg" disable>Completed</button>';
-                    }else{
+                    } else {
                         $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Forward</a>';
-                        
                     }
 
-                   
+
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])
@@ -119,7 +130,7 @@ class PrelimGeneralController extends Controller
             ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
             ->where('prelim_gen_specs.id', $id)
             ->first();
-        
+
         $designations = Designation::all();
 
         $admin_id = Auth::user()->id;
@@ -175,20 +186,19 @@ class PrelimGeneralController extends Controller
 
                 $data->status = 1;
                 $data->save();
-                
-            $value = new DocumentTrack();
-            $value->ins_id = $ins_id;
-            $value->section_id = $section_id;
-            $value->doc_type_id = $doc_type_id;
-            $value->doc_ref_id = $doc_ref_id;
-            $value->track_status = 2;
-            $value->reciever_desig_id = $reciever_desig_id;
-            $value->sender_designation_id = $sender_designation_id;
-            $value->created_at = Carbon::now();
-            $value->updated_at = Carbon::now();
-            $value->save();
-            }
 
+                $value = new DocumentTrack();
+                $value->ins_id = $ins_id;
+                $value->section_id = $section_id;
+                $value->doc_type_id = $doc_type_id;
+                $value->doc_ref_id = $doc_ref_id;
+                $value->track_status = 2;
+                $value->reciever_desig_id = $reciever_desig_id;
+                $value->sender_designation_id = $sender_designation_id;
+                $value->created_at = Carbon::now();
+                $value->updated_at = Carbon::now();
+                $value->save();
+            }
         }
 
 

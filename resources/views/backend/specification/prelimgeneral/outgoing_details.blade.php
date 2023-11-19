@@ -2,6 +2,63 @@
 @section('title', 'Prelim/general ')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
+    <style>
+        /* styles.css */
+
+        /* Styling for the card elements */
+        .card {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #006A4E !important;
+            border-radius: 8px 8px 0 0 !important;
+            color: #ffff;
+        }
+
+        .card-body {
+            padding: 20px !important;
+        }
+
+        .col-3,
+        .col-2 {
+            background-color: #F5F7FB !important;
+            /* Light gray */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h4 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        /* Styling for the form elements */
+        form {
+            margin-top: 15px;
+        }
+
+        .delivery-btn {
+            width: 100%;
+            /* Adjust for padding */
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #006a4ef !important;
+            color:#ffff;
+            cursor: pointer;
+        }
+
+        .delivery-btn:hover {
+            background-color: #ff8533 !important;
+            /* Lighter orange on hover */
+        }
+    </style>
 @endpush
 @section('main_menu', 'Prelim/general')
 @section('active_menu', 'Outgoing')
@@ -17,7 +74,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
-
+                <h2>Details of Specification</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-6" style="margin: 10px">
@@ -60,8 +117,8 @@
                 <div class="card-body col-2" style="margin: 10px;">
                     <h4>Vetted</h4>
                     <form action="">
-                      
 
+                        @if ($desig_position->position != 7)
                             <select name="designation" id="designations" class="form-control">
 
                                 @foreach ($designations as $d)
@@ -69,7 +126,7 @@
                                 @endforeach
 
                             </select>
-                     
+                        @endif
                         @if ($desig_position->position == 3)
                             <div class='mt-2'>
                                 <label for='delivery_date'>Delivery Date </label>
@@ -81,7 +138,7 @@
 
 
 
-                        <button class="btn btn-success mt-2 " id="submitBtn">Deliver</button>
+                        <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
                     </form>
                 </div>
             </div>
