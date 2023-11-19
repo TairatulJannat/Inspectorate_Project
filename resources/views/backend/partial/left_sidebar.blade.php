@@ -43,22 +43,12 @@ $currentControllerName = Request::segment(2);
                                 @endif
                                 @if (sub_menu_check('indent/views') !== null)
                                     <li><a href=""
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Received
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Indent</a></li>
                                 @endif
                             </ul>
                         </li>
-                        {{-- <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
-                                    data-feather="list"></i><span>Indent</span></a>
-                            <ul class="nav-submenu menu-content">
 
-                                <li><a href="" class="">View Indent</a>
-                                </li>
-                                <li><a href=""
-                                        class="{{ Request::is('*/*/add_role') ? 'active' : '' }}">Option</a>
-                                </li>
-                            </ul>
-                        </li> --}}
                     @endif
 
                     @if (count(menu_check('PrelimGeneral')) !== 0)
