@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Section extends Model
 {
     use HasFactory;
+
+    public function inspectorate()
+    {
+        return $this->belongsTo(Inspectorate::class, 'inspectorate_id');
+    }
 }
