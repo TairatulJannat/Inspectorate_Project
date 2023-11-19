@@ -40,6 +40,7 @@ class PrelimGeneralController extends Controller
             $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
             $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+            // dd($section_ids);
 
             $desig_position = Designation::where('id', $designation_id)->first();
 
@@ -52,23 +53,29 @@ class PrelimGeneralController extends Controller
                     ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
                     ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
-            } elseif($desig_position->id==1){
-                
-                $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
-                ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
-                ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
-                ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                ->get();
-            }
-            else {
+            } elseif ($desig_position->id == 1) {
 
                 $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
                     ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('prelim_gen_specs.insp_id', $insp_id)
-                    ->whereIn('prelim_gen_specs.sec_id', $section_ids)
                     ->get();
+            } else {
+
+                $prelimGenIds = PrelimGeneral::leftJoin('document_tracks', 'prelim_gen_specs.id', '=', 'document_tracks.doc_ref_id')
+                    ->where('document_tracks.reciever_desig_id', $designation_id)
+                    ->where('prelim_gen_specs.insp_id', $insp_id)
+                    ->whereIn('prelim_gen_specs.sec_id', $section_ids)->pluck('prelim_gen_specs.id', 'prelim_gen_specs.id')->toArray();
+
+
+                $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
+                    ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('prelim_gen_specs.id', $prelimGenIds)
+                    ->get();
+
+                // dd($query);
 
                 $designation_ids = AdminSection::where('admin_id', $admin_id)->select('desig_id')->first();
 
@@ -76,15 +83,17 @@ class PrelimGeneralController extends Controller
                 if ($query) {
                     foreach ($query as $prelimGen) {
                         array_push($prelimGenId, $prelimGen->id);
+                        if (in_array($prelimGen->id, $prelimGenId)) {
+                        }
                     }
                 }
 
                 $document_tracks_receiver_ids = DocumentTrack::whereIn('doc_ref_id', $prelimGenId)
                     ->where('reciever_desig_id', $designation_ids->desig_id)
                     ->first();
-
+                // dd($document_tracks_receiver_ids);
                 if (!$document_tracks_receiver_ids) {
-                    $query = PrelimGeneral::where('id', 'no data')->get();
+                    $query = PrelimGeneral::where('id', 'no data')->first();
                 }
             }
 
