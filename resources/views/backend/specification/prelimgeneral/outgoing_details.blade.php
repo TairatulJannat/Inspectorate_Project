@@ -133,7 +133,7 @@
                                 <input type="date" id='delivery_date' name="delivery_date" class="form-control">
                             </div>
 
-                            <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="delay_cause"></textarea>
+                            <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="enter delay cause"></textarea>
                         @endif
 
 
