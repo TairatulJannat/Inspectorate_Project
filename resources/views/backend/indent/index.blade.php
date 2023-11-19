@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Prelim/general')
+@section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -9,7 +9,7 @@
 
         }
         .table{
-            border-radius:10px !important; 
+            border-radius:10px !important;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
         .table thead{
@@ -17,12 +17,12 @@
             color: #ffff
         }
         .table thead tr th{
-         
+
             color: #ffff
         }
     </style>
 @endpush
-@section('main_menu', 'Prelim/general')
+@section('main_menu', 'Indent')
 @section('active_menu', 'Incoming')
 @section('content')
 
@@ -84,5 +84,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.specification.prelimgeneral.index_js')
+    @include('backend.indent.index_js')
 @endpush

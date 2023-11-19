@@ -41,8 +41,8 @@ $currentControllerName = Request::segment(2);
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Indent</a>
                                     </li>
                                 @endif
-                                @if (sub_menu_check('indent/views') !== null)
-                                    <li><a href=""
+                                @if (sub_menu_check('indent/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.indent/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Indent</a></li>
                                 @endif

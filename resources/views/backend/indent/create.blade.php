@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Prelim/General Specification')
+@section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -9,8 +9,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Prelim/General')
-@section('active_menu', 'Add Specification')
+@section('main_menu', 'Indent')
+@section('active_menu', 'Add Indent')
 @section('content')
     <div class="col-sm-12 col-xl-12">
 
@@ -50,29 +50,6 @@
                                 <span id="error_sender" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="spec_type">Spec. Type</label>
-                                <select class="form-control" id="spec_type" name="spec_type">
-
-                                    <option value="">Please Select </option>
-                                    <option value="1">Prelim Spec </option>
-                                    <option value="2"> General Spec</option>
-
-
-                                </select>
-                                <span id="error_spec_type" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="spec_received_date">Spec. Received Date</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -101,19 +78,10 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_type_id">Item Type</label>
-                                <select class="form-control " id="item_type_id" name="item_type_id">
-
-                                    <option selected disabled value="">Please Select</option>
-
-                                    @foreach ($item_types as $item_type)
-                                        <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
-                                    @endforeach
-
-                                </select>
-
-
-                                <span id="error_item_type_id" class="text-danger error_field"></span>
+                                <label for="spec_received_date">Spec. Received Date</label>
+                                <input type="date" class="form-control" id="spec_received_date"
+                                    name="spec_received_date">
+                                <span id="error_spec_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -131,6 +99,33 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_qty">Item QTY</label>
+                                <input type="text" class="form-control" id="item_qty" name="item_qty">
+
+                                <span id="error_item_qty" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="spec_received_date">Tender Floating Date by DGDP</label>
+                                <input type="date" class="form-control" id="spec_received_date"
+                                    name="spec_received_date">
+                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="spec_received_date">Tender Opening Date by DGDP</label>
+                                <input type="date" class="form-control" id="spec_received_date"
+                                    name="spec_received_date">
+                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -140,6 +135,7 @@
                                 <span id="error_received_by" class="text-danger error_field"></span>
                             </div>
                         </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>

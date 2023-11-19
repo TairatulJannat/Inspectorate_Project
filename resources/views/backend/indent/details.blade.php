@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Prelim/general Specification')
+@section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -59,7 +59,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Prelim/General Specification')
+@section('main_menu', 'Indent')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -67,7 +67,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
-                <h2>Details of Specification</h2>
+                <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-6" style="margin: 10px">
