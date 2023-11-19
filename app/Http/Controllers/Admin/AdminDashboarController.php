@@ -24,7 +24,7 @@ class AdminDashboarController extends Controller
         $total_entry = User::all()->count();
         $approve_entry = User::where('submit_status', 3)->count();
         $pending_entry = User::where('submit_status', 1)->count();
-//        dd($total_entry,$approve_entry,$pending_entry);
+        //        dd($total_entry,$approve_entry,$pending_entry);
         return view('backend.dashboard.dashboard', compact('total_entry', 'approve_entry', 'pending_entry'));
     }
 
@@ -68,20 +68,4 @@ class AdminDashboarController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
-
-    
-
-
-    
-
-  
-
-    
-
-
-   
-
-    
-
-
 }

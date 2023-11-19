@@ -19,9 +19,11 @@
 <script src="{{ asset('assets/backend/js/config.js') }}"></script>
 <script src="{{ asset('assets/backend/js/bootstrap/popper.min.js') }}"></script>
 <script src="{{ asset('assets/backend/js/bootstrap/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/backend/js/bootstrap/bootstrap-switch.min.js') }}"></script>
 <script src="{{ asset('assets/backend/js/script.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+@stack('custom-scripts')
 @stack('js')
 {!! Toastr::message() !!}
 <script>
@@ -36,51 +38,64 @@
     console.log = function() {};
 
 
-    
-        var options = {
+
+
+        // var options = {
+        // chart: {
+        //     type: 'pie'
+        // },
+        // series: [44, 55, 13, 33],
+        //     labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
+
+        // }
+
+        // var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
+
+        // chart.render();
+
+
+    // var options = {
+    // chart: {
+    //     type: 'pie'
+    // },
+    // series: [44, 55, 13, 33],
+    //     labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
+
+    // }
+
+    // var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
+
+    // chart.render();
+
+
+    var options8 = {
         chart: {
-            type: 'pie'
+            width: 380,
+            type: 'pie',
         },
-        series: [44, 55, 13, 33],
-            labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
-    
-        }
-    
-        var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
-    
-        chart.render();
-
-
-        var options8 = {
-    chart: {
-        width: 380,
-        type: 'pie',
-    },
-    labels: ['Team A', 'Team B', 'Team C', 'Team D','Team E'],
-    series: [44, 55, 13, 43],
-    responsive: [{
-        breakpoint: 480,
-        options: {
-            chart: {
-                width: 200
-            },
-            legend: {
-                position: 'bottom'
+        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+        series: [44, 55, 13, 43],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
             }
-        }
-    }],
-    colors:[vihoAdminConfig.primary, vihoAdminConfig.secondary, '#222222', '#717171', '#e2c636']
-}
+        }],
+        colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#222222', '#717171', '#e2c636']
+    }
 
-// var chart8 = new ApexCharts(
-//     document.querySelector("#mypiechart"),
-//     options8
-// );
+    // var chart8 = new ApexCharts(
+    //     document.querySelector("#mypiechart"),
+    //     options8
+    // );
 
-// chart8.render();
-
+    // chart8.render();
 </script>
-@stack('js')
 </body>
 
 </html>

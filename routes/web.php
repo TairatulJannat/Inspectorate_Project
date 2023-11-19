@@ -17,7 +17,7 @@ Route::get('/clear_cache', function () {
 });
 
 
-Route::group(['prefix'=>'admin'],function () {
+Route::group(['prefix' => 'admin'], function () {
     Auth::routes(['register' => false]);
 });
 
@@ -36,6 +36,3 @@ Route::middleware(['auth', 'routeprifix'])->prefix('{roleBased}')->group(functio
         }
     });
 });
-
-
-

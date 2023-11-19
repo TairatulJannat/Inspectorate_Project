@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/flag-icon.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/feather-icon.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap-switch.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/responsive.css') }}">
     <link id="color" rel="stylesheet" href="{{ asset('assets/backend/css/color-1.css') }}" media="screen">
