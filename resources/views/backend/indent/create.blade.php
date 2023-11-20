@@ -7,6 +7,10 @@
         form select {
             padding: 10px
         }
+        .form-check-input{
+            width:70px !important;
+            height: 35px;
+        }
     </style>
 @endpush
 @section('main_menu', 'Indent')
@@ -78,10 +82,35 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="spec_received_date">Spec. Received Date</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                                <label for="indent_number">Indent Number</label>
+                                <input type="text" class="form-control" id="indent_number"
+                                    name="indent_number">
+                                <span id="error_indent_number" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_received_date">Indent Received Date</label>
+                                <input type="date" class="form-control" id="indent_received_date"
+                                    name="indent_received_date">
+                                <span id="error_indent_received_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_type_id">Item Type</label>
+                                <select class="form-control " id="item_type_id" name="item_type_id">
+
+                                    <option selected disabled value="">Please Select</option>
+
+                                    @foreach ($item_types as $item_type)
+                                        <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -92,7 +121,70 @@
                                 <select class="form-control" id="item_id" name="item_id">
 
                                     <option value="">Please Select </option>
+                                </select>
 
+                                <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="qty">Item QTY</label>
+                                <input type="text" class="form-control" id="qty" name="qty">
+
+                                <span id="error_qty" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="attribute">Attribute</label>
+                               <select class="form-control" name="attribute" id="attribute">
+                                <option value="">Please Select</option>
+                                <option value="Controlled">Controlled</option>
+                                <option value="Uncontrolled">Uncontrolled</option>
+                               </select>
+
+                                <span id="error_attribute" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="estimated_value">Estimated Value</label>
+                                <input type="text" class="form-control" id="estimated_value" name="estimated_value">
+
+                                <span id="error_estimated_value" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="spare">Spare</label>
+                                <input type="text" class="form-control" id="spare" name="spare">
+
+                                <span id="error_spare" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="checked_standard">Standard Checked</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="checked_standard"  name="checked_standard">
+                                </div>
+
+                                <span id="error_checked_standard" class="text-danger error_field"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fin_year_id">Financial Year </label>
+
+                                <select class="form-control" id="fin_year_id" name="fin_year_id ">
+
+                                    <option value="">Please Select Year </option>
+                                    @foreach ($fin_years as $fin_year)
+                                        <option value={{ $fin_year->id }}>{{ $fin_year->name }} </option>
+                                    @endforeach
 
                                 </select>
 
@@ -101,37 +193,51 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_qty">Item QTY</label>
-                                <input type="text" class="form-control" id="item_qty" name="item_qty">
+                                <label for="nomenclature">Nomenclature</label>
+                                <input type="text" class="form-control" id="nomenclature" name="nomenclature">
 
-                                <span id="error_item_qty" class="text-danger error_field"></span>
+                                <span id="error_nomenclature" class="text-danger error_field"></span>
                             </div>
                         </div>
-
-
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="spec_received_date">Tender Floating Date by DGDP</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                                <label for="make">Make</label>
+                                <input type="text" class="form-control" id="make" name="make">
+
+                                <span id="error_make" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="model">Model</label>
+                                <input type="text" class="form-control" id="model" name="model">
+
+                                <span id="error_model" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="country_of_origin">Country of Origin</label>
+                                <input type="text" class="form-control" id="country_of_origin" name="country_of_origin">
+
+                                <span id="error_country_of_origin" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="country_of_assembly">Country of Assembly</label>
+                                <input type="text" class="form-control" id="country_of_assembly" name="country_of_assembly">
+
+                                <span id="error_country_of_assembly" class="text-danger error_field"></span>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="spec_received_date">Tender Opening Date by DGDP</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="received_by">Received By</label>
-                                <input type="text" value="{{ \Illuminate\Support\Facades\Auth::user()->name }}" readonly
-                                    class="form-control" id="received_by" name="received_by">
+                                <input type="text" value="{{ \Illuminate\Support\Facades\Auth::user()->name }}"
+                                    readonly class="form-control" id="received_by" name="received_by">
                                 <span id="error_received_by" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -164,32 +270,32 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.indent.index_js')
     <script>
-        // $(document).ready(function() {
+        $(document).ready(function() {
 
-        //     $("#item_type_id").off('change').on('change', function() {
+            $("#item_type_id").off('change').on('change', function() {
 
-        //         //  alert('123');
-        //         var itemtype_id = $('#item_type_id').val();
+                //  alert('123');
+                var itemtype_id = $('#item_type_id').val();
 
-        //         if (itemtype_id > 0) {
-        //             $.ajax({
-        //                 url: "{{ url('admin/prelimgeneral/item_name') }}" +
-        //                     '/' + itemtype_id,
-        //                 type: 'GET',
-        //                 dataType: 'json',
-        //                 success: function(res) {
-        //                     console.log(res);
+                if (itemtype_id > 0) {
+                    $.ajax({
+                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
+                            '/' + itemtype_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            console.log(res);
 
-        //                     var _html = '<option value="">Select an item</option>';
-        //                     $.each(res, function(index, item) {
-        //                         _html += '<option value="' + item.id + '">' + item
-        //                             .name + '</option>';
-        //                     });
-        //                     $('#item_id').html(_html);
-        //                 }
-        //             });
-        //         }
-        //     });
-        // });
+                            var _html = '<option value="">Select an item</option>';
+                            $.each(res, function(index, item) {
+                                _html += '<option value="' + item.id + '">' + item
+                                    .name + '</option>';
+                            });
+                            $('#item_id').html(_html);
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endpush

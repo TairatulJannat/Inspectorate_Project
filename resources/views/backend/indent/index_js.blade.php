@@ -28,7 +28,7 @@
             },
             ajax: {
 
-                url: "{{ url('admin/prelimgeneral/alldata') }}",
+                url: "{{ url('admin/indent/all_data') }}",
                 type: 'GET',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
@@ -38,6 +38,11 @@
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
                     searchable: false
+                },
+                {
+                    data: 'indent_number',
+                    name: 'indent_number',
+                    orderable: false
                 },
                 {
                     data: 'item_type_name',
@@ -52,8 +57,8 @@
 
 
                 {
-                    data: 'spec_received_date',
-                    name: 'spec_received_date',
+                    data: 'indent_received_date',
+                    name: 'indent_received_date',
                     orderable: false
                 },
                 {
@@ -62,8 +67,8 @@
                     orderable: false
                 },
                 {
-                    data: 'remark',
-                    name: 'remark',
+                    data: 'qty',
+                    name: 'qty',
                     orderable: false
                 },
 
@@ -101,7 +106,7 @@
 
         disableButton()
         $.ajax({
-            url: "{{ url('admin/prelimgeneral/store') }}",
+            url: "{{ url('admin/indent/store') }}",
             type: "POST",
             data: formData,
             processData: false,
@@ -125,15 +130,15 @@
             error: function(response) {
                 enableeButton()
                 clear_error_field();
-                error_notification('Please fill up the form correctly and try again')
-                $('#error_sender').text(response.responseJSON.errors.sender);
-                $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                $('#error_spec_type').text(response.responseJSON.errors.spec_type);
-                $('#error_additional_documents').text(response.responseJSON.errors
-                    .additional_documents);
-                $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
-                $('#error_spec_received_date').text(response.responseJSON.errors
-                    .spec_received_date);
+                // error_notification('Please fill up the form correctly and try again')
+                // $('#error_sender').text(response.responseJSON.errors.sender);
+                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                // $('#error_spec_type').text(response.responseJSON.errors.spec_type);
+                // $('#error_additional_documents').text(response.responseJSON.errors
+                //     .additional_documents);
+                // $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
+                // $('#error_spec_received_date').text(response.responseJSON.errors
+                //     .spec_received_date);
 
             }
         });

@@ -8,6 +8,7 @@ use App\Models\ParameterGroup;
 use App\Models\Section;
 use App\Models\Items;
 use App\Models\Item_type;
+use App\Models\Inspectorate;
 use DataTables;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -87,12 +88,21 @@ class ParameterGroupController extends Controller
                 foreach ($parameterNames as $parameterName) {
                     $parameterGroup = new ParameterGroup();
 
+                    $parameterGroup->name = $parameterName;
                     $parameterGroup->item_type_id = $request->input('item-type-id');
                     $parameterGroup->item_id = $request->input('item-id');
                     $parameterGroup->inspectorate_id = Auth::user()->inspectorate_id;
-                    $parameterGroup->section_id = 1;
+                    $id = $parameterGroup->inspectorate_id;
+                    
+                    if (Auth::user()->id === 92) {
+                        $parameterGroup->section_id = 92;
+                    } else {
+                        $inspectorate = Inspectorate::find($id);
+                        $section = $inspectorate->section;
+                        $parameterGroup->section_id = $section->id;
+                    }
+
                     $parameterGroup->status = 1;
-                    $parameterGroup->name = $parameterName;
 
                     if (!$parameterGroup->save()) {
                         DB::rollBack();

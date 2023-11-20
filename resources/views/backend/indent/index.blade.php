@@ -41,7 +41,7 @@
 
                     <div class="d-flex justify-content-between px-4 py-2">
                         <div class="col-6">
-                            <a href="{{ route('admin.prelimgeneral/view') }}" type="button"
+                            <a href="{{ route('admin.indent/view') }}" type="button"
                                 class="btn btn-success">Incoming</a>
                             <a href="{{ route('admin.prelimgeneral/outgoing') }}" type="button"
                                 class="btn btn-danger">OutGoing</a>
@@ -60,11 +60,12 @@
                         <thead>
                             <tr>
                                 <th>SL No</th>
+                                <th>Indent Number</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Remark</th>
+                                <th>Item QTY</th>
                                 <th>Present state of spec</th>
                                 <th>Action</th>
                             </tr>
