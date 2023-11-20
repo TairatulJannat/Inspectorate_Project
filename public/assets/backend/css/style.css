@@ -6015,7 +6015,7 @@ table tbody .border-bottom-warning td {
 }
 
 .page-main-header .main-header-right .left-menu-header {
-    padding: 24px 40px;
+    padding: 0 20px;
 }
 
 .page-main-header .main-header-right .left-menu-header ul li .search-form .search-bg {
@@ -7347,7 +7347,7 @@ table tbody .border-bottom-warning td {
 
 .page-wrapper.compact-wrapper .page-body-wrapper header.main-nav .main-navbar .nav-menu {
     border-radius: 0;
-   
+
     left: -300px;
     z-index: 99;
     -webkit-transition: color 1s ease;
