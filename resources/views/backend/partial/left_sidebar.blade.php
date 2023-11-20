@@ -29,7 +29,6 @@ $currentControllerName = Request::segment(2);
                             <span>Dashboard</span>
                         </a>
                     </li>
-
                     @if (count(menu_check('Indent')) !== 0)
                         <li class="dropdown"><a
                                 class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
@@ -45,6 +44,27 @@ $currentControllerName = Request::segment(2);
                                     <li><a class="text-light" href="{{ route('admin.indent/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Indent</a></li>
+                                @endif
+                            </ul>
+                        </li>
+
+                    @endif
+
+                    @if (count(menu_check('Tender')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Tender' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="book-open"
+                                    class="text-light"></i><span>Tender</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Tender/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('tender/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.tender/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Tender</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('tender/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.tender/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            Tender</a></li>
                                 @endif
                             </ul>
                         </li>

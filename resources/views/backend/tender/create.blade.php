@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Tender Management')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -9,8 +9,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
-@section('active_menu', 'Add Indent')
+@section('main_menu', 'Tender Management')
+@section('active_menu', 'Add Specification')
 @section('content')
     <div class="col-sm-12 col-xl-12">
 
@@ -50,7 +50,45 @@
                                 <span id="error_sender" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="spec_type">Spec. Type</label>
+                                <select class="form-control" id="spec_type" name="spec_type">
 
+                                    <option value="">Please Select </option>
+                                    <option value="1">Prelim Spec </option>
+                                    <option value="2"> General Spec</option>
+
+
+                                </select>
+                                <span id="error_spec_type" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="spec_received_date">Spec. Received Date</label>
+                                <input type="date" class="form-control" id="spec_received_date"
+                                    name="spec_received_date">
+                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tender_date">Tender Date</label>
+                                <input type="date" class="form-control" id="tender_date" name="tender_date">
+                                <span id="error_tender_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="opening_date">Opening Date</label>
+                                <input type="date" class="form-control" id="opening_date" name="opening_date">
+                                <span id="error_opening_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
@@ -58,7 +96,13 @@
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tender_number">Tender Number</label>
+                                <input type="text" class="form-control" id="tender_number" name="tender_number">
+                                <span id="error_tender_number" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="additional_documents">Aditional Document</label>
@@ -78,10 +122,19 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="spec_received_date">Spec. Received Date</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                                <label for="item_type_id">Item Type</label>
+                                <select class="form-control " id="item_type_id" name="item_type_id">
+
+                                    <option selected disabled value="">Please Select</option>
+
+                                    @foreach ($item_types as $item_type)
+                                        <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
+                                    @endforeach
+
+                                </select>
+
+
+                                <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -101,37 +154,17 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_qty">Item QTY</label>
-                                <input type="text" class="form-control" id="item_qty" name="item_qty">
-
-                                <span id="error_item_qty" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="spec_received_date">Tender Floating Date by DGDP</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="spec_received_date">Tender Opening Date by DGDP</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                                <label for="qty">Item Quantity</label>
+                                <input type="text" class="form-control" id="qty" name="qty">
+                                <span id="error_qty" class="text-danger error_field"></span>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="received_by">Received By</label>
-                                <input type="text" value="{{ \Illuminate\Support\Facades\Auth::user()->name }}" readonly
-                                    class="form-control" id="received_by" name="received_by">
+                                <input type="text" value="{{ \Illuminate\Support\Facades\Auth::user()->name }}"
+                                    readonly class="form-control" id="received_by" name="received_by">
                                 <span id="error_received_by" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -164,32 +197,33 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.tender.index_js')
     <script>
-        // $(document).ready(function() {
+      
+        $(document).ready(function() {
 
-        //     $("#item_type_id").off('change').on('change', function() {
+            $("#item_type_id").off('change').on('change', function() {
 
-        //         //  alert('123');
-        //         var itemtype_id = $('#item_type_id').val();
+                //  alert('123');
+                var itemtype_id = $('#item_type_id').val();
 
-        //         if (itemtype_id > 0) {
-        //             $.ajax({
-        //                 url: "{{ url('admin/prelimgeneral/item_name') }}" +
-        //                     '/' + itemtype_id,
-        //                 type: 'GET',
-        //                 dataType: 'json',
-        //                 success: function(res) {
-        //                     console.log(res);
+                if (itemtype_id > 0) {
+                    $.ajax({
+                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
+                            '/' + itemtype_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            console.log(res);
 
-        //                     var _html = '<option value="">Select an item</option>';
-        //                     $.each(res, function(index, item) {
-        //                         _html += '<option value="' + item.id + '">' + item
-        //                             .name + '</option>';
-        //                     });
-        //                     $('#item_id').html(_html);
-        //                 }
-        //             });
-        //         }
-        //     });
-        // });
+                            var _html = '<option value="">Select an item</option>';
+                            $.each(res, function(index, item) {
+                                _html += '<option value="' + item.id + '">' + item
+                                    .name + '</option>';
+                            });
+                            $('#item_id').html(_html);
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endpush

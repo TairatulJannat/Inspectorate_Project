@@ -12,7 +12,7 @@
 
     <div class="row">
 
-        <div class="col-sm-12 col-xl-6 box-col-6">
+        {{-- <div class="col-sm-12 col-xl-6 box-col-6">
             <div class="card">
                 <div class="card">
                     <div class="card-header pb-0">
@@ -23,7 +23,7 @@
                     </div>
                   </div>
             </div>
-        </div>
+        </div> --}}
 
 
 
