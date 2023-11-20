@@ -51,6 +51,8 @@
     @include('backend.parameter-groups.edit')
     {{-- Show Parameter Group --}}
     @include('backend.parameter-groups.show')
+    {{-- Show Assign Parameter --}}
+    @include('backend.parameter-groups.assign_parameter_value')
 @endsection
 
 @push('custom-scripts')
