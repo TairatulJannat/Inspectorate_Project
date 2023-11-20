@@ -14,7 +14,7 @@
         <div class="left-menu-header col">
             <ul>
                 <li>
-                    <h3 class="font-success" style="font-size: 18px;font-weight: bold">Inspectorate</h3>
+                    <h3 class="font-success" style="font-size: 24px;font-weight: bold">Inspectorate of Electrical Equipments & Instruments</h3>
                 </li>
             </ul>
         </div>

@@ -5,12 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Section extends Model
+class FinancialYear extends Model
 {
     use HasFactory;
-
-    public function inspectorate()
-    {
-        return $this->belongsTo(Inspectorate::class, 'inspectorate_id');
-    }
+    protected $table = 'fin_years';
+    protected $fillable = [];
 }

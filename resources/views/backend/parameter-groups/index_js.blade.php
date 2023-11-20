@@ -92,9 +92,12 @@
                                 '<button class="btn btn-secondary btn-sm me-2 edit_parameter_group" id="' +
                                 row.id +
                                 '" >Edit</button>' +
-                                '<button class="btn btn-danger btn-sm delete_parameter_group"id="' +
+                                '<button class="btn btn-danger btn-sm me-2 delete_parameter_group" id="' +
                                 row.id +
-                                '" >Delete</button>';
+                                '" >Delete</button>' +
+                                '<button class="btn btn-dark btn-sm assign-parameter-value" id="' +
+                                row.id +
+                                '" >Assign Parameter</button>';
                         }
                     }
                 ],
@@ -343,7 +346,7 @@
                 $('#editItemId').append('<option value="' + value.id + '">' + value.name + '</option>');
             });
         }
-        // Creating dynamic input fields: Ends here
+        // Populate Items Dropdown: Ends here
 
         // Creating dynamic input fields: Begins here
         var addButton = $('.add_button');
@@ -362,5 +365,139 @@
             $(this).closest('.row').remove();
         });
         // Creating dynamic input fields: Ends here
+
+        // Assign Parameter Value Modal Show
+        $(document).on('click', '.assign-parameter-value', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('id');
+            $.ajax({
+                url: '{{ url('admin/assign-parameter-value/show') }}',
+                method: 'post',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $("#assignParameterGroupId").val(response.id);
+                    $("#assignParameterGroupName").val(response.name);
+
+                    $('#assignParameterValueGroupModal').modal('show');
+                }
+            });
+        });
+
+        // Creating dynamic input fields for adding parameter value: Begins here
+        var addButton = $('.add-parameter-button');
+        var wrapper = $('.parameter-field-wrapper');
+        var fieldCounter = 1; // Initialize the counter
+
+        // Once add button is clicked
+        $(addButton).click(function() {
+            fieldCounter++; // Increment the counter
+
+            var fieldHTML =
+                '<div class="row mb-2">' +
+                '<div class="col-5 ps-0">' +
+                '<input type="text" class="form-control parameter-name" id="parameterName_' +
+                fieldCounter + '" name="parameter-name[]" placeholder="Name">' +
+                '<span class="text-danger error-text parameter-name-error"></span>' +
+                '</div>' +
+                '<div class="col-5">' +
+                '<input type="text" class="form-control parameter-value" id="parameterValue_' +
+                fieldCounter + '" name="parameter-value[]" placeholder="Value">' +
+                '<span class="text-danger error-text parameter-value-error"></span>' +
+                '</div>' +
+                '<div class="col-2">' +
+                '<a href="javascript:void(0);" class="btn btn-danger-gradien float-end remove-parameter-button" title="Remove Parameter field">-</a>' +
+                '</div>' +
+                '</div>';
+
+            $(wrapper).append(fieldHTML);
+        });
+
+        // Once remove button is clicked
+        $(wrapper).on('click', '.remove-parameter-button', function(e) {
+            e.preventDefault();
+            $(this).closest('.row').remove();
+        });
+        // Creating dynamic input fields for adding parameter value: Ends here
+
+        $("#assignParameterValueGroupForm").on("submit", function(e) {
+            console.log("object");
+            e.preventDefault();
+            var form = this;
+            var assignButton = $("#assignButton");
+            var modalContent = $("#assignParameterValueGroupModal .modal-content");
+
+            var originalModalContent = modalContent.html();
+
+            modalContent.html(
+                '<div class="text-center"><i class="fa fa-spinner fa-spin" style="font-size:40px"></i><p>Loading...</p></div>'
+            );
+
+            $(form).find("span.parameter-name-error, span.parameter-value-error").text("");
+
+            $.ajax({
+                url: $(form).attr('action'),
+                method: $(form).attr('method'),
+                data: new FormData(form),
+                processData: false,
+                dataType: "JSON",
+                contentType: false,
+                cache: false, // Ensure that the request is not cached
+                beforeSend: function() {
+                    $(form).find("span.parameter-name-error, span.parameter-value-error")
+                        .text("");
+                },
+                success: function(response) {
+                    console.log(response);
+
+                    if (response && typeof response === 'object' && 'isSuccess' in
+                        response) {
+                        if (response.isSuccess === false) {
+                            if ('error' in response) {
+                                $.each(response.error, function(prefix, val) {
+                                    $(form).find("span." + prefix + "-error").text(
+                                        val[0]);
+                                });
+                            }
+                            toastr.error(response.Message);
+                        } else if (response.isSuccess === true) {
+                            if ('Message' in response) {
+                                toastr.success(response.Message);
+                            }
+
+                            $(form)[0].reset();
+                            // Reset the dynamic fields as well
+                            $('.parameter-field-wrapper').html('');
+                            fieldCounter = 1;
+
+                            $("#assignParameterValueGroupModal").modal("hide");
+                            Swal.fire(
+                                'Added!',
+                                'Parameter Value Assigned Successfully!',
+                                'success'
+                            );
+
+                            if ($.fn.DataTable.isDataTable('.yajra-datatable')) {
+                                $('.yajra-datatable').DataTable().ajax.reload();
+                            }
+                        } else {
+                            toastr.error('Unexpected response format.');
+                        }
+                    } else {
+                        toastr.error('Unexpected response format.');
+                    }
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                    toastr.error('An error occurred while processing the request.');
+                },
+                complete: function() {
+                    assignButton.prop('disabled', false).text('Assign');
+                    modalContent.html(originalModalContent);
+                }
+            });
+        });
     });
 </script>

@@ -105,22 +105,22 @@ class PrelimGeneralController extends Controller
 
                 ->addColumn('status', function ($data) {
                     if ($data->status == '0') {
-                        return '<button class="btn btn-success btn-sm">New</button>';
+                        return '<button class="btn btn-primary btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-danger  btn-sm">Under Vatted</button>';
+                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
                     }
                     if ($data->status == '2') {
-                        return '<button class="btn btn-danger btn-sm">Delivered</button>';
+                        return '<button class="btn btn-green btn-sm">Delivered</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
                     if ($data->status == '2') {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <button href="" class="edit btn btn-success btn-lg" disable>Completed</button>';
+                        <button href="" class="edit btn btn-success " disable>Completed</button>';
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Forward</a>';
+                        <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary ">Forward</a>';
                     }
 
 
