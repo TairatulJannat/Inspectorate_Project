@@ -74,7 +74,7 @@ $currentControllerName = Request::segment(2);
                                     </li>
                                 @endif
                                 @if (sub_menu_check('prelimgeneral/create') !== null)
-                                    <li><a  class="text-light" href="{{ route('admin.prelimgeneral/create') }}"
+                                    <li><a class="text-light" href="{{ route('admin.prelimgeneral/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Prelim/General</a></li>
                                 @endif
@@ -141,11 +141,15 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
-                    {{-- Side Menu Button Links for Parameter Groups --}}
-                    @if (count(menu_check('ParameterGroup')) !== 0)
+                    {{-- Side Menu Button Links for Parameters --}}
+                    @if (count(menu_check('Parameter')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
-                                    data-feather="list"></i><span>Parameter Groups</span></a>
+                                    data-feather="list"></i><span>Parameters</span></a>
                             <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/parameter/index') }}"
+                                        class="{{ Request::is('*/admin/parameter/index') ? 'active' : '' }} text-white">Parameters
+                                        Index</a>
+                                </li>
                                 <li><a href="{{ url('admin/parameter_groups/index') }}"
                                         class="{{ Request::is('*/admin/parameter_groups/index') ? 'active' : '' }} text-white">Parameter
                                         Groups Index</a>
@@ -167,6 +171,7 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+
                     @if (count(menu_check('I-Note')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>I-Note</span></a>
