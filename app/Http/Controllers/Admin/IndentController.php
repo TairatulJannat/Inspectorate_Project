@@ -94,22 +94,25 @@ class IndentController extends Controller
 
                 ->addColumn('status', function ($data) {
                     if ($data->status == '0') {
-                        return '<button class="btn btn-success btn-sm">New</button>';
+                        return '<button class="btn btn-primary btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-danger  btn-sm">Under Vatted</button>';
+                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
                     }
                     if ($data->status == '2') {
-                        return '<button class="btn btn-danger btn-sm">Delivered</button>';
+                        return '<button class="btn btn-success btn-sm">Delivered</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
                     if ($data->status == '2') {
                         $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/indent/progress/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Progress</a>
                         <button href="" class="edit btn btn-success btn-lg" disable>Completed</button>';
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Forward</a>';
+                        <a href="' . url('admin/indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Progress</a>
+                        <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
+                        </div>';
                     }
 
 
@@ -119,35 +122,39 @@ class IndentController extends Controller
                 ->make(true);
         }
     }
-    // public function details($id)
-    // {
+    public function details($id)
+    {
 
 
-    //     $details = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
-    //         ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
-    //         ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
-    //         ->where('prelim_gen_specs.id', $id)
-    //         ->first();
-
-    //     $designations = Designation::all();
-
-    //     $admin_id = Auth::user()->id;
-    //     $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-
-    //     $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
-    //         ->leftJoin('designations', 'document_tracks.sender_designation_id', '=', 'designations.id')
-    //         ->where('track_status', 1)
-    //         ->select('document_tracks.*', 'designations.name as designations_name')->get();
-
-    //     $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
-    //     if ($auth_designation_id) {
-    //         $desig_id = $auth_designation_id->desig_id;
-    //     }
+        $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
+            ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
+            ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
+            ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name',
+                    'additional_documents.name as additional_documents_name', 'fin_years.name as fin_year_name')
+            ->where('indents.id', $id)
+            ->first();
 
 
+        $designations = Designation::all();
 
-    //     return view('backend.specification.prelimgeneral.details', compact('details', 'designations', 'document_tracks', 'desig_id'));
-    // }
+        $admin_id = Auth::user()->id;
+        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
+        $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
+            ->leftJoin('designations', 'document_tracks.sender_designation_id', '=', 'designations.id')
+            ->where('track_status', 1)
+            ->select('document_tracks.*', 'designations.name as designations_name')->get();
+
+        $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
+        if ($auth_designation_id) {
+            $desig_id = $auth_designation_id->desig_id;
+        }
+
+
+
+        return view('backend.indent.details', compact('details', 'designations', 'document_tracks', 'desig_id'));
+    }
 
     // public function prelimGenTracking(Request $request)
     // {
@@ -275,5 +282,12 @@ class IndentController extends Controller
     {
         $items = Items::where('item_type_id', $id)->get();
         return response()->json($items);
+    }
+
+    public function progress(){
+
+
+        return view('backend.indent.progress');
+
     }
 }

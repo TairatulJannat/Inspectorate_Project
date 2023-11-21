@@ -78,8 +78,16 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
+                                <th>Indent Number</td>
+                                <td>{{ $details->indent_number }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Receive Date</td>
+                                <td>{{ $details->indent_received_date }}</td>
                             </tr>
 
                             <tr>
@@ -87,17 +95,39 @@
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
                             <tr>
-                                <th>Receive Date</td>
-                                <td>{{ $details->spec_received_date }}</td>
+                                <th>Attribute</td>
+                                <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-                                <th>Specification Type</td>
-                                <td> {{ $details->spec_type == 1 ? 'Prelim Specification' : 'Genarel Specification' }}</td>
+                                <th>Additional Documents</td>
+                                <td>{{ $details->additional_documents_name }}</td>
                             </tr>
                             <tr>
-                                <th>Delivary</td>
-                                <td> {{ $details->delivery_date }}</td>
+                                <th>Financial Year</td>
+                                <td>{{ $details->fin_year_name}}</td>
                             </tr>
+                            <tr>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->nomenclature }}</td>
+                            </tr>
+                            <tr>
+                                <th>Make</td>
+                                <td>{{ $details->make }}</td>
+                            </tr>
+                            <tr>
+                                <th>Model</td>
+                                <td>{{ $details->model }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Origin</td>
+                                <td>{{ $details->country_of_origin }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Assembly</td>
+                                <td>{{ $details->country_of_assembly }}</td>
+                            </tr>
+
+
                         </table>
                     </div>
                 </div>
