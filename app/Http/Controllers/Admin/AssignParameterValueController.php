@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ParameterGroup;
 use App\Models\AssignParameterValue;
+use App\Models\Items;
+use App\Models\Item_type;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
@@ -16,15 +18,31 @@ class AssignParameterValueController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $items = Items::all();
+            $itemTypes = Item_type::all();
+        } catch (\Exception $e) {
+            return back()->withError('Failed to retrieve from Database.');
+        }
+        return view('backend.item-parameters.index', compact('items', 'itemTypes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            $id = $request->id;
+            $parameterGroup = ParameterGroup::findOrFail($id);
+
+            return response()->json($parameterGroup);
+        } catch (\Exception $e) {
+            // Log detailed error information for debugging purposes
+            \Log::error('Error in show method: ' . $e->getMessage());
+
+            return response()->json(['error' => 'Parameter Group not found'], 404);
+        }
     }
 
     /**
@@ -109,16 +127,44 @@ class AssignParameterValueController extends Controller
      */
     public function show(Request $request)
     {
-        try {
-            $id = $request->id;
-            $parameterGroup = ParameterGroup::findOrFail($id);
+        $customMessages = [
+            'item-type-id.required' => 'Please select an Item Type.',
+            'item-id.required' => 'Please select an Item.',
+        ];
 
-            return response()->json($parameterGroup);
-        } catch (\Exception $e) {
-            // Log detailed error information for debugging purposes
-            \Log::error('Error in show method: ' . $e->getMessage());
+        $validator = Validator::make($request->all(), [
+            'item-type-id' => ['required', 'exists:item_types,id'],
+            'item-id' => ['required', 'exists:items,id'],
+        ], $customMessages);
 
-            return response()->json(['error' => 'Parameter Group not found'], 404);
+        if ($validator->passes()) {
+            $itemId = $request->input('item-id');
+            $parameterGroups = ParameterGroup::with('assignParameterValues')
+                ->where('item_id', $itemId)
+                ->get();
+
+            // Access related data
+            foreach ($parameterGroups as $parameterGroup) {
+                $treeNode = [
+                    'parameterGroupId' => $parameterGroup->id,
+                    'parameterGroupName' => $parameterGroup->name,
+                    'parameterValues' => $parameterGroup->assignParameterValues->toArray(),
+                ];
+
+                $treeViewData[] = $treeNode;
+            }
+
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => 'Parameter Groups data successfully retrieved.',
+                'treeViewData' => $treeViewData,
+            ], 200);
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => "Validation failed. Please check the inputs!",
+                'error' => $validator->errors()->toArray()
+            ], 200);
         }
     }
 

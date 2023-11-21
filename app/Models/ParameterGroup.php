@@ -36,4 +36,9 @@ class ParameterGroup extends Model
     {
         return $this->belongsTo(Item_type::class, 'item_type_id');
     }
+
+    public function assignParameterValues()
+    {
+        return $this->hasMany(AssignParameterValue::class, 'parameter_group_id');
+    }
 }
