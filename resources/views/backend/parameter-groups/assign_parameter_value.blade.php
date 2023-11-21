@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Assign Parameter Value Group</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Assign Parameter Value</h5>
             </div>
             <form action="{{ url('admin/assign-parameter-value/store') }}" method="POST"
                 id="assignParameterValueGroupForm" autocomplete="off">

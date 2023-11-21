@@ -93,14 +93,14 @@ class AssignParameterValueController extends Controller
                     'isSuccess' => false,
                     'Message' => "Something went wrong!",
                     'Error' => $e->getMessage(),
-                ], 500);
+                ], 200);
             }
         } else {
             return response()->json([
                 'isSuccess' => false,
                 'Message' => "Please check the inputs!",
                 'error' => $validator->errors()->toArray()
-            ], 422);
+            ], 200);
         }
     }
 

@@ -423,17 +423,12 @@
         // Creating dynamic input fields for adding parameter value: Ends here
 
         $("#assignParameterValueGroupForm").on("submit", function(e) {
-            console.log("object");
             e.preventDefault();
+
             var form = this;
             var assignButton = $("#assignButton");
-            var modalContent = $("#assignParameterValueGroupModal .modal-content");
-
-            var originalModalContent = modalContent.html();
-
-            modalContent.html(
-                '<div class="text-center"><i class="fa fa-spinner fa-spin" style="font-size:40px"></i><p>Loading...</p></div>'
-            );
+            assignButton.prop('disabled', true).html(
+                '<div class="text-center"><i class="fa fa-spinner fa-spin"></i></div>');
 
             $(form).find("span.parameter-name-error, span.parameter-value-error").text("");
 
@@ -450,8 +445,6 @@
                         .text("");
                 },
                 success: function(response) {
-                    console.log(response);
-
                     if (response && typeof response === 'object' && 'isSuccess' in
                         response) {
                         if (response.isSuccess === false) {
@@ -491,11 +484,16 @@
                 },
                 error: function(error) {
                     console.log('Error:', error);
+                    if ('error' in response) {
+                        $.each(response.error, function(prefix, val) {
+                            $(form).find("span." + prefix + "-error").text(
+                                val[0]);
+                        });
+                    }
                     toastr.error('An error occurred while processing the request.');
                 },
                 complete: function() {
                     assignButton.prop('disabled', false).text('Assign');
-                    modalContent.html(originalModalContent);
                 }
             });
         });
