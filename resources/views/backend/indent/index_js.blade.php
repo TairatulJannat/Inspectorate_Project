@@ -125,7 +125,7 @@
                     $('.yajra-datatable').DataTable().ajax.reload(null, false);
                     toastr.success('Information Saved', 'Saved');
                 }
-                setTimeout(window.location.href = "{{ route('admin.prelimgeneral/view') }}", 40000);
+                setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
             },
             error: function(response) {
                 enableeButton()

@@ -89,7 +89,7 @@ class OutgoingPrelimGeneral extends Controller
                 ->addColumn('action', function ($data) {
 
                     $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/outgoing_prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Vetted</a>';
+                            <a href="' . url('admin/outgoing_prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])

@@ -58,6 +58,7 @@ class PrelimGeneralController extends Controller
                 $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
+                    ->where('prelim_gen_specs.status' , 0)
                     ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
@@ -65,6 +66,7 @@ class PrelimGeneralController extends Controller
                 $prelimGenIds = PrelimGeneral::leftJoin('document_tracks', 'prelim_gen_specs.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('prelim_gen_specs.insp_id', $insp_id)
+                    ->where('prelim_gen_specs.status' , 0)
                     ->whereIn('prelim_gen_specs.sec_id', $section_ids)->pluck('prelim_gen_specs.id', 'prelim_gen_specs.id')->toArray();
 
 
@@ -73,6 +75,7 @@ class PrelimGeneralController extends Controller
                     ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
                     ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('prelim_gen_specs.id', $prelimGenIds)
+                    ->where('prelim_gen_specs.status' , 0)
                     ->get();
 
                 // dd($query);

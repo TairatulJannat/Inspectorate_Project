@@ -88,6 +88,11 @@ $currentControllerName = Request::segment(2);
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Prelim/General</a></li>
                                 @endif
+                                @if (sub_menu_check('prelimgen/revision') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.prelimgen/revision') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Revision
+                                            Prelim/General</a></li>
+                                @endif
                             </ul>
                         </li>
                     @endif

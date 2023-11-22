@@ -5,6 +5,12 @@
     <style>
         .card .card-header {
             padding: 0px;
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
+
+        }
+        <style>
+        .card .card-header {
+            padding: 0px;
             border-bottom: 1px solid rgba(182, 182, 182 , .6);
 
         }
@@ -21,9 +27,10 @@
             color: #ffff
         }
     </style>
+
 @endpush
 @section('main_menu', 'Indent')
-@section('active_menu', 'Incoming')
+@section('active_menu', 'Outgoing')
 @section('content')
 
     <div class="panel-heading">
@@ -33,7 +40,6 @@
 
     </div>
     <br>
-
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
@@ -85,5 +91,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.indent.index_js')
+    @include('backend.indent.outgoing_index_js')
 @endpush

@@ -188,7 +188,6 @@
 
                 var reciever_desig_id = $('#designations').val()
                 var doc_ref_id = {{ $details->id }}
-                var doc_type_id = {{ $details->spec_type }}
 
 
                 swal({
@@ -209,11 +208,10 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/prelimgeneral/prelim_gen_tracking') }}',
+                            url: '{{ url('admin/indent/indent_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
-                                'doc_type_id': doc_type_id,
 
                             },
                             headers: {

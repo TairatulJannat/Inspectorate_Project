@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Prelim/general Specification')
+@section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -11,13 +11,14 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .card-header {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color:  #006A4E!important;
+            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color:  #ffff;
+            color: #ffff;
         }
 
         .card-body {
@@ -48,26 +49,32 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background-color: #ffffff !important;
-            color: #006a4e8c;
+            background-color: #006a4ef !important;
+            color:#ffff;
             cursor: pointer;
         }
 
         .delivery-btn:hover {
-            background-color: #02572f !important;
+            background-color: #ff8533 !important;
             /* Lighter orange on hover */
         }
     </style>
 @endpush
-@section('main_menu', 'Prelim/General Specification')
-@section('active_menu', 'Details')
+@section('main_menu', 'Indent')
+@section('active_menu', 'Outgoing Details')
 @section('content')
 
+    <div class="panel-heading">
+        <div class="invoice_date_filter" style="">
 
+        </div>
+
+    </div>
+    <br>
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
-                <h2>Details of Specification</h2>
+                <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-6" style="margin: 10px">
@@ -78,8 +85,16 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
+                                <th>Indent Number</td>
+                                <td>{{ $details->indent_number }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Receive Date</td>
+                                <td>{{ $details->indent_received_date }}</td>
                             </tr>
 
                             <tr>
@@ -87,27 +102,49 @@
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
                             <tr>
-                                <th>Receive Date</td>
-                                <td>{{ $details->spec_received_date }}</td>
+                                <th>Attribute</td>
+                                <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-                                <th>Specification Type</td>
-                                <td> {{ $details->spec_type == 1 ? 'Prelim Specification' : 'Genarel Specification' }}</td>
+                                <th>Additional Documents</td>
+                                <td>{{ $details->additional_documents_name }}</td>
                             </tr>
                             <tr>
-                                <th>Delivary</td>
-                                <td> {{ $details->delivery_date }}</td>
+                                <th>Financial Year</td>
+                                <td>{{ $details->fin_year_name}}</td>
                             </tr>
+                            <tr>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->nomenclature }}</td>
+                            </tr>
+                            <tr>
+                                <th>Make</td>
+                                <td>{{ $details->make }}</td>
+                            </tr>
+                            <tr>
+                                <th>Model</td>
+                                <td>{{ $details->model }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Origin</td>
+                                <td>{{ $details->country_of_origin }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Assembly</td>
+                                <td>{{ $details->country_of_assembly }}</td>
+                            </tr>
+
+
                         </table>
                     </div>
                 </div>
                 <div class="card-body col-3" style="margin: 10px;">
-                    <h4>Forward Status</h4>
+                    <h4>Vetted Status</h4>
                     <ul>
                         @if ($document_tracks !== null && $desig_id !== 1)
                             @foreach ($document_tracks as $document_track)
                                 <li><i class="fa fa-check ps-2 text-success"
-                                        aria-hidden="true"></i>{{ $document_track->designations_name }}</li>
+                                        aria-hidden="true"></i>{{ $document_track->designations_name }} </li>
                             @endforeach
                         @endif
 
@@ -116,16 +153,30 @@
                     </ul>
                 </div>
                 <div class="card-body col-2" style="margin: 10px;">
-                    <h4>Forward</h4>
+                    <h4>Vetted</h4>
                     <form action="">
-                        <select name="designation" id="designations" class="form-control">
 
-                            @foreach ($designations as $d)
-                                <option value={{ $d->id }}>{{ $d->name }}</option>
-                            @endforeach
+                        @if ($desig_position->position != 7)
+                            <select name="designation" id="designations" class="form-control">
 
-                        </select>
-                        <button class="btn btn-success mt-2 " id="submitBtn">Forward</button>
+                                @foreach ($designations as $d)
+                                    <option value={{ $d->id }}>{{ $d->name }}</option>
+                                @endforeach
+
+                            </select>
+                        @endif
+                        @if ($desig_position->position == 3)
+                            <div class='mt-2'>
+                                <label for='delivery_date'>Delivery Date </label>
+                                <input type="date" id='delivery_date' name="delivery_date" class="form-control">
+                            </div>
+
+                            <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="enter delay cause"></textarea>
+                        @endif
+
+
+
+                        <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
                     </form>
                 </div>
             </div>
@@ -157,12 +208,15 @@
                 event.preventDefault();
 
                 var reciever_desig_id = $('#designations').val()
+                var delivery_date = $('#delivery_date').val()
+                var delay_cause = $('#delay_cause').val()
+
                 var doc_ref_id = {{ $details->id }}
                 var doc_type_id = {{ $details->spec_type }}
 
 
                 swal({
-                    title: `Are you sure to forward <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
+                    title: `Are you sure to delivared <span style="color: red; font-weight: bold;"> ${reciever_desig_text}</span>?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -179,12 +233,13 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/prelimgeneral/prelim_gen_tracking') }}',
+                            url: '{{ url('admin/outgoing_indent/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
                                 'doc_type_id': doc_type_id,
-
+                                'delay_cause': delay_cause,
+                                'delivery_date': delivery_date
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
