@@ -93,7 +93,7 @@ class ParameterGroupController extends Controller
                     $parameterGroup->item_id = $request->input('item-id');
                     $parameterGroup->inspectorate_id = Auth::user()->inspectorate_id;
                     $id = $parameterGroup->inspectorate_id;
-                    
+
                     if (Auth::user()->id === 92) {
                         $parameterGroup->section_id = 92;
                     } else {

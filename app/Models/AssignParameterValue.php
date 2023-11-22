@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class AssignParameterValue extends Model
 {
     use HasFactory;
+
+    public function parameterGroup()
+    {
+        return $this->belongsTo(ParameterGroup::class, 'parameter_group_id');
+    }
 }
