@@ -16,19 +16,11 @@
                             <label for="showItemType" class="form-label">Item Type</label>
                             <div id="showItemType"></div>
                         </div>
-                        <div class="mb-3">
-                            <label for="showSection" class="form-label">Section</label>
-                            <div id="showSection"></div>
-                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="showItem" class="form-label">Item</label>
                             <div id="showItem"></div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="showInspectorate" class="form-label">Inspectorate</label>
-                            <div id="showInspectorate"></div>
                         </div>
                         <div class="mb-3">
                             <label for="showStatus" class="form-label">Status</label>

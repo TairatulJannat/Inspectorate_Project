@@ -8,23 +8,19 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="showInspectorateId" class="form-label">Inspectorate ID</label>
-                            <div id="showInspectorateId"></div>
-                        </div>
-                        <div class="mb-3">
+                        <div class="m-3">
                             <label for="showItemName" class="form-label">Item Name</label>
                             <div id="showItemName"></div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="showItemTypeName" class="form-label">Item Type Name</label>
-                            <div id="showItemTypeName"></div>
-                        </div>
-                        <div class="mb-3">
+                        <div class="m-3">
                             <label for="showAttribute" class="form-label">Attribute</label>
                             <div id="showAttribute"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="m-3">
+                            <label for="showItemTypeName" class="form-label">Item Type Name</label>
+                            <div id="showItemTypeName"></div>
                         </div>
                     </div>
                 </div>
