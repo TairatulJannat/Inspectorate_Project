@@ -38,7 +38,7 @@
                                 <div class="row mb-2">
                                     <div class="col-10 ps-0">
                                         <input type="text" class="form-control parameter-group-name"
-                                            id="parameterGroupName" name="parameter-group-name[]">
+                                            id="parameterGroupName_1" name="parameter-group-name[]">
                                         <span class="text-danger error-text parameter-group-name-error"></span>
                                     </div>
                                     <div class="col-2">

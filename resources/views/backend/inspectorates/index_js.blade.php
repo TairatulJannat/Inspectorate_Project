@@ -61,7 +61,7 @@
                         render: function(data, type, row) {
                             // Add your action buttons here, e.g., edit and delete
                             return '<button class="btn btn-secondary btn-sm me-2 edit_inspectorate" id="' +
-                            row.id +
+                                row.id +
                                 '" >Edit</button>' +
                                 '<button class="btn btn-danger btn-sm delete_inspectorate"id="' +
                                 row.id +
@@ -112,6 +112,9 @@
                         )
                         toastr.success(response.Message);
                         createButton.prop('disabled', false).text('Create');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -178,6 +181,9 @@
                         )
                         toastr.success(response.Message);
                         editButton.prop('disabled', false).text('Update');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -219,6 +225,9 @@
                                     'success'
                                 );
                                 toastr.success(response.Message);
+
+                                // Reload the DataTable
+                                $('.yajra-datatable').DataTable().ajax.reload();
                             } else if (response.isSuccess === false) {
                                 Swal.fire(
                                     'Caution!',

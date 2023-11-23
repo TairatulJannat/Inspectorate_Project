@@ -40,6 +40,11 @@
                     searchable: false
                 },
                 {
+                    data: 'reference_no',
+                    name: 'reference_no',
+                    orderable: false
+                },
+                {
                     data: 'indent_number',
                     name: 'indent_number',
                     orderable: false
@@ -125,7 +130,7 @@
                     $('.yajra-datatable').DataTable().ajax.reload(null, false);
                     toastr.success('Information Saved', 'Saved');
                 }
-                setTimeout(window.location.href = "{{ route('admin.prelimgeneral/view') }}", 40000);
+                setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
             },
             error: function(response) {
                 enableeButton()

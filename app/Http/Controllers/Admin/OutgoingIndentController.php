@@ -6,67 +6,77 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\PrelimGeneral;
+use App\Models\Indent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class OutgoingPrelimGeneral extends Controller
+class OutgoingIndentController extends Controller
 {
-    //
-
     public function outgoing()
     {
-        return view('backend.specification.prelimgeneral.outgoing');
+        return view('backend.indent.outgoing');
     }
     public function all_data(Request $request)
     {
-        // dd($request->all());
+
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
             $admin_id = Auth::user()->id;
             $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
+            $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+            $desig_position = Designation::where('id', $designation_id)->first();
+
 
 
 
             if (Auth::user()->id == 92) {
-                $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
-                    ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('prelim_gen_specs.status', '=', 1)
+                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
+                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('indents.status', '=', 1)
+                    ->get();
+            } elseif ($desig_position->id == 1) {
+
+                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
+                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('indents.status', '=', 1)
                     ->get();
             } else {
 
-                $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'prelim_gen_specs.sec_id', '=', 'sections.id')
-                    ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('prelim_gen_specs.insp_id', $insp_id)
-                    ->whereIn('prelim_gen_specs.sec_id', $section_ids)
-                    ->where('prelim_gen_specs.status', '=', 1)
+                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
+                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('indents.insp_id', $insp_id)
+                    ->whereIn('indents.sec_id', $section_ids)
+                    ->where('indents.status', '=', 1)
                     ->get();
 
                 $designation_ids = AdminSection::where('admin_id', $admin_id)->select('desig_id')->first();
 
-                $prelimGenId = [];
+                $indentId = [];
                 if ($query) {
-                    foreach ($query as $prelimGen) {
-                        array_push($prelimGenId, $prelimGen->id);
+                    foreach ($query as $indent) {
+                        array_push($indentId, $indent->id);
                     }
                 }
 
-                $document_tracks_receiver_ids = DocumentTrack::whereIn('doc_ref_id', $prelimGenId)
-                    ->where('reciever_desig_id', $designation_ids->desig_id)
-                    ->where('track_status', 2)
-                    ->first();
+                $document_tracks_receiver_ids = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                ->where('reciever_desig_id', $designation_ids->desig_id)
+                ->where('track_status', 2)
+                ->first();
 
-                if (!$document_tracks_receiver_ids) {
-                    $query = PrelimGeneral::where('id', 'no data')->get();
-                }
+            if (!$document_tracks_receiver_ids) {
+                $query = Indent::where('id', 'no data')->get();
+            }
             }
 
             // $query->orderBy('id', 'asc');
@@ -83,13 +93,22 @@ class OutgoingPrelimGeneral extends Controller
                         return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
                     }
                     if ($data->status == '2') {
-                        return '<button class="btn btn-green btn-sm">Delivered</button>';
+                        return '<button class="btn btn-success btn-sm">Delivered</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
+                    if ($data->status == '2') {
+                        $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Progress</a>
+                        <button href="" class="edit btn btn-success btn-sm" disable>Completed</button>';
+                    } else {
+                        $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Progress</a>
+                        <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                        </div>';
+                    }
 
-                    $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/outgoing_prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>';
+
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])
@@ -100,16 +119,14 @@ class OutgoingPrelimGeneral extends Controller
     public function details($id)
     {
 
-
-        $details = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
-            ->select('prelim_gen_specs.*', 'item_types.name as item_type_name', 'prelim_gen_specs.*', 'dte_managments.name as dte_managment_name')
-            ->where('prelim_gen_specs.id', $id)
-            ->where('prelim_gen_specs.status', 1)
+        $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
+            ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name')
+            ->where('indents.id', $id)
+            ->where('indents.status', 1)
             ->first();
 
         $designations = Designation::all();
-
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
@@ -132,16 +149,16 @@ class OutgoingPrelimGeneral extends Controller
 
         // delay cause for sec IC start
 
-        return view('backend.specification.prelimgeneral.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position'));
+        return view('backend.indent.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position'));
     }
 
-    public function OutgoingPrelimGenTracking(Request $request)
+    public function OutgoingIndentTracking(Request $request)
     {
         // dd($request->id);
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = $request->doc_type_id;
+        $doc_type_id = 3; // 3 for doc type indent from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
@@ -165,7 +182,7 @@ class OutgoingPrelimGeneral extends Controller
 
         // ----delay_cause start here
 
-        $prelimgen = PrelimGeneral::find($doc_ref_id);
+        $prelimgen = Indent::find($doc_ref_id);
         $prelimgen->delay_cause = $request->delay_cause;
         $prelimgen->delivery_date = $request->delivery_date;
         $prelimgen->delivery_by = Auth::user()->id;
@@ -176,7 +193,7 @@ class OutgoingPrelimGeneral extends Controller
 
         if ($desig_position->position == 7) {
 
-            $data = PrelimGeneral::find($doc_ref_id);
+            $data = Indent::find($doc_ref_id);
 
             if ($data) {
 
@@ -197,9 +214,11 @@ class OutgoingPrelimGeneral extends Controller
             }
         }
 
-
-
-
         return response()->json(['success' => 'Done']);
+    }
+    public function progress($id)
+    {
+
+        return view('backend.indent.progress');
     }
 }

@@ -124,6 +124,9 @@
                         )
                         toastr.success(response.Message);
                         createButton.prop('disabled', false).text('Create');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -190,6 +193,9 @@
                         )
                         toastr.success(response.Message);
                         editButton.prop('disabled', false).text('Update');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -223,7 +229,6 @@
                             _token: csrf
                         },
                         success: function(response) {
-                            console.log(response);
                             if (response.isSuccess === true) {
                                 Swal.fire(
                                     'Deleted!',
@@ -231,6 +236,9 @@
                                     'success'
                                 );
                                 toastr.success(response.Message);
+
+                                // Reload the DataTable
+                                $('.yajra-datatable').DataTable().ajax.reload();
                             } else if (response.isSuccess === false) {
                                 Swal.fire(
                                     'Caution!',

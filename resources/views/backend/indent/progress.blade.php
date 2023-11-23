@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Indent Progress')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -22,8 +22,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
-@section('active_menu', 'Incoming')
+@section('main_menu', 'Indent Progress')
+@section('active_menu', 'Deatils')
 @section('content')
 
     <div class="panel-heading">
@@ -40,12 +40,7 @@
                 <div class="row justify-content-between align-items-center">
 
                     <div class="d-flex justify-content-between px-4 py-2">
-                        <div class="col-6">
-                            <a href="{{ route('admin.indent/view') }}" type="button"
-                                class="btn btn-success">Incoming</a>
-                            <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-danger">OutGoing</a>
-                        </div>
+
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
                         </div>
@@ -60,7 +55,6 @@
                         <thead>
                             <tr>
                                 <th>SL No</th>
-                                <th>Reference Number</th>
                                 <th>Indent Number</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
@@ -86,5 +80,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.indent.index_js')
+    {{-- @include('backend.indent.index_js') --}}
 @endpush

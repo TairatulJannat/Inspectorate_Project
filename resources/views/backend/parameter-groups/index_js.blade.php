@@ -86,18 +86,20 @@
                         searchable: false,
                         orderable: false,
                         render: function(data, type, row) {
-                            return '<button class="btn btn-sm me-2 show_parameter_group" id="' +
+                            return '<td class="dt-center px-0">' +
+                                '<button class="btn btn-sm me-2 show_parameter_group fa fa-eye" id="' +
                                 row.id +
-                                '" >Show</button>' +
-                                '<button class="btn btn-secondary btn-sm me-2 edit_parameter_group" id="' +
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></button>' +
+                                '<button class="btn btn-secondary btn-sm me-2 edit_parameter_group fa fa-edit" id="' +
                                 row.id +
-                                '" >Edit</button>' +
-                                '<button class="btn btn-danger btn-sm me-2 delete_parameter_group" id="' +
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></button>' +
+                                '<button class="btn btn-danger btn-sm me-2 delete_parameter_group fa fa-trash-o" id="' +
                                 row.id +
-                                '" >Delete</button>' +
-                                '<button class="btn btn-dark btn-sm assign-parameter-value" id="' +
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></button>' +
+                                '<button class="btn btn-dark btn-sm assign-parameter-value fa fa-plus-square-o" id="' +
                                 row.id +
-                                '" >Assign Parameter</button>';
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="Assign Parameter"></button>' +
+                                '</td>';
                         }
                     }
                 ],
@@ -137,6 +139,16 @@
                         createButton.prop('disabled', false).text('Create');
                     } else if (response.isSuccess === true) {
                         $(form)[0].reset();
+
+                        for (let i = inputFieldCounter; i > 1; i--) {
+                            let parameterGroupNameId = 'parameterGroupName_' + i;
+
+                            $('.field_wrapper').find('#' + parameterGroupNameId)
+                                .closest('.row').remove();
+                        }
+
+                        inputFieldCounter = 1;
+
                         $("#createParameterGroupModal").modal("hide");
                         Swal.fire(
                             'Added!',
@@ -301,8 +313,6 @@
                     $("#showParameterGroupName").text(response.name);
                     $("#showItem").text(response.item_id);
                     $("#showItemType").text(response.item_type_id);
-                    $("#showInspectorate").text(response.inspectorate_id);
-                    $("#showSection").text(response.section_id);
                     $("#showStatus").prop('checked', response.status == 1);
 
                     $('#showParameterGroupModal').modal('show');
@@ -351,11 +361,24 @@
         // Creating dynamic input fields: Begins here
         var addButton = $('.add_button');
         var wrapper = $('.field_wrapper');
-        var fieldHTML =
-            '<div class="row mb-2"><div class="col-10 ps-0"><input type="text" class="form-control parameter-group-name" id="parameterGroupName" name="parameter-group-name[]"><span class="text-danger error-text parameter-group-name-error"></span></div><div class="col-2 ps-0"><a href="javascript:void(0);" class="btn btn-danger-gradien float-end remove_button" title="Remove field">-</a></div></div>';
+        var inputFieldCounter = 1;
 
         // Once add button is clicked
         $(addButton).click(function() {
+            inputFieldCounter++; // Increment the counter
+
+            var fieldHTML =
+                '<div class="row mb-2">' +
+                '<div class="col-10 ps-0">' +
+                '<input type="text" class="form-control parameter-group-name"' +
+                'id="parameterGroupName_' + inputFieldCounter + '" name="parameter-group-name[]">' +
+                '<span class="text-danger error-text parameter-group-name-error"></span>' +
+                '</div>' +
+                '<div class="col-2 ps-0">' +
+                '<a href="javascript:void(0);" class="btn btn-danger-gradien float-end remove_button" title="Remove field">-</a>' +
+                '</div>' +
+                '</div>';
+
             $(wrapper).append(fieldHTML);
         });
 
@@ -371,7 +394,7 @@
             e.preventDefault();
             let id = $(this).attr('id');
             $.ajax({
-                url: '{{ url('admin/assign-parameter-value/show') }}',
+                url: '{{ url('admin/assign-parameter-value/create') }}',
                 method: 'post',
                 data: {
                     id: id,
@@ -387,12 +410,12 @@
         });
 
         // Creating dynamic input fields for adding parameter value: Begins here
-        var addButton = $('.add-parameter-button');
-        var wrapper = $('.parameter-field-wrapper');
+        var addParameterButton = $('.add-parameter-button');
+        var parameterFieldWrapper = $('.parameter-field-wrapper');
         var fieldCounter = 1; // Initialize the counter
 
         // Once add button is clicked
-        $(addButton).click(function() {
+        $(addParameterButton).click(function() {
             fieldCounter++; // Increment the counter
 
             var fieldHTML =
@@ -412,28 +435,24 @@
                 '</div>' +
                 '</div>';
 
-            $(wrapper).append(fieldHTML);
+            $(parameterFieldWrapper).append(fieldHTML);
         });
 
         // Once remove button is clicked
-        $(wrapper).on('click', '.remove-parameter-button', function(e) {
+        $(parameterFieldWrapper).on('click', '.remove-parameter-button', function(e) {
             e.preventDefault();
             $(this).closest('.row').remove();
         });
         // Creating dynamic input fields for adding parameter value: Ends here
 
+        // Assign Parameter Value ajax request
         $("#assignParameterValueGroupForm").on("submit", function(e) {
-            console.log("object");
             e.preventDefault();
+
             var form = this;
             var assignButton = $("#assignButton");
-            var modalContent = $("#assignParameterValueGroupModal .modal-content");
-
-            var originalModalContent = modalContent.html();
-
-            modalContent.html(
-                '<div class="text-center"><i class="fa fa-spinner fa-spin" style="font-size:40px"></i><p>Loading...</p></div>'
-            );
+            assignButton.prop('disabled', true).html(
+                '<div class="text-center"><i class="fa fa-spinner fa-spin"></i></div>');
 
             $(form).find("span.parameter-name-error, span.parameter-value-error").text("");
 
@@ -450,8 +469,6 @@
                         .text("");
                 },
                 success: function(response) {
-                    console.log(response);
-
                     if (response && typeof response === 'object' && 'isSuccess' in
                         response) {
                         if (response.isSuccess === false) {
@@ -468,20 +485,22 @@
                             }
 
                             $(form)[0].reset();
-                            // Reset the dynamic fields as well
-                            $('.parameter-field-wrapper').html('');
+
+                            for (let i = fieldCounter; i > 1; i--) {
+                                let parameterValueId = 'parameterValue_' + i;
+
+                                $('.parameter-field-wrapper').find('#' + parameterValueId)
+                                    .closest('.row').remove();
+                            }
+
                             fieldCounter = 1;
 
                             $("#assignParameterValueGroupModal").modal("hide");
                             Swal.fire(
                                 'Added!',
-                                'Parameter Value Assigned Successfully!',
+                                'Parameter Group Value added Successfully!',
                                 'success'
                             );
-
-                            if ($.fn.DataTable.isDataTable('.yajra-datatable')) {
-                                $('.yajra-datatable').DataTable().ajax.reload();
-                            }
                         } else {
                             toastr.error('Unexpected response format.');
                         }
@@ -491,11 +510,16 @@
                 },
                 error: function(error) {
                     console.log('Error:', error);
+                    if ('error' in response) {
+                        $.each(response.error, function(prefix, val) {
+                            $(form).find("span." + prefix + "-error").text(
+                                val[0]);
+                        });
+                    }
                     toastr.error('An error occurred while processing the request.');
                 },
                 complete: function() {
                     assignButton.prop('disabled', false).text('Assign');
-                    modalContent.html(originalModalContent);
                 }
             });
         });

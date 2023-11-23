@@ -6,6 +6,14 @@
             dropdownParent: $('#createItemModal')
         });
 
+        $('.attributeType').select2({
+            dropdownParent: $('#createItemModal')
+        });
+
+        $('.editAttributeType').select2({
+            dropdownParent: $('#editItemModal')
+        });
+
         toastr.options.preventDuplicates = true;
 
         // Get All Data 
@@ -124,6 +132,9 @@
                         )
                         toastr.success(response.Message);
                         createButton.prop('disabled', false).text('Create');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -150,7 +161,7 @@
                     $("#editItemName").val(response.name);
                     $("#editItemInspectorateId").val(response.inspectorate_id);
                     $("#editItemTypeId").val(response.item_type_id).trigger('change');
-                    $("#editItemAttribute").val(response.attribute);
+                    $("#editItemAttribute").val(response.attribute).trigger('change');
 
                     $('#editItemModal').modal('show');
                 }
@@ -192,6 +203,9 @@
                         )
                         toastr.success(response.Message);
                         editButton.prop('disabled', false).text('Update');
+
+                        // Reload the DataTable
+                        $('.yajra-datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -233,6 +247,9 @@
                                     'success'
                                 );
                                 toastr.success(response.Message);
+
+                                // Reload the DataTable
+                                $('.yajra-datatable').DataTable().ajax.reload();
                             } else if (response.isSuccess === false) {
                                 Swal.fire(
                                     'Caution!',
@@ -268,8 +285,6 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    console.log(response);
-                    $("#showInspectorateId").text(response.inspectorate_id);
                     $("#showItemName").text(response.name);
                     $("#showItemTypeName").text(response.item_type_id);
                     $("#showAttribute").text(response.attribute);
