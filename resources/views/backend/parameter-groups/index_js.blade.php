@@ -86,18 +86,20 @@
                         searchable: false,
                         orderable: false,
                         render: function(data, type, row) {
-                            return '<button class="btn btn-sm me-2 show_parameter_group" id="' +
+                            return '<td class="dt-center px-0">' +
+                                '<button class="btn btn-sm me-2 show_parameter_group fa fa-eye" id="' +
                                 row.id +
-                                '" >Show</button>' +
-                                '<button class="btn btn-secondary btn-sm me-2 edit_parameter_group" id="' +
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></button>' +
+                                '<button class="btn btn-secondary btn-sm me-2 edit_parameter_group fa fa-edit" id="' +
                                 row.id +
-                                '" >Edit</button>' +
-                                '<button class="btn btn-danger btn-sm me-2 delete_parameter_group" id="' +
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></button>' +
+                                '<button class="btn btn-danger btn-sm me-2 delete_parameter_group fa fa-trash-o" id="' +
                                 row.id +
-                                '" >Delete</button>' +
-                                '<button class="btn btn-dark btn-sm assign-parameter-value" id="' +
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></button>' +
+                                '<button class="btn btn-dark btn-sm assign-parameter-value fa fa-plus-square-o" id="' +
                                 row.id +
-                                '" >Assign Parameter</button>';
+                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="Assign Parameter"></button>' +
+                                '</td>';
                         }
                     }
                 ],
@@ -311,8 +313,6 @@
                     $("#showParameterGroupName").text(response.name);
                     $("#showItem").text(response.item_id);
                     $("#showItemType").text(response.item_type_id);
-                    $("#showInspectorate").text(response.inspectorate_id);
-                    $("#showSection").text(response.section_id);
                     $("#showStatus").prop('checked', response.status == 1);
 
                     $('#showParameterGroupModal').modal('show');
@@ -495,16 +495,12 @@
 
                             fieldCounter = 1;
 
-                            $("#createParameterGroupModal").modal("hide");
+                            $("#assignParameterValueGroupModal").modal("hide");
                             Swal.fire(
                                 'Added!',
-                                'Parameter Group Created Successfully!',
+                                'Parameter Group Value added Successfully!',
                                 'success'
                             );
-
-                            if ($.fn.DataTable.isDataTable('.yajra-datatable')) {
-                                $('.yajra-datatable').DataTable().ajax.reload();
-                            }
                         } else {
                             toastr.error('Unexpected response format.');
                         }

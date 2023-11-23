@@ -29,7 +29,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="editItemAttribute" class="form-label">Attribute</label>
-                        <input type="text" class="form-control" id="editItemAttribute" name="edit_attribute">
+                        <select class="form-control select2 editAttributeType" name="edit_attribute" id="editItemAttribute"
+                            style="width: 100% !important;">
+                            <option value="" selected disabled>Select attribute type</option>
+                            <option value="controlled">Controlled</option>
+                            <option value="uncontrolled">Uncontrolled</option>
+                        </select>
                         <span class="text-danger error-text edit_attribute_error"></span>
                     </div>
                 </div>

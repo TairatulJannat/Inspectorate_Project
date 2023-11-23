@@ -25,8 +25,13 @@
                         <span class="text-danger error-text item_type_id_error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="itemAttribute" class="form-label">Attribute</label>
-                        <input type="text" class="form-control" id="itemAttribute" name="attribute">
+                        <label for="itemAttribute" class="form-label">Attribute</label><br>
+                        <select class="form-control select2 attributeType" name="attribute" id="itemAttribute"
+                            style="width: 100% !important;">
+                            <option value="" selected disabled>Select attribute type</option>
+                            <option value="controlled">Controlled</option>
+                            <option value="uncontrolled">Uncontrolled</option>
+                        </select>
                         <span class="text-danger error-text attribute_error"></span>
                     </div>
                 </div>
