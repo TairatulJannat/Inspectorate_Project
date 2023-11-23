@@ -34,14 +34,11 @@
                         });
                         toastr.error(response.Message);
                     } else if (response.isSuccess === true) {
-                        Swal.fire(
-                            'Successful!',
-                            'Parameter Groups and related values were successfully retrieved!',
-                            'success'
-                        );
                         toastr.success(response.Message);
 
-                        renderTreeView(response.treeViewData);
+                        renderTreeView(response.treeViewData, response.itemTypeName,
+                            response
+                            .itemName);
                     }
 
                     searchButton.html(originalSearchButtonHtml);
@@ -53,36 +50,43 @@
             });
         });
 
-        function renderTreeView(treeViewData) {
+        function renderTreeView(treeViewData, itemTypeName, itemName) {
             var searchedDataContainer = $(".searched-data");
 
             searchedDataContainer.empty();
 
             if (treeViewData && treeViewData.length > 0) {
-                var html = '<div class="row">';
+                var html =
+                    '<div class="p-md-3 paper-document" style="background-color: honeydew;">' +
+                    '<div class="header text-center">' +
+                    '<div class="item-id f-30">' + itemName + '</div>' +
+                    '<div class="item-type-id f-20">' + itemTypeName + '</div>' +
+                    '</div>' +
+                    '<div class="content">';
 
                 $.each(treeViewData, function(index, node) {
                     html +=
-                        '<div class="col-md-6 mb-4">' +
-                        '<div class="card parameter-group">' +
-                        '<div class="card-body shadow">' +
-                        '<h5 class="card-title parameter-group-name">Parameter Group Name: ' + node
+                        '<div class="row parameter-group mt-5">' +
+                        '<h5 class="parameter-group-name text-uppercase text-underline fw-bold">' + node
                         .parameterGroupName + '</h5>' +
-                        '<ul class="list-group parameter-values">';
+                        '<table class="parameter-table table table-border-vertical table-hover">';
 
                     $.each(node.parameterValues, function(i, parameterValue) {
-                        html += '<li class="list-group-item">' +
-                            '<span class="parameter-name">' + parameterValue.parameter_name +
-                            ': </span>' +
-                            '<span class="parameter-value">' + parameterValue.parameter_value +
-                            '</span>' +
-                            '</li>';
+                        html +=
+                            '<tr>' +
+                            '<td class="col-md-4 parameter-name">' + parameterValue
+                            .parameter_name +
+                            '</td>' +
+                            '<td class="col-md-8 parameter-value">' + parameterValue
+                            .parameter_value +
+                            '</td>' +
+                            '</tr>';
                     });
 
-                    html += '</ul></div></div></div>';
+                    html += '</table></div>';
                 });
 
-                html += '</div>';
+                html += '</div></div>';
                 searchedDataContainer.append(html);
             } else {
                 searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
