@@ -40,6 +40,11 @@
                     searchable: false
                 },
                 {
+                    data: 'reference_no',
+                    name: 'reference_no',
+                    orderable: false
+                },
+                {
                     data: 'indent_number',
                     name: 'indent_number',
                     orderable: false

@@ -47,7 +47,9 @@ class IndentController extends Controller
                 $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
+                    ->where('indents.status', 0)
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+
                     ->get();
             } elseif ($desig_position->id == 1) {
 
@@ -55,6 +57,7 @@ class IndentController extends Controller
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('indents.status', 0)
                     ->get();
             } else {
 
@@ -64,6 +67,7 @@ class IndentController extends Controller
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('indents.insp_id', $insp_id)
                     ->whereIn('indents.sec_id', $section_ids)
+                    ->where('indents.status', 0)
                     ->get();
 
                 $designation_ids = AdminSection::where('admin_id', $admin_id)->select('desig_id')->first();
@@ -104,11 +108,11 @@ class IndentController extends Controller
                 ->addColumn('action', function ($data) {
                     if ($data->status == '2') {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/progress/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Progress</a>
+                        <a href="' . url('admin/indent/progress/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
                         <a href="" class="edit btn btn-success btn-sm" disable>Completed</a>';
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Progress</a>
+                        <a href="' . url('admin/indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
                         <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
                     }
@@ -221,9 +225,16 @@ class IndentController extends Controller
             $desig_id = $auth_designation_id->desig_id;
         }
 
+        //Start blade notes section....
+
+        if ($document_tracks->isNotEmpty()) {
+            $notes = $document_tracks->last();
+        }
+
+        //End blade notes section....
 
 
-        return view('backend.indent.details', compact('details', 'designations', 'document_tracks', 'desig_id'));
+        return view('backend.indent.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes' ,'auth_designation_id'));
     }
 
     public function indentTracking(Request $request)
@@ -234,12 +245,14 @@ class IndentController extends Controller
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
+        $remarks = $request->remarks;
+
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-        // dd( $desig_position);
+
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
@@ -248,6 +261,7 @@ class IndentController extends Controller
         $data->track_status = 1;
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
+        $data->remarks = $remarks;
         $data->created_at = Carbon::now();
         $data->updated_at = Carbon::now();
         $data->save();

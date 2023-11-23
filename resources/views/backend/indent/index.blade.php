@@ -60,6 +60,7 @@
                         <thead>
                             <tr>
                                 <th>SL No</th>
+                                <th>Reference Number</th>
                                 <th>Indent Number</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
