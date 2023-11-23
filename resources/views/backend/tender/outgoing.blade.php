@@ -5,6 +5,12 @@
     <style>
         .card .card-header {
             padding: 0px;
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
+
+        }
+        <style>
+        .card .card-header {
+            padding: 0px;
             border-bottom: 1px solid rgba(182, 182, 182 , .6);
 
         }
@@ -21,8 +27,9 @@
             color: #ffff
         }
     </style>
+    </style>
 @endpush
-@section('main_menu', 'Tender Management')
+@section('main_menu', 'Prelim/general')
 @section('active_menu', 'Incoming')
 @section('content')
 
@@ -33,7 +40,6 @@
 
     </div>
     <br>
-
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
@@ -59,18 +65,19 @@
                     <table class="table table-bordered yajra-datatable">
                         <thead>
                             <tr>
-                                <th>SL No</th>
-                                <th>Reference Number</th>
-                                <th>Name of Eqpt</th>
-                                <th>User Directorate</th>
-                                <th>Receive Date</th>
-                                <th>Section Name</th>
-                                <th>Remark</th>
-                                <th>Present state of spec</th>
-                                <th>Tender Date</th>
-                                <th>Opening Date</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>SL No</th>
+                                    <th>Reference Number</th>
+                                    <th>Name of Eqpt</th>
+                                    <th>User Directorate</th>
+                                    <th>Receive Date</th>
+                                    <th>Section Name</th>
+                                    <th>Remark</th>
+                                    <th>Present state of spec</th>
+                                    <th>Tender Date</th>
+                                    <th>Opening Date</th>
+                                    <th>Action</th>
+                                </tr>
                         </thead>
                         <tbody>
                         </tbody>
@@ -87,5 +94,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.tender.index_js')
+    @include('backend.tender.outgoing_index_js')
 @endpush

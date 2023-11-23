@@ -11,4 +11,8 @@ class Tender extends Model
 
     protected $table = 'tenders';
     protected $fillable = [];
+    protected $casts = [
+        'additional_documents' => 'json',
+    ];
+
 }
