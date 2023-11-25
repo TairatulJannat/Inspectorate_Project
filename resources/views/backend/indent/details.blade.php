@@ -25,7 +25,8 @@
 
             margin: 30px 15px 30px 0
         }
-        .col-6{
+
+        .col-6 {
             padding: 10px 15px !important;
         }
 
@@ -70,11 +71,12 @@
         .remarks_status {
             min-height: 250px
         }
-        .documents{
+
+        .documents {
             display: flex;
             justify-content: center;
             column-gap: 10px;
-            margin-bottom:25px
+            margin-bottom: 25px
         }
     </style>
 @endpush
@@ -89,7 +91,7 @@
                 <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
-                <div class="card-body col-6" >
+                <div class="card-body col-6">
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -150,65 +152,70 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-body col-3" >
-                    <h4 class="text-success">Forward Status</h4>
-                    <hr>
-                    <ul class="forward_status">
-
-                        <li class="d-flex justify-content-between bg-success p-2 mb-2" style="border-radius: 5px">
-                            <div>Sender </div>
-                            <div> Forwarded Date Time</div>
-                        </li>
 
 
-                        @if ($document_tracks !== null && $desig_id !== 1)
-                            @foreach ($document_tracks as $document_track)
-                                <li class="d-flex justify-content-between px-2 ">
-                                    <div><i class="fa fa-check ps-2 text-success"
-                                            aria-hidden="true"></i>{{ $document_track->designations_name }}</div>
-                                    <div> {{ $document_track->created_at->format('d-m-Y h:i A') }}</div>
-                                </li>
-                            @endforeach
-                        @else
-                            <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found</li>
-                        @endif
+                @if (!$sender_designation_id )
+                    <div class="card-body col-3">
+                        <h4 class="text-success">Forward Status</h4>
+                        <hr>
+                        <ul class="forward_status">
+
+                            <li class="d-flex justify-content-between bg-success p-2 mb-2" style="border-radius: 5px">
+                                <div>Sender </div>
+                                <div> Forwarded Date Time</div>
+                            </li>
 
 
-                    </ul>
-                    <h4 class="text-success">Notes from immediate sender </h4>
-                    <hr>
-                    <ul class="remarks_status">
-                        <li>
-                            @if ($notes)
+                            @if ($document_tracks !== null && $desig_id !== 1)
+                                @foreach ($document_tracks as $document_track)
+                                    <li class="d-flex justify-content-between px-2 ">
+                                        <div><i class="fa fa-check ps-2 text-success"
+                                                aria-hidden="true"></i>{{ $document_track->designations_name }}</div>
+                                        <div> {{ $document_track->created_at->format('d-m-Y h:i A') }}</div>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found</li>
+                            @endif
 
-                                @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
-                                    <p>{{ $notes->remarks }}</p>
+
+                        </ul>
+                        <h4 class="text-success">Notes from immediate sender </h4>
+                        <hr>
+                        <ul class="remarks_status">
+                            <li>
+                                @if ($notes)
+
+                                    @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
+                                        <p>{{ $notes->remarks }}</p>
+                                    @else
+                                        <p>Notes are not provided.</p>
+                                    @endif
                                 @else
                                     <p>Notes are not provided.</p>
                                 @endif
-                            @else
-                                <p>Notes are not provided.</p>
-                            @endif
-                        </li>
+                            </li>
 
-                    </ul>
-                </div>
-                <div class="card-body col-2" >
-                    <h4 class="text-success">Forward</h4>
-                    <hr>
-                    <form action="">
-                        <select name="designation" id="designations" class="form-control mt-2">
+                        </ul>
+                    </div>
+                    <div class="card-body col-2">
+                        <h4 class="text-success">Forward</h4>
+                        <hr>
+                        <form action="">
+                            <select name="designation" id="designations" class="form-control mt-2">
 
-                            @foreach ($designations as $d)
-                                <option value={{ $d->id }}>{{ $d->name }}</option>
-                            @endforeach
+                                @foreach ($designations as $d)
+                                    <option value={{ $d->id }}>{{ $d->name }}</option>
+                                @endforeach
 
-                        </select>
+                            </select>
 
-                        <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
-                        <button class="btn btn-success mt-2 " id="submitBtn">Forward</button>
-                    </form>
-                </div>
+                            <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
+                            <button class="btn btn-success mt-2 " id="submitBtn">Forward</button>
+                        </form>
+                    </div>
+
+                @endif
             </div>
 
         </div>
@@ -294,6 +301,7 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
+                                            setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
                                     }
                                 }
                             },
