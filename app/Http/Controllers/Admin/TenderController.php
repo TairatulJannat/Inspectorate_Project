@@ -14,7 +14,7 @@ use App\Models\Items;
 use App\Models\PrelimGeneral;
 use App\Models\Section;
 use App\Models\Tender;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -139,7 +139,7 @@ class TenderController extends Controller
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documents = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->get();
-        return view('backend.tender.create',compact('dte_managments', 'additional_documents', 'item_types', 'sections'));
+        return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections'));
     }
 
     public function store(Request $request)
@@ -188,10 +188,23 @@ class TenderController extends Controller
 
         $details = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
+            // ->leftJoin('additional_documents', 'tenders.additional_documents', '=', 'additional_documents.id')
             ->select('tenders.*', 'item_types.name as item_type_name', 'tenders.*', 'dte_managments.name as dte_managment_name')
             ->where('tenders.id', $id)
             ->first();
 
+        $details->additional_documents = json_decode($details->additional_documents, true);
+
+        $additional_documents_names = [];
+        
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names=Additional_document::where('id',$document_id)->pluck('name')->first();
+        
+           array_push($additional_documents_names, $additional_names);
+            
+        }
+     
+        
         $designations = Designation::all();
 
         $admin_id = Auth::user()->id;
@@ -209,10 +222,10 @@ class TenderController extends Controller
 
 
 
-        return view('backend.tender.details', compact('details', 'designations', 'document_tracks', 'desig_id'));
+        return view('backend.tender.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'additional_documents_names'));
     }
 
-    
+
     public function tenderTracking(Request $request)
     {
         // dd($request->id);
@@ -268,5 +281,4 @@ class TenderController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-
 }

@@ -98,6 +98,21 @@
                                 <th>Delivary</td>
                                 <td> {{ $details->delivery_date }}</td>
                             </tr>
+                            <tr>
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name}} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
