@@ -125,6 +125,18 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
+                    {{-- Side Menu Button Links for Contracts --}}
+                    @if (count(menu_check('Contract')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="book-open"></i><span>Contracts</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/contract/index') }}"
+                                        class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">Contracts</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
                     {{-- Side Menu Button Links for Items --}}
                     @if (count(menu_check('Items')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
