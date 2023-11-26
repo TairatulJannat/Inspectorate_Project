@@ -59,7 +59,7 @@ class AssignParameterValueController extends Controller
         $validator = Validator::make($request->all(), [
             'assign-parameter-group-id' => ['required', 'exists:parameter_groups,id'],
             'parameter-name.*' => ['required', 'string', 'max:255'],
-            'parameter-value.*' => ['required', 'string', 'max:255'],
+            'parameter-value.*' => ['required', 'string', 'max:999'],
         ], $customMessages);
 
         if ($validator->passes()) {
@@ -139,11 +139,18 @@ class AssignParameterValueController extends Controller
 
         if ($validator->passes()) {
             $itemId = $request->input('item-id');
+            $itemTypeId = $request->input('item-type-id');
+
+            $item = Items::find($itemId);
+            $itemName = $item ? $item->name : 'Unknown Item';
+
+            $itemType = Item_Type::find($itemTypeId);
+            $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+
             $parameterGroups = ParameterGroup::with('assignParameterValues')
                 ->where('item_id', $itemId)
                 ->get();
 
-            // Access related data
             foreach ($parameterGroups as $parameterGroup) {
                 $treeNode = [
                     'parameterGroupId' => $parameterGroup->id,
@@ -158,6 +165,10 @@ class AssignParameterValueController extends Controller
                 'isSuccess' => true,
                 'Message' => 'Parameter Groups data successfully retrieved.',
                 'treeViewData' => $treeViewData,
+                'itemTypeId' => $itemTypeId,
+                'itemTypeName' => $itemTypeName,
+                'itemId' => $itemId,
+                'itemName' => $itemName,
             ], 200);
         } else {
             return response()->json([

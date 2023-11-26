@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class DocType extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'doc_serial',
+        'processing_day',
+    ];
 }
