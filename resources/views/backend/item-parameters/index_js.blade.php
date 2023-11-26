@@ -92,5 +92,26 @@
                 searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
             }
         }
+
+        // Populate Items Dropdown: Begins here
+        var itemsData = {!! $items !!};
+        populateItemsDropdown(itemsData);
+
+        $('#itemTypeId').on('change', function() {
+            var itemTypeId = $(this).val();
+            var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
+
+            populateItemsDropdown(filteredItems);
+        });
+
+        function populateItemsDropdown(items) {
+            $('#itemId').empty();
+            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
+
+            $.each(items, function(key, value) {
+                $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
+            });
+        }
+        // Populate Items Dropdown: Ends here
     });
 </script>
