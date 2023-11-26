@@ -61,7 +61,7 @@ class TenderController extends Controller
                     ->get();
             } else {
 
-                $prelimGenIds = Tender::leftJoin('document_tracks', 'tenders.id', '=', 'document_tracks.doc_ref_id')
+                $Tenders = Tender::leftJoin('document_tracks', 'tenders.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('tenders.insp_id', $insp_id)
                     ->whereIn('tenders.sec_id', $section_ids)->pluck('tenders.id', 'tenders.id')->toArray();
@@ -71,30 +71,35 @@ class TenderController extends Controller
                     ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
                     ->select('tenders.*', 'item_types.name as item_type_name', 'tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('tenders.id', $prelimGenIds)
+                    ->whereIn('tenders.id', $Tenders)
                     ->get();
 
                 // dd($query);
 
                 $designation_ids = AdminSection::where('admin_id', $admin_id)->select('desig_id')->first();
 
-                $prelimGenId = [];
+                $tenderId = [];
                 if ($query) {
-                    foreach ($query as $prelimGen) {
-                        array_push($prelimGenId, $prelimGen->id);
-                        if (in_array($prelimGen->id, $prelimGenId)) {
+                    foreach ($query as $tender) {
+                        array_push($tenderId, $tender->id);
+                        if (in_array($tender->id, $tenderId)) {
                         }
                     }
                 }
 
-                $document_tracks_receiver_ids = DocumentTrack::whereIn('doc_ref_id', $prelimGenId)
+                $document_tracks_sender_id = DocumentTrack::whereIn('doc_ref_id', $tenderId)
+                ->where('sender_designation_id', $designation_id)
+                ->first();
+
+                $document_tracks_receiver_ids = DocumentTrack::whereIn('doc_ref_id', $tenderId)
                     ->where('reciever_desig_id', $designation_ids->desig_id)
                     ->first();
-                // dd($document_tracks_receiver_ids);
+
                 if (!$document_tracks_receiver_ids) {
                     $query = Tender::where('id', 'no data')->first();
                 }
             }
+
 
             // $query->orderBy('id', 'asc');
 
@@ -219,10 +224,19 @@ class TenderController extends Controller
         if ($auth_designation_id) {
             $desig_id = $auth_designation_id->desig_id;
         }
+// dd($auth_designation_id);
+        //Start blade notes section....
+        $notes = '';
+
+        if ($document_tracks->isNotEmpty()) {
+            $notes = $document_tracks->last();
+        }
+
+        //End blade notes section....
 
 
 
-        return view('backend.tender.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'additional_documents_names'));
+        return view('backend.tender.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'additional_documents_names', 'auth_designation_id','notes',));
     }
 
 
@@ -232,8 +246,8 @@ class TenderController extends Controller
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        // $doc_type_id = 4;
         $doc_ref_id = $request->doc_ref_id;
+        $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
@@ -248,6 +262,7 @@ class TenderController extends Controller
         $data->track_status = 1;
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
+        $data->remarks = $remarks;
         $data->created_at = Carbon::now();
         $data->updated_at = Carbon::now();
         $data->save();
@@ -270,6 +285,7 @@ class TenderController extends Controller
                 $value->track_status = 2;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
+                $data->remarks = $remarks;
                 $value->created_at = Carbon::now();
                 $value->updated_at = Carbon::now();
                 $value->save();

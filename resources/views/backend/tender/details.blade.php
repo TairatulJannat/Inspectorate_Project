@@ -19,6 +19,9 @@
             border-radius: 8px 8px 0 0 !important;
             color:  #ffff;
         }
+        .remarks_status {
+            min-height: 250px
+        }
 
         .card-body {
             padding: 20px !important;
@@ -116,17 +119,45 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-body col-3" style="margin: 10px;">
-                    <h4>Forward Status</h4>
-                    <ul>
-                        @if ($document_tracks !== null && $desig_id !== 1)
+
+                
+                <div class="card-body col-3">
+                    <h4 class="text-success">Forward Status</h4>
+                    <hr>
+                    <ul class="forward_status">
+
+                        <li class="d-flex justify-content-between bg-success p-2 mb-2" style="border-radius: 5px">
+                            <div>Sender </div>
+                            <div> Forwarded Date Time</div>
+                        </li>
+                            @if ($document_tracks !== null )
                             @foreach ($document_tracks as $document_track)
-                                <li><i class="fa fa-check ps-2 text-success"
-                                        aria-hidden="true"></i>{{ $document_track->designations_name }}</li>
+                                <li class="d-flex justify-content-between px-2 ">
+                                    <div><i class="fa fa-check ps-2 text-success"
+                                            aria-hidden="true"></i>{{ $document_track->designations_name }}</div>
+                                    <div> {{ $document_track->created_at->format('d-m-Y h:i A') }}</div>
+                                </li>
                             @endforeach
+                        @else
+                            <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found</li>
                         @endif
+              
+                    </ul>
+                    <h4 class="text-success">Notes from immediate sender </h4>
+                    <hr>
+                    <ul class="remarks_status">
+                        <li>
+                                @if ($notes)
 
-
+                                @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
+                                    <p>{{ $notes->remarks }}</p>
+                                @else
+                                    <p>Notes are not provided.</p>
+                                @endif
+                            @else
+                                <p>Notes are not provided.</p>
+                            @endif
+                        </li>
 
                     </ul>
                 </div>
@@ -134,12 +165,13 @@
                     <h4>Forward</h4>
                     <form action="">
                         <select name="designation" id="designations" class="form-control">
-
+                            <option value="">Select To Receiver </option>
                             @foreach ($designations as $d)
                                 <option value={{ $d->id }}>{{ $d->name }}</option>
                             @endforeach
 
                         </select>
+                        <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
                         <button class="btn btn-success mt-2 " id="submitBtn">Forward</button>
                     </form>
                 </div>
@@ -171,9 +203,11 @@
 
                 event.preventDefault();
 
-                var reciever_desig_id = $('#designations').val()
+                var reciever_desig_id = $('#designations').val() 
+                var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_type_id = {{ $details->spec_type }}
+            
 
 
                 swal({
@@ -199,6 +233,7 @@
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
                                 'doc_type_id': doc_type_id,
+                                'remarks': remarks,
 
                             },
                             headers: {
@@ -214,6 +249,7 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
+                                        setTimeout(window.location.href = "{{ route('admin.tender/view') }}", 40000);
                                     }
                                 }
                             },
@@ -223,6 +259,7 @@
                                 toastr.error(
                                     'An error occurred while processing the request',
                                     'Error');
+                                   
                             }
                         });
 
