@@ -46,15 +46,19 @@ class IndentController extends Controller
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
 
-                $indentId = [];
-                if ($query) {
-                    foreach ($query as $indent) {
-                        array_push($indentId, $indent->id);
-                    }
-                }
-                $document_tracks_sender_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
-                    ->where('sender_designation_id', $designation_id)
-                    ->first();
+                //......Start for DataTable Forward and Details btn change
+                // $indentId = [];
+                // if ($query) {
+                //     foreach ($query as $indent) {
+                //         array_push($indentId, $indent->id);
+                //     }
+                // }
+                // $document_tracks_sender_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                //     ->where('sender_designation_id', $designation_id)
+                //     ->first();
+
+                //......End for DataTable Forward and Details btn change
+
             } elseif ($desig_position->id == 1) {
 
                 $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
@@ -64,29 +68,36 @@ class IndentController extends Controller
                     ->where('indents.status', 0)
                     ->get();
 
+                //......Start for DataTable Forward and Details btn change
+                // $indentId = [];
+                // if ($query) {
+                //     foreach ($query as $indent) {
+                //         array_push($indentId, $indent->id);
+                //     }
+                // }
+                // $document_tracks_sender_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                //     ->where('sender_designation_id', $designation_id)
+                //     ->first();
 
-                $indentId = [];
-                if ($query) {
-                    foreach ($query as $indent) {
-                        array_push($indentId, $indent->id);
-                    }
-                }
-                $document_tracks_sender_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
-                    ->where('sender_designation_id', $designation_id)
-                    ->first();
-
-                    // dd( $document_tracks_sender_id);
+                //......End for DataTable Forward and Details btn change
             } else {
+
+                $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
+                    ->where('document_tracks.reciever_desig_id', $designation_id)
+                    ->where('indents.insp_id', $insp_id)
+                    ->where('indents.status' , 0)
+                    ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
 
                 $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('indents.insp_id', $insp_id)
-                    ->whereIn('indents.sec_id', $section_ids)
+                    ->whereIn('indents.id', $indentIds)
                     ->where('indents.status', 0)
                     ->get();
 
+
+                //......Start for DataTable Forward and Details btn change
                 $indentId = [];
                 if ($query) {
                     foreach ($query as $indent) {
@@ -94,19 +105,25 @@ class IndentController extends Controller
                     }
                 }
 
-                $document_tracks_receiver_ids = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                // $document_tracks_sender_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                //     ->where('sender_designation_id', $designation_id)
+                //     ->first();
+
+                //......End for DataTable Forward and Details btn change
+
+
+                //......Start for showing data for receiver designation
+
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
                     ->where('reciever_desig_id', $designation_id)
                     ->first();
 
-                $document_tracks_sender_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
-                    ->where('sender_designation_id', $designation_id)
-                    ->first();
 
 
-
-                if (!$document_tracks_receiver_ids) {
+                if (!$document_tracks_receiver_id) {
                     $query = Indent::where('id', 'no data')->get();
                 }
+                  //......End for showing data for receiver designation
             }
 
             // $query->orderBy('id', 'asc');
@@ -126,21 +143,7 @@ class IndentController extends Controller
                         return '<button class="btn btn-success btn-sm">Delivered</button>';
                     }
                 })
-                ->addColumn('action', function ($data) use ($document_tracks_sender_id, $designation_id) {
-
-                    if ($document_tracks_sender_id==null) {
-
-                        $btnName = 'Forward';
-                    }else{
-
-                        if ($document_tracks_sender_id->sender_designation_id == $designation_id) {
-                            $btnName = 'Details';
-                        } else {
-
-                            $btnName = 'Forward';
-                        }
-                    }
-
+                ->addColumn('action', function ($data)  {
 
 
                     if ($data->status == '2') {
@@ -151,7 +154,7 @@ class IndentController extends Controller
 
                         $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">' . $btnName . '</a>
+                        <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
                     }
 
@@ -254,9 +257,15 @@ class IndentController extends Controller
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
-            ->leftJoin('designations', 'document_tracks.sender_designation_id', '=', 'designations.id')
+            ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
+            ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 1)
-            ->select('document_tracks.*', 'designations.name as designations_name')->get();
+            ->select(
+                'document_tracks.*',
+                'sender_designation.name as sender_designation_name',
+                'receiver_designation.name as receiver_designation_name'
+            )
+            ->get();
 
         $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
 
@@ -337,6 +346,7 @@ class IndentController extends Controller
                 $value->track_status = 2;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
+                $data->remarks = $remarks;
                 $value->created_at = Carbon::now();
                 $value->updated_at = Carbon::now();
                 $value->save();
@@ -359,5 +369,11 @@ class IndentController extends Controller
 
 
         return view('backend.indent.progress');
+    }
+    public function parameter()
+    {
+
+
+        return view('backend.indent.parameter');
     }
 }
