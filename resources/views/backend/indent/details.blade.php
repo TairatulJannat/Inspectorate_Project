@@ -148,13 +148,13 @@
                                 <td>{{ $details->country_of_assembly }}</td>
                             </tr>
 
-
                         </table>
+                        <button class="btn btn-success mt-3 btn-parameter">Parameter</button>
                     </div>
                 </div>
 
 
-                @if (!$sender_designation_id )
+                {{-- @if (!$sender_designation_id ) --}}
                     <div class="card-body col-3">
                         <h4 class="text-success">Forward Status</h4>
                         <hr>
@@ -166,7 +166,7 @@
                             </li>
 
 
-                            @if ($document_tracks !== null && $desig_id !== 1)
+                            @if ($document_tracks !== null )
                                 @foreach ($document_tracks as $document_track)
                                     <li class="d-flex justify-content-between px-2 ">
                                         <div><i class="fa fa-check ps-2 text-success"
@@ -203,7 +203,7 @@
                         <hr>
                         <form action="">
                             <select name="designation" id="designations" class="form-control mt-2">
-
+                                <option value="">Select To Receiver </option>
                                 @foreach ($designations as $d)
                                     <option value={{ $d->id }}>{{ $d->name }}</option>
                                 @endforeach
@@ -215,7 +215,7 @@
                         </form>
                     </div>
 
-                @endif
+                {{-- @endif --}}
             </div>
 
         </div>
@@ -327,6 +327,10 @@
                 })
 
             });
+
+            $('.btn-parameter').on('click', function(event){
+                event
+            })
 
         });
     </script>
