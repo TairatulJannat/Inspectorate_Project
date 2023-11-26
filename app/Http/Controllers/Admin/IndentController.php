@@ -370,10 +370,13 @@ class IndentController extends Controller
 
         return view('backend.indent.progress');
     }
-    public function parameter()
+    public function parameter(Request $request)
     {
 
+        $indent=Indent::find($request->indent_id);
+        $item_id= $indent->item_id;
+        $item_type_id=$indent->item_type_id;
 
-        return view('backend.indent.parameter');
+        return view('backend.indent.parameter',compact('item_id','item_type_id'));
     }
 }

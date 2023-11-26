@@ -158,7 +158,7 @@
                             </tr>
 
                         </table>
-                        <button class="btn btn-success mt-3 btn-parameter" href="">Parameter</button>
+                        <a class="btn btn-success mt-3 btn-parameter" href="{{ route('admin.indent/parameter', ['indent_id' => $details->id ]) }}">Parameter</a>
                     </div>
                 </div>
 
@@ -354,10 +354,6 @@
 
             });
 
-            $('.btn-parameter').on('click', function(event) {
-                event.preventDefault();
-
-            })
 
         });
     </script>

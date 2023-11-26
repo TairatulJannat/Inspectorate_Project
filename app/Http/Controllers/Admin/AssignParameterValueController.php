@@ -127,6 +127,9 @@ class AssignParameterValueController extends Controller
      */
     public function show(Request $request)
     {
+
+        // dd('$request->all()');
+        dd($request->all());
         $customMessages = [
             'item-type-id.required' => 'Please select an Item Type.',
             'item-id.required' => 'Please select an Item.',
