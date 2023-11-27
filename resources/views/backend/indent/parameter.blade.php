@@ -22,14 +22,12 @@
         }
 
         .card-body {
-
-            margin: 30px 15px 30px 0
         }
 
-        .table thead {
+        /* .table thead {
             background-color: #1B4C43 !important;
             border-radius: 10px !important;
-        }
+        } */
 
         .table thead tr th {
             color: #ffff !important;
@@ -95,14 +93,18 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Parameter</h2>
+                <h2>Details of Item Parameter</h2>
             </div>
-            <div style="display: flex">
-                <div class="card-body col-5">
-
+            <div class="card-body">
+                <div class="row border" style="background-color: honeydew;">
+                    <div class="text-success searched-data">
+                        <div class="text-center">
+                            <h2>Searched Item Parameters will appear here.</h2>
+                        </div>
+                    </div>
                 </div>
-
             </div>
+
 
         </div>
     </div>
@@ -127,22 +129,19 @@
                     'item-id': item_id,
                     'item-type-id': item_type_id,
                 },
-                processData: false,
-                contentType: false,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
-
                 success: function(response) {
                     if (response.isSuccess === false) {
                         console.log(response)
-
                     } else if (response.isSuccess === true) {
 
 
-                        console.log(response)
+                        renderTreeView(response.treeViewData, response.itemTypeName,
+                            response
+                            .itemName);
                     }
-
                 },
                 error: function(error) {
                     console.log('Error:', error);
@@ -159,8 +158,8 @@
                     var html =
                         '<div class="p-md-3 paper-document" style="background-color: honeydew;">' +
                         '<div class="header text-center">' +
-                        '<div class="item-id f-30">' + itemName + '</div>' +
-                        '<div class="item-type-id f-20">' + itemTypeName + '</div>' +
+                        '<div class="item-id f-30"> Item: ' + itemName + '</div>' +
+                        '<div class="item-type-id f-20">Item Type: ' + itemTypeName + '</div>' +
                         '</div>' +
                         '<div class="content">';
 
@@ -174,10 +173,10 @@
                         $.each(node.parameterValues, function(i, parameterValue) {
                             html +=
                                 '<tr>' +
-                                '<td class="col-md-4 parameter-name">' + parameterValue
+                                '<td class="col-md-6 parameter-name">' + parameterValue
                                 .parameter_name +
                                 '</td>' +
-                                '<td class="col-md-8 parameter-value">' + parameterValue
+                                '<td class="col-md-6 parameter-value">' + parameterValue
                                 .parameter_value +
                                 '</td>' +
                                 '</tr>';

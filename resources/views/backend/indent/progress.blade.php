@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent Progress')
+@section('title', 'Indent Document Status')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -22,7 +22,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent Progress')
+@section('main_menu', 'Document Status')
 @section('active_menu', 'Deatils')
 @section('content')
 
