@@ -52,13 +52,16 @@
             </div>
         </div>
     </form>
-    <div class="row bg-body p-3">
+    <div class="row bg-body p-3" style="background-color: honeydew !important;">
         <div class="text-success searched-data">
             <div class="text-center">
                 <h2>Searched Item Parameters will appear here.</h2>
             </div>
         </div>
     </div>
+
+    {{-- Edit Parameter Modal --}}
+    @include('backend.item-parameters.edit')
 @endsection
 
 @push('custom-scripts')

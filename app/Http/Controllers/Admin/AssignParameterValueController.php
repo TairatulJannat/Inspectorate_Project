@@ -182,9 +182,16 @@ class AssignParameterValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
-        //
+        try {
+            $id = $request->id;
+            $data = AssignParameterValue::where('parameter_group_id', $id)->get();
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Parameter Group Data not found'], 404);
+        }
     }
 
     /**
