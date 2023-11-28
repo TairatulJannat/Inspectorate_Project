@@ -285,6 +285,7 @@
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
+                var doc_ref_id = {{ $details->id }}
 
 
                 swal({

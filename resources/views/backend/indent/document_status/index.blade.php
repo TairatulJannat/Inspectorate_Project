@@ -32,7 +32,9 @@
                                 <th>SL</th>
                                 <th>Document</th>
                                 <th>Duration</th>
+                                <th>Receive Status</th>
                                 <th>Receive Date</th>
+                                <th>Asking Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
