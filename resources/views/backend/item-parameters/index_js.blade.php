@@ -84,7 +84,6 @@
                 searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
             }
 
-            // Move this block outside the renderTreeView function
             $('.edit-group').click(function() {
                 var groupId = $(this).data('group-id');
                 var groupName = $(this).data('group-name');
