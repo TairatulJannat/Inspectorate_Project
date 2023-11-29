@@ -22,15 +22,29 @@
         }
 
         .card-body {
-            padding: 20px !important;
+
+            margin: 30px 15px 30px 0
         }
 
-        .col-3,
+        .table thead {
+            background-color: #1B4C43 !important;
+            border-radius: 10px !important;
+        }
+
+        .table thead tr th {
+            color: #ffff !important;
+        }
+
+        .col-5 {
+            padding: 10px 15px !important;
+        }
+
+        .col-4,
         .col-2 {
             background-color: #F5F7FB !important;
             /* Light gray */
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
         }
 
         h4 {
@@ -49,37 +63,37 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background-color: #006a4ef !important;
-            color:#ffff;
             cursor: pointer;
         }
 
-        .delivery-btn:hover {
-            background-color: #ff8533 !important;
-            /* Lighter orange on hover */
+        .forward_status {
+            min-height: 250px
+        }
+
+        .remarks_status {
+            min-height: 250px
+        }
+
+        .documents {
+            display: flex;
+            justify-content: center;
+            column-gap: 10px;
+            margin-bottom: 25px
         }
     </style>
 @endpush
 @section('main_menu', 'Indent')
 @section('active_menu', 'Outgoing Details')
 @section('content')
-
-    <div class="panel-heading">
-        <div class="invoice_date_filter" style="">
-
-        </div>
-
-    </div>
-    <br>
     <div class="col-sm-12 col-xl-12">
-        <div class="card">
+        <div class="card ">
             <div class="card-header">
                 <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
-                <div class="card-body col-6" style="margin: 10px">
+                <div class="card-body col-5">
                     <div class="table-responsive">
-                        <table class="table table-bordered yajra-datatable">
+                        <table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
@@ -111,7 +125,7 @@
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name}}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
                             <tr>
                                 <th>Nomenclature</td>
@@ -134,55 +148,109 @@
                                 <td>{{ $details->country_of_assembly }}</td>
                             </tr>
 
-
                         </table>
+                        <a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                     </div>
                 </div>
-                <div class="card-body col-3" style="margin: 10px;">
-                    <h4>Vetted Status</h4>
-                    <ul>
-                        @if ($document_tracks !== null && $desig_id !== 1)
-                            @foreach ($document_tracks as $document_track)
-                                <li><i class="fa fa-check ps-2 text-success"
-                                        aria-hidden="true"></i>{{ $document_track->designations_name }} </li>
-                            @endforeach
-                        @endif
+
+
+                {{-- @if (!$sender_designation_id) --}}
+                <div class="card-body col-4">
+                    <h4 class="text-success">Vatted Status</h4>
+                    <hr>
+                    <ul class="forward_status">
+
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th>Sender</th>
+                                    <th></th>
+                                    <th>Receiver</th>
+                                    <th>Forwarded Date Time</th>
+                                </tr>
+                            </thead>
+
+
+                            @if ($document_tracks !== null)
+                                @foreach ($document_tracks as $document_track)
+                                    <tr>
+                                        <td>{{ $document_track->sender_designation_name }}</td>
+                                        <td><i class="fa fa-arrow-right text-success"></i></td>
+                                        <td>{{ $document_track->receiver_designation_name }}</td>
+                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found</li>
+                            @endif
+
+                        </table>
+
 
 
 
                     </ul>
+                    @if ($notes == !null)
+                        <h4 class="text-success">Notes from <span class="font-weight-bold text-danger">
+                                {{ $notes->sender_designation_name }}</span> </h4>
+                        <hr>
+                        <ul class="remarks_status">
+                            <li>
+                                @if ($notes)
+
+                                    @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
+                                        <p>{{ $notes->remarks }}</p>
+                                    @else
+                                        <p>Notes are not provided.</p>
+                                    @endif
+                                @else
+                                    <p>Notes are not provided.</p>
+                                @endif
+                            </li>
+
+                        </ul>
+
+                    @endif
+
                 </div>
-                <div class="card-body col-2" style="margin: 10px;">
-                    <h4>Vetted</h4>
+                <div class="card-body col-2">
+                    <h4 class="text-success">Forward</h4>
+                    <hr>
                     <form action="">
 
                         @if ($desig_position->position != 7)
                             <select name="designation" id="designations" class="form-control">
-
+                                <option value="">Select To Receiver </option>
                                 @foreach ($designations as $d)
                                     <option value={{ $d->id }}>{{ $d->name }}</option>
                                 @endforeach
 
                             </select>
-                        @endif
-                        @if ($desig_position->position == 3)
-                            <div class='mt-2'>
-                                <label for='delivery_date'>Delivery Date </label>
-                                <input type="date" id='delivery_date' name="delivery_date" class="form-control">
-                            </div>
+                            @if ($desig_position->position == 3)
+                                <div class='mt-2'>
+                                    <label for='delivery_date'>Delivery Date </label>
+                                    <input type="date" id='delivery_date' name="delivery_date" class="form-control">
+                                </div>
 
-                            <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="enter delay cause"></textarea>
-                        @endif
+                                <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="Enter delay cause"></textarea>
+                            @endif
 
+                        @endif
+                        <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
 
 
                         <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
                     </form>
+
                 </div>
+
+                {{-- @endif --}}
             </div>
 
         </div>
     </div>
+
 
 @endsection
 @push('js')
@@ -207,9 +275,11 @@
 
                 event.preventDefault();
 
+
                 var reciever_desig_id = $('#designations').val()
                 var delivery_date = $('#delivery_date').val()
                 var delay_cause = $('#delay_cause').val()
+                var remarks = $('#remarks').val()
 
                 var doc_ref_id = {{ $details->id }}
                 var doc_type_id = {{ $details->spec_type }}
@@ -239,7 +309,8 @@
                                 'doc_ref_id': doc_ref_id,
                                 'doc_type_id': doc_type_id,
                                 'delay_cause': delay_cause,
-                                'delivery_date': delivery_date
+                                'delivery_date': delivery_date,
+                                'remarks': remarks
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -254,6 +325,10 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
+
+                                        setTimeout(window.location.href =
+                                            "{{ route('admin.indent/outgoing') }}",
+                                            40000);
                                     }
                                 }
                             },

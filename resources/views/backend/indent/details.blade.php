@@ -158,7 +158,8 @@
                             </tr>
 
                         </table>
-                        <button class="btn btn-success mt-3 btn-parameter" href="">Parameter</button>
+                        <a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                     </div>
                 </div>
 
@@ -199,19 +200,21 @@
 
 
                     </ul>
-                    @if ($notes==!null)
-                        <h4 class="text-success">Notes from <span class="font-weight-bold text-danger">
-                                {{ $notes->sender_designation_name }}</span> </h4>
+                    @if ($notes == !null)
+                        <h4 class="text-success">Notes </h4>
                         <hr>
                         <ul class="remarks_status">
                             <li>
                                 @if ($notes)
+                                    @foreach ($notes as $note)
+                                        @if ($note->reciever_desig_id == $auth_designation_id->desig_id)
+                                            <p><i class="fa fa-circle ps-2 text-success" aria-hidden="true"></i>
 
-                                    @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
-                                        <p>{{ $notes->remarks }}</p>
-                                    @else
-                                        <p>Notes are not provided.</p>
-                                    @endif
+                                                {{ $note->remarks }}</p>
+                                        @else
+                                            <p>Notes are not provided.</p>
+                                        @endif
+                                    @endforeach
                                 @else
                                     <p>Notes are not provided.</p>
                                 @endif
@@ -285,6 +288,7 @@
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
+                var doc_ref_id = {{ $details->id }}
 
 
                 swal({
@@ -354,10 +358,6 @@
 
             });
 
-            $('.btn-parameter').on('click', function(event) {
-                event.preventDefault();
-
-            })
 
         });
     </script>

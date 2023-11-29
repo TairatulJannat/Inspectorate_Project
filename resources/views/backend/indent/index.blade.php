@@ -42,9 +42,13 @@
                     <div class="d-flex justify-content-between px-4 py-2">
                         <div class="col-6">
                             <a href="{{ route('admin.indent/view') }}" type="button"
-                                class="btn btn-success">Incoming</a>
+                                class="btn btn-success">Incoming(New)</a>
+                            <a href="{{ route('admin.indent_approved/view') }}" type="button"
+                                class="btn btn-secondary">Incoming(Approved)</a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-danger">OutGoing</a>
+                                class="btn btn-info">OutGoing(New)</a>
+                            <a href="{{ route('admin.indent/outgoing') }}" type="button"
+                                class="btn btn-danger">OutGoing(Dispatch)</a>
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>

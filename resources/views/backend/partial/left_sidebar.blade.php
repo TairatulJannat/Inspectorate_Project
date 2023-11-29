@@ -29,6 +29,15 @@ $currentControllerName = Request::segment(2);
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    @if (count(menu_check('Search')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Search' ? 'active' : '' }}"
+                                href="{{ route('admin.search') }}"><i data-feather="book-open"
+                                    class="text-light"></i><span>Search</span></a>
+
+                        </li>
+
+                    @endif
                     @if (count(menu_check('Indent')) !== 0)
                         <li class="dropdown"><a
                                 class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
