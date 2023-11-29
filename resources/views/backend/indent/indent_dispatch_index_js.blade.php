@@ -28,7 +28,7 @@
             },
             ajax: {
 
-                url: "{{ url('admin/indent_approved/all_data') }}",
+                url: "{{ url('admin/indent_dispatch/all_data') }}",
                 type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
@@ -103,51 +103,7 @@
     // End:: All Data
 
     // Start:: save information
-    $('#save_info').off().on('submit', function(event) {
-        event.preventDefault();
-
-        var formData = new FormData($('#save_info')[0]);
-
-
-        disableButton()
-        $.ajax({
-            url: "{{ url('admin/indent/store') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            success: function(response) {
-                if (response.error) {
-                    error_notification(response.error)
-                    enableeButton()
-                }
-                if (response.success) {
-                    enableeButton()
-                    $('.modal-backdrop').remove();
-                    $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                    toastr.success('Information Saved', 'Saved');
-                }
-                setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
-            },
-            error: function(response) {
-                enableeButton()
-                clear_error_field();
-                // error_notification('Please fill up the form correctly and try again')
-                // $('#error_sender').text(response.responseJSON.errors.sender);
-                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                // $('#error_spec_type').text(response.responseJSON.errors.spec_type);
-                // $('#error_additional_documents').text(response.responseJSON.errors
-                //     .additional_documents);
-                // $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
-                // $('#error_spec_received_date').text(response.responseJSON.errors
-                //     .spec_received_date);
-
-            }
-        });
-    })
+   
     // End:: save information
 
     //Start:: Update information

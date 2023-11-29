@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Indent (Outgoing)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -82,7 +82,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
+@section('main_menu', 'Indent (Outgoing)')
 @section('active_menu', 'Outgoing Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
@@ -192,18 +192,20 @@
 
                     </ul>
                     @if ($notes == !null)
-                        <h4 class="text-success">Notes from <span class="font-weight-bold text-danger">
-                                {{ $notes->sender_designation_name }}</span> </h4>
+                        <h4 class="text-success">Notes </h4>
                         <hr>
                         <ul class="remarks_status">
                             <li>
                                 @if ($notes)
+                                    @foreach ($notes as $note)
+                                        @if ($note->reciever_desig_id == $auth_designation_id->desig_id)
+                                            <p><i class="fa fa-circle ps-2 text-success" aria-hidden="true"></i>
 
-                                    @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
-                                        <p>{{ $notes->remarks }}</p>
-                                    @else
-                                        <p>Notes are not provided.</p>
-                                    @endif
+                                                {{ $note->remarks }}</p>
+                                        @else
+                                            <p>Notes are not provided.</p>
+                                        @endif
+                                    @endforeach
                                 @else
                                     <p>Notes are not provided.</p>
                                 @endif
@@ -280,9 +282,8 @@
                 var delivery_date = $('#delivery_date').val()
                 var delay_cause = $('#delay_cause').val()
                 var remarks = $('#remarks').val()
-
                 var doc_ref_id = {{ $details->id }}
-                var doc_type_id = {{ $details->spec_type }}
+                var doc_reference_number = '{{ $details->reference_no }}'
 
 
                 swal({
@@ -307,9 +308,9 @@
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
-                                'doc_type_id': doc_type_id,
                                 'delay_cause': delay_cause,
                                 'delivery_date': delivery_date,
+                                'doc_reference_number': doc_reference_number,
                                 'remarks': remarks
                             },
                             headers: {

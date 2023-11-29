@@ -102,6 +102,12 @@ class IndentController extends Controller
                     if ($data->status == '2') {
                         return '<button class="btn btn-success btn-sm">Delivered</button>';
                     }
+                    if ($data->status == '3') {
+                        return '<button class="btn btn-info btn-sm">Approved</button>';
+                    }
+                    if ($data->status == '4') {
+                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
+                    }
                 })
                 ->addColumn('action', function ($data) {
 
@@ -203,7 +209,7 @@ class IndentController extends Controller
                 'indents.*',
                 'dte_managments.name as dte_managment_name',
                 'additional_documents.name as additional_documents_name',
-                'fin_years.name as fin_year_name'
+                'fin_years.year as fin_year_name'
             )
             ->where('indents.id', $id)
             ->first();
@@ -250,7 +256,6 @@ class IndentController extends Controller
             ->where('track_status', 1)
             ->where('reciever_desig_id', $desig_id)->get();
 
-        // dd($document_tracks_notes);
         if ($document_tracks_notes->isNotEmpty()) {
             $notes = $document_tracks_notes;
         }
@@ -269,8 +274,8 @@ class IndentController extends Controller
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
+        $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
-
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
@@ -282,6 +287,7 @@ class IndentController extends Controller
         $data->section_id = $section_id;
         $data->doc_type_id = $doc_type_id;
         $data->doc_ref_id = $doc_ref_id;
+        $data->doc_reference_number = $doc_reference_number;
         $data->track_status = 1;
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
@@ -297,7 +303,7 @@ class IndentController extends Controller
 
             if ($data) {
 
-                $data->status = 1;
+                $data->status = 3;
                 $data->save();
 
                 $value = new DocumentTrack();
@@ -305,10 +311,11 @@ class IndentController extends Controller
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                $value->track_status = 2;
+                $value->doc_reference_number = $doc_reference_number;
+                $value->track_status = 3;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $data->remarks = $remarks;
+                $value->remarks = $remarks;
                 $value->created_at = Carbon::now();
                 $value->updated_at = Carbon::now();
                 $value->save();

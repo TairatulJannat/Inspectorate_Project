@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Indent (Outgoing)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -8,29 +8,31 @@
             border-bottom: 1px solid rgba(182, 182, 182, .6);
 
         }
-        <style>
-        .card .card-header {
+
+        <style>.card .card-header {
             padding: 0px;
-            border-bottom: 1px solid rgba(182, 182, 182 , .6);
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
 
         }
-        .table{
-            border-radius:10px !important;
+
+        .table {
+            border-radius: 10px !important;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
-        .table thead{
+
+        .table thead {
             background: #006A4E;
             color: #ffff
         }
-        .table thead tr th{
+
+        .table thead tr th {
 
             color: #ffff
         }
     </style>
-
 @endpush
-@section('main_menu', 'Indent')
-@section('active_menu', 'Outgoing')
+@section('main_menu', 'Indent (Outgoing)')
+@section('active_menu', 'All Data')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
@@ -41,9 +43,13 @@
                     <div class="d-flex justify-content-between px-4 py-2">
                         <div class="col-6">
                             <a href="{{ route('admin.indent/view') }}" type="button"
-                                class="btn btn-success">Incoming</a>
+                                class="btn btn-success">Incoming(New)</a>
+                            <a href="{{ route('admin.indent_approved/view') }}" type="button"
+                                class="btn btn-secondary">Incoming(Approved)</a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-danger">OutGoing</a>
+                                class="btn btn-info">OutGoing(New)</a>
+                            <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
+                                class="btn btn-danger">OutGoing(Dispatch)</a>
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>

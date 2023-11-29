@@ -247,20 +247,7 @@
 
         </div>
     </div>
-    {{-- <div class="col-sm-12 col-xl-12">
-        <div class="card">
-            <div class="p-3">
-                <h4>Documents</h4>
-            </div>
-            <div class="documents">
-                <img src="{{ asset('assets/backend/images/pdf.png') }}" alt="">
-                <img src="{{ asset('assets/backend/images/pdf.png') }}" alt="">
-                <img src="{{ asset('assets/backend/images/pdf.png') }}" alt="">
-
-            </div>
-
-        </div>
-    </div> --}}
+   
 
 @endsection
 @push('js')
@@ -288,9 +275,7 @@
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
-                var doc_ref_id = {{ $details->id }}
-
-
+                var doc_reference_number = '{{ $details->reference_no }}'
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
@@ -313,6 +298,7 @@
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
+                                'doc_reference_number': doc_reference_number,
                                 'remarks': remarks,
 
                             },
