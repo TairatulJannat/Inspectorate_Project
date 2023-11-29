@@ -18,13 +18,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class IndentController extends Controller
+class IndentApprovedController extends Controller
 {
-    //
     public function index()
     {
 
-        return view('backend.indent.index');
+        return view('backend.indent.indent_approved_index');
     }
 
     public function all_data(Request $request)
@@ -125,71 +124,7 @@ class IndentController extends Controller
         }
     }
 
-    public function create()
-    {
-        $admin_id = Auth::user()->id;
-        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $sections = Section::whereIn('id', $section_ids)->get();
 
-        $dte_managments = Dte_managment::where('status', 1)->get();
-        $additional_documnets = Additional_document::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->get();
-        $item = Items::all();
-        $fin_years = FinancialYear::all();
-        return view('backend.indent.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
-    }
-
-    public function store(Request $request)
-    {
-        // $this->validate($request, [
-        //     'sender' => 'required',
-        //     'admin_section' => 'required',
-        //     'reference_no' => 'required',
-        //     'spec_type' => 'required',
-        //     'additional_documents' => 'required',
-        //     'item_type_id' => 'required',
-        //     'spec_received_date' => 'required',
-
-        // ]);
-        $insp_id = Auth::user()->inspectorate_id;
-        $sec_id = $request->admin_section;
-
-        $data = new Indent();
-        $data->insp_id = $insp_id;
-        $data->sec_id = $sec_id;
-        $data->sender = $request->sender;
-        $data->reference_no = $request->reference_no;
-        $data->indent_number = $request->indent_number;
-
-        $data->additional_documents = $request->additional_documents;
-        $data->item_id = $request->item_id;
-        $data->item_type_id = $request->item_type_id;
-        $data->qty = $request->qty;
-        $data->estimated_value = $request->estimated_value;
-        $data->indent_received_date = $request->indent_received_date;
-        $data->fin_year_id = $request->fin_year_id;
-        $data->attribute = $request->attribute;
-        $data->spare = $request->spare;
-        $data->checked_standard = $request->checked_standard == 'on' ? 0 : 1;
-        $data->nomenclature = $request->nomenclature;
-        $data->make = $request->make;
-        $data->model = $request->model;
-        $data->country_of_origin = $request->country_of_origin;
-        $data->country_of_assembly = $request->country_of_assembly;
-
-        $data->received_by = Auth::user()->id;
-        $data->remark = $request->remark;
-        $data->status = 0;
-        $data->created_at = Carbon::now()->format('Y-m-d');
-        $data->updated_at = Carbon::now()->format('Y-m-d');;
-
-        // $data->created_by = auth()->id();
-        // $data->updated_by = auth()->id();
-
-        $data->save();
-
-        return response()->json(['success' => 'Done']);
-    }
     public function details($id)
     {
 
@@ -282,7 +217,7 @@ class IndentController extends Controller
         $data->section_id = $section_id;
         $data->doc_type_id = $doc_type_id;
         $data->doc_ref_id = $doc_ref_id;
-        $data->track_status = 1;
+        $data->track_status = 2;
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
@@ -291,7 +226,7 @@ class IndentController extends Controller
         $data->save();
 
 
-        if ($desig_position->position == 7) {
+        if ($desig_position->position == 5) {
 
             $data = Indent::find($doc_ref_id);
 
@@ -320,16 +255,8 @@ class IndentController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function item_name($id)
-    {
-        $items = Items::where('item_type_id', $id)->get();
-        return response()->json($items);
-    }
 
-    public function progress()
-    {
-        return view('backend.indent.progress');
-    }
+
     public function parameter(Request $request)
     {
         $indent = Indent::find($request->indent_id);
