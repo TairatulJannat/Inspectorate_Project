@@ -51,73 +51,71 @@ class AssignParameterValueController extends Controller
     public function store(Request $request)
     {
         $customMessages = [
-            'assign-parameter-group-id.required' => 'Please select a Parameter Group.',
-            'parameter-name.*.required' => 'Please enter a Parameter Name.',
-            'parameter-value.*.required' => 'Please enter a Parameter Value.',
+            'assign_parameter_group_id.required' => 'Please select a Parameter Group.',
+            'parameter_name.*.required' => 'Please enter a Parameter Name.',
+            'parameter_value.*.required' => 'Please enter a Parameter Value.',
         ];
 
         $validator = Validator::make($request->all(), [
-            'assign-parameter-group-id' => ['required', 'exists:parameter_groups,id'],
-            'parameter-name.*' => ['required', 'string', 'max:255'],
-            'parameter-value.*' => ['required', 'string', 'max:999'],
+            'assign_parameter_group_id' => ['required', 'exists:parameter_groups,id'],
+            'parameter_name.*' => ['required', 'string', 'max:255'],
+            'parameter_value.*' => ['required', 'string', 'max:999'],
         ], $customMessages);
 
-        if ($validator->passes()) {
-            try {
-                DB::beginTransaction();
-
-                $parameterGroup = ParameterGroup::find($request->input('assign-parameter-group-id'));
-
-                if (!$parameterGroup) {
-                    return response()->json([
-                        'isSuccess' => false,
-                        'Message' => "Invalid Parameter Group selected!",
-                    ], 200);
-                }
-
-                $parameterNames = $request->input('parameter-name');
-                $parameterValues = $request->input('parameter-value');
-
-                foreach ($parameterNames as $key => $parameterName) {
-                    $assignParameterValue = new AssignParameterValue();
-
-                    $assignParameterValue->parameter_name = $parameterName;
-                    $assignParameterValue->parameter_value = $parameterValues[$key];
-                    $assignParameterValue->parameter_group_id = $parameterGroup->id;
-
-                    // Additional logic as needed
-
-                    if (!$assignParameterValue->save()) {
-                        DB::rollBack();
-
-                        return response()->json([
-                            'isSuccess' => false,
-                            'Message' => "Something went wrong while storing data!",
-                        ], 200);
-                    }
-                }
-
-                DB::commit();
-
-                return response()->json([
-                    'isSuccess' => true,
-                    'Message' => "Parameter Names and Values saved successfully!",
-                ], 200);
-            } catch (\Exception $e) {
-                // Log detailed error information for debugging purposes
-                \Log::error('Error in store method: ' . $e->getMessage());
-
-                return response()->json([
-                    'isSuccess' => false,
-                    'Message' => "Something went wrong!",
-                    'Error' => $e->getMessage(),
-                ], 200);
-            }
-        } else {
+        if ($validator->fails()) {
             return response()->json([
                 'isSuccess' => false,
-                'Message' => "Please check the inputs!",
-                'error' => $validator->errors()->toArray()
+                'message' => 'Validation failed. Please check the inputs.',
+                'errors' => $validator->errors()->toArray(),
+            ], 200);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $parameterGroup = ParameterGroup::find($request->input('assign_parameter_group_id'));
+
+            if (!$parameterGroup) {
+                return response()->json([
+                    'isSuccess' => false,
+                    'message' => 'Invalid Parameter Group selected!',
+                ], 200);
+            }
+
+            $parameterNames = (array) $request->input('parameter_name');
+            $parameterValues = (array) $request->input('parameter_value');
+
+            foreach ($parameterNames as $key => $parameterName) {
+                $assignParameterValue = new AssignParameterValue();
+
+                $assignParameterValue->parameter_name = $parameterName;
+                $assignParameterValue->parameter_value = $parameterValues[$key];
+                $assignParameterValue->parameter_group_id = $parameterGroup->id;
+
+                if (!$assignParameterValue->save()) {
+                    DB::rollBack();
+
+                    return response()->json([
+                        'isSuccess' => false,
+                        'message' => 'Something went wrong while storing data!',
+                    ], 200);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'isSuccess' => true,
+                'message' => 'Parameter Names and Values saved successfully!',
+            ], 200);
+        } catch (\Exception $e) {
+            // Log detailed error information for debugging purposes
+            \Log::error('Error in store method: ' . $e->getMessage());
+
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Something went wrong!',
+                'error' => $e->getMessage(),
             ], 200);
         }
     }
@@ -163,7 +161,7 @@ class AssignParameterValueController extends Controller
 
             return response()->json([
                 'isSuccess' => true,
-                'Message' => 'Parameter Groups data successfully retrieved.',
+                'message' => 'Parameter Groups data successfully retrieved.',
                 'treeViewData' => $treeViewData,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
@@ -173,7 +171,7 @@ class AssignParameterValueController extends Controller
         } else {
             return response()->json([
                 'isSuccess' => false,
-                'Message' => "Validation failed. Please check the inputs!",
+                'message' => "Validation failed. Please check the inputs!",
                 'error' => $validator->errors()->toArray()
             ], 200);
         }
@@ -197,16 +195,66 @@ class AssignParameterValueController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'id' => 'required',
+            'parameter_name' => 'required',
+            'parameter_value' => 'required',
+        ]);
+
+        try {
+            $parameterValue = AssignParameterValue::findOrFail($validatedData['id']);
+            $parameterValue->id = $validatedData['id'];
+            $parameterValue->parameter_name = $validatedData['parameter_name'];
+            $parameterValue->parameter_value = $validatedData['parameter_value'];
+
+            if ($parameterValue->update()) {
+                return response()->json([
+                    'isSuccess' => true,
+                    'message' => 'Parameters updated successfully!'
+                ], 200);
+            } else {
+                return response()->json([
+                    'isSuccess' => false,
+                    'message' => 'Failed to update Parameters!'
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            // Handle the exception, log the error, etc.
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Error updating Parameters!'
+            ], 200);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+
+        $parameterValue = AssignParameterValue::findOrFail($id);
+
+        if ($parameterValue) {
+            if ($parameterValue->delete()) {
+                return response()->json([
+                    'isSuccess' => true,
+                    'message' => 'Parameters deleted successfully!'
+                ], 200);
+            } else {
+                return response()->json([
+                    'isSuccess' => false,
+                    'message' => 'Failed to delete Parameters!'
+                ], 200);
+            }
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Parameters not found!'
+            ], 200);
+        }
     }
 }

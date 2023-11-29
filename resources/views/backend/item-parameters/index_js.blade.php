@@ -1,4 +1,6 @@
 <script>
+    var initialData = {};
+
     $(document).ready(function() {
         $('.select2').select2();
         toastr.options.preventDuplicates = true;
@@ -28,9 +30,9 @@
                         $.each(response.error, function(prefix, val) {
                             $(form).find("span." + prefix + "-error").text(val[0]);
                         });
-                        toastr.error(response.Message);
+                        toastr.error(response.message);
                     } else if (response.isSuccess === true) {
-                        toastr.success(response.Message);
+                        toastr.success(response.message);
                         renderTreeView(response.treeViewData, response.itemTypeName,
                             response.itemName);
                     }
@@ -99,14 +101,21 @@
                             var groupData = response;
 
                             $('#editGroupName').text(groupName);
+                            $('#editParameterGroupId').val(groupId);
                             $('.modal-body .dynamic-fields').empty();
 
                             var labelPrinted = false;
                             groupData.forEach(function(parameter) {
+
+                                initialData[parameter.id] = {
+                                    parameter_name: parameter.parameter_name,
+                                    parameter_value: parameter.parameter_value,
+                                    deleted: false
+                                };
+
                                 if (!labelPrinted) {
                                     $('.modal-body .dynamic-fields').append(
-                                        '<div class="row mb-3" data-row-id="' +
-                                        parameter.id + '">' +
+                                        '<div class="row mb-3">' +
                                         '<div class="col-md-5">' +
                                         '<label class="form-label">' +
                                         'Parameter Name</label></div>' +
@@ -147,6 +156,16 @@
                                             '.row');
                                         var rowIdToRemove = rowToRemove.data(
                                             'row-id');
+                                        if (initialData && initialData
+                                            .hasOwnProperty(rowIdToRemove)) {
+                                            initialData[rowIdToRemove].deleted =
+                                                true;
+                                        } else {
+                                            console.error(
+                                                'initialData is undefined or row with ID ' +
+                                                rowIdToRemove +
+                                                ' not found.');
+                                        }
                                         rowToRemove.remove();
                                     });
                             });
@@ -186,12 +205,21 @@
             });
 
             $('#saveChanges').click(function() {
+                var groupId = $('#editParameterGroupId').val();
+                var hasEmptyFields = false;
+
                 $('.modal-body .dynamic-fields .row').each(function() {
                     var rowId = $(this).data('row-id');
+
                     var editedData = {
                         parameter_name: $(this).find('[name="parameter_name[]"]').val(),
                         parameter_value: $(this).find('[name="parameter_value[]"]').val()
                     };
+
+                    // if (!editedData.parameter - name || !editedData.parameter - value) {
+                    //     hasEmptyFields = true;
+                    //     return false;
+                    // }
 
                     if (
                         initialData[rowId] &&
@@ -203,47 +231,25 @@
                     }
                 });
 
+                if (hasEmptyFields) {
+                    toastr.error('Please fill in all the fields.');
+                    return;
+                }
+
                 for (var id in initialData) {
                     if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
                         deleteRowFromDatabase(id);
                     }
                 }
+
+                // Collect data from dynamically added fields
+                var newDataRows = $('.modal-body .dynamic-fields .row[data-new-row="true"]');
+                newDataRows.each(function() {
+                    var parameterName = $(this).find('[name="parameter_name[]"]').val();
+                    var parameterValue = $(this).find('[name="parameter_value[]"]').val();
+                    saveNewRowToDatabase(groupId, parameterName, parameterValue);
+                });
             });
-
-            function deleteRowFromDatabase(rowId) {
-                $.ajax({
-                    url: '{{ url('admin/assign-parameter-value/delete') }}',
-                    method: 'post',
-                    data: {
-                        id: rowId,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log('Row deleted successfully:', response);
-                    },
-                    error: function(error) {
-                        console.log('Error deleting row:', error);
-                    }
-                });
-            }
-
-            function saveNewRowToDatabase(parameterName, parameterValue) {
-                $.ajax({
-                    url: '{{ url('admin/assign-parameter-value/add') }}',
-                    method: 'post',
-                    data: {
-                        parameter_name: parameterName,
-                        parameter_value: parameterValue,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log('New row saved successfully:', response);
-                    },
-                    error: function(error) {
-                        console.log('Error saving new row:', error);
-                    }
-                });
-            }
 
             function updateRowInDatabase(rowId, parameterName, parameterValue) {
                 $.ajax({
@@ -256,10 +262,58 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        console.log('Row updated successfully:', response);
+                        if (response.isSuccess === false) {
+                            toastr.error(response.message);
+                        } else if (response.isSuccess === true) {
+                            toastr.success(response.message);
+                        }
                     },
                     error: function(error) {
-                        console.log('Error updating row:', error);
+                        toastr.error(error.responseText, error.statusText);
+                    }
+                });
+            }
+
+            function deleteRowFromDatabase(rowId) {
+                $.ajax({
+                    url: '{{ url('admin/assign-parameter-value/destroy') }}',
+                    method: 'post',
+                    data: {
+                        id: rowId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.isSuccess === false) {
+                            toastr.error(response.message);
+                        } else if (response.isSuccess === true) {
+                            toastr.success(response.message);
+                        }
+                    },
+                    error: function(error) {
+                        toastr.error(error.responseText, error.statusText);
+                    }
+                });
+            }
+
+            function saveNewRowToDatabase(groupId, parameterName, parameterValue) {
+                $.ajax({
+                    url: '{{ url('admin/assign-parameter-value/store') }}',
+                    method: 'post',
+                    data: {
+                        assign_parameter_group_id: groupId,
+                        parameter_name: parameterName,
+                        parameter_value: parameterValue,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.isSuccess === false) {
+                            toastr.error(response.message);
+                        } else if (response.isSuccess === true) {
+                            toastr.success(response.message);
+                        }
+                    },
+                    error: function(error) {
+                        toastr.error(error.responseText, error.statusText);
                     }
                 });
             }
