@@ -54,6 +54,13 @@
             cursor: pointer;
         }
 
+        .remarks_status {
+            min-height: 250px
+        }
+        .forward_status {
+            min-height: 250px
+        }
+
         .delivery-btn:hover {
             background-color: #ff8533 !important;
             /* Lighter orange on hover */
@@ -74,7 +81,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
-                <h2>Details of Specification</h2>
+                <h2>Details of Tender Management</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-6" style="margin: 10px">
@@ -94,23 +101,80 @@
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
                             <tr>
+                                <th>Item</td>
+                                <td>{{ $details->item_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Item Quantity</td>
+                                <td>{{ $details->qty }}</td>
+                            </tr>
+                            <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->spec_received_date }}</td>
+                                <td>{{ $details->receive_date}}</td>
+                            </tr>
+                            <tr>
+                                <th>Opening Date</td>
+                                <td> {{ $details->opening_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tender Date</td>
+                                <td> {{ $details->tender_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name}} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
                             </tr>
                         </table>
                     </div>
                 </div>
-                <div class="card-body col-3" style="margin: 10px;">
-                    <h4>Vetted Status</h4>
-                    <ul>
-                        @if ($document_tracks !== null && $desig_id !== 1)
+                 <div class="card-body col-3">
+                    <h4 class="text-success">Vetted Status</h4>
+                    <hr>
+                    <ul class="forward_status">
+
+                        <li class="d-flex justify-content-between bg-success p-2 mb-2" style="border-radius: 5px">
+                            <div>Sender </div>
+                            <div> Vetted Date Time</div>
+                        </li>
+                            @if ($document_tracks !== null )
                             @foreach ($document_tracks as $document_track)
-                                <li><i class="fa fa-check ps-2 text-success"
-                                        aria-hidden="true"></i>{{ $document_track->designations_name }} </li>
+                                <li class="d-flex justify-content-between px-2 ">
+                                    <div><i class="fa fa-check ps-2 text-success"
+                                            aria-hidden="true"></i>{{ $document_track->designations_name }}</div>
+                                    <div> {{ $document_track->created_at->format('d-m-Y h:i A') }}</div>
+                                </li>
                             @endforeach
+                        @else
+                            <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No vetted status found</li>
                         @endif
+              
+                    </ul>
+                    <h4 class="text-success">Notes from immediate sender </h4>
+                    <hr>
+                    <ul class="remarks_status">
+                        <li>
+                                @if ($notes)
 
-
+                                @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
+                                    <p>{{ $notes->remarks }}</p>
+                                @else
+                                    <p>Notes are not provided.</p>
+                                @endif
+                            @else
+                                <p>Notes are not provided.</p>
+                            @endif
+                        </li>
 
                     </ul>
                 </div>
@@ -126,6 +190,7 @@
                                 @endforeach
 
                             </select>
+                            <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
                         @endif
                         @if ($desig_position->position == 3)
                             <div class='mt-2'>
@@ -140,7 +205,17 @@
 
                         <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
                     </form>
+                    <hr>
+                    <h4 class="text-success">Delay Notes</h4>
+                    <hr>
+                    <ul class="remarks_status">
+                        <li>
+                            {{ $details->delay_cause }} 
+                        </li>
+
+                    </ul>
                 </div>
+               
             </div>
 
         </div>
@@ -168,11 +243,12 @@
             $('#submitBtn').off('click').on('click', function(event) {
 
                 event.preventDefault();
-
+                var remarks = $('#remarks').val()
+                // alert( remarks)
                 var reciever_desig_id = $('#designations').val()
                 var delivery_date = $('#delivery_date').val()
                 var delay_cause = $('#delay_cause').val()
-
+                
                 var doc_ref_id = {{ $details->id }}
                 var doc_type_id = {{ $details->spec_type }}
 
@@ -201,7 +277,8 @@
                                 'doc_ref_id': doc_ref_id,
                                 'doc_type_id': doc_type_id,
                                 'delay_cause': delay_cause,
-                                'delivery_date': delivery_date
+                                'delivery_date': delivery_date,
+                                'remarks': remarks,
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -216,6 +293,7 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
+                                            setTimeout(window.location.href = "{{ route('admin.Outgoingtender/outgoing') }}", 40000);
                                     }
                                 }
                             },

@@ -43,6 +43,11 @@
                     name: 'reference_no',
                     orderable: false
                 },
+                {
+                    data: 'fin_years_name',
+                    name: 'fin_year_id',
+                    orderable: false
+                },
 
                 {
                     data: 'item_type_name',

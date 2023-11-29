@@ -52,6 +52,22 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="fin_year_id">Financial Year </label>
+
+                                <select class="form-control" id="fin_year_id" name="fin_year_id">
+
+                                    <option value="">Please Select Year </option>
+                                    @foreach ($fin_years as $fin_year)
+                                        <option value={{ $fin_year->id }}>{{ $fin_year->year }} </option>
+                                    @endforeach
+
+                                </select>
+
+                                <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <label for="receive_date">Tender Received Date</label>
                                 <input type="date" class="form-control" id="receive_date"
                                     name="receive_date">
@@ -81,6 +97,7 @@
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="tender_number">Tender Number</label>

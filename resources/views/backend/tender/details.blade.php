@@ -22,6 +22,9 @@
         .remarks_status {
             min-height: 250px
         }
+        .forward_status {
+            min-height: 250px
+        }
 
         .card-body {
             padding: 20px !important;
@@ -90,16 +93,24 @@
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
                             <tr>
+                                <th>Item</td>
+                                <td>{{ $details->item_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Item Quantity</td>
+                                <td>{{ $details->qty }}</td>
+                            </tr>
+                            <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->spec_received_date }}</td>
+                                <td>{{ $details->receive_date}}</td>
                             </tr>
                             <tr>
-                                <th>Specification Type</td>
-                                <td> {{ $details->spec_type == 1 ? 'Prelim Specification' : 'Genarel Specification' }}</td>
+                                <th>Opening Date</td>
+                                <td> {{ $details->opening_date }}</td>
                             </tr>
                             <tr>
-                                <th>Delivary</td>
-                                <td> {{ $details->delivery_date }}</td>
+                                <th>Tender Date</td>
+                                <td> {{ $details->tender_date }}</td>
                             </tr>
                             <tr>
                                 <th>Additional Documents</th>
@@ -116,6 +127,7 @@
                                     @endif
                                 </td>
                             </tr>
+                          
                         </table>
                     </div>
                 </div>
@@ -148,12 +160,15 @@
                     <ul class="remarks_status">
                         <li>
                                 @if ($notes)
-
-                                @if ($notes->reciever_desig_id == $auth_designation_id->desig_id)
-                                    <p>{{ $notes->remarks }}</p>
-                                @else
-                                    <p>Notes are not provided.</p>
-                                @endif
+                                @foreach ( $notes as $note )
+                                    @if ($note->reciever_desig_id == $auth_designation_id->desig_id)
+                                        <p><i class="fa fa-circle ps-2 text-success" aria-hidden="true"></i> 
+                                            
+                                            {{ $note->remarks }}</p>
+                                    @else
+                                        <p>Notes are not provided.</p>
+                                    @endif
+                                @endforeach
                             @else
                                 <p>Notes are not provided.</p>
                             @endif
