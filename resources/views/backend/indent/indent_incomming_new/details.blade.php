@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Outgoing)')
+@section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -63,7 +63,14 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
+            background-color: #ffffff !important;
+            color: #006a4e8c;
             cursor: pointer;
+        }
+
+        .delivery-btn:hover {
+            background-color: rgb(7, 66, 20), 59, 5) !important;
+            /* Lighter orange on hover */
         }
 
         .forward_status {
@@ -82,9 +89,11 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Outgoing)')
-@section('active_menu', 'Outgoing Details')
+@section('main_menu', 'Indent')
+@section('active_menu', 'Details')
 @section('content')
+
+
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
@@ -157,7 +166,7 @@
 
                 {{-- @if (!$sender_designation_id) --}}
                 <div class="card-body col-4">
-                    <h4 class="text-success">Vatted Status</h4>
+                    <h4 class="text-success">Forward Status</h4>
                     <hr>
                     <ul class="forward_status">
 
@@ -220,31 +229,17 @@
                     <h4 class="text-success">Forward</h4>
                     <hr>
                     <form action="">
+                        <select name="designation" id="designations" class="form-control mt-2">
+                            <option value="">Select To Receiver </option>
+                            @foreach ($designations as $d)
+                                <option value={{ $d->id }}>{{ $d->name }}</option>
+                            @endforeach
 
-                        @if ($desig_position->position != 7)
-                            <select name="designation" id="designations" class="form-control">
-                                <option value="">Select To Receiver </option>
-                                @foreach ($designations as $d)
-                                    <option value={{ $d->id }}>{{ $d->name }}</option>
-                                @endforeach
+                        </select>
 
-                            </select>
-                            @if ($desig_position->position == 3)
-                                <div class='mt-2'>
-                                    <label for='delivery_date'>Delivery Date </label>
-                                    <input type="date" id='delivery_date' name="delivery_date" class="form-control">
-                                </div>
-
-                                <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="Enter delay cause"></textarea>
-                            @endif
-
-                        @endif
                         <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
-
-
-                        <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
+                        <button class="btn btn-success mt-2 " id="submitBtn">Forward</button>
                     </form>
-
                 </div>
 
                 {{-- @endif --}}
@@ -261,7 +256,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.specification.prelimgeneral.index_js') --}}
+    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -277,17 +272,12 @@
 
                 event.preventDefault();
 
-
                 var reciever_desig_id = $('#designations').val()
-                var delivery_date = $('#delivery_date').val()
-                var delay_cause = $('#delay_cause').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
-
-
                 swal({
-                    title: `Are you sure to delivared <span style="color: red; font-weight: bold;"> ${reciever_desig_text}</span>?`,
+                    title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -304,14 +294,13 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/outgoing_indent/tracking') }}',
+                            url: '{{ url('admin/indent/indent_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
-                                'delay_cause': delay_cause,
-                                'delivery_date': delivery_date,
                                 'doc_reference_number': doc_reference_number,
-                                'remarks': remarks
+                                'remarks': remarks,
+
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -326,9 +315,8 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
-
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent/outgoing') }}",
+                                            "{{ route('admin.indent/view') }}",
                                             40000);
                                     }
                                 }
@@ -355,6 +343,7 @@
                 })
 
             });
+
 
         });
     </script>

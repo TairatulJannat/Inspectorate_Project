@@ -24,7 +24,7 @@ class IndentDispatchController extends Controller
     public function index()
     {
 
-        return view('backend.indent.indent_dispatch_index');
+        return view('backend.indent.indent_dispatch.indent_dispatch_index');
     }
 
     public function all_data(Request $request)
@@ -44,15 +44,8 @@ class IndentDispatchController extends Controller
                     ->where('indents.status', 4)
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
-            } elseif ($desig_position->id == 1) {
-
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('indents.status', 4)
-                    ->get();
-            } else {
+            }
+             else {
 
                 $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
@@ -121,9 +114,10 @@ class IndentDispatchController extends Controller
 
                         $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
                         </div>';
                     }
+                    
 
                     return $actionBtn;
                 })
@@ -208,7 +202,7 @@ class IndentDispatchController extends Controller
         //End blade notes section....
 
 
-        return view('backend.indent.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','desig_position'));
+        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','desig_position'));
     }
 
     public function indentTracking(Request $request)
@@ -233,7 +227,7 @@ class IndentDispatchController extends Controller
         $data->doc_type_id = $doc_type_id;
         $data->doc_ref_id = $doc_ref_id;
         $data->doc_reference_number = $doc_reference_number;
-        $data->track_status = 1;
+        $data->track_status = 4;
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
@@ -242,13 +236,13 @@ class IndentDispatchController extends Controller
         $data->save();
 
 
-        if ($desig_position->position == 7) {
+        if ($desig_position->position == 1) {
 
             $data = Indent::find($doc_ref_id);
 
             if ($data) {
 
-                $data->status = 4;
+                $data->status = 2;
                 $data->save();
 
                 $value = new DocumentTrack();
@@ -257,7 +251,7 @@ class IndentDispatchController extends Controller
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
                 $data->doc_reference_number = $doc_reference_number;
-                $value->track_status = 1;
+                $value->track_status = 4;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
                 $data->remarks = $remarks;

@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Indent (Approved)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -89,7 +89,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
+@section('main_menu', 'Indent (Approved) ')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -247,7 +247,7 @@
 
         </div>
     </div>
-   
+
 
 @endsection
 @push('js')
@@ -256,7 +256,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.specification.prelimgeneral.index_js') --}}
+    {{-- @include('backend.indent.indent_incomming_approved.indent_approved_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -294,7 +294,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/indent/indent_tracking') }}',
+                            url: '{{ url('admin/indent_approved/indent_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -316,7 +316,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent/view') }}",
+                                            "{{ route('admin.indent_approved/view') }}",
                                             40000);
                                     }
                                 }

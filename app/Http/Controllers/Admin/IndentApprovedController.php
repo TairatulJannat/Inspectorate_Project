@@ -23,7 +23,7 @@ class IndentApprovedController extends Controller
     public function index()
     {
 
-        return view('backend.indent.indent_approved_index');
+        return view('backend.indent.indent_incomming_approved.indent_approved_index');
     }
 
     public function all_data(Request $request)
@@ -199,7 +199,7 @@ class IndentApprovedController extends Controller
          //End blade notes section....
 
 
-        return view('backend.indent.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id'));
+        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id'));
     }
 
     public function indentTracking(Request $request)

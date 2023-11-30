@@ -24,7 +24,7 @@ class IndentController extends Controller
     public function index()
     {
 
-        return view('backend.indent.index');
+        return view('backend.indent.indent_incomming_new.index');
     }
 
     public function all_data(Request $request)
@@ -142,7 +142,7 @@ class IndentController extends Controller
         $item_types = Item_type::where('status', 1)->get();
         $item = Items::all();
         $fin_years = FinancialYear::all();
-        return view('backend.indent.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.indent.indent_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
     }
 
     public function store(Request $request)
@@ -263,7 +263,7 @@ class IndentController extends Controller
         //End blade notes section....
 
 
-        return view('backend.indent.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id'));
+        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id'));
     }
 
     public function indentTracking(Request $request)

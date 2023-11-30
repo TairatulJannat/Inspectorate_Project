@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Approved)')
+@section('title', 'Indent (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -63,15 +63,9 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background-color: #ffffff !important;
-            color: #006a4e8c;
             cursor: pointer;
         }
 
-        .delivery-btn:hover {
-            background-color: rgb(7, 66, 20), 59, 5) !important;
-            /* Lighter orange on hover */
-        }
 
         .forward_status {
             min-height: 250px
@@ -89,10 +83,9 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Approved) ')
+@section('main_menu', 'Indent (Dispatch) ')
 @section('active_menu', 'Details')
 @section('content')
-
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
@@ -229,25 +222,27 @@
                     <h4 class="text-success">Forward</h4>
                     <hr>
                     <form action="">
-                        <select name="designation" id="designations" class="form-control mt-2">
-                            <option value="">Select To Receiver </option>
-                            @foreach ($designations as $d)
-                                <option value={{ $d->id }}>{{ $d->name }}</option>
-                            @endforeach
 
-                        </select>
+                        @if ($desig_position->position != 1)
+                            <select name="designation" id="designations" class="form-control">
+                                <option value="">Select To Receiver </option>
+                                @foreach ($designations as $d)
+                                    <option value={{ $d->id }}>{{ $d->name }}</option>
+                                @endforeach
 
+                            </select>
+                        @endif
                         <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
-                        <button class="btn btn-success mt-2 " id="submitBtn">Forward</button>
+
+
+                        <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
                     </form>
                 </div>
 
                 {{-- @endif --}}
             </div>
-
         </div>
     </div>
-
 
 @endsection
 @push('js')
@@ -256,17 +251,18 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.specification.prelimgeneral.index_js') --}}
+    {{-- @include('backend.indent.indent_dispatch.indent_dispatch_index_js') --}}
 
     <script>
         $(document).ready(function() {
-            var reciever_desig_text
+            var reciever_desig_text = ''
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();
+                reciever_desig_text =
+                    `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
 
             });
-
 
             $('#submitBtn').off('click').on('click', function(event) {
 
@@ -277,7 +273,7 @@
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
                 swal({
-                    title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
+                    title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -294,7 +290,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/indent_approved/indent_tracking') }}',
+                            url: '{{ url('admin/indent_dispatch/indent_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -316,7 +312,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent_approved/view') }}",
+                                            "{{ route('admin.indent_dispatch/view') }}",
                                             40000);
                                     }
                                 }

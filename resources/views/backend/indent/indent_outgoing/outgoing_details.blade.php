@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent(Dispatch)')
+@section('title', 'Indent (Outgoing)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -66,7 +66,6 @@
             cursor: pointer;
         }
 
-
         .forward_status {
             min-height: 250px
         }
@@ -83,11 +82,9 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent(Dispatch) ')
-@section('active_menu', 'Details')
+@section('main_menu', 'Indent (Outgoing)')
+@section('active_menu', 'Outgoing Details')
 @section('content')
-
-
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
@@ -160,7 +157,7 @@
 
                 {{-- @if (!$sender_designation_id) --}}
                 <div class="card-body col-4">
-                    <h4 class="text-success">Forward Status</h4>
+                    <h4 class="text-success">Vatted Status</h4>
                     <hr>
                     <ul class="forward_status">
 
@@ -247,6 +244,7 @@
 
                         <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
                     </form>
+
                 </div>
 
                 {{-- @endif --}}
@@ -263,14 +261,15 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.specification.prelimgeneral.index_js') --}}
+    {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
 
     <script>
         $(document).ready(function() {
-            var reciever_desig_text
+            var reciever_desig_text='';
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();
+                reciever_desig_text=`to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
 
             });
 
@@ -279,12 +278,17 @@
 
                 event.preventDefault();
 
+
                 var reciever_desig_id = $('#designations').val()
+                var delivery_date = $('#delivery_date').val()
+                var delay_cause = $('#delay_cause').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
+
+
                 swal({
-                    title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
+                    title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -301,13 +305,14 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/indent_dispatch/indent_tracking') }}',
+                            url: '{{ url('admin/outgoing_indent/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
+                                'delay_cause': delay_cause,
+                                'delivery_date': delivery_date,
                                 'doc_reference_number': doc_reference_number,
-                                'remarks': remarks,
-
+                                'remarks': remarks
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -322,8 +327,9 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
+
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent/view') }}",
+                                            "{{ route('admin.indent/outgoing') }}",
                                             40000);
                                     }
                                 }
@@ -350,7 +356,6 @@
                 })
 
             });
-
 
         });
     </script>
