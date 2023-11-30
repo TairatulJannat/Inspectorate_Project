@@ -21,35 +21,39 @@ class SearchController extends Controller
         $docTypeId = $request->docTypeId;
         $docReferenceNumber = $request->docReferenceNumber;
 
-
-
-        
         // dd($data);
         if ($docTypeId == 3) {
-            
-            $data = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)->get();
 
-            if (!$data) {
+            $data = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
+            ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
+            ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+            ->select(
+                'document_tracks.*',
+                'sender_designation.name as sender_designation_name',
+                'receiver_designation.name as receiver_designation_name'
+            )
+            ->get();
+
+            if ($data) {
+                $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
+                    ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
+                    ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
+                    ->leftJoin('items', 'indents.item_id', '=', 'items.id')
+                    ->select(
+                        'indents.*',
+                        'item_types.name as item_type_name',
+                        'indents.*',
+                        'dte_managments.name as dte_managment_name',
+                        'items.name as item_name',
+                        'additional_documents.name as additional_documents_name',
+                        'fin_years.year as fin_year_name'
+                    )->where('indents.reference_no', $docReferenceNumber)
+                    ->first();
+                return response()->json(['details' => $details, 'data' => $data]);
+            } elseif (!$data) {
                 return response()->json(['error' => 'Document not found'], 404);
             }
-            $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
-                ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
-                ->leftJoin('items', 'indents.item_id', '=', 'items.id')
-                ->select(
-                    'indents.*',
-                    'item_types.name as item_type_name',
-                    'indents.*',
-                    'dte_managments.name as dte_managment_name',
-                    'items.name as item_name',
-                    'additional_documents.name as additional_documents_name',
-                    'fin_years.year as fin_year_name'
-                )->where('indents.reference_no', $docReferenceNumber)
-                ->first();
         }
-
-
-        return response()->json(['details' => $details, 'data' => $data]);
     }
 }

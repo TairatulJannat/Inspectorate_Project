@@ -19,73 +19,55 @@
 @section('main_menu', 'Search')
 @section('active_menu', 'Search')
 @section('content')
-    {{-- <form action="" method="POST" id="" autocomplete="off">
-        @csrf
-        <div class="container-fluid dashboard-default-sec">
-            <div class="card">
-                <div class="search-box">
-                    <select name="" id="" class="form-control">
-                        <option value="">Select Document Type</option>
-                        @foreach ($doc_types as $doc_type)
-                            <option value="{{ $doc_type->id }}">{{ $doc_type->name }}</option>
-                        @endforeach
 
-                    </select>
-                    <input type="text" placeholder="Enter Reference" class="form-control">
-                    <button type="button" class="btn btn-primary">Search</button>
-                </div>
-            </div>
-        </div>
-    </form> --}}
 
     <div class="card">
         <div class="card-body">
-            <form action="" method=" " id="searchItemParametersButton" autocomplete="off">
-                @csrf
-                <div class="row p-3">
-                    <div class="col-md-2 text-center mt-2">
-                        <h6>Select Document Type: </h6>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-2">
-                            <select class="form-control select2 item-type-id" id="docTypeId" name="doc-type-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select Document Type</option>
-                                @foreach ($doc_types as $doc_type)
-                                    <option value="{{ $doc_type->doc_serial }}">{{ $doc_type->name }}</option>
-                                @endforeach
-                            </select>
+            <div>
+                <form action="" method=" " id="searchItemParametersButton" autocomplete="off">
+                    @csrf
+                    <div class="row p-3">
+                        <div class="col-md-2 text-center mt-2">
+                            <h6>Select Document Type: </h6>
                         </div>
-                        <span class="text-danger error-text item-type-id-error"></span>
+                        <div class="col-md-3">
+                            <div class="mb-2">
+                                <select class="form-control select2 item-type-id" id="docTypeId" name="doc-type-id"
+                                    style="width: 100% !important;">
+                                    <option value="" selected disabled>Select Document Type</option>
+                                    @foreach ($doc_types as $doc_type)
+                                        <option value="{{ $doc_type->doc_serial }}">{{ $doc_type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span class="text-danger error-text item-type-id-error"></span>
+                        </div>
+                        <div class="col-md-2 text-center mt-2">
+                            <h6 class="card-title">Referance Number: </h6>
+                        </div>
+                        <div class="col-md-3">
+
+                            <input type="text" placeholder="Enter Reference" class="form-control" id="reference_number">
+                            <span class="text-danger error-text item-id-error"></span>
+                        </div>
+                        <!-- Search Button -->
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success-gradien search-button"
+                                id="searchButton">Search<span>
+                                    <i class="fa fa-search"></i></span></button>
+                        </div>
                     </div>
-                    <div class="col-md-2 text-center mt-2">
-                        <h6 class="card-title">Referance Number: </h6>
-                    </div>
-                    <div class="col-md-3">
-                        {{-- <div class="mb-2">
-                            <select class="form-control select2 item-id" id="itemId" name="item-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select an item</option>
-                               
-                            </select>
-                        </div> --}}
-                        <input type="text" placeholder="Enter Reference" class="form-control" id="reference_number">
-                        <span class="text-danger error-text item-id-error"></span>
-                    </div>
-                    <!-- Search Button -->
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-success-gradien search-button" id="searchButton">Search<span>
-                                <i class="fa fa-search"></i></span></button>
-                    </div>
+                </form>
+            </div>
+            <div class="details">
+                <div class="col-12 col-lg-6" id="indent_details">
+
                 </div>
-            </form>
-            {{-- <div class="row border p-3" style="background-color: honeydew;">
-                <div class="text-success searched-data">
-                    <div class="text-center">
-                        <h2>Searched Item Parameters will appear here.</h2>
-                    </div>
+                <div class="col-12 col-lg-6" id="track_details">
+
                 </div>
-            </div> --}}
+
+            </div>
         </div>
 
     </div>
@@ -109,7 +91,7 @@
 
                 $.ajax({
                     type: 'Post',
-                    url: '{{url('admin/search/view') }}',
+                    url: '{{ url('admin/search/view') }}',
                     data: {
                         'docTypeId': docTypeId,
                         'docReferenceNumber': docReferenceNumber,
@@ -126,9 +108,11 @@
                                     'You don\'t have that Permission',
                                     'Permission Denied');
                             } else {
-                                   console.log(response)
-                                 var  details = response.details;
-                                 var  doc_track_data = response.data;
+
+                                var details = response.details;
+                                var doc_track_data = response.data;
+                                $('#indent_details').html(indent_details(details))
+                                $('#track_details').html(track_data(doc_track_data))
                             }
                         }
                     },
@@ -144,5 +128,95 @@
 
 
         });
+
+        function indent_details(details) {
+            html = '';
+            html += `<table class="table table-bordered ">
+                            <tr>
+                                <th>Referance No</td>
+                                <td>${details.reference_no }</td>
+                            </tr>
+                            <tr>
+                                <th>Indent Number</td>
+                                <td>${details.indent_number}</td>
+                            </tr>
+                            <tr>
+                                <th>User Directorate</td>
+                                <td>${details.dte_managment_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Receive Date</td>
+                                <td>${details.indent_received_date }</td>
+                            </tr>
+
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>${details.item_type_name}</td>
+                            </tr>
+                            <tr>
+                                <th>Attribute</td>
+                                <td>${details.attribute}</td>
+                            </tr>
+                            <tr>
+                                <th>Additional Documents</td>
+                                <td>${details.additional_documents_name}</td>
+                            </tr>
+                            <tr>
+                                <th>Financial Year</td>
+                                <td>${details.fin_year_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Nomenclature</td>
+                                <td>${details.nomenclature }</td>
+                            </tr>
+                            <tr>
+                                <th>Make</td>
+                                <td>${ details.make }</td>
+                            </tr>
+                            <tr>
+                                <th>Model</td>
+                                <td>${ details.model }</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Origin</td>
+                                <td>${ details.country_of_origin }</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Assembly</td>
+                                <td>${ details.country_of_assembly }</td>
+                            </tr>
+
+                        </table>`
+
+            return html;
+
+        }
+
+        function track_data(data) {
+            var html = ''
+            html += `<table class="table ">
+                            <thead>
+                                <tr>
+                                    <th>Sender</th>
+                                    <th></th>
+                                    <th>Receiver</th>
+                                    <th>Forwarded Date Time</th>
+                                </tr>
+                            </thead>`
+
+
+            if (data !== null)
+                $.each(data, function(index, value) {
+                    `<tr>
+                        <td> ${ value.sender_designation_name } </td>
+                         <td> < i class = "fa fa-arrow-right text-success" > </i></td >
+                        <td> ${value.receiver_designation_name } </td>
+                        <td>  </td>
+                    </tr>`
+                });
+
+                `</table>`
+
+        }
     </script>
 @endpush
