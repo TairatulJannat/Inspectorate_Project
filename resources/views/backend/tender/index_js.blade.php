@@ -5,53 +5,112 @@
 
 
     // Start:: All Data
-    // $(function() {
-    //     var table = $('.yajra-datatable').DataTable({
-    //         searching: true,
-    //         "order": [
-    //             [1, 'desc']
-    //         ],
-    //         "bFilter": false,
-    //         "columnDefs": [{
-    //             "className": "dt-center",
-    //             "targets": "_all"
-    //         }],
-    //         "bDestroy": true,
-    //         processing: true,
-    //         serverSide: true,
-    //         "language": {
-    //             processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
-    //         },
-    //         drawCallback: function(settings) {
-    //             var api = this.api();
-    //             $('#total_data').html(api.ajax.json().recordsTotal);
-    //         },
-    //         ajax: {
+    $(function() {
+        var table = $('.yajra-datatable').DataTable({
+            searching: true,
+            "order": [
+                [1, 'desc']
+            ],
+            "bFilter": false,
+            "columnDefs": [{
+                "className": "dt-center",
+                "targets": "_all"
+            }],
+            "bDestroy": true,
+            processing: true,
+            serverSide: true,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
+            },
+            drawCallback: function(settings) {
+                var api = this.api();
+                $('#total_data').html(api.ajax.json().recordsTotal);
+            },
+            ajax: {
 
-    //             url: " ",
-    //             type: 'GET',
-    //             data: function(d) {
-    //                 d._token = '{{ csrf_token() }}'
-    //             }
-    //         },
-    //         columns: [{
-    //                 data: 'DT_RowIndex',
-    //                 name: 'DT_RowIndex',
-    //                 searchable: false
-    //             },
+                url: "{{ url('admin/tender/alldata') }}",
+                type: 'GET',
+                data: function(d) {
+                    d._token = '{{ csrf_token() }}'
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    searchable: false
+                },
+                {
+                    data: 'reference_no',
+                    name: 'reference_no',
+                    orderable: false
+                },
+                {
+                    data: 'fin_years_name',
+                    name: 'fin_year_id',
+                    orderable: false
+                },
+
+                {
+                    data: 'item_type_name',
+                    name: 'item_type_id',
+                    orderable: false
+                },
+                {
+                    data: 'dte_managment_name',
+                    name: 'sender',
+                    orderable: false
+                },
+
+                {
+                    data: 'receive_date',
+                    name: 'receive_date',
+                    orderable: false
+                },
+                {
+                    data: 'section_name',
+                    name: 'section_name',
+                    orderable: false
+                },
+                {
+                    data: 'remark',
+                    name: 'remark',
+                    orderable: false
+                },
+
+                {
+                    data: 'status',
+                    name: 'status',
+                    orderable: false
+                },
+
+                {
+                    data: 'tender_date',
+                    name: 'tender_date',
+                    orderable: false
+                },
+                {
+                    data: 'opening_date',
+                    name: 'opening_date',
+                    orderable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: true
+                },
                 
 
-    //         ],
-    //         dom: 'lBfrtip',
-    //         buttons: [
-    //             'excel', 'csv', 'pdf', 'copy'
-    //         ],
-    //     });
-    //     $('#search_form').on('submit', function(event) {
-    //         event.preventDefault();
-    //         table.draw(true);
-    //     });
-    // });
+            ],
+            dom: 'lBfrtip',
+            buttons: [
+                'excel', 'csv', 'pdf', 'copy'
+            ],
+        });
+        $('#search_form').on('submit', function(event) {
+            event.preventDefault();
+            table.draw(true);
+        });
+    });
     // End:: All Data
 
     // Start:: save information

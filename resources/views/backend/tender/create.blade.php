@@ -52,25 +52,26 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="spec_type">Spec. Type</label>
-                                <select class="form-control" id="spec_type" name="spec_type">
+                                <label for="fin_year_id">Financial Year </label>
 
-                                    <option value="">Please Select </option>
-                                    <option value="1">Prelim Spec </option>
-                                    <option value="2"> General Spec</option>
+                                <select class="form-control" id="fin_year_id" name="fin_year_id">
 
+                                    <option value="">Please Select Year </option>
+                                    @foreach ($fin_years as $fin_year)
+                                        <option value={{ $fin_year->id }}>{{ $fin_year->year }} </option>
+                                    @endforeach
 
                                 </select>
-                                <span id="error_spec_type" class="text-danger error_field"></span>
+
+                                <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="spec_received_date">Spec. Received Date</label>
-                                <input type="date" class="form-control" id="spec_received_date"
-                                    name="spec_received_date">
-                                <span id="error_spec_received_date" class="text-danger error_field"></span>
+                                <label for="receive_date">Tender Received Date</label>
+                                <input type="date" class="form-control" id="receive_date"
+                                    name="receive_date">
+                                <span id="error_receive_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -96,6 +97,7 @@
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="tender_number">Tender Number</label>
@@ -105,16 +107,12 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="additional_documents">Aditional Document</label>
-                                <select class="form-control " id="additional_documents" name="additional_documents">
-
+                                <label for="additional_documents">Additional Documents</label>
+                                <select class="form-control select2" id="additional_documents" name="additional_documents[]" multiple>
                                     <option value="">Please Select</option>
-
-                                    @foreach ($additional_documnets as $additional_documnet)
-                                        <option value="{{ $additional_documnet->id }}">{{ $additional_documnet->name }}
-                                        </option>
+                                    @foreach ($additional_documents as $additional_document)
+                                        <option value="{{ $additional_document->id }}">{{ $additional_document->name }}</option>
                                     @endforeach
-
                                 </select>
                                 <span id="error_additional_documents" class="text-danger error_field"></span>
                             </div>
@@ -199,6 +197,8 @@
     <script>
       
         $(document).ready(function() {
+    
+        $('.select2').select2();
 
             $("#item_type_id").off('change').on('change', function() {
 
@@ -225,5 +225,8 @@
                 }
             });
         });
+
+
+        
     </script>
 @endpush

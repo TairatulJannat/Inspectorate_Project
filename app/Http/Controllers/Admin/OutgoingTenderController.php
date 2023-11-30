@@ -4,36 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
+use Illuminate\Http\Request;
 use App\Models\AdminSection;
-use App\Models\DocType;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\Dte_managment;
-use App\Models\FinancialYear;
-use App\Models\Item_type;
-use App\Models\Items;
-use App\Models\PrelimGeneral;
-use App\Models\Section;
 use App\Models\Tender;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class TenderController extends Controller
+class OutgoingTenderController extends Controller
 {
     //
-
-    public function index()
+    public function outgoing()
     {
-
-        return view('backend.tender.index');
+        return view('backend.tender.outgoing');
     }
 
     public function all_data(Request $request)
     {
-
-
+        // dd($request->all());
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
@@ -43,45 +33,37 @@ class TenderController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
 
+
+
             if (Auth::user()->id == 92) {
-                $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
-                    ->leftJoin('fin_years', 'tenders.fin_year_id', '=', 'fin_years.id')
-                    ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
-                    ->where('tenders.status', 0)
-                    ->select('tenders.*', 'item_types.name as item_type_name', 'fin_years.year as fin_years_name', 'tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->get();
-
-                
-            } elseif ($desig_position->id == 1) {
-
                 $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
                     ->leftJoin('fin_years', 'tenders.fin_year_id', '=', 'fin_years.id')
                     ->select('tenders.*', 'item_types.name as item_type_name','fin_years.year as fin_years_name', 'tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('tenders.status', 0)
+                    ->where('tenders.status', '=', 1)
                     ->get();
-
             } else {
 
                 $tenderIds = Tender::leftJoin('document_tracks', 'tenders.id', '=', 'document_tracks.doc_ref_id')
-                    ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('tenders.insp_id', $insp_id)
-                    ->where('tenders.status' , 0)
-                    ->whereIn('tenders.sec_id', $section_ids)->pluck('tenders.id', 'tenders.id')->toArray();
+                ->where('document_tracks.reciever_desig_id', $designation_id)
+                ->where('tenders.insp_id', $insp_id)
+                ->where('tenders.status', '=', 1)
+                ->whereIn('tenders.sec_id', $section_ids)->pluck('tenders.id', 'tenders.id')->toArray();
 
                 $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
                     ->leftJoin('fin_years', 'tenders.fin_year_id', '=', 'fin_years.id')
-                    ->select('tenders.*', 'item_types.name as item_type_name', 'fin_years.year as fin_years_name','tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('tenders.*', 'item_types.name as item_type_name','fin_years.year as fin_years_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('tenders.insp_id', $insp_id)
+                    ->whereIn('tenders.sec_id', $section_ids)
                     ->whereIn('tenders.id', $tenderIds)
-                    ->where('tenders.status', 0)
+                    ->where('tenders.status', '=', 1)
                     ->get();
+            
+                // $designation_ids = AdminSection::where('admin_id', $admin_id)->select('desig_id')->first();
 
-
-                //......Start for DataTable Forward and Details btn change
                 $tenderId = [];
                 if ($query) {
                     foreach ($query as $tender) {
@@ -100,7 +82,6 @@ class TenderController extends Controller
                 if (!$document_tracks_receiver_id) {
                     $query = Tender::where('id', 'no data')->get();
                 }
-                  //......End for showing data for receiver designation
             }
 
             // $query->orderBy('id', 'asc');
@@ -117,85 +98,19 @@ class TenderController extends Controller
                         return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
                     }
                     if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
+                        return '<button class="btn btn-green btn-sm">Delivered</button>';
                     }
                 })
-                ->addColumn('action', function ($data)  {
+                ->addColumn('action', function ($data) {
 
-
-                    if ($data->status == '2') {
-                        $actionBtn = '<div class="btn-group" role="group">
-                       
-                        <a href="" class="edit btn btn-success btn-sm" disable>Completed</a>';
-                    } else {
-
-                        $actionBtn = '<div class="btn-group" role="group">
-                        
-                        <a href="' . url('admin/tender/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
-                        </div>';
-                    }
-
-
+                    $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/outgoingtender/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Vetted</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])
                 ->make(true);
         }
-    }
 
-    public function create()
-    {
-        $admin_id = Auth::user()->id;
-        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $sections = Section::whereIn('id', $section_ids)->get();
-
-        $dte_managments = Dte_managment::where('status', 1)->get();
-        $additional_documents = Additional_document::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->get();
-        $fin_years = FinancialYear::all();
-        // dd( $fin_years);
-        return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections','fin_years'));
-    }
-
-    public function store(Request $request)
-    {
- 
-        // $this->validate($request, [
-        //     'sender' => 'required',
-        //     'admin_section' => 'required',
-        //     'reference_no' => 'required',
-        //     'spec_type' => 'required',
-        //     'additional_documents' => 'required',
-        //     'item_type_id' => 'required',
-        //     'spec_received_date' => 'required',
-
-        // ]);
-        $insp_id = Auth::user()->inspectorate_id;
-        $sec_id = $request->admin_section;
-
-        $data = new Tender();
-        $data->insp_id = $insp_id;
-        $data->sec_id = $sec_id;
-        $data->sender = $request->sender;
-        $data->reference_no = $request->reference_no;
-        $data->tender_number = $request->tender_number;
-        $data->receive_date = $request->receive_date;
-        $data->additional_documents = json_encode($request->additional_documents);
-        $data->item_id = $request->item_id;
-        $data->item_type_id = $request->item_type_id;
-        $data->fin_year_id = $request->fin_year_id;
-        $data->qty = $request->qty;
-        $data->tender_date = $request->tender_date;
-        $data->opening_date = $request->opening_date;
-        $data->received_by = Auth::user()->id;
-        $data->remark = $request->remark;
-        $data->status = 0;
-        $data->created_at = Carbon::now()->format('Y-m-d');
-        $data->updated_at = Carbon::now()->format('Y-m-d');;
-
-        $data->save();
-
-        return response()->json(['success' => 'Done']);
     }
 
     public function details($id)
@@ -204,10 +119,12 @@ class TenderController extends Controller
 
         $details = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
-            // ->leftJoin('additional_documents', 'tenders.additional_documents', '=', 'additional_documents.id')
-            ->select('tenders.*', 'item_types.name as item_type_name', 'tenders.*', 'dte_managments.name as dte_managment_name')
+            ->leftJoin('items', 'tenders.item_id', '=', 'items.id')
+            ->select('tenders.*', 'item_types.name as item_type_name','items.name as item_name','dte_managments.name as dte_managment_name')
             ->where('tenders.id', $id)
+            ->where('tenders.status', 1)
             ->first();
+
 
         $details->additional_documents = json_decode($details->additional_documents, true);
 
@@ -219,8 +136,7 @@ class TenderController extends Controller
            array_push($additional_documents_names, $additional_names);
             
         }
-     
-        
+
         $designations = Designation::all();
 
         $admin_id = Auth::user()->id;
@@ -228,41 +144,43 @@ class TenderController extends Controller
 
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations', 'document_tracks.sender_designation_id', '=', 'designations.id')
-            ->where('track_status', 1)
+            ->where('track_status', 2)
             ->select('document_tracks.*', 'designations.name as designations_name')->get();
-            
 
         $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
         if ($auth_designation_id) {
+
             $desig_id = $auth_designation_id->desig_id;
         }
-// dd($auth_designation_id);
-        //Start blade notes section....
-        $notes = '';
 
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();  
-             
-// dd($document_tracks_notes);
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
+            //Start blade notes section....
+            $notes = '';
 
-        //End blade notes section....
+            if ($document_tracks->isNotEmpty()) {
+                $notes = $document_tracks->last();
+            }
+    
+            //End blade notes section....
+    
 
+        // delay cause for sec IC start
 
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        return view('backend.tender.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'additional_documents_names', 'auth_designation_id','notes'));
+        // delay cause for sec IC end
+
+        return view('backend.tender.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position','additional_documents_names','auth_designation_id','notes'));
     }
 
-
-    public function tenderTracking(Request $request)
+    public function OutgoingTenderTracking(Request $request)
     {
-        // dd($request->id);
+        // dd($request->all());
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $doc_type_id = 4;
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
@@ -270,20 +188,32 @@ class TenderController extends Controller
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-
+        // dd( $desig_position);
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
-        $data->doc_type_id = 4; //doc serial number
+        $data->doc_type_id = 4;
         $data->doc_ref_id = $doc_ref_id;
-        $data->track_status = 1;
+        $data->track_status = 2;
+
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
         $data->created_at = Carbon::now();
         $data->updated_at = Carbon::now();
+        //  dd($data);
         $data->save();
 
+        // ----delay_cause start here
+
+        $prelimgen = Tender::find($doc_ref_id);
+        $prelimgen->delay_cause = $request->delay_cause;
+        $prelimgen->delivery_date = $request->delivery_date;
+        $prelimgen->delivery_by = Auth::user()->id;
+        $prelimgen->save();
+
+
+        // ----delay_cause end here
 
         if ($desig_position->position == 7) {
 
@@ -291,13 +221,13 @@ class TenderController extends Controller
 
             if ($data) {
 
-                $data->status = 1;
+                $data->status = 2;
                 $data->save();
 
                 $value = new DocumentTrack();
                 $value->ins_id = $ins_id;
                 $value->section_id = $section_id;
-                $value->doc_type_id = 4; //doc serial number
+                $value->doc_type_id = 4;
                 $value->doc_ref_id = $doc_ref_id;
                 $value->track_status = 2;
                 $value->reciever_desig_id = $reciever_desig_id;
