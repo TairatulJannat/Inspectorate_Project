@@ -29,7 +29,7 @@
             ajax: {
 
                 url: "{{ url('admin/indent_approved/all_data') }}",
-                type: 'GET',
+                type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
                 }

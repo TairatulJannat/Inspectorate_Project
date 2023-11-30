@@ -16,7 +16,7 @@ class OutgoingIndentController extends Controller
 {
     public function outgoing()
     {
-        return view('backend.indent.outgoing');
+        return view('backend.indent.indent_outgoing.outgoing');
     }
     public function all_data(Request $request)
     {
@@ -37,7 +37,7 @@ class OutgoingIndentController extends Controller
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('indents.status', '=', 1)
                     ->get();
-            }  else {
+            } else {
                 $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('indents.insp_id', $insp_id)
@@ -88,6 +88,12 @@ class OutgoingIndentController extends Controller
                     }
                     if ($data->status == '2') {
                         return '<button class="btn btn-success btn-sm">Delivered</button>';
+                    }
+                    if ($data->status == '3') {
+                        return '<button class="btn btn-info btn-sm">Approved</button>';
+                    }
+                    if ($data->status == '4') {
+                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
@@ -155,13 +161,17 @@ class OutgoingIndentController extends Controller
         //Start blade notes section....
         $notes = '';
 
-        if ($document_tracks->isNotEmpty()) {
-            $notes = $document_tracks->last();
+        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
+            ->where('track_status', 1)
+            ->where('reciever_desig_id', $desig_id)->get();
+
+        if ($document_tracks_notes->isNotEmpty()) {
+            $notes = $document_tracks_notes;
         }
 
         //End blade notes section....
 
-        return view('backend.indent.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id'));
+        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id'));
     }
 
     public function OutgoingIndentTracking(Request $request)
@@ -172,6 +182,7 @@ class OutgoingIndentController extends Controller
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 3; // 3 for doc type indent from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
+        $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = $section_ids[0];
@@ -184,6 +195,7 @@ class OutgoingIndentController extends Controller
         $data->section_id = $section_id;
         $data->doc_type_id = $doc_type_id;
         $data->doc_ref_id = $doc_ref_id;
+        $data->doc_reference_number = $doc_reference_number;
         $data->track_status = 2;
         $data->remarks = $remarks;
 
@@ -194,14 +206,13 @@ class OutgoingIndentController extends Controller
         $data->save();
 
         // ----delay_cause start here
-
-        $prelimgen = Indent::find($doc_ref_id);
-        $prelimgen->delay_cause = $request->delay_cause;
-        $prelimgen->delivery_date = $request->delivery_date;
-        $prelimgen->delivery_by = Auth::user()->id;
-        $prelimgen->save();
-
-
+        if ($desig_position->position == 3) {
+            $indent_data = Indent::find($doc_ref_id);
+            $indent_data->delay_cause = $request->delay_cause;
+            $indent_data->delivery_date = $request->delivery_date;
+            $indent_data->delivery_by = Auth::user()->id;
+            $indent_data->save();
+        }
         // ----delay_cause end here
 
         if ($desig_position->position == 7) {
@@ -210,7 +221,7 @@ class OutgoingIndentController extends Controller
 
             if ($data) {
 
-                $data->status = 2;
+                $data->status = 4;
                 $data->save();
 
                 $value = new DocumentTrack();
@@ -218,9 +229,10 @@ class OutgoingIndentController extends Controller
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                $value->track_status = 2;
+                $value->doc_reference_number = $doc_reference_number;
+                $value->track_status = 4;
                 $value->remarks = $remarks;
-                $value->reciever_desig_id = $reciever_desig_id;
+                $value->reciever_desig_id = 3;
                 $value->sender_designation_id = $sender_designation_id;
                 $value->created_at = Carbon::now();
                 $value->updated_at = Carbon::now();
