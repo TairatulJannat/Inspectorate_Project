@@ -8,8 +8,10 @@ use App\Models\ParameterGroup;
 use App\Models\AssignParameterValue;
 use App\Models\Items;
 use App\Models\Item_type;
+use App\Models\ParameterLog;
 use Illuminate\Support\Facades\DB;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AssignParameterValueController extends Controller
 {
@@ -209,7 +211,17 @@ class AssignParameterValueController extends Controller
             $parameterValue->parameter_name = $validatedData['parameter_name'];
             $parameterValue->parameter_value = $validatedData['parameter_value'];
 
-            if ($parameterValue->update()) {
+            $parameterLog = new ParameterLog();
+
+            $parameterLog->item_type_id = $request->item_type_id;
+            $parameterLog->item_id = $request->item_id;
+            $parameterLog->parameter_group_id = $request->group_id;
+            $parameterLog->parameter_id = $request->id;
+            $parameterLog->parameter_name = $request->parameter_name;
+            $parameterLog->user_id = Auth::user()->id;
+            $parameterLog->action_type = "Update";
+
+            if ($parameterValue->update() && $parameterLog->save()) {
                 return response()->json([
                     'isSuccess' => true,
                     'message' => 'Parameters updated successfully!'
@@ -238,8 +250,18 @@ class AssignParameterValueController extends Controller
 
         $parameterValue = AssignParameterValue::findOrFail($id);
 
+        $parameterLog = new ParameterLog();
+
+        $parameterLog->item_type_id = $request->item_type_id;
+        $parameterLog->item_id = $request->item_id;
+        $parameterLog->parameter_group_id = $request->group_id;
+        $parameterLog->parameter_id = $request->id;
+        $parameterLog->parameter_name = $request->parameter_name;
+        $parameterLog->user_id = Auth::user()->id;
+        $parameterLog->action_type = "Delete";
+
         if ($parameterValue) {
-            if ($parameterValue->delete()) {
+            if ($parameterValue->delete() && $parameterLog->save()) {
                 return response()->json([
                     'isSuccess' => true,
                     'message' => 'Parameters deleted successfully!'

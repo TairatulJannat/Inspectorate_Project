@@ -3,7 +3,7 @@
 
     $(document).ready(function() {
         $('.select2').select2();
-        toastr.options.preventDuplicates = true;
+        // toastr.options.preventDuplicates = true;
 
         $('#searchItemParametersButton').submit(function(e) {
             e.preventDefault();
@@ -233,13 +233,14 @@
             $('#saveChanges').click(function() {
                 var saveChangesButton = $("#saveChanges");
                 var originalsaveChangesButtonHtml = saveChangesButton.html();
-
-                saveChangesButton.html(
-                    '<span class="fw-bold">Saving <i class="fa fa-spinner fa-spin"></i></span>');
-
+                var itemTypeId = $('.item-type-id').val();
+                var itemId = $('.item-id').val();
                 var groupId = $('#editParameterGroupId').val();
                 var hasEmptyFields = false;
                 var rowsToUpdate = [];
+
+                saveChangesButton.html(
+                    '<span class="fw-bold">Saving <i class="fa fa-spinner fa-spin"></i></span>');
 
                 $('.modal-body .dynamic-fields .row').each(function() {
                     var editedData = {
@@ -284,7 +285,9 @@
                     if (rowsToUpdate.length > 0) {
                         for (var i = 0; i < rowsToUpdate.length; i++) {
                             var rowToUpdate = rowsToUpdate[i];
-                            updateRowInDatabase(rowToUpdate.rowId, rowToUpdate.parameter_name,
+                            updateRowInDatabase(itemTypeId, itemId, groupId, rowToUpdate.rowId,
+                                rowToUpdate
+                                .parameter_name,
                                 rowToUpdate.parameter_value);
                         }
                     } else {
@@ -294,7 +297,7 @@
                     // Delete Row From Database
                     for (var id in initialData) {
                         if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
-                            deleteRowFromDatabase(id);
+                            deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id].parameter_name);
                         }
                     }
 
@@ -306,19 +309,19 @@
                         saveNewRowToDatabase(groupId, parameterName, parameterValue);
                     });
                 }
-
                 saveChangesButton.html(originalsaveChangesButtonHtml);
-                var itemTypeId = $('.item-type-id').val();
-                var itemId = $('.item-id').val();
                 performSearchWithParams(itemTypeId, itemId);
             });
 
-            function updateRowInDatabase(rowId, parameterName, parameterValue) {
+            function updateRowInDatabase(itemTypeId, itemId, groupId, rowId, parameterName, parameterValue) {
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/update') }}',
                     method: 'post',
                     data: {
                         id: rowId,
+                        item_type_id: itemTypeId,
+                        item_id: itemId,
+                        group_id: groupId,
                         parameter_name: parameterName,
                         parameter_value: parameterValue,
                         _token: '{{ csrf_token() }}'
@@ -338,12 +341,16 @@
                 });
             }
 
-            function deleteRowFromDatabase(rowId) {
+            function deleteRowFromDatabase(itemTypeId, itemId, groupId, id, parameterName) {
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/destroy') }}',
                     method: 'post',
                     data: {
-                        id: rowId,
+                        id: id,
+                        item_type_id: itemTypeId,
+                        item_id: itemId,
+                        group_id: groupId,
+                        parameter_name: parameterName,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
