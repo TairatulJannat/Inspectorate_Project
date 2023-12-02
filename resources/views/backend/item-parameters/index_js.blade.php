@@ -87,6 +87,7 @@
             }
 
             $('.edit-group').click(function() {
+                $('.modal-body .dynamic-fields').empty();
                 var groupId = $(this).data('group-id');
                 var groupName = $(this).data('group-name');
                 $.ajax({
@@ -97,35 +98,16 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
+                        $('#editGroupName').text(groupName);
+                        $('#editParameterGroupId').val(groupId);
+
                         if (response.length > 0) {
-                            var groupData = response;
-
-                            $('#editGroupName').text(groupName);
-                            $('#editParameterGroupId').val(groupId);
-                            $('.modal-body .dynamic-fields').empty();
-
-                            var labelPrinted = false;
-                            groupData.forEach(function(parameter) {
-
+                            response.forEach(function(parameter) {
                                 initialData[parameter.id] = {
                                     parameter_name: parameter.parameter_name,
                                     parameter_value: parameter.parameter_value,
                                     deleted: false
                                 };
-
-                                if (!labelPrinted) {
-                                    $('.modal-body .dynamic-fields').append(
-                                        '<div class="row mb-3">' +
-                                        '<div class="col-md-5">' +
-                                        '<label class="form-label">' +
-                                        'Parameter Name</label></div>' +
-                                        '<div class="col-md-5">' +
-                                        '<label class="form-label">' +
-                                        'Parameter Value</label></div>' +
-                                        '</div>'
-                                    );
-                                    labelPrinted = true;
-                                }
 
                                 var inputFields = $(
                                     '<div class="row mb-3" data-row-id="' +
@@ -149,8 +131,8 @@
                                 $('.modal-body .dynamic-fields').append(
                                     inputFields);
 
-                                $('.modal-body .dynamic-fields').on('click',
-                                    '.delete-row',
+                                $('.modal-body .dynamic-fields').off('click').on(
+                                    'click', '.delete-row',
                                     function() {
                                         var rowToRemove = $(this).closest(
                                             '.row');
@@ -169,32 +151,34 @@
                                         rowToRemove.remove();
                                     });
                             });
-
-                            $('#addNewInputFields').off('click').on('click', function() {
-                                var newInputFields = $(
-                                    '<div class="row mb-3" data-new-row="true">' +
-                                    '<div class="col-md-5">' +
-                                    '<input type="text" class="form-control" name="parameter_name[]" placeholder="Parameter Name">' +
-                                    '</div>' +
-                                    '<div class="col-md-5">' +
-                                    '<input type="text" class="form-control" name="parameter_value[]" placeholder="Parameter Value">' +
-                                    '</div>' +
-                                    '<div class="col-md-2">' +
-                                    '<button class="btn btn-danger-gradien btn-sm delete-row fa fa-trash-o" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">' +
-                                    '</button>' +
-                                    '</div>' +
-                                    '</div>');
-
-                                $('.modal-body .dynamic-fields').append(
-                                    newInputFields);
-
-                                $('.modal-body .dynamic-fields').on('click',
-                                    '.delete-row',
-                                    function() {
-                                        $(this).closest('.row').remove();
-                                    });
-                            });
+                        } else {
+                            console.log('No parameter assigned.');
                         }
+
+                        $('#addNewInputFields').off('click').on('click', function() {
+                            var newInputFields = $(
+                                '<div class="row mb-3" data-new-row="true">' +
+                                '<div class="col-md-5">' +
+                                '<input type="text" class="form-control" name="parameter_name[]">' +
+                                '</div>' +
+                                '<div class="col-md-5">' +
+                                '<input type="text" class="form-control" name="parameter_value[]">' +
+                                '</div>' +
+                                '<div class="col-md-2">' +
+                                '<button class="btn btn-danger-gradien btn-sm delete-new-row fa fa-trash-o" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">' +
+                                '</button>' +
+                                '</div>' +
+                                '</div>');
+
+                            $('.modal-body .dynamic-fields').append(
+                                newInputFields);
+
+                            $('.modal-body .dynamic-fields').on('click',
+                                '.delete-new-row',
+                                function() {
+                                    $(this).closest('.row').remove();
+                                });
+                        });
 
                         $('#editModal').modal('show');
                     },
@@ -205,50 +189,83 @@
             });
 
             $('#saveChanges').click(function() {
+                var saveChangesButton = $("#saveChanges");
+                var originalsaveChangesButtonHtml = saveChangesButton.html();
+
+                saveChangesButton.html(
+                    '<span class="fw-bold">Saving <i class="fa fa-spinner fa-spin"></i></span>');
+
                 var groupId = $('#editParameterGroupId').val();
                 var hasEmptyFields = false;
+                var rowsToUpdate = [];
 
                 $('.modal-body .dynamic-fields .row').each(function() {
-                    var rowId = $(this).data('row-id');
-
                     var editedData = {
                         parameter_name: $(this).find('[name="parameter_name[]"]').val(),
                         parameter_value: $(this).find('[name="parameter_value[]"]').val()
                     };
-
-                    // if (!editedData.parameter - name || !editedData.parameter - value) {
-                    //     hasEmptyFields = true;
-                    //     return false;
-                    // }
-
-                    if (
-                        initialData[rowId] &&
-                        (editedData.parameter_name !== initialData[rowId].parameter_name ||
-                            editedData.parameter_value !== initialData[rowId].parameter_value)
-                    ) {
-                        updateRowInDatabase(rowId, editedData.parameter_name, editedData
-                            .parameter_value);
+                    if (!editedData.parameter_name.trim() || !editedData.parameter_value
+                        .trim()) {
+                        hasEmptyFields = true;
+                        return false;
                     }
                 });
 
                 if (hasEmptyFields) {
-                    toastr.error('Please fill in all the fields.');
+                    toastr.error('Please fill in all the fields!');
+                    saveChangesButton.html(originalsaveChangesButtonHtml);
+
                     return;
-                }
+                } else {
+                    $('.modal-body .dynamic-fields .row').each(function() {
+                        var rowId = $(this).data('row-id');
 
-                for (var id in initialData) {
-                    if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
-                        deleteRowFromDatabase(id);
+                        var editedData = {
+                            parameter_name: $(this).find('[name="parameter_name[]"]').val(),
+                            parameter_value: $(this).find('[name="parameter_value[]"]')
+                                .val()
+                        };
+
+                        if ($(this).data('new-row') !== true && initialData[rowId] &&
+                            (editedData.parameter_name !== initialData[rowId].parameter_name ||
+                                editedData.parameter_value !== initialData[rowId]
+                                .parameter_value)) {
+                            rowsToUpdate.push({
+                                rowId: rowId,
+                                parameter_name: editedData.parameter_name,
+                                parameter_value: editedData.parameter_value
+                            });
+                        }
+                    });
+
+                    // Update Previous Row Into Database
+                    if (rowsToUpdate.length > 0) {
+                        for (var i = 0; i < rowsToUpdate.length; i++) {
+                            var rowToUpdate = rowsToUpdate[i];
+                            updateRowInDatabase(rowToUpdate.rowId, rowToUpdate.parameter_name,
+                                rowToUpdate.parameter_value);
+                        }
+                    } else {
+                        toastr.error('No changes have been done!');
                     }
+
+                    // Delete Row From Database
+                    for (var id in initialData) {
+                        if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
+                            deleteRowFromDatabase(id);
+                        }
+                    }
+
+                    // Add Newly Added Row Into Database
+                    var newDataRows = $('.modal-body .dynamic-fields .row[data-new-row="true"]');
+                    newDataRows.each(function() {
+                        var parameterName = $(this).find('[name="parameter_name[]"]').val();
+                        var parameterValue = $(this).find('[name="parameter_value[]"]').val();
+                        saveNewRowToDatabase(groupId, parameterName, parameterValue);
+                    });
                 }
 
-                // Collect data from dynamically added fields
-                var newDataRows = $('.modal-body .dynamic-fields .row[data-new-row="true"]');
-                newDataRows.each(function() {
-                    var parameterName = $(this).find('[name="parameter_name[]"]').val();
-                    var parameterValue = $(this).find('[name="parameter_value[]"]').val();
-                    saveNewRowToDatabase(groupId, parameterName, parameterValue);
-                });
+                saveChangesButton.html(originalsaveChangesButtonHtml);
             });
 
             function updateRowInDatabase(rowId, parameterName, parameterValue) {
@@ -267,6 +284,8 @@
                         } else if (response.isSuccess === true) {
                             toastr.success(response.message);
                         }
+
+                        $('#editModal').modal('hide');
                     },
                     error: function(error) {
                         toastr.error(error.responseText, error.statusText);
@@ -288,6 +307,8 @@
                         } else if (response.isSuccess === true) {
                             toastr.success(response.message);
                         }
+
+                        $('#editModal').modal('hide');
                     },
                     error: function(error) {
                         toastr.error(error.responseText, error.statusText);
@@ -311,6 +332,8 @@
                         } else if (response.isSuccess === true) {
                             toastr.success(response.message);
                         }
+
+                        $('#editModal').modal('hide');
                     },
                     error: function(error) {
                         toastr.error(error.responseText, error.statusText);

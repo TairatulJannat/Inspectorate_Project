@@ -7,6 +7,18 @@
                 <input type="hidden" id="editParameterGroupId">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="row p-2 mt-2 text-center">
+                <div class="col-md-5">
+                    <label class="form-label">
+                        Parameter Name
+                    </label>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">
+                        Parameter Value
+                    </label>
+                </div>
+            </div>
             <div class="modal-body">
                 <!-- Container for dynamically generated input fields -->
                 <div class="dynamic-fields"></div>
