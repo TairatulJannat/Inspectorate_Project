@@ -8,6 +8,10 @@
         $('#searchItemParametersButton').submit(function(e) {
             e.preventDefault();
             var form = this;
+            performSearch(form);
+        });
+
+        function performSearch(form) {
             var searchButton = $(".search-button");
             var originalSearchButtonHtml = searchButton.html();
 
@@ -33,8 +37,8 @@
                         toastr.error(response.message);
                     } else if (response.isSuccess === true) {
                         toastr.success(response.message);
-                        renderTreeView(response.treeViewData, response.itemTypeName,
-                            response.itemName);
+                        renderTreeView(response.treeViewData, response.itemTypeName, response
+                            .itemName);
                     }
 
                     searchButton.html(originalSearchButtonHtml);
@@ -44,7 +48,45 @@
                     toastr.error('An error occurred while processing the request.');
                 },
             });
-        });
+        }
+
+        function performSearchWithParams(itemTypeId, itemId) {
+            var searchButton = $(".search-button");
+            var originalSearchButtonHtml = searchButton.html();
+
+            searchButton.html(
+                '<span class="fw-bold">Loading <i class="fa fa-spinner fa-spin"></i></span>');
+
+            $.ajax({
+                url: '{{ url('admin/assign-parameter-value/show') }}',
+                method: 'POST',
+                data: {
+                    'item-type-id': itemTypeId,
+                    'item-id': itemId,
+                    '_token': '{{ csrf_token() }}'
+                },
+                dataType: "JSON",
+                cache: false,
+                beforeSend: function() {
+                    // Clear any previous error messages here
+                },
+                success: function(response) {
+                    if (response.isSuccess === false) {
+                        toastr.error(response.message);
+                    } else if (response.isSuccess === true) {
+                        toastr.success(response.message);
+                        renderTreeView(response.treeViewData, response.itemTypeName, response
+                            .itemName);
+                    }
+
+                    searchButton.html(originalSearchButtonHtml);
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                    toastr.error('An error occurred while processing the request.');
+                },
+            });
+        }
 
         function renderTreeView(treeViewData, itemTypeName, itemName) {
             var searchedDataContainer = $(".searched-data");
@@ -266,6 +308,9 @@
                 }
 
                 saveChangesButton.html(originalsaveChangesButtonHtml);
+                var itemTypeId = $('.item-type-id').val();
+                var itemId = $('.item-id').val();
+                performSearchWithParams(itemTypeId, itemId);
             });
 
             function updateRowInDatabase(rowId, parameterName, parameterValue) {
