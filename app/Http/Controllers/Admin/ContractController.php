@@ -9,6 +9,7 @@ use App\Models\Contract;
 use App\Models\Supplier;
 use Validator;
 
+
 class ContractController extends Controller
 {
     /**
@@ -16,7 +17,9 @@ class ContractController extends Controller
      */
     public function index()
     {
+
         return view('backend.contracts.index');
+
     }
 
     /**
@@ -30,6 +33,7 @@ class ContractController extends Controller
             return back()->withError('Failed to retrieve from Database.');
         }
         return view('backend.contracts.create', compact('suppliers'));
+
     }
 
     /**
@@ -37,6 +41,7 @@ class ContractController extends Controller
      */
     public function store(Request $request)
     {
+
         $customMessages = [
             'ltr-no-of-contract.required' => 'The letter No. of Contract field is required.',
             'ltr-date-contract.required' => 'The letter Date Contract field is required.',
@@ -117,6 +122,7 @@ class ContractController extends Controller
                 'error' => $validator->errors()->toArray()
             ], 200);
         }
+
     }
 
     /**

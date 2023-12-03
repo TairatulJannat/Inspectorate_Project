@@ -96,7 +96,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-primary btn-block" type="submit">Login</button>
+                                    <button class="btn btn-success btn-block" type="submit">Login</button>
                                 </div>
 
 
@@ -109,17 +109,17 @@
 
                                 <div class="form-group">
                                     <ul class="login-social">
-                                        <li style="margin-top: 20px">
+                                        <li style="margin-top: 25px">
                                             <img class="justify-content-center"
-                                                src="{{ asset('assets/backend/images/logo/army_logo.png') }}"
-                                                alt="" style="height:100px;">
+                                                src="{{ asset('assets/backend/images/logo/logo_til.jpeg') }}"
+                                                alt="" style="height:70px;">
                                         </li>
                                     </ul>
                                 </div>
 
 
-                                <div class="pt-4">
-                                    <p>Developed by <a href="https://www.tilbd.net/" target="_blank">Trust Innovation
+                                <div class="">
+                                    <p>Developed by <a href="https://www.tilbd.net/" target="_blank" style="color: #3B76AA">Trust Innovation
                                             Limited</a></p>
                                 </div>
 

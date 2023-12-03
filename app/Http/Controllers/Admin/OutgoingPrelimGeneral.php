@@ -29,9 +29,6 @@ class OutgoingPrelimGeneral extends Controller
             $admin_id = Auth::user()->id;
             $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
-
-
-
             if (Auth::user()->id == 92) {
                 $query = PrelimGeneral::leftJoin('item_types', 'prelim_gen_specs.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'prelim_gen_specs.sender', '=', 'dte_managments.id')
@@ -77,19 +74,19 @@ class OutgoingPrelimGeneral extends Controller
 
                 ->addColumn('status', function ($data) {
                     if ($data->status == '0') {
-                        return '<button class="btn btn-success btn-sm">New</button>';
+                        return '<button class="btn btn-primary btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-danger  btn-sm">Under Vatted</button>';
+                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
                     }
                     if ($data->status == '2') {
-                        return '<button class="btn btn-danger btn-sm">Delivered</button>';
+                        return '<button class="btn btn-green btn-sm">Delivered</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
 
                     $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/outgoing_prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-lg">Vatted</a>';
+                            <a href="' . url('admin/outgoing_prelimgeneral/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])

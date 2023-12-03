@@ -54,7 +54,7 @@
         }
 
         .delivery-btn:hover {
-            background-color: #ff8533 !important;
+            background-color: #02572f !important;
             /* Lighter orange on hover */
         }
     </style>

@@ -1736,8 +1736,8 @@ a:hover {
 /*======= Font-color css end  ======= */
 /*======= Button-color css starts  ======= */
 .btn-primary {
-    background-color: #24695c !important;
-    border-color: #24695c !important;
+    background-color: #0099cc !important;
+    border-color: #0099cc !important;
 }
 
 .btn-primary.disabled,
@@ -1799,10 +1799,7 @@ a:hover {
     box-shadow: 0 0 0 0.2rem #edabb1;
 }
 
-.btn-info {
-    background-color: #717171 !important;
-    border-color: #717171 !important;
-}
+
 
 .btn-info.disabled,
 .btn-info:disabled {
@@ -6015,7 +6012,7 @@ table tbody .border-bottom-warning td {
 }
 
 .page-main-header .main-header-right .left-menu-header {
-    padding: 24px 40px;
+    padding: 0 20px;
 }
 
 .page-main-header .main-header-right .left-menu-header ul li .search-form .search-bg {
@@ -7347,7 +7344,7 @@ table tbody .border-bottom-warning td {
 
 .page-wrapper.compact-wrapper .page-body-wrapper header.main-nav .main-navbar .nav-menu {
     border-radius: 0;
-   
+
     left: -300px;
     z-index: 99;
     -webkit-transition: color 1s ease;
@@ -8226,9 +8223,7 @@ table tbody .border-bottom-warning td {
     border-color: #c8ac1d;
 }
 
-.btn-info {
-    color: #fff;
-}
+
 
 .input-air-primary {
     -webkit-box-shadow: 0 3px 5px 1px rgba(88, 103, 221, 0.15) !important;

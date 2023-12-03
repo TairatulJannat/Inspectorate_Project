@@ -29,7 +29,15 @@ $currentControllerName = Request::segment(2);
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    @if (count(menu_check('Search')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Search' ? 'active' : '' }}"
+                                href="{{ route('admin.search') }}"><i data-feather="book-open"
+                                    class="text-light"></i><span>Search</span></a>
 
+                        </li>
+
+                    @endif
                     @if (count(menu_check('Indent')) !== 0)
                         <li class="dropdown"><a
                                 class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
@@ -41,24 +49,35 @@ $currentControllerName = Request::segment(2);
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Indent</a>
                                     </li>
                                 @endif
-                                @if (sub_menu_check('indent/views') !== null)
-                                    <li><a href=""
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Received
+                                @if (sub_menu_check('indent/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.indent/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Indent</a></li>
                                 @endif
                             </ul>
                         </li>
-                        {{-- <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
-                                    data-feather="list"></i><span>Indent</span></a>
-                            <ul class="nav-submenu menu-content">
 
-                                <li><a href="" class="">View Indent</a>
-                                </li>
-                                <li><a href=""
-                                        class="{{ Request::is('*/*/add_role') ? 'active' : '' }}">Option</a>
-                                </li>
+                    @endif
+
+                    @if (count(menu_check('Tender')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Tender' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="book-open"
+                                    class="text-light"></i><span>Tender</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Tender/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('tender/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.tender/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Tender</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('tender/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.tender/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            Tender</a></li>
+                                @endif
                             </ul>
-                        </li> --}}
+                        </li>
+
                     @endif
 
                     @if (count(menu_check('PrelimGeneral')) !== 0)
@@ -76,6 +95,11 @@ $currentControllerName = Request::segment(2);
                                 @if (sub_menu_check('prelimgeneral/create') !== null)
                                     <li><a class="text-light" href="{{ route('admin.prelimgeneral/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            Prelim/General</a></li>
+                                @endif
+                                @if (sub_menu_check('prelimgen/revision') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.prelimgen/revision') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Revision
                                             Prelim/General</a></li>
                                 @endif
                             </ul>
@@ -116,12 +140,14 @@ $currentControllerName = Request::segment(2);
                                     data-feather="book-open"></i><span>Contracts</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/contract/index') }}"
+
                                         class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">Contracts
                                         Index</a>
                                 </li>
                                 <li><a href="{{ url('admin/contract/create') }}"
                                         class="{{ Request::is('*/admin/contract/create') ? 'active' : '' }} text-white">
                                         Create Contract</a>
+
                                 </li>
                             </ul>
                         </li>
