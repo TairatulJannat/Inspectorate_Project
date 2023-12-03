@@ -1,3 +1,12 @@
+<style>
+
+   @media screen and (max-width: 1120px) {
+        .left-menu-header .font-success {
+            display: none;
+        }
+    }
+
+</style>
 <div class="page-main-header">
     <div class="main-header-right row m-0">
         <div class="main-header-left" style=" background-color:#006A4E;">
@@ -14,7 +23,8 @@
         <div class="left-menu-header col">
             <ul>
                 <li>
-                    <h3 class="font-success" style="font-size: 18px;font-weight: bold">Inspectorate</h3>
+                    <h3 class="font-success" style="font-size: 24px;font-weight: bold">Inspectorate of Electrical
+                        Equipments & Instruments</h3>
                 </li>
             </ul>
         </div>
@@ -28,7 +38,7 @@
                     <div class=" dropdown-basic">
 
                         <div class="dropdown">
-                            <button class="dropbtn btn-primary" type="button" data-bs-original-title="" title="">
+                            <button class="dropbtn btn-success" type="button" data-bs-original-title="" title="">
                                 <img class="img-90 rounded-circle"
                                     src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt=""
                                     height='30px' width="30px">
