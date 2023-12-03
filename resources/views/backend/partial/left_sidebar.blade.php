@@ -140,7 +140,14 @@ $currentControllerName = Request::segment(2);
                                     data-feather="book-open"></i><span>Contracts</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/contract/index') }}"
-                                        class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">Contracts</a>
+
+                                        class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">Contracts
+                                        Index</a>
+                                </li>
+                                <li><a href="{{ url('admin/contract/create') }}"
+                                        class="{{ Request::is('*/admin/contract/create') ? 'active' : '' }} text-white">
+                                        Create Contract</a>
+
                                 </li>
                             </ul>
                         </li>

@@ -1,15 +1,17 @@
 <script>
+    var initialData = {};
+
     $(document).ready(function() {
-        // Initial Setup: Begins here
         $('.select2').select2();
+        // toastr.options.preventDuplicates = true;
 
-        toastr.options.preventDuplicates = true;
-        // Initial Setup: Ends here
-
-        // Search Item Parameters
         $('#searchItemParametersButton').submit(function(e) {
             e.preventDefault();
             var form = this;
+            performSearch(form);
+        });
+
+        function performSearch(form) {
             var searchButton = $(".search-button");
             var originalSearchButtonHtml = searchButton.html();
 
@@ -32,12 +34,10 @@
                         $.each(response.error, function(prefix, val) {
                             $(form).find("span." + prefix + "-error").text(val[0]);
                         });
-                        toastr.error(response.Message);
+                        toastr.error(response.message);
                     } else if (response.isSuccess === true) {
-                        toastr.success(response.Message);
-
-                        renderTreeView(response.treeViewData, response.itemTypeName,
-                            response
+                        toastr.success(response.message);
+                        renderTreeView(response.treeViewData, response.itemTypeName, response
                             .itemName);
                     }
 
@@ -48,16 +48,55 @@
                     toastr.error('An error occurred while processing the request.');
                 },
             });
-        });
+        }
+
+        function performSearchWithParams(itemTypeId, itemId) {
+            var searchButton = $(".search-button");
+            var originalSearchButtonHtml = searchButton.html();
+
+            searchButton.html(
+                '<span class="fw-bold">Loading <i class="fa fa-spinner fa-spin"></i></span>');
+
+            $.ajax({
+                url: '{{ url('admin/assign-parameter-value/show') }}',
+                method: 'POST',
+                data: {
+                    'item-type-id': itemTypeId,
+                    'item-id': itemId,
+                    '_token': '{{ csrf_token() }}'
+                },
+                dataType: "JSON",
+                cache: false,
+                beforeSend: function() {
+                    // Clear any previous error messages here
+                },
+                success: function(response) {
+                    if (response.isSuccess === false) {
+                        toastr.error(response.message);
+                    } else if (response.isSuccess === true) {
+                        toastr.success(response.message);
+                        renderTreeView(response.treeViewData, response.itemTypeName, response
+                            .itemName);
+                    }
+
+                    searchButton.html(originalSearchButtonHtml);
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                    toastr.error('An error occurred while processing the request.');
+                },
+            });
+        }
 
         function renderTreeView(treeViewData, itemTypeName, itemName) {
             var searchedDataContainer = $(".searched-data");
-
             searchedDataContainer.empty();
 
             if (treeViewData && treeViewData.length > 0) {
-                var html =
-                    '<div class="p-md-3 paper-document">' +
+
+                var html = '<div class="p-md-3 paper-document">' +
+
+
                     '<div class="header text-center">' +
                     '<div class="item-id f-30">' + itemName + '</div>' +
                     '<div class="item-type-id f-20">' + itemTypeName + '</div>' +
@@ -65,21 +104,21 @@
                     '<div class="content">';
 
                 $.each(treeViewData, function(index, node) {
-                    html +=
-                        '<div class="row parameter-group mt-5">' +
-                        '<h5 class="parameter-group-name text-uppercase text-underline fw-bold">' + node
-                        .parameterGroupName + '</h5>' +
+                    html += '<div class="row parameter-group mt-5 edit-row">' +
+                        '<span><h5 class="parameter-group-name text-uppercase text-underline fw-bold">' +
+                        node.parameterGroupName + '</h5>' +
+                        '<button class="btn btn-outline-warning btn-sm fa fa-edit edit-group float-end" data-group-id="' +
+                        node.parameterGroupId +
+                        '" data-group-name="' + node.parameterGroupName +
+                        '" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></button></span>' +
                         '<table class="parameter-table table table-border-vertical table-hover">';
 
                     $.each(node.parameterValues, function(i, parameterValue) {
-                        html +=
-                            '<tr>' +
+                        html += '<tr>' +
                             '<td class="col-md-4 parameter-name">' + parameterValue
-                            .parameter_name +
-                            '</td>' +
-                            '<td class="col-md-8 parameter-value">' + parameterValue
-                            .parameter_value +
-                            '</td>' +
+                            .parameter_name + '</td>' +
+                            '<td class="col-md-6 parameter-value">' + parameterValue
+                            .parameter_value + '</td>' +
                             '</tr>';
                     });
 
@@ -91,9 +130,273 @@
             } else {
                 searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
             }
+
+            $('.edit-group').click(function() {
+                $('.modal-body .dynamic-fields').empty();
+                var groupId = $(this).data('group-id');
+                var groupName = $(this).data('group-name');
+                $.ajax({
+                    url: '{{ url('admin/assign-parameter-value/edit') }}',
+                    method: 'post',
+                    data: {
+                        id: groupId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        $('#editGroupName').text(groupName);
+                        $('#editParameterGroupId').val(groupId);
+
+                        if (response.length > 0) {
+                            response.forEach(function(parameter) {
+                                initialData[parameter.id] = {
+                                    parameter_name: parameter.parameter_name,
+                                    parameter_value: parameter.parameter_value,
+                                    deleted: false
+                                };
+
+                                var inputFields = $(
+                                    '<div class="row mb-3" data-row-id="' +
+                                    parameter.id + '">' +
+                                    '<div class="col-md-5">' +
+                                    '<input type="text" class="form-control" name="parameter_name[]" value="' +
+                                    parameter.parameter_name +
+                                    '">' +
+                                    '</div>' +
+                                    '<div class="col-md-5">' +
+                                    '<input type="text" class="form-control" name="parameter_value[]" value="' +
+                                    parameter.parameter_value +
+                                    '">' +
+                                    '</div>' +
+                                    '<div class="col-md-2">' +
+                                    '<button class="btn btn-danger-gradien btn-sm delete-row fa fa-trash-o" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">' +
+                                    '</button>' +
+                                    '</div>' +
+                                    '</div>');
+
+                                $('.modal-body .dynamic-fields').append(
+                                    inputFields);
+
+                                $('.modal-body .dynamic-fields').off('click').on(
+                                    'click', '.delete-row',
+                                    function() {
+                                        var rowToRemove = $(this).closest(
+                                            '.row');
+                                        var rowIdToRemove = rowToRemove.data(
+                                            'row-id');
+                                        if (initialData && initialData
+                                            .hasOwnProperty(rowIdToRemove)) {
+                                            initialData[rowIdToRemove].deleted =
+                                                true;
+                                        } else {
+                                            console.error(
+                                                'initialData is undefined or row with ID ' +
+                                                rowIdToRemove +
+                                                ' not found.');
+                                        }
+                                        rowToRemove.remove();
+                                    });
+                            });
+                        } else {
+                            console.log('No parameter assigned.');
+                        }
+
+                        $('#addNewInputFields').off('click').on('click', function() {
+                            var newInputFields = $(
+                                '<div class="row mb-3" data-new-row="true">' +
+                                '<div class="col-md-5">' +
+                                '<input type="text" class="form-control" name="parameter_name[]">' +
+                                '</div>' +
+                                '<div class="col-md-5">' +
+                                '<input type="text" class="form-control" name="parameter_value[]">' +
+                                '</div>' +
+                                '<div class="col-md-2">' +
+                                '<button class="btn btn-danger-gradien btn-sm delete-new-row fa fa-trash-o" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">' +
+                                '</button>' +
+                                '</div>' +
+                                '</div>');
+
+                            $('.modal-body .dynamic-fields').append(
+                                newInputFields);
+
+                            $('.modal-body .dynamic-fields').on('click',
+                                '.delete-new-row',
+                                function() {
+                                    $(this).closest('.row').remove();
+                                });
+                        });
+
+                        $('#editModal').modal('show');
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+
+            $('#saveChanges').click(function() {
+                var saveChangesButton = $("#saveChanges");
+                var originalsaveChangesButtonHtml = saveChangesButton.html();
+                var itemTypeId = $('.item-type-id').val();
+                var itemId = $('.item-id').val();
+                var groupId = $('#editParameterGroupId').val();
+                var hasEmptyFields = false;
+                var rowsToUpdate = [];
+
+                saveChangesButton.html(
+                    '<span class="fw-bold">Saving <i class="fa fa-spinner fa-spin"></i></span>');
+
+                $('.modal-body .dynamic-fields .row').each(function() {
+                    var editedData = {
+                        parameter_name: $(this).find('[name="parameter_name[]"]').val(),
+                        parameter_value: $(this).find('[name="parameter_value[]"]').val()
+                    };
+                    if (!editedData.parameter_name.trim() || !editedData.parameter_value
+                        .trim()) {
+                        hasEmptyFields = true;
+                        return false;
+                    }
+                });
+
+                if (hasEmptyFields) {
+                    toastr.error('Please fill in all the fields!');
+                    saveChangesButton.html(originalsaveChangesButtonHtml);
+
+                    return;
+                } else {
+                    $('.modal-body .dynamic-fields .row').each(function() {
+                        var rowId = $(this).data('row-id');
+
+                        var editedData = {
+                            parameter_name: $(this).find('[name="parameter_name[]"]').val(),
+                            parameter_value: $(this).find('[name="parameter_value[]"]')
+                                .val()
+                        };
+
+                        if ($(this).data('new-row') !== true && initialData[rowId] &&
+                            (editedData.parameter_name !== initialData[rowId].parameter_name ||
+                                editedData.parameter_value !== initialData[rowId]
+                                .parameter_value)) {
+                            rowsToUpdate.push({
+                                rowId: rowId,
+                                parameter_name: editedData.parameter_name,
+                                parameter_value: editedData.parameter_value
+                            });
+                        }
+                    });
+
+                    // Update Previous Row Into Database
+                    if (rowsToUpdate.length > 0) {
+                        for (var i = 0; i < rowsToUpdate.length; i++) {
+                            var rowToUpdate = rowsToUpdate[i];
+                            updateRowInDatabase(itemTypeId, itemId, groupId, rowToUpdate.rowId,
+                                rowToUpdate
+                                .parameter_name,
+                                rowToUpdate.parameter_value);
+                        }
+                    } else {
+                        toastr.error('No changes have been done!');
+                    }
+
+                    // Delete Row From Database
+                    for (var id in initialData) {
+                        if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
+                            deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id].parameter_name);
+                        }
+                    }
+
+                    // Add Newly Added Row Into Database
+                    var newDataRows = $('.modal-body .dynamic-fields .row[data-new-row="true"]');
+                    newDataRows.each(function() {
+                        var parameterName = $(this).find('[name="parameter_name[]"]').val();
+                        var parameterValue = $(this).find('[name="parameter_value[]"]').val();
+                        saveNewRowToDatabase(groupId, parameterName, parameterValue);
+                    });
+                }
+                saveChangesButton.html(originalsaveChangesButtonHtml);
+                performSearchWithParams(itemTypeId, itemId);
+            });
+
+            function updateRowInDatabase(itemTypeId, itemId, groupId, rowId, parameterName, parameterValue) {
+                $.ajax({
+                    url: '{{ url('admin/assign-parameter-value/update') }}',
+                    method: 'post',
+                    data: {
+                        id: rowId,
+                        item_type_id: itemTypeId,
+                        item_id: itemId,
+                        group_id: groupId,
+                        parameter_name: parameterName,
+                        parameter_value: parameterValue,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.isSuccess === false) {
+                            toastr.error(response.message);
+                        } else if (response.isSuccess === true) {
+                            toastr.success(response.message);
+                        }
+
+                        $('#editModal').modal('hide');
+                    },
+                    error: function(error) {
+                        toastr.error(error.responseText, error.statusText);
+                    }
+                });
+            }
+
+            function deleteRowFromDatabase(itemTypeId, itemId, groupId, id, parameterName) {
+                $.ajax({
+                    url: '{{ url('admin/assign-parameter-value/destroy') }}',
+                    method: 'post',
+                    data: {
+                        id: id,
+                        item_type_id: itemTypeId,
+                        item_id: itemId,
+                        group_id: groupId,
+                        parameter_name: parameterName,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.isSuccess === false) {
+                            toastr.error(response.message);
+                        } else if (response.isSuccess === true) {
+                            toastr.success(response.message);
+                        }
+
+                        $('#editModal').modal('hide');
+                    },
+                    error: function(error) {
+                        toastr.error(error.responseText, error.statusText);
+                    }
+                });
+            }
+
+            function saveNewRowToDatabase(groupId, parameterName, parameterValue) {
+                $.ajax({
+                    url: '{{ url('admin/assign-parameter-value/store') }}',
+                    method: 'post',
+                    data: {
+                        assign_parameter_group_id: groupId,
+                        parameter_name: parameterName,
+                        parameter_value: parameterValue,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.isSuccess === false) {
+                            toastr.error(response.message);
+                        } else if (response.isSuccess === true) {
+                            toastr.success(response.message);
+                        }
+
+                        $('#editModal').modal('hide');
+                    },
+                    error: function(error) {
+                        toastr.error(error.responseText, error.statusText);
+                    }
+                });
+            }
         }
 
-        // Populate Items Dropdown: Begins here
         var itemsData = {!! $items !!};
         populateItemsDropdown(itemsData);
 
@@ -112,6 +415,5 @@
                 $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
             });
         }
-        // Populate Items Dropdown: Ends here
     });
 </script>
