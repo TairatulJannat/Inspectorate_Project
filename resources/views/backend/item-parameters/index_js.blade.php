@@ -93,10 +93,7 @@
             searchedDataContainer.empty();
 
             if (treeViewData && treeViewData.length > 0) {
-
                 var html = '<div class="p-md-3 paper-document">' +
-
-
                     '<div class="header text-center">' +
                     '<div class="item-id f-30">' + itemName + '</div>' +
                     '<div class="item-type-id f-20">' + itemTypeName + '</div>' +
@@ -300,7 +297,8 @@
                     // Delete Row From Database
                     for (var id in initialData) {
                         if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
-                            deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id].parameter_name);
+                            deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id]
+                                .parameter_name);
                         }
                     }
 
