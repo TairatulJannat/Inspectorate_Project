@@ -36,7 +36,7 @@
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="file" class="form-label">Choose Excel/CSV File:</label>
-                            <input class="form-control" type="file" id="file">
+                            <input class="form-control" type="file" id="file" name="file">
                             @error('file')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -45,7 +45,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary btn-block mt-3 float-end">Import Data</button>
+                        <button type="submit" class="btn btn-primary float-end">Import Data</button>
                     </div>
                 </div>
             </form>
