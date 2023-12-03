@@ -165,82 +165,91 @@
 
 
                 {{-- @if (!$sender_designation_id) --}}
-                <div class="card-body col-4">
-                    <h4 class="text-success">Forward Status</h4>
-                    <hr>
-                    <ul class="forward_status">
+                <div class="card-body col-6">
+                    <div>
 
-                        <table class="table ">
-                            <thead>
-                                <tr>
-                                    <th>Sender</th>
-                                    <th></th>
-                                    <th>Receiver</th>
-                                    <th>Forwarded Date Time</th>
-                                </tr>
-                            </thead>
-
-
-                            @if ($document_tracks !== null)
-                                @foreach ($document_tracks as $document_track)
-                                    <tr>
-                                        <td>{{ $document_track->sender_designation_name }}</td>
-                                        <td><i class="fa fa-arrow-right text-success"></i></td>
-                                        <td>{{ $document_track->receiver_designation_name }}</td>
-                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found</li>
-                            @endif
-
-                        </table>
-
-
-
-
-                    </ul>
-                    @if ($notes == !null)
-                        <h4 class="text-success">Notes </h4>
+                        <h4 class="text-success">Forward</h4>
                         <hr>
-                        <ul class="remarks_status">
-                            <li>
-                                @if ($notes)
-                                    @foreach ($notes as $note)
-                                        @if ($note->reciever_desig_id == $auth_designation_id->desig_id)
-                                            <p><i class="fa fa-circle ps-2 text-success" aria-hidden="true"></i>
+                        <form action="">
+                            <div class="d-flex" >
+                                <select name="designation" id="designations" class="form-control m-2">
+                                    <option value="">Select To Receiver </option>
+                                    @foreach ($designations as $d)
+                                        <option value={{ $d->id }}>{{ $d->name }}</option>
+                                    @endforeach
 
-                                                {{ $note->remarks }}</p>
-                                        @else
-                                            <p>Notes are not provided.</p>
-                                        @endif
+                                </select>
+
+                                <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here"></textarea>
+                                <button class="btn btn-success" id="submitBtn">Forward</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div>
+                        <h4 class="text-success">Forward Status</h4>
+                        <hr>
+                        <ul class="forward_status">
+
+                            <table class="table ">
+                                <thead>
+                                    <tr>
+                                        <th>Sender</th>
+                                        <th></th>
+                                        <th>Receiver</th>
+                                        <th>Forwarded Date Time</th>
+                                    </tr>
+                                </thead>
+
+
+                                @if ($document_tracks !== null)
+                                    @foreach ($document_tracks as $document_track)
+                                        <tr>
+                                            <td>{{ $document_track->sender_designation_name }}</td>
+                                            <td><i class="fa fa-arrow-right text-success"></i></td>
+                                            <td>{{ $document_track->receiver_designation_name }}</td>
+                                            <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
+                                        </tr>
                                     @endforeach
                                 @else
-                                    <p>Notes are not provided.</p>
+                                    <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found
+                                    </li>
                                 @endif
-                            </li>
+
+                            </table>
+
+
+
 
                         </ul>
+                        @if ($notes == !null)
+                            <h4 class="text-success">Notes </h4>
+                            <hr>
+                            <ul class="remarks_status">
+                                <li>
+                                    @if ($notes)
+                                        @foreach ($notes as $note)
+                                            @if ($note->reciever_desig_id == $auth_designation_id->desig_id)
+                                                <p><i class="fa fa-circle ps-2 text-success" aria-hidden="true"></i>
 
-                    @endif
+                                                    {{ $note->remarks }}</p>
+                                            @else
+                                                <p>Notes are not provided.</p>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <p>Notes are not provided.</p>
+                                    @endif
+                                </li>
+
+                            </ul>
+
+                        @endif
+                    </div>
+
 
                 </div>
-                <div class="card-body col-2">
-                    <h4 class="text-success">Forward</h4>
-                    <hr>
-                    <form action="">
-                        <select name="designation" id="designations" class="form-control mt-2">
-                            <option value="">Select To Receiver </option>
-                            @foreach ($designations as $d)
-                                <option value={{ $d->id }}>{{ $d->name }}</option>
-                            @endforeach
 
-                        </select>
-
-                        <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
-                        <button class="btn btn-success mt-2 " id="submitBtn">Forward</button>
-                    </form>
-                </div>
 
                 {{-- @endif --}}
             </div>

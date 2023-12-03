@@ -59,11 +59,11 @@
                     </div>
                 </form>
             </div>
-            <div class="details">
-                <div class="col-12 col-lg-6" id="indent_details">
+            <div class="row details">
+                <div class="col-6" id="indent_details">
 
                 </div>
-                <div class="col-12 col-lg-6" id="track_details">
+                <div class="col-6" id="track_details">
 
                 </div>
 
@@ -113,6 +113,7 @@
                                 var doc_track_data = response.data;
                                 $('#indent_details').html(indent_details(details))
                                 $('#track_details').html(track_data(doc_track_data))
+                                // $('#track_details').html("ok")
                             }
                         }
                     },
@@ -193,30 +194,51 @@
         }
 
         function track_data(data) {
-            var html = ''
-            html += `<table class="table ">
-                            <thead>
-                                <tr>
-                                    <th>Sender</th>
-                                    <th></th>
-                                    <th>Receiver</th>
-                                    <th>Forwarded Date Time</th>
-                                </tr>
-                            </thead>`
+            var html = '';
+            html += `<table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sender</th>
+                        <th></th>
+                        <th>Receiver</th>
+                        <th>Forwarded Date Time</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            if (data !== null) {
 
 
-            if (data !== null)
                 $.each(data, function(index, value) {
-                    `<tr>
-                        <td> ${ value.sender_designation_name } </td>
-                         <td> < i class = "fa fa-arrow-right text-success" > </i></td >
-                        <td> ${value.receiver_designation_name } </td>
-                        <td>  </td>
-                    </tr>`
+
+                    var date_time = formatDate(value.created_at)
+
+                    html += `<tr>
+                        <td>${value.sender_designation_name}</td>
+                        <td><i class="fa fa-arrow-right text-success"></i></td>
+                        <td>${value.receiver_designation_name}</td>
+                        <td>${date_time}</td>
+                    </tr>`;
                 });
+            }
 
-                `</table>`
+            html += `</tbody>
+            </table>`;
 
+            return html;
         }
+
+        function formatDate(date) {
+            var selectedDate = date.toString();
+            var selectedDate = new Date(selectedDate);
+
+            var year = selectedDate.getFullYear();
+            var month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+            var day = selectedDate.getDate().toString().padStart(2, '0');
+
+            return `${day}-${month}-${year}`;
+        }
+
+        
     </script>
 @endpush

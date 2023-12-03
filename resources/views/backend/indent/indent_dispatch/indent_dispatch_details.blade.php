@@ -158,7 +158,7 @@
 
 
                 {{-- @if (!$sender_designation_id) --}}
-                <div class="card-body col-4">
+                <div class="card-body col-6">
                     <h4 class="text-success">Forward Status</h4>
                     <hr>
                     <ul class="forward_status">
@@ -188,9 +188,6 @@
                             @endif
 
                         </table>
-
-
-
 
                     </ul>
                     @if ($notes == !null)
