@@ -188,6 +188,20 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
+                    {{-- Side Menu Button Links for Excel Files --}}
+                    @if (count(menu_check('Excel')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Excel Files</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/excel-csv-file') }}"
+                                        class="{{ Request::is('*/admin/excel-csv-file') ? 'active' : '' }} text-white">Import
+                                        Excel
+                                        File</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
                     @if (count(menu_check('Contact')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Contact</span></a>
