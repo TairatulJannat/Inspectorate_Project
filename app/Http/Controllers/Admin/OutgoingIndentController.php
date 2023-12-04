@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
@@ -84,7 +85,7 @@ class OutgoingIndentController extends Controller
                         return '<button class="btn btn-primary btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
+                        return '<button class="btn btn-warning  btn-sm">Vetting on process</button>';
                     }
                     if ($data->status == '2') {
                         return '<button class="btn btn-success btn-sm">Delivered</button>';
@@ -98,17 +99,17 @@ class OutgoingIndentController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
+                    $actionBtn = '<div class="btn-group" role="group">
+                    <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                    </div>';
+                    // if ($data->status == '2') {
+                    //     $actionBtn = '<div class="btn-group" role="group">
+                    //     <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
+                    //     <button href="" class="edit btn btn-success btn-sm" disable>Completed</button>';
+                    // } else {
 
-                    if ($data->status == '2') {
-                        $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
-                        <button href="" class="edit btn btn-success btn-sm" disable>Completed</button>';
-                    } else {
-                        $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Progress</a>
-                        <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
-                        </div>';
-                    }
+                    // }
 
 
                     return $actionBtn;
@@ -127,6 +128,15 @@ class OutgoingIndentController extends Controller
             ->where('indents.id', $id)
             ->where('indents.status', 1)
             ->first();
+
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
+
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+
+            array_push($additional_documents_names, $additional_names);
+        }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -171,7 +181,9 @@ class OutgoingIndentController extends Controller
 
         //End blade notes section....
 
-        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id'));
+
+        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id','additional_documents_names'));
+
     }
 
     public function OutgoingIndentTracking(Request $request)

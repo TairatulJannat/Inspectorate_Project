@@ -140,7 +140,14 @@ $currentControllerName = Request::segment(2);
                                     data-feather="book-open"></i><span>Contracts</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/contract/index') }}"
-                                        class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">Contracts</a>
+
+                                        class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">Contracts
+                                        Index</a>
+                                </li>
+                                <li><a href="{{ url('admin/contract/create') }}"
+                                        class="{{ Request::is('*/admin/contract/create') ? 'active' : '' }} text-white">
+                                        Create Contract</a>
+
                                 </li>
                             </ul>
                         </li>
@@ -202,6 +209,20 @@ $currentControllerName = Request::segment(2);
                                 <li><a href="{{ url('admin/doc-type/index') }}"
                                         class="{{ Request::is('*/admin/doc-type/index') ? 'active' : '' }} text-white">Doc
                                         Types</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Side Menu Button Links for Excel Files --}}
+                    @if (count(menu_check('Excel')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Excel Files</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/excel-csv-file') }}"
+                                        class="{{ Request::is('*/admin/excel-csv-file') ? 'active' : '' }} text-white">Import
+                                        Excel
+                                        File</a>
                                 </li>
                             </ul>
                         </li>

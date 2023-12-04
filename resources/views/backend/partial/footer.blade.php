@@ -40,18 +40,18 @@
 
 
 
-        // var options = {
-        // chart: {
-        //     type: 'pie'
-        // },
-        // series: [44, 55, 13, 33],
-        //     labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
+    // var options = {
+    // chart: {
+    //     type: 'pie'
+    // },
+    // series: [44, 55, 13, 33],
+    //     labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
 
-        // }
+    // }
 
-        // var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
+    // var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
 
-        // chart.render();
+    // chart.render();
 
 
     // var options = {

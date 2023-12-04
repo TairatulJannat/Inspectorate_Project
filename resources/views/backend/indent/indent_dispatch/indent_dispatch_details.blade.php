@@ -39,12 +39,15 @@
             padding: 10px 15px !important;
         }
 
-        .col-4,
-        .col-2 {
+
+        .forward_status,
+        .forward {
             background-color: #F5F7FB !important;
             /* Light gray */
-            border-radius: 8px;
-            box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+
         }
 
         h4 {
@@ -93,7 +96,9 @@
                 <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
-                <div class="card-body col-5">
+
+                <div class="card-body col-4">
+
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -157,8 +162,87 @@
                 </div>
 
 
+                <div class="card-body">
+                    <div class="row">
+                        <div class="forward col-md-12 mb-3">
+                            <div>
+                                <h4 class="text-success">Forward</h4>
+                                <hr>
+                                <form action="">
+                                    <div class="row">
+                                        @if ($desig_position->position != 1)
+                                        <div class="col-md-4 mb-2">
+                                            <select name="designation" id="designations" class="form-control"
+                                                style="height: 40px;">
+                                                <option value="">Select To Receiver</option>
+                                                @foreach ($designations as $d)
+                                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @endif
+                                        <div class="col-md-4 mb-2">
+                                            <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-success" id="submitBtn"
+                                                style="height: 40px;">Forward</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="forward_status col-md-12">
+                            <div>
+                                <h4 class="text-success">Dispatch Status</h4>
+                                <hr>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Sender</th>
+                                                <th></th>
+                                                <th>Receiver</th>
+                                                <th>Forwarded Date Time</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if ($document_tracks !== null)
+                                                @foreach ($document_tracks as $document_track)
+                                                    <tr>
+                                                        <td>{{ $document_track->sender_designation_name }}</td>
+                                                        <td><i class="fa fa-arrow-right text-success"></i></td>
+                                                        <td>{{ $document_track->receiver_designation_name }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
+                                                        <td>{{ $document_track->remarks }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="5"> <i class="fa fa-times text-danger"
+                                                            aria-hidden="true"></i> No forward status found </td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes Sectio
+                                n - Uncomment if needed -->
+                    {{-- <div class="col-md-6">
+                        @if ($notes == !null)
+                            ... <!-- Your notes HTML here -->
+                        @endif
+                    </div> --}}
+                </div>
                 {{-- @if (!$sender_designation_id) --}}
-                <div class="card-body col-4">
+                {{-- <div class="card-body col-6">
+
                     <h4 class="text-success">Forward Status</h4>
                     <hr>
                     <ul class="forward_status">
@@ -188,8 +272,6 @@
                             @endif
 
                         </table>
-
-
 
 
                     </ul>
@@ -237,9 +319,6 @@
 
                         <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
                     </form>
-                </div>
-
-                {{-- @endif --}}
             </div>
         </div>
     </div>

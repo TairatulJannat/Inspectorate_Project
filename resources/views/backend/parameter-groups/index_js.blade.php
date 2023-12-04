@@ -87,18 +87,12 @@
                         orderable: false,
                         render: function(data, type, row) {
                             return '<td class="dt-center px-0">' +
-                                '<button class="btn btn-sm me-2 show_parameter_group fa fa-eye" id="' +
-                                row.id +
-                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></button>' +
                                 '<button class="btn btn-secondary btn-sm me-2 edit_parameter_group fa fa-edit" id="' +
                                 row.id +
                                 '" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></button>' +
                                 '<button class="btn btn-danger btn-sm me-2 delete_parameter_group fa fa-trash-o" id="' +
                                 row.id +
                                 '" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></button>' +
-                                '<button class="btn btn-dark btn-sm assign-parameter-value fa fa-plus-square-o" id="' +
-                                row.id +
-                                '" data-bs-toggle="tooltip" data-bs-placement="top" title="Assign Parameter"></button>' +
                                 '</td>';
                         }
                     }
