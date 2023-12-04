@@ -1,7 +1,11 @@
 <script>
     var initialData = {};
+    var xhr;
 
     $(document).ready(function() {
+        var itemsData = {!! $items !!};
+        populateItemsDropdown(itemsData);
+
         $('.select2').select2();
         // toastr.options.preventDuplicates = true;
 
@@ -11,14 +15,33 @@
             performSearch(form);
         });
 
+        $('#itemTypeId').on('change', function() {
+            var itemTypeId = $(this).val();
+            var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
+
+            populateItemsDropdown(filteredItems);
+        });
+
+        function populateItemsDropdown(items) {
+            $('#itemId').empty();
+            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
+
+            $.each(items, function(key, value) {
+                $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
+            });
+        }
+
         function performSearch(form) {
             var searchButton = $(".search-button");
             var originalSearchButtonHtml = searchButton.html();
 
-            searchButton.html(
-                '<span class="fw-bold">Loading <i class="fa fa-spinner fa-spin"></i></span>');
+            searchButton.html('<span class="fw-bold">Loading <i class="fa fa-spinner fa-spin"></i></span>');
 
-            $.ajax({
+            if (xhr) {
+                xhr.abort();
+            }
+
+            xhr = $.ajax({
                 url: $(form).attr('action'),
                 method: $(form).attr('method'),
                 data: new FormData(form),
@@ -30,6 +53,8 @@
                     $(form).find("span.error-text").text("");
                 },
                 success: function(response) {
+                    initialData = {};
+
                     if (response.isSuccess === false) {
                         $.each(response.error, function(prefix, val) {
                             $(form).find("span." + prefix + "-error").text(val[0]);
@@ -139,6 +164,7 @@
                         id: groupId,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         $('#editGroupName').text(groupName);
                         $('#editParameterGroupId').val(groupId);
@@ -191,6 +217,8 @@
                                                 ' not found.');
                                         }
                                         rowToRemove.remove();
+                                        rowToRemove = '';
+                                        rowIdToRemove = '';
                                     });
                             });
                         } else {
@@ -230,7 +258,7 @@
                 });
             });
 
-            $('#saveChanges').click(function() {
+            $('#saveChanges').off('click').click(function() {
                 var saveChangesButton = $("#saveChanges");
                 var originalsaveChangesButtonHtml = saveChangesButton.html();
                 var itemTypeId = $('.item-type-id').val();
@@ -311,10 +339,17 @@
                     });
                 }
                 saveChangesButton.html(originalsaveChangesButtonHtml);
+                // location.reload();
                 performSearchWithParams(itemTypeId, itemId);
             });
 
             function updateRowInDatabase(itemTypeId, itemId, groupId, rowId, parameterName, parameterValue) {
+                log.warn('itemTypeId:', itemTypeId);
+                log.warn('itemId:', itemId);
+                log.warn('groupId:', groupId);
+                log.warn('id:', rowId);
+                log.warn('parameterName:', parameterName);
+                log.warn('parameterValue:', parameterValue);
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/update') }}',
                     method: 'post',
@@ -327,6 +362,7 @@
                         parameter_value: parameterValue,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         if (response.isSuccess === false) {
                             toastr.error(response.message);
@@ -343,6 +379,11 @@
             }
 
             function deleteRowFromDatabase(itemTypeId, itemId, groupId, id, parameterName) {
+                log.warn('itemTypeId:', itemTypeId);
+                log.warn('itemId:', itemId);
+                log.warn('groupId:', groupId);
+                log.warn('id:', id);
+                log.warn('parameterName:', parameterName);
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/destroy') }}',
                     method: 'post',
@@ -354,6 +395,7 @@
                         parameter_name: parameterName,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         if (response.isSuccess === false) {
                             toastr.error(response.message);
@@ -370,6 +412,9 @@
             }
 
             function saveNewRowToDatabase(groupId, parameterName, parameterValue) {
+                log.warn('groupId:', groupId);
+                log.warn('parameterName:', parameterName);
+                log.warn('parameterValue:', parameterValue);
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/store') }}',
                     method: 'post',
@@ -379,6 +424,7 @@
                         parameter_value: parameterValue,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         if (response.isSuccess === false) {
                             toastr.error(response.message);
@@ -393,25 +439,6 @@
                     }
                 });
             }
-        }
-
-        var itemsData = {!! $items !!};
-        populateItemsDropdown(itemsData);
-
-        $('#itemTypeId').on('change', function() {
-            var itemTypeId = $(this).val();
-            var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
-
-            populateItemsDropdown(filteredItems);
-        });
-
-        function populateItemsDropdown(items) {
-            $('#itemId').empty();
-            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
-
-            $.each(items, function(key, value) {
-                $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
-            });
         }
     });
 </script>

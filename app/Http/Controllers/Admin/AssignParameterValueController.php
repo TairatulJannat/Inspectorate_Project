@@ -163,7 +163,7 @@ class AssignParameterValueController extends Controller
 
             return response()->json([
                 'isSuccess' => true,
-                'message' => 'Parameter Groups data successfully retrieved.',
+                'message' => 'Parameters Data successfully retrieved!',
                 'treeViewData' => $treeViewData,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
