@@ -217,8 +217,6 @@
                                                 ' not found.');
                                         }
                                         rowToRemove.remove();
-                                        rowToRemove = '';
-                                        rowIdToRemove = '';
                                     });
                             });
                         } else {
@@ -240,8 +238,7 @@
                                 '</div>' +
                                 '</div>');
 
-                            $('.modal-body .dynamic-fields').append(
-                                newInputFields);
+                            $('.modal-body .dynamic-fields').append(newInputFields);
 
                             $('.modal-body .dynamic-fields').on('click',
                                 '.delete-new-row',
@@ -325,8 +322,12 @@
                     // Delete Row From Database
                     for (var id in initialData) {
                         if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
-                            deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id]
-                                .parameter_name);
+                            if (initialData[id]) {
+                                deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id]
+                                    .parameter_name);
+                            } else {
+                                console.error('Row with ID ' + id + ' not found in initialData.');
+                            }
                         }
                     }
 
@@ -339,17 +340,10 @@
                     });
                 }
                 saveChangesButton.html(originalsaveChangesButtonHtml);
-                // location.reload();
                 performSearchWithParams(itemTypeId, itemId);
             });
 
             function updateRowInDatabase(itemTypeId, itemId, groupId, rowId, parameterName, parameterValue) {
-                log.warn('itemTypeId:', itemTypeId);
-                log.warn('itemId:', itemId);
-                log.warn('groupId:', groupId);
-                log.warn('id:', rowId);
-                log.warn('parameterName:', parameterName);
-                log.warn('parameterValue:', parameterValue);
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/update') }}',
                     method: 'post',
@@ -379,11 +373,13 @@
             }
 
             function deleteRowFromDatabase(itemTypeId, itemId, groupId, id, parameterName) {
-                log.warn('itemTypeId:', itemTypeId);
-                log.warn('itemId:', itemId);
-                log.warn('groupId:', groupId);
-                log.warn('id:', id);
-                log.warn('parameterName:', parameterName);
+                if (initialData[id]) {
+                    initialData[id].deleted = true;
+
+                    delete initialData[id];
+                }
+
+                // Perform the AJAX request to delete the row from the database
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/destroy') }}',
                     method: 'post',
@@ -411,10 +407,8 @@
                 });
             }
 
+
             function saveNewRowToDatabase(groupId, parameterName, parameterValue) {
-                log.warn('groupId:', groupId);
-                log.warn('parameterName:', parameterName);
-                log.warn('parameterValue:', parameterValue);
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/store') }}',
                     method: 'post',
@@ -431,7 +425,6 @@
                         } else if (response.isSuccess === true) {
                             toastr.success(response.message);
                         }
-
                         $('#editModal').modal('hide');
                     },
                     error: function(error) {
