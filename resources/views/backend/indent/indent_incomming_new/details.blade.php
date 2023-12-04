@@ -46,6 +46,7 @@
             border-radius: 6px;
             padding: 20px ;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+
         }
 
         h4 {
@@ -80,6 +81,8 @@
 
 
 
+
+
         .documents {
             display: flex;
             justify-content: center;
@@ -99,7 +102,9 @@
                 <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
+
                 <div class="card-body col-4">
+
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -128,6 +133,7 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
+
                                 <th>Additional Documents</th>
                                 <td>
                                     @if (!empty($additional_documents_names))
@@ -141,6 +147,7 @@
                                         No additional documents available.
                                     @endif
                                 </td>
+
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
@@ -175,6 +182,7 @@
 
 
                 {{-- @if (!$sender_designation_id) --}}
+
                 <div class="card-body">
                     <div class="row">
                         <div class="forward col-md-12 mb-3">
@@ -248,6 +256,7 @@
                         @endif
                     </div> --}}
                 </div>
+
 
 
                 {{-- @endif --}}
