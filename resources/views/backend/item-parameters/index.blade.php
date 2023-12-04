@@ -28,7 +28,6 @@
                         @endforeach
                     </select>
                 </div>
-
                 <span class="text-danger error-text item-type-id-error"></span>
             </div>
             <div class="col-md-2 text-center mt-2">
@@ -58,7 +57,6 @@
             <div class="text-center">
                 <h2>Searched Item Parameters will appear here.</h2>
             </div>
-
         </div>
     </div>
 

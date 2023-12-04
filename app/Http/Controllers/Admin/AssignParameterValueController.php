@@ -221,7 +221,7 @@ class AssignParameterValueController extends Controller
             $parameterLog->user_id = Auth::user()->id;
             $parameterLog->action_type = "Update";
 
-            if ($parameterValue->update()) {
+            if ($parameterValue->update() && $parameterLog->save()) {
                 return response()->json([
                     'isSuccess' => true,
                     'message' => 'Parameters updated successfully!'
@@ -261,7 +261,7 @@ class AssignParameterValueController extends Controller
         $parameterLog->action_type = "Delete";
 
         if ($parameterValue) {
-            if ($parameterValue->delete() ) {
+            if ($parameterValue->delete() && $parameterLog->save()) {
                 return response()->json([
                     'isSuccess' => true,
                     'message' => 'Parameters deleted successfully!'

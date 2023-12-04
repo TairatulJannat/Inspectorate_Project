@@ -13,9 +13,6 @@
 </div>
 </div>
 <script src="{{ asset('assets/backend/js/jquery-3.5.1.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/loglevel/1.8.1/loglevel.min.js"
-    integrity="sha512-oV2OSHwbdIfdp1EgzpUZ6pTsCZqCIHJJ4if5D5odgiKXZqED5ROcJ4kX9hzaRtCdteDmxBPfrobbQ4rVdo63Aw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{ asset('assets/backend/js/icons/feather-icon/feather.min.js') }}"></script>
 <script src="{{ asset('assets/backend/js/icons/feather-icon/feather-icon.js') }}"></script>
 <script src="{{ asset('assets/backend/js/sidebar-menu.js') }}"></script>
