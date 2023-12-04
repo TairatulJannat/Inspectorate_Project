@@ -85,7 +85,7 @@ class OutgoingIndentController extends Controller
                         return '<button class="btn btn-primary btn-sm">New</button>';
                     }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Vetting on process</button>';
+                        return '<button class="btn btn-warning  btn-sm">Vetting On Process</button>';
                     }
                     if ($data->status == '2') {
                         return '<button class="btn btn-success btn-sm">Delivered</button>';
@@ -242,7 +242,7 @@ class OutgoingIndentController extends Controller
                 $value->doc_reference_number = $doc_reference_number;
                 $value->track_status = 4;
                 $value->remarks = $remarks;
-                $value->reciever_desig_id = 3;
+                $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
                 $value->created_at = Carbon::now();
                 $value->updated_at = Carbon::now();

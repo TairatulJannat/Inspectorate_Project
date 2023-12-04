@@ -178,11 +178,11 @@
                             <div class="form-group">
                                 <label for="fin_year_id">Financial Year </label>
 
-                                <select class="form-control" id="fin_year_id" name="fin_year_id ">
+                                <select class="form-control" id="fin_year_id" name="fin_year_id">
 
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
-                                        <option value={{ $fin_year->id }}>{{ $fin_year->name }} </option>
+                                        <option value={{ $fin_year->id }}>{{ $fin_year->year }} </option>
                                     @endforeach
 
                                 </select>
@@ -271,6 +271,7 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.indent.indent_incomming_new.index_js')
     <script>
+
         $(document).ready(function() {
             $('.select2').select2();
             $("#item_type_id").off('change').on('change', function() {

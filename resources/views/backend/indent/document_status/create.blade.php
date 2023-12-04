@@ -22,7 +22,8 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="duration">Duration</label>
-                        <input class="form-control" type="text" id="duration" name="duration">
+                        <input class="form-control" type="text" id="duration" name="duration" >
+
                         <span class="text-danger error-text duration_error"></span>
                     </div>
                     <div class="mb-3">
@@ -42,7 +43,21 @@
                     </div>
                     <div class="mb-3">
                         <label class=" form-label" for="member">Member</label>
-                        <input class="form-control" type="text" id="member" name="member" >
+                        <select class="form-control" id="member" name="member" >
+                            <option value="">Select Number Of Member</option>
+                            <option value="None">None</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+
+                        </select>
                         <span class="text-danger error-text member_error"></span>
                     </div>
                 </div>

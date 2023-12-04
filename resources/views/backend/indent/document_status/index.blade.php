@@ -17,7 +17,7 @@
                     </div>
                     <!-- Button to trigger the modal -->
                     <div class="col-6">
-                        <button type="button" class="btn btn-primary float-md-end" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-success float-md-end" data-bs-toggle="modal"
                             data-bs-target="#createItemTypeModal">
                            Add Document
                         </button>
