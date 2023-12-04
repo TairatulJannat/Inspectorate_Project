@@ -1,7 +1,11 @@
 <script>
     var initialData = {};
+    var xhr;
 
     $(document).ready(function() {
+        var itemsData = {!! $items !!};
+        populateItemsDropdown(itemsData);
+
         $('.select2').select2();
         // toastr.options.preventDuplicates = true;
 
@@ -11,14 +15,33 @@
             performSearch(form);
         });
 
+        $('#itemTypeId').on('change', function() {
+            var itemTypeId = $(this).val();
+            var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
+
+            populateItemsDropdown(filteredItems);
+        });
+
+        function populateItemsDropdown(items) {
+            $('#itemId').empty();
+            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
+
+            $.each(items, function(key, value) {
+                $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
+            });
+        }
+
         function performSearch(form) {
             var searchButton = $(".search-button");
             var originalSearchButtonHtml = searchButton.html();
 
-            searchButton.html(
-                '<span class="fw-bold">Loading <i class="fa fa-spinner fa-spin"></i></span>');
+            searchButton.html('<span class="fw-bold">Loading <i class="fa fa-spinner fa-spin"></i></span>');
 
-            $.ajax({
+            if (xhr) {
+                xhr.abort();
+            }
+
+            xhr = $.ajax({
                 url: $(form).attr('action'),
                 method: $(form).attr('method'),
                 data: new FormData(form),
@@ -30,6 +53,8 @@
                     $(form).find("span.error-text").text("");
                 },
                 success: function(response) {
+                    initialData = {};
+
                     if (response.isSuccess === false) {
                         $.each(response.error, function(prefix, val) {
                             $(form).find("span." + prefix + "-error").text(val[0]);
@@ -93,10 +118,7 @@
             searchedDataContainer.empty();
 
             if (treeViewData && treeViewData.length > 0) {
-
                 var html = '<div class="p-md-3 paper-document">' +
-
-
                     '<div class="header text-center">' +
                     '<div class="item-id f-30">' + itemName + '</div>' +
                     '<div class="item-type-id f-20">' + itemTypeName + '</div>' +
@@ -142,6 +164,7 @@
                         id: groupId,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         $('#editGroupName').text(groupName);
                         $('#editParameterGroupId').val(groupId);
@@ -215,8 +238,7 @@
                                 '</div>' +
                                 '</div>');
 
-                            $('.modal-body .dynamic-fields').append(
-                                newInputFields);
+                            $('.modal-body .dynamic-fields').append(newInputFields);
 
                             $('.modal-body .dynamic-fields').on('click',
                                 '.delete-new-row',
@@ -233,7 +255,7 @@
                 });
             });
 
-            $('#saveChanges').click(function() {
+            $('#saveChanges').off('click').click(function() {
                 var saveChangesButton = $("#saveChanges");
                 var originalsaveChangesButtonHtml = saveChangesButton.html();
                 var itemTypeId = $('.item-type-id').val();
@@ -300,7 +322,12 @@
                     // Delete Row From Database
                     for (var id in initialData) {
                         if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
-                            deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id].parameter_name);
+                            if (initialData[id]) {
+                                deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id]
+                                    .parameter_name);
+                            } else {
+                                console.error('Row with ID ' + id + ' not found in initialData.');
+                            }
                         }
                     }
 
@@ -329,6 +356,7 @@
                         parameter_value: parameterValue,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         if (response.isSuccess === false) {
                             toastr.error(response.message);
@@ -345,6 +373,13 @@
             }
 
             function deleteRowFromDatabase(itemTypeId, itemId, groupId, id, parameterName) {
+                if (initialData[id]) {
+                    initialData[id].deleted = true;
+
+                    delete initialData[id];
+                }
+
+                // Perform the AJAX request to delete the row from the database
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/destroy') }}',
                     method: 'post',
@@ -356,6 +391,7 @@
                         parameter_name: parameterName,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         if (response.isSuccess === false) {
                             toastr.error(response.message);
@@ -370,6 +406,7 @@
                     }
                 });
             }
+
 
             function saveNewRowToDatabase(groupId, parameterName, parameterValue) {
                 $.ajax({
@@ -381,13 +418,13 @@
                         parameter_value: parameterValue,
                         _token: '{{ csrf_token() }}'
                     },
+                    cache: false,
                     success: function(response) {
                         if (response.isSuccess === false) {
                             toastr.error(response.message);
                         } else if (response.isSuccess === true) {
                             toastr.success(response.message);
                         }
-
                         $('#editModal').modal('hide');
                     },
                     error: function(error) {
@@ -395,25 +432,6 @@
                     }
                 });
             }
-        }
-
-        var itemsData = {!! $items !!};
-        populateItemsDropdown(itemsData);
-
-        $('#itemTypeId').on('change', function() {
-            var itemTypeId = $(this).val();
-            var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
-
-            populateItemsDropdown(filteredItems);
-        });
-
-        function populateItemsDropdown(items) {
-            $('#itemId').empty();
-            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
-
-            $.each(items, function(key, value) {
-                $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
-            });
         }
     });
 </script>

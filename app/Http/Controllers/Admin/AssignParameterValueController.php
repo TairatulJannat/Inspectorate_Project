@@ -127,7 +127,6 @@ class AssignParameterValueController extends Controller
      */
     public function show(Request $request)
     {
-        // dd($request->all());
         $customMessages = [
             'item-type-id.required' => 'Please select an Item Type.',
             'item-id.required' => 'Please select an Item.',
@@ -164,7 +163,7 @@ class AssignParameterValueController extends Controller
 
             return response()->json([
                 'isSuccess' => true,
-                'message' => 'Parameter Groups data successfully retrieved.',
+                'message' => 'Parameters Data successfully retrieved!',
                 'treeViewData' => $treeViewData,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
