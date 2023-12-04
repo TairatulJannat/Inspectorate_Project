@@ -51,6 +51,7 @@
                 <div class="row justify-content-between align-items-center">
 
                     <div class="d-flex justify-content-between px-4 py-2">
+
                         <div class="col-9">
                             <a href="{{ route('admin.indent/view') }}" type="button"
                                 class="btn btn-success btn-sm">New Arrival</a>
@@ -60,6 +61,7 @@
                                 class="btn btn-info text-white btn-sm">OutGoing</a>
                             <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
+
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
@@ -75,7 +77,9 @@
                         <thead>
                             <tr>
                                 <th>SL No</th>
+
                                 <th>Reference No</th>
+
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>

@@ -181,7 +181,9 @@ class OutgoingIndentController extends Controller
 
         //End blade notes section....
 
+
         return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id','additional_documents_names'));
+
     }
 
     public function OutgoingIndentTracking(Request $request)

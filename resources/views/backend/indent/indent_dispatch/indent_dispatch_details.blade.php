@@ -39,6 +39,7 @@
             padding: 10px 15px !important;
         }
 
+
         .forward_status,
         .forward {
             background-color: #F5F7FB !important;
@@ -46,6 +47,7 @@
             border-radius: 6px;
             padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+
         }
 
         h4 {
@@ -94,7 +96,9 @@
                 <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
+
                 <div class="card-body col-4">
+
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -167,6 +171,7 @@
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                     </div>
                 </div>
+
 
                 <div class="card-body">
                     <div class="row">

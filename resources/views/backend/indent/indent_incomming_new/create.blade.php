@@ -8,8 +8,10 @@
             padding: 10px
         }
 
+
         .form-check-input {
             width: 70px !important;
+
             height: 35px;
         }
     </style>
@@ -66,6 +68,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
+
                                 <label for="additional_documents">Additional Documents</label>
                                 <select class="form-control select2" id="additional_documents" name="additional_documents[]"
                                     multiple>
@@ -74,6 +77,7 @@
                                         <option value="{{ $additional_document->id }}">{{ $additional_document->name }}
                                         </option>
                                     @endforeach
+
                                 </select>
                                 <span id="error_additional_documents" class="text-danger error_field"></span>
                             </div>
@@ -82,7 +86,9 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_number">Indent Number</label>
+
                                 <input type="text" class="form-control" id="indent_number" name="indent_number">
+
                                 <span id="error_indent_number" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -136,11 +142,13 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="attribute">Attribute</label>
+
                                 <select class="form-control" name="attribute" id="attribute">
                                     <option value="">Please Select</option>
                                     <option value="Controlled">Controlled</option>
                                     <option value="Uncontrolled">Uncontrolled</option>
                                 </select>
+
 
                                 <span id="error_attribute" class="text-danger error_field"></span>
                             </div>
@@ -165,8 +173,10 @@
                             <div class="form-group">
                                 <label for="checked_standard">Standard Checked</label>
                                 <div class="form-check form-switch">
+
                                     <input class="form-check-input" type="checkbox" id="checked_standard"
                                         name="checked_standard">
+
                                 </div>
 
                                 <span id="error_checked_standard" class="text-danger error_field"></span>
@@ -217,8 +227,10 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="country_of_origin">Country of Origin</label>
+
                                 <input type="text" class="form-control" id="country_of_origin"
                                     name="country_of_origin">
+
 
                                 <span id="error_country_of_origin" class="text-danger error_field"></span>
                             </div>
@@ -226,8 +238,10 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="country_of_assembly">Country of Assembly</label>
+
                                 <input type="text" class="form-control" id="country_of_assembly"
                                     name="country_of_assembly">
+
 
                                 <span id="error_country_of_assembly" class="text-danger error_field"></span>
                             </div>
@@ -273,7 +287,9 @@
     <script>
 
         $(document).ready(function() {
+
             $('.select2').select2();
+
             $("#item_type_id").off('change').on('change', function() {
 
                 //  alert('123');

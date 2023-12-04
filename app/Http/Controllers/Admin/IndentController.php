@@ -274,7 +274,9 @@ class IndentController extends Controller
         //End blade notes section....
 
 
+
         return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','additional_documents_names'));
+
     }
 
     public function indentTracking(Request $request)
