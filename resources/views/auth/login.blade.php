@@ -89,12 +89,12 @@
                                         <div class="show-hide"><span class="show" onclick="myFunction()"></span></div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <div class="checkbox">
                                         <input id="checkbox1" type="checkbox">
                                         <label class="text-muted" for="checkbox1">Remember password</label>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <button class="btn btn-success btn-block" type="submit">Login</button>
                                 </div>

@@ -39,8 +39,8 @@
                     searchable: false
                 },
                 {
-                    data: 'indent_number',
-                    name: 'indent_number',
+                    data: 'reference_no',
+                    name: 'reference_no',
                     orderable: false
                 },
                 {

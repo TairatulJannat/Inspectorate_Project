@@ -167,7 +167,7 @@ class IndentController extends Controller
         $data->reference_no = $request->reference_no;
         $data->indent_number = $request->indent_number;
 
-        $data->additional_documents = $request->additional_documents;
+        $data->additional_documents = json_encode($request->additional_documents);
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
@@ -213,6 +213,15 @@ class IndentController extends Controller
             )
             ->where('indents.id', $id)
             ->first();
+
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
+
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+
+            array_push($additional_documents_names, $additional_names);
+        }
 
 
         $designations = Designation::all();
@@ -263,7 +272,7 @@ class IndentController extends Controller
         //End blade notes section....
 
 
-        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id'));
+        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','additional_documents_names'));
     }
 
     public function indentTracking(Request $request)

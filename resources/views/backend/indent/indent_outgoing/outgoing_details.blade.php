@@ -121,8 +121,19 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-                                <th>Additional Documents</td>
-                                <td>{{ $details->additional_documents_name }}</td>
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name }} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
@@ -162,31 +173,37 @@
                                 <h4 class="text-success">Forward</h4>
                                 <hr>
                                 <form action="">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex">
+                                            @if ($desig_position->position != 7)
+                                                <select name="designation" id="designations" class="form-control" style="height: 40px;">
+                                                    <option value="">Select To Receiver </option>
+                                                    @foreach ($designations as $d)
+                                                        <option value={{ $d->id }}>{{ $d->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here" style="height: 40px;"></textarea>
 
-                                    @if ($desig_position->position != 7)
-                                        <select name="designation" id="designations" class="form-control">
-                                            <option value="">Select To Receiver </option>
-                                            @foreach ($designations as $d)
-                                                <option value={{ $d->id }}>{{ $d->name }}</option>
-                                            @endforeach
+                                            @endif
+                                        </div>
+                                        <div>
+                                            @if ($desig_position->position == 3)
+                                                <div class="mt-2">
+                                                    <label for="delivery_date">Delivery Date </label>
+                                                    <input type="date" id="delivery_date" name="delivery_date"
+                                                        class="form-control">
+                                                </div>
+                                                <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="Enter delay cause" style="height: 40px;"></textarea>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-6">
 
-                                        </select>
-                                        @if ($desig_position->position == 3)
-                                            <div class='mt-2'>
-                                                <label for='delivery_date'>Delivery Date </label>
-                                                <input type="date" id='delivery_date' name="delivery_date"
-                                                    class="form-control">
-                                            </div>
-
-                                            <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="Enter delay cause"></textarea>
-                                        @endif
-
-                                    @endif
-                                    <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
-
-
-                                    <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
+                                            <button class="delivery-btn btn btn-success mt-2"
+                                                id="submitBtn">Deliver</button>
+                                        </div>
+                                    </div>
                                 </form>
+
                             </div>
                         </div>
 

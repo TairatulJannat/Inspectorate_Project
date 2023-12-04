@@ -130,8 +130,19 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-                                <th>Additional Documents</td>
-                                <td>{{ $details->additional_documents_name }}</td>
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name}} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Financial Year</td>

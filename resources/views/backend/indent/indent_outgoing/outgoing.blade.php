@@ -75,7 +75,7 @@
                         <thead>
                             <tr>
                                 <th>SL No</th>
-                                <th>Indent Number</th>
+                                <th>Reference No</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
