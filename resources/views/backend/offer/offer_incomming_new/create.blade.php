@@ -68,6 +68,14 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="tender_reference_no">Tender Reference No.</label>
+                                <input type="text" class="form-control" id="tender_reference_no" name="tender_reference_no">
+                                <span id="error_tender_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
 
                                 <label for="additional_documents">Additional Documents</label>
                                 <select class="form-control select2" id="additional_documents" name="additional_documents[]"
@@ -85,21 +93,51 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="indent_number">Indent Number</label>
 
-                                <input type="text" class="form-control" id="indent_number" name="indent_number">
+                                <label for="supplier_id">Suppiler</label>
+                                <select class="form-control " id="supplier_id" name="supplier_id">
 
-                                <span id="error_indent_number" class="text-danger error_field"></span>
+                                    <option value="">Please Select</option>
+
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_supplier_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="offer_rcv_ltr_no">Offer Rcv Ltr No</label>
+                                <input type="text" class="form-control" id="offer_rcv_ltr_no"
+                                    name="offer_rcv_ltr_no">
+                                <span id="error_offer_rcv_ltr_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="offer_rcv_ltr_dt">Offer Rcv Ltr Date</label>
+                                <input type="date" class="form-control" id="offer_rcv_ltr_dt"
+                                    name="offer_rcv_ltr_dt">
+                                <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>
 
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_received_date">Indent Received Date</label>
-                                <input type="date" class="form-control" id="indent_received_date"
-                                    name="indent_received_date">
-                                <span id="error_indent_received_date" class="text-danger error_field"></span>
-                            </div>
+                            <label class="form-check-label form-label" for="receive_status">Is Offer Vetted</label>
+                            <input class="form-check-input" type="checkbox" id="is_offer_vetted" name="is_offer_vetted" checked>
+                            <span class="text-danger error-text receive_status_error"></span>
+                        </div>
+                        <div class="col-md-4" id="offer_vetting_ltr_no">
+                            <label class=" form-label" for="receive_date">Offer Vetting Ltr No</label>
+                            <input class="form-control"  type="text" id="offer_vetting_ltr_no" name="offer_vetting_ltr_no" >
+                            <span class="text-danger error-text rreceive_date_error"></span>
+                        </div>
+                        <div class="col-md-4" id="offer_vetting_ltr_dt">
+                            <label class=" form-label" for="asking_date">Offer vetting Ltr Date</label>
+                            <input class="form-control" type="date" id="offer_vetting_ltr_dt" name="offer_vetting_ltr_dt" >
+                            <span class="text-danger error-text receiveDate_error"></span>
                         </div>
 
                         <div class="col-md-4">
@@ -153,37 +191,7 @@
                                 <span id="error_attribute" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="estimated_value">Estimated Value</label>
-                                <input type="text" class="form-control" id="estimated_value" name="estimated_value">
-
-                                <span id="error_estimated_value" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="spare">Spare</label>
-                                <input type="text" class="form-control" id="spare" name="spare">
-
-                                <span id="error_spare" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="checked_standard">Standard Checked</label>
-                                <div class="form-check form-switch">
-
-                                    <input class="form-check-input" type="checkbox" id="checked_standard"
-                                        name="checked_standard">
-
-                                </div>
-
-                                <span id="error_checked_standard" class="text-danger error_field"></span>
-                            </div>
-
-                        </div>
-
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fin_year_id">Financial Year </label>
@@ -200,54 +208,7 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="nomenclature">Nomenclature</label>
-                                <input type="text" class="form-control" id="nomenclature" name="nomenclature">
-
-                                <span id="error_nomenclature" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="make">Make</label>
-                                <input type="text" class="form-control" id="make" name="make">
-
-                                <span id="error_make" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="model">Model</label>
-                                <input type="text" class="form-control" id="model" name="model">
-
-                                <span id="error_model" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="country_of_origin">Country of Origin</label>
-
-                                <input type="text" class="form-control" id="country_of_origin"
-                                    name="country_of_origin">
-
-
-                                <span id="error_country_of_origin" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="country_of_assembly">Country of Assembly</label>
-
-                                <input type="text" class="form-control" id="country_of_assembly"
-                                    name="country_of_assembly">
-
-
-                                <span id="error_country_of_assembly" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="received_by">Received By</label>
@@ -283,9 +244,8 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.indent.indent_incomming_new.index_js')
+    @include('backend.offer.offer_incomming_new.index_js')
     <script>
-
         $(document).ready(function() {
 
             $('.select2').select2();

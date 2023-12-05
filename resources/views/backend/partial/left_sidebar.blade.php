@@ -80,6 +80,27 @@ $currentControllerName = Request::segment(2);
 
                     @endif
 
+                    @if (count(menu_check('Offer')) !== 0)
+                    <li class="dropdown"><a
+                            class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                            href="javascript:void(0)"><i data-feather="book-open"
+                                class="text-light"></i><span>Offer</span></a>
+                        <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
+                            @if (sub_menu_check('offer/view') !== null)
+                                <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                        class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Offer</a>
+                                </li>
+                            @endif
+                            @if (sub_menu_check('offer/create') !== null)
+                                <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                        class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                        Offer</a></li>
+                            @endif
+                        </ul>
+                    </li>
+
+                @endif
+
                     @if (count(menu_check('PrelimGeneral')) !== 0)
                         <li class="dropdown"><a
                                 class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
