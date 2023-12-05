@@ -113,9 +113,9 @@ class IndentController extends Controller
                         return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
                     }
                 })
-                ->addColumn('action', function ($data) use ($document_tracks_sender_count) {
+                ->addColumn('action', function ($data)  {
 
-                    
+
                         $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
                         <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
