@@ -31,8 +31,6 @@ class IndentController extends Controller
     {
         if ($request->ajax()) {
 
-
-
             $insp_id = Auth::user()->inspectorate_id;
             $admin_id = Auth::user()->id;
             $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -82,6 +80,10 @@ class IndentController extends Controller
                     ->where('reciever_desig_id', $designation_id)
                     ->first();
 
+                $document_tracks_sender_count = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                    ->where('sender_designation_id', $designation_id)
+                    ->get();
+
                 if (!$document_tracks_receiver_id) {
                     $query = Indent::where('id', 'no data')->get();
                 }
@@ -111,20 +113,14 @@ class IndentController extends Controller
                         return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
                     }
                 })
-                ->addColumn('action', function ($data) {
+                ->addColumn('action', function ($data) use ($document_tracks_sender_count) {
 
-
-                    if ($data->status == '2') {
-                        $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
-                        <a href="" class="edit btn btn-success btn-sm" disable>Completed</a>';
-                    } else {
-
+                    
                         $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
                         <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
-                    }
+
 
                     return $actionBtn;
                 })
