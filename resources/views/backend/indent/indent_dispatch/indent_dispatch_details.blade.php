@@ -123,8 +123,19 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-                                <th>Additional Documents</td>
-                                <td>{{ $details->additional_documents_name }}</td>
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name}} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
@@ -166,7 +177,7 @@
                                 <form action="">
                                     <div class="row">
                                         @if ($desig_position->position != 1)
-                                        <div class="col-md-4 mb-2">
+                                        <div class="col-md-6 mb-2">
                                             <select name="designation" id="designations" class="form-control"
                                                 style="height: 40px;">
                                                 <option value="">Select To Receiver</option>
@@ -176,12 +187,12 @@
                                             </select>
                                         </div>
                                         @endif
-                                        <div class="col-md-4 mb-2">
+                                        <div class="col-md-6 mb-2">
                                             <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <button class="btn btn-success" id="submitBtn"
-                                                style="height: 40px;">Forward</button>
+                                                style="height: 40px;">Deliver</button>
                                         </div>
                                     </div>
                                 </form>
@@ -227,7 +238,7 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
 
             </div>
