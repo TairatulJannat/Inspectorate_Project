@@ -187,8 +187,6 @@ class IndentController extends Controller
                         </div>';
                     }
 
-
-
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])
@@ -336,9 +334,13 @@ class IndentController extends Controller
 
         //End blade notes section....
 
+        //Start blade forward on off section....
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+
+        //End blade forward on off section....
 
 
-        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names'));
+        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names','DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
