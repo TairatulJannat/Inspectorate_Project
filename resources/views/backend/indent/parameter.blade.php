@@ -24,9 +24,9 @@
         .card-body {}
 
         /* .table thead {
-                            background-color: #1B4C43 !important;
-                            border-radius: 10px !important;
-                        } */
+                                            background-color: #1B4C43 !important;
+                                            border-radius: 10px !important;
+                                        } */
 
         .table thead tr th {
             color: #ffff !important;
@@ -84,6 +84,11 @@
             column-gap: 10px;
             margin-bottom: 25px
         }
+
+        /* .header {
+                        background-color: #006A4E;
+                        color:#F5F7FB;
+                    } */
     </style>
 @endpush
 @section('main_menu', 'Parameter')
@@ -91,6 +96,8 @@
 @section('content')
 
     <div class="row bg-body p-3 m-3" style="border-radius:8px">
+        <div class="d-flex flex-row-reverse"><button class="btn btn-success" onclick="goBack()"><i
+                    class="fa fa-arrow-left"></i></button></div>
         <div class="text-success searched-data">
             <div class="text-center">
                 <h2>Searched Item Parameters will appear here.</h2>
@@ -457,7 +464,10 @@
                 }
             }
 
-
         });
+
+        function goBack() {
+            window.history.back();
+        }
     </script>
 @endpush

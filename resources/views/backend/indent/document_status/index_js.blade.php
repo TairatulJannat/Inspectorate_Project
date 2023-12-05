@@ -153,25 +153,25 @@
         })
 
         // // Edit Item Type
-        // $(document).on('click', '.edit_item_type', function(e) {
-        //     e.preventDefault();
-        //     let id = $(this).attr('id');
-        //     $.ajax({
-        //         url: '{{ url('admin/item_types/edit') }}',
-        //         method: 'post',
-        //         data: {
-        //             id: id,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             $("#edit_item_type_id").val(id);
-        //             $("#editItemTypeName").val(response.name);
-        //             $("#editItemTypeStatus").prop('checked', response.status == 1);
+        $(document).on('click', '.edit_data', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('id');
+            $.ajax({
+                url: '{{ url('admin/indent/doc_status/edit') }}',
+                method: 'get',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $("#edit_item_type_id").val(id);
+                    $("#editItemTypeName").val(response.name);
+                    $("#editItemTypeStatus").prop('checked', response.status == 1);
 
-        //             $('#editItemTypeModal').modal('show');
-        //         }
-        //     });
-        // });
+                    $('#editItemTypeModal').modal('show');
+                }
+            });
+        });
 
         // // Update Item Type
         // $("#editItemTypeForm").on("submit", function(e) {

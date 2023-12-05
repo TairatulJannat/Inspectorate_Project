@@ -191,7 +191,7 @@
                                 <hr>
                                 <form action="">
                                     <div class="row">
-                                        <div class="col-md-4 mb-2">
+                                        <div class="col-md-6 mb-2">
                                             <select name="designation" id="designations" class="form-control" style="height: 40px;">
                                                 <option value="">Select To Receiver</option>
                                                 @foreach ($designations as $d)
@@ -199,7 +199,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-4 mb-2">
+                                        <div class="col-md-6 mb-2">
                                             <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                         </div>
                                         <div class="col-md-4">

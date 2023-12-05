@@ -127,8 +127,19 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-                                <th>Additional Documents</td>
-                                <td>{{ $details->additional_documents_name }}</td>
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name}} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
@@ -171,7 +182,7 @@
                                 <form action="">
                                     <div class="row">
                                         @if ($desig_position->position != 1)
-                                        <div class="col-md-4 mb-2">
+                                        <div class="col-md-6 mb-2">
                                             <select name="designation" id="designations" class="form-control"
                                                 style="height: 40px;">
                                                 <option value="">Select To Receiver</option>
@@ -181,12 +192,12 @@
                                             </select>
                                         </div>
                                         @endif
-                                        <div class="col-md-4 mb-2">
+                                        <div class="col-md-6 mb-2">
                                             <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <button class="btn btn-success" id="submitBtn"
-                                                style="height: 40px;">Forward</button>
+                                                style="height: 40px;">Deliver</button>
                                         </div>
                                     </div>
                                 </form>
@@ -232,93 +243,9 @@
                         </div>
                     </div>
 
-                    <!-- Notes Sectio
-                                n - Uncomment if needed -->
-                    {{-- <div class="col-md-6">
-                        @if ($notes == !null)
-                            ... <!-- Your notes HTML here -->
-                        @endif
-                    </div> --}}
-                </div>
-                {{-- @if (!$sender_designation_id) --}}
-                {{-- <div class="card-body col-6">
-
-                    <h4 class="text-success">Forward Status</h4>
-                    <hr>
-                    <ul class="forward_status">
-
-                        <table class="table ">
-                            <thead>
-                                <tr>
-                                    <th>Sender</th>
-                                    <th></th>
-                                    <th>Receiver</th>
-                                    <th>Forwarded Date Time</th>
-                                </tr>
-                            </thead>
-
-
-                            @if ($document_tracks !== null)
-                                @foreach ($document_tracks as $document_track)
-                                    <tr>
-                                        <td>{{ $document_track->sender_designation_name }}</td>
-                                        <td><i class="fa fa-arrow-right text-success"></i></td>
-                                        <td>{{ $document_track->receiver_designation_name }}</td>
-                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found</li>
-                            @endif
-
-                        </table>
-
-
-                    </ul>
-                    @if ($notes == !null)
-                        <h4 class="text-success">Notes </h4>
-                        <hr>
-                        <ul class="remarks_status">
-                            <li>
-                                @if ($notes)
-                                    @foreach ($notes as $note)
-                                        @if ($note->reciever_desig_id == $auth_designation_id->desig_id)
-                                            <p><i class="fa fa-circle ps-2 text-success" aria-hidden="true"></i>
-
-                                                {{ $note->remarks }}</p>
-                                        @else
-                                            <p>Notes are not provided.</p>
-                                        @endif
-                                    @endforeach
-                                @else
-                                    <p>Notes are not provided.</p>
-                                @endif
-                            </li>
-
-                        </ul>
-
-                    @endif
 
                 </div>
-                <div class="card-body col-2">
-                    <h4 class="text-success">Forward</h4>
-                    <hr>
-                    <form action="">
 
-                        @if ($desig_position->position != 1)
-                            <select name="designation" id="designations" class="form-control">
-                                <option value="">Select To Receiver </option>
-                                @foreach ($designations as $d)
-                                    <option value={{ $d->id }}>{{ $d->name }}</option>
-                                @endforeach
-
-                            </select>
-                        @endif
-                        <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
-
-
-                        <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
-                    </form>
             </div>
         </div>
     </div>

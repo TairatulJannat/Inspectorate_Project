@@ -41,7 +41,8 @@
 
 
         .forward_status,
-        .forward {
+        .forward,
+        .delay_cause {
             background-color: #F5F7FB !important;
             /* Light gray */
             border-radius: 6px;
@@ -70,7 +71,10 @@ n
         }
 
         .forward_status {
-            min-height: 250px
+            min-height: 200px
+        }
+        .delay_cause{
+            min-height: 100px
         }
 
         .remarks_status {
@@ -182,31 +186,36 @@ n
                                 <form action="">
                                     <div class="row">
                                         <div class="col-md-12 d-flex">
-                                            @if ($desig_position->position != 7)
-                                                <select name="designation" id="designations" class="form-control" style="height: 40px;">
-                                                    <option value="">Select To Receiver </option>
-                                                    @foreach ($designations as $d)
-                                                        <option value={{ $d->id }}>{{ $d->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here" style="height: 40px;"></textarea>
 
-                                            @endif
+                                            <select name="designation" id="designations" class="form-control "
+                                                style="height: 40px; margin-right">
+                                                <option value="">Select To Receiver </option>
+                                                @foreach ($designations as $d)
+                                                    <option value={{ $d->id }}>{{ $d->name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
+                                                style="height: 40px; margin-left: 10px;"></textarea>
                                         </div>
-                                        <div>
+                                        <div class="d-flex">
                                             @if ($desig_position->position == 3)
-                                                <div class="mt-2">
+                                                <div class=" col-md-6 mt-2">
                                                     <label for="delivery_date">Delivery Date </label>
                                                     <input type="date" id="delivery_date" name="delivery_date"
                                                         class="form-control">
                                                 </div>
-                                                <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="Enter delay cause" style="height: 40px;"></textarea>
+                                                <div class="col-md-6 mt-2 " style="margin-left: 10px;">
+                                                    <label for="delay_cause">Delivery Date </label>
+                                                    <textarea name="delay_cause" id="delay_cause" class="form-control" placeholder="Enter delay cause"
+                                                        style="height: 40px; "></textarea>
+                                                </div>
                                             @endif
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-2">
 
-                                            <button class="delivery-btn btn btn-success mt-2"
-                                                id="submitBtn">Deliver</button>
+                                            <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                style="height: 40px;">Deliver</button>
                                         </div>
                                     </div>
                                 </form>
@@ -214,7 +223,7 @@ n
                             </div>
                         </div>
 
-                        <div class="forward_status col-md-12">
+                        <div class="forward_status col-md-12 mb-3">
                             <div>
                                 <h4 class="text-success">Vetted Status</h4>
                                 <hr>
@@ -251,103 +260,21 @@ n
                                 </div>
                             </div>
                         </div>
+                        @if ($details->delay_cause !== null)
+                            <div class="delay_cause col-md-12">
+                                <div>
+                                    <h4 class="text-success">Delay Cause</h4>
+                                    <hr>
+                                    <div class="table-responsive">
+                                       {{ $details->delay_cause}}
+
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                 </div>
-                {{-- @if (!$sender_designation_id) --}}
-                {{-- <div class="card-body col-4">
-                    <h4 class="text-success">Vetted Status</h4>
-
-                    <hr>
-                    <ul class="forward_status">
-
-                        <table class="table ">
-                            <thead>
-                                <tr>
-                                    <th>Sender</th>
-                                    <th></th>
-                                    <th>Receiver</th>
-                                    <th>Forwarded Date Time</th>
-                                </tr>
-                            </thead>
-
-
-                            @if ($document_tracks !== null)
-                                @foreach ($document_tracks as $document_track)
-                                    <tr>
-                                        <td>{{ $document_track->sender_designation_name }}</td>
-                                        <td><i class="fa fa-arrow-right text-success"></i></td>
-                                        <td>{{ $document_track->receiver_designation_name }}</td>
-                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <li> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found</li>
-                            @endif
-
-                        </table>
-
-
-                    </ul>
-                    @if ($notes == !null)
-                        <h4 class="text-success">Notes </h4>
-                        <hr>
-                        <ul class="remarks_status">
-                            <li>
-                                @if ($notes)
-                                    @foreach ($notes as $note)
-                                        @if ($note->reciever_desig_id == $auth_designation_id->desig_id)
-                                            <p><i class="fa fa-circle ps-2 text-success" aria-hidden="true"></i>
-
-                                                {{ $note->remarks }}</p>
-                                        @else
-                                            <p>Notes are not provided.</p>
-                                        @endif
-                                    @endforeach
-                                @else
-                                    <p>Notes are not provided.</p>
-                                @endif
-                            </li>
-
-                        </ul>
-
-                    @endif
-
-                </div>
-                <div class="card-body col-2">
-                    <h4 class="text-success">Forward</h4>
-                    <hr>
-                    <form action="">
-
-                        @if ($desig_position->position != 7)
-                            <select name="designation" id="designations" class="form-control">
-                                <option value="">Select To Receiver </option>
-                                @foreach ($designations as $d)
-                                    <option value={{ $d->id }}>{{ $d->name }}</option>
-                                @endforeach
-
-                            </select>
-                            @if ($desig_position->position == 3)
-                                <div class='mt-2'>
-                                    <label for='delivery_date'>Delivery Date </label>
-                                    <input type="date" id='delivery_date' name="delivery_date" class="form-control">
-                                </div>
-
-                                <textarea name="delay_cause" id="delay_cause" class="form-control mt-2" placeholder="Enter delay cause"></textarea>
-                            @endif
-
-                        @endif
-                        <textarea name="remarks" id="remarks" class="form-control mt-2" placeholder="Remarks Here"></textarea>
-
-
-                        <button class="delivery-btn btn btn-success mt-2 " id="submitBtn">Deliver</button>
-                    </form>
-
-
-                </div> --}}
-
-
-                {{-- @endif --}}
             </div>
 
         </div>
