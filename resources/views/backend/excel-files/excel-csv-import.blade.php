@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'Excel Files')
+@section('title', 'Import Excel/CSV File')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
@@ -8,7 +8,7 @@
 @endpush
 
 @section('main_menu', 'Excel Files')
-@section('active_menu', 'Excel Files Index')
+@section('active_menu', 'Import Excel/CSV File')
 
 @section('content')
     @if (session('status'))
@@ -17,39 +17,75 @@
         </div>
     @endif
 
-    <div class="card">
-        <div class="card-header bg-primary">
-            <div class="d-flex justify-content-between align-items-center">
-                <h2 class="m-0">Import Export Excel, CSV File</h2>
-                {{-- <div>
-                    <a href="{{ url('admin/export-excel-csv-file/xlsx') }}" class="btn btn-secondary mr-2">Export
-                        Excel</a>
-                    <a href="{{ url('admin/export-excel-csv-file/csv') }}" class="btn btn-secondary">Export CSV</a>
-                </div> --}}
-            </div>
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
-        <div class="card-body">
-            <form id="excel-csv-import-form" method="POST" action="{{ url('admin/import-excel-csv-file') }}"
-                accept-charset="utf-8" enctype="multipart/form-data">
-                @csrf
+    @endif
+
+    <div class="card" style="background-color: darkseagreen;">
+        <form id="excel-csv-import-form" method="POST" action="{{ url('admin/import-excel-csv') }}" accept-charset="utf-8"
+            enctype="multipart/form-data">
+            @csrf
+            <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
+                <div class="row">
+                    <div class="col-md-2 mt-2">
+                        <h6>Item Type: </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <select class="form-control select2 item-type-id" id="itemTypeId" name="item-type-id"
+                                style="width: 100% !important;">
+                                <option value="" selected disabled>Select Item Type</option>
+                                @foreach ($itemTypes as $itemType)
+                                    <option value="{{ $itemType->id }}">{{ $itemType->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('item-type-id')
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <span class="text-danger error-text item-type-id-error"></span>
+                    </div>
+                    <div class="col-md-2 mt-2">
+                        <h6 class="card-title">Item: </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <select class="form-control select2 item-id" id="itemId" name="item-id"
+                                style="width: 100% !important;">
+                                <option value="" selected disabled>Select an item</option>
+                                @foreach ($items as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('item-id')
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <span class="text-danger error-text item-id-error"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
-                            <label for="file" class="form-label">Choose Excel/CSV File:</label>
+                            <label for="file" class="form-label mb-2 text-white f-22">Choose Excel/CSV File:</label>
                             <input class="form-control" type="file" id="file" name="file">
                             @error('file')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary float-end">Import Data</button>
+                        <button type="submit" class="btn btn-primary float-end">Import</button>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 @endsection
 
@@ -59,4 +95,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- Developer's JS file for brand page -->
+    @include('backend.item-parameters.index_js')
 @endpush

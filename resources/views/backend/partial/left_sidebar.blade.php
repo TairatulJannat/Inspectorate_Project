@@ -36,7 +36,6 @@ $currentControllerName = Request::segment(2);
                                     class="text-light"></i><span>Search</span></a>
 
                         </li>
-
                     @endif
                     @if (count(menu_check('Indent')) !== 0)
                         <li class="dropdown"><a
@@ -140,7 +139,6 @@ $currentControllerName = Request::segment(2);
                                     data-feather="book-open"></i><span>Contracts</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/contract/index') }}"
-
                                         class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">Contracts
                                         Index</a>
                                 </li>
@@ -219,10 +217,9 @@ $currentControllerName = Request::segment(2);
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Excel Files</span></a>
                             <ul class="nav-submenu menu-content">
-                                <li><a href="{{ url('admin/excel-csv-file') }}"
-                                        class="{{ Request::is('*/admin/excel-csv-file') ? 'active' : '' }} text-white">Import
-                                        Excel
-                                        File</a>
+                                <li><a href="{{ url('admin/excel-csv-index') }}"
+                                        class="{{ Request::is('*/admin/excel-csv-index') ? 'active' : '' }} text-white">Excel
+                                        CSV Index</a>
                                 </li>
                             </ul>
                         </li>
