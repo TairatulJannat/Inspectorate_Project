@@ -2,16 +2,16 @@
 
 namespace App\Exports;
 
-use App\Models\Test;
+use App\Models\AssignParameterValue;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class TestsExport implements FromCollection
+class AssignParameterValuesExport implements FromCollection
 {
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
-        return Test::all();
+        return AssignParameterValue::all();
     }
 }

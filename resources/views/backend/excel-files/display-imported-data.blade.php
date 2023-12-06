@@ -72,7 +72,7 @@
             @endif
         </div>
         <div class="card-footer py-3" style="background-color: teal !important;">
-            <a href="{{ url('admin/excel-csv-index') }}" class="btn btn-danger float-end">Cancel</a>
+            <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-danger float-end">Cancel</a>
         </div>
     </div>
 @endsection

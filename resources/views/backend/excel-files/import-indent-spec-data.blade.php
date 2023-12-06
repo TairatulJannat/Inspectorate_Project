@@ -30,7 +30,7 @@
     @endif
 
     <div class="card" style="background-color: darkseagreen;">
-        <form id="excel-csv-import-form" method="POST" action="{{ url('admin/import-indent-spec-data') }}"
+        <form id="import-indent-spec-data-form" method="POST" action="{{ url('admin/import-indent-spec-data') }}"
             accept-charset="utf-8" enctype="multipart/form-data">
             @csrf
             <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">

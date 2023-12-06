@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Exceptions\UnreadableFileException;
 use Maatwebsite\Excel\Exceptions\SheetNotFoundException;
-use App\Imports\TestsImport;
+use App\Imports\AssignParameterValuesImport;
 use App\Models\Items;
 use App\Models\Item_type;
 use App\Models\ParameterGroup;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class ExcelController extends Controller
 {
-    public function index()
+    public function indentIndex()
     {
         try {
             $items = Items::all();
@@ -26,7 +26,7 @@ class ExcelController extends Controller
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve from Database.');
         }
-        return view('backend.excel-files.excel-csv-import', compact('items', 'itemTypes'));
+        return view('backend.excel-files.import-indent-spec-data', compact('items', 'itemTypes'));
     }
 
     public function importIndentEditedData(Request $request)
@@ -44,7 +44,7 @@ class ExcelController extends Controller
         ]);
 
         try {
-            $importedData = Excel::toCollection(new TestsImport, $request->file('file'))->first();
+            $importedData = Excel::toCollection(new AssignParameterValuesImport, $request->file('file'))->first();
 
             $parameterGroups = [];
             $currentGroupName = null;
@@ -83,11 +83,11 @@ class ExcelController extends Controller
                 'itemName' => $itemName,
             ]);
         } catch (UnreadableFileException $e) {
-            return redirect()->to('admin/excel-csv-index')->with('error', 'The uploaded file is unreadable.');
+            return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'The uploaded file is unreadable.');
         } catch (SheetNotFoundException $e) {
-            return redirect()->to('admin/excel-csv-index')->with('error', 'Sheet not found in the Excel file.');
+            return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
         } catch (\Exception $e) {
-            return redirect()->to('admin/excel-csv-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
+            return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
         }
     }
 
@@ -116,7 +116,7 @@ class ExcelController extends Controller
 
             DB::commit();
 
-            return redirect()->to('admin/excel-csv-index')->with('success', 'Changes saved successfully.');
+            return redirect()->to('admin/import-indent-spec-data-index')->with('success', 'Changes saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Error saving data: ' . $e->getMessage());
