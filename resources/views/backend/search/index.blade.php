@@ -29,9 +29,52 @@
         .table-responsive {
             padding: 0 10px;
         }
-        .card-body form{
-        background-color: hsla(170, 37%, 66%, 0.384);
-        margin-bottom: 20px;
+
+        .card-body form {
+            background-color: hsla(170, 37%, 66%, 0.384);
+            margin-bottom: 20px;
+            border-radius: 7px;
+        }
+
+        .search_title h3 {
+            padding: 0;
+            margin: 0;
+        }
+
+        .search_title {
+            border-radius: 7px;
+            background-color: #ededed;
+            color: rgb(75, 75, 75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search_body {
+            border: 1px solid #ededed;
+            border-radius: 7px;
+        }
+
+        .details {
+            padding: 0 10px;
+            margin-top: 15px;
+        }
+
+        .current_status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ededed;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color:
+        }
+
+        .current_status div h4 {
+            padding: 5px 8px;
+            border-radius: 7px;
+            color: white
         }
     </style>
 @endpush
@@ -41,6 +84,7 @@
 
 
     <div class="card">
+
         <div class="card-body">
             <div>
                 <form action="" method=" " id="searchItemParametersButton" autocomplete="off">
@@ -78,16 +122,21 @@
                     </div>
                 </form>
             </div>
-            <div class="row details">
-                <div class="col-5" id="indent_details">
+
+            <div class="search_body">
+                <div class="search_title col-12 text-center  p-3 ">
+                    <h3>Searched details will appear here.</h3>
+                </div>
+                <div class="row details">
+                    <div class="col-5" id="indent_details">
+
+
+                    </div>
+                    <div class="col-7" id="track_details">
+
+                    </div>
 
                 </div>
-                <div class="col-7" id="track_details">
-
-
-
-                </div>
-
             </div>
         </div>
 
@@ -163,6 +212,26 @@
 
         function indent_details(details) {
             html = '';
+            html += `<div class="current_status">
+                        <div><h5 class="m-0">Current Status :</h5></div>`;
+
+                        if (details.status == 0) {
+                            html += `<div><h4 class="m-0 bg-warning">New Arrival</h4></div>`;
+                        } else if (details.status == 1) {
+                            html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
+                        } else if (details.status == 2) {
+                            html += `<div><h4 class="m-0 bg-success">Completed</h4></div>`;
+                        } else if (details.status == 3) {
+                            html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
+                        } else if (details.status == 4) {
+                            html += `<div><h4 class="m-0 bg-danger">Dispatched</h4></div>`;
+                        } else {
+                            html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
+                        }
+
+            html += `</div>`;
+
+
             html += `<table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
@@ -230,8 +299,8 @@
             var html = '';
             html += `<div class="forward_status col-md-12 mb-3">
                         <div>
-                            <h4 class="title ">New Arrivel</h4>
-                            <hr>
+                            <h4 class="title text-center ">New Arrivel</h4>
+
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -275,8 +344,8 @@
             var html = '';
             html += `<div class="forward_status col-md-12 mb-3">
                         <div>
-                            <h4 class="title bg-info ">OutGoing</h4>
-                            <hr>
+                            <h4 class="title text-center bg-info ">OutGoing</h4>
+
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -320,8 +389,8 @@
             var html = '';
             html += `<div class="forward_status col-md-12 mb-3">
                         <div>
-                            <h4 class="title bg-secondary">Decision</h4>
-                            <hr>
+                            <h4 class="title text-center bg-secondary">Decision</h4>
+
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -365,8 +434,8 @@
             var html = '';
             html += `<div class="forward_status col-md-12 mb-3">
                         <div>
-                            <h4 class="title bg-danger">Dispatch</h4>
-                            <hr>
+                            <h4 class="title text-center bg-danger">Dispatch</h4>
+
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
