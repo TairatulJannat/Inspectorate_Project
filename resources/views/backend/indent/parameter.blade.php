@@ -96,7 +96,7 @@
 @section('content')
 
     <div class="row bg-body p-3 m-3" style="border-radius:8px">
-        <div class="d-flex flex-row-reverse"><button class="btn btn-success" onclick="goBack()"><i
+        <div class="d-flex flex-row-reverse"><button class="btn btn-success" onclick="rediract()"><i
                     class="fa fa-arrow-left"></i></button></div>
         <div class="text-success searched-data">
             <div class="text-center">
@@ -466,7 +466,7 @@
 
         });
 
-        function goBack() {
+        function rediract() {
             window.history.back();
         }
     </script>
