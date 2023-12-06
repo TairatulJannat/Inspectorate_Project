@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('assign_parameter_values', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('parameter_name');
-            $table->string('parameter_value');
+            $table->longText('parameter_value');
             $table->unsignedBigInteger('parameter_group_id');
 
             $table->foreign('parameter_group_id')
