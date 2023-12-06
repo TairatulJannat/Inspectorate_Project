@@ -98,22 +98,49 @@ class OutgoingIndentController extends Controller
                     }
                 })
                 ->addColumn('action', function ($data) {
+                    // start Forward Btn Change for index
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
+                    // start Forward Btn Change for index
 
-                    $actionBtn = '<div class="btn-group" role="group">
+                    if ($DocumentTrack) {
+                        if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
                     <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
                     <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
                     </div>';
-                    // if ($data->status == '2') {
-                    //     $actionBtn = '<div class="btn-group" role="group">
-                    //     <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
-                    //     <button href="" class="edit btn btn-success btn-sm" disable>Completed</button>';
-                    // } else {
+                        } else {
+                            $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Vetted</a>
+                            </div>';
+                        }
 
-                    // }
-
+                        if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Vetted</a>
+                            </div>';
+                        }
+                    } else {
+                        $actionBtn = '<div class="btn-group" role="group">
+                    <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                    </div>';
+                    }
 
                     return $actionBtn;
                 })
+                // ->addColumn('action', function ($data) {
+
+                //     $actionBtn = '<div class="btn-group" role="group">
+                //     <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                //     <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                //     </div>';
+
+
+                //     return $actionBtn;
+                // })
                 ->rawColumns(['action', 'status'])
                 ->make(true);
         }
@@ -181,9 +208,13 @@ class OutgoingIndentController extends Controller
 
         //End blade notes section....
 
+        //Start blade forward on off section....
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
 
-        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id','additional_documents_names'));
+        //End blade forward on off section....
 
+
+        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function OutgoingIndentTracking(Request $request)
@@ -235,7 +266,6 @@ class OutgoingIndentController extends Controller
 
                 $data->status = 4;
                 $data->save();
-
                 $value = new DocumentTrack();
                 $value->ins_id = $ins_id;
                 $value->section_id = $section_id;

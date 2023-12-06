@@ -44,8 +44,7 @@ class IndentDispatchController extends Controller
                     ->where('indents.status', 4)
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
-            }
-             else {
+            } else {
 
                 $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
@@ -100,24 +99,40 @@ class IndentDispatchController extends Controller
                         return '<button class="btn btn-info btn-sm">Approved</button>';
                     }
                     if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
+                        return '<button class="btn btn-secondary btn-sm">Dispatched</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
 
+                    // start Forward Btn Change for index
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
+                    // start Forward Btn Change for index
+                    if ($DocumentTrack) {
+                        if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                            <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
+                            </div>';
+                        } else {
+                            $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
+                        </div>';
+                        }
 
-                    if ($data->status == '2') {
-                        $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
-                        <a href="" class="edit btn btn-success btn-sm" disable>Completed</a>';
+                        if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
+                        </div>';
+                        }
                     } else {
-
                         $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
                         <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
                         </div>';
                     }
-
 
                     return $actionBtn;
                 })
@@ -145,14 +160,14 @@ class IndentDispatchController extends Controller
             )
             ->where('indents.id', $id)
             ->first();
-            $details->additional_documents = json_decode($details->additional_documents, true);
-            $additional_documents_names = [];
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
 
-            foreach ($details->additional_documents as $document_id) {
-                $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-                array_push($additional_documents_names, $additional_names);
-            }
+            array_push($additional_documents_names, $additional_names);
+        }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -207,9 +222,13 @@ class IndentDispatchController extends Controller
         }
 
         //End blade notes section....
+        //Start blade forward on off section....
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+
+        //End blade forward on off section....
 
 
-        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','desig_position', 'additional_documents_names'));
+        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)

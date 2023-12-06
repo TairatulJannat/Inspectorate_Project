@@ -140,7 +140,7 @@
                                     @if (!empty($additional_documents_names))
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name}} </li>
+                                                <li>{{ $documents_name }} </li>
                                                 <!-- Adjust the key according to your array structure -->
                                             @endforeach
                                         </ul>
@@ -186,32 +186,73 @@
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="forward col-md-12 mb-3">
-                            <div>
-                                <h4 class="text-success">Forward</h4>
-                                <hr>
-                                <form action="">
-                                    <div class="row">
-                                        <div class="col-md-4 mb-2">
-                                            <select name="designation" id="designations" class="form-control"
-                                                style="height: 40px;">
-                                                <option value="">Select To Receiver</option>
-                                                @foreach ($designations as $d)
-                                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4 mb-2">
-                                            <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <button class="btn btn-success" id="submitBtn"
-                                                style="height: 40px;">Forward</button>
-                                        </div>
+                        @if ($DocumentTrack_hidden)
+
+                            @if ($desig_id == $DocumentTrack_hidden->reciever_desig_id)
+                                <div class="forward col-md-12 mb-3">
+                                    <div>
+                                        <h4 class="text-success">Forward</h4>
+                                        <hr>
+                                        <form action="">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <select name="designation" id="designations" class="form-control"
+                                                        style="height: 40px;">
+                                                        <option value="">Select To Receiver</option>
+                                                        @foreach ($designations as $d)
+                                                            <option value="{{ $d->id }}">{{ $d->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button class="btn btn-success" id="submitBtn"
+                                                        style="height: 40px;">Forward</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
+                            @else
+                            {{-- blank --}}
+                            @endif
+
+                            @if ($desig_id == $DocumentTrack_hidden->sender_designation_id)
+                                {{-- blank --}}
+                            @endif
+                        @else
+                            <div class="forward col-md-12 mb-3">
+                                <div>
+                                    <h4 class="text-success">Forward</h4>
+                                    <hr>
+                                    <form action="">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-2">
+                                                <select name="designation" id="designations" class="form-control"
+                                                    style="height: 40px;">
+                                                    <option value="">Select To Receiver</option>
+                                                    @foreach ($designations as $d)
+                                                        <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-success" id="submitBtn"
+                                                    style="height: 40px;">Forward</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+
+                        @endif
+                     
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -252,13 +293,7 @@
                         </div>
                     </div>
 
-                    <!-- Notes Sectio
-                                n - Uncomment if needed -->
-                    {{-- <div class="col-md-6">
-                        @if ($notes == !null)
-                            ... <!-- Your notes HTML here -->
-                        @endif
-                    </div> --}}
+
 
                 </div>
 
@@ -280,7 +315,7 @@
 
     <script>
         $(document).ready(function() {
-            var reciever_desig_text
+            var reciever_desig_text='';
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();

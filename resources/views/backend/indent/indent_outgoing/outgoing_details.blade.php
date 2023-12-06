@@ -48,7 +48,7 @@
             border-radius: 6px;
             padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
-n
+            n
         }
 
         h4 {
@@ -73,7 +73,8 @@ n
         .forward_status {
             min-height: 200px
         }
-        .delay_cause{
+
+        .delay_cause {
             min-height: 100px
         }
 
@@ -179,7 +180,106 @@ n
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="forward col-md-12 mb-3">
+                        @if ($DocumentTrack_hidden)
+
+                            @if ($desig_id == $DocumentTrack_hidden->reciever_desig_id)
+                                <div class="forward col-md-12 mb-3">
+                                    <div>
+                                        <h4 class="text-success">Forward</h4>
+                                        <hr>
+                                        <form action="">
+                                            <div class="row">
+                                                <div class="col-md-12 d-flex">
+
+                                                    <select name="designation" id="designations" class="form-control "
+                                                        style="height: 40px; margin-right">
+                                                        <option value="">Select To Receiver </option>
+                                                        @foreach ($designations as $d)
+                                                            <option value={{ $d->id }}>{{ $d->name }}</option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
+                                                        style="height: 40px; margin-left: 10px;"></textarea>
+                                                </div>
+                                                <div class="d-flex">
+                                                    @if ($desig_position->position == 3)
+                                                        <div class=" col-md-6 mt-2">
+                                                            <label for="delivery_date">Delivery Date </label>
+                                                            <input type="date" id="delivery_date" name="delivery_date"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="col-md-6 mt-2 " style="margin-left: 10px;">
+                                                            <label for="delay_cause">Delay Cause </label>
+                                                            <textarea name="delay_cause" id="delay_cause" class="form-control" placeholder="Enter delay cause"
+                                                                style="height: 40px; "></textarea>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-2">
+
+                                                    <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                        style="height: 40px;">Deliver</button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            @else
+                                {{-- blank --}}
+                            @endif
+
+                            @if ($desig_id == $DocumentTrack_hidden->sender_designation_id)
+                                {{-- blank --}}
+                            @endif
+                        @else
+                            <div class="forward col-md-12 mb-3">
+                                <div>
+                                    <h4 class="text-success">Forward</h4>
+                                    <hr>
+                                    <form action="">
+                                        <div class="row">
+                                            <div class="col-md-12 d-flex">
+
+                                                <select name="designation" id="designations" class="form-control "
+                                                    style="height: 40px; margin-right">
+                                                    <option value="">Select To Receiver </option>
+                                                    @foreach ($designations as $d)
+                                                        <option value={{ $d->id }}>{{ $d->name }}</option>
+                                                    @endforeach
+                                                </select>
+
+                                                <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
+                                                    style="height: 40px; margin-left: 10px;"></textarea>
+                                            </div>
+                                            <div class="d-flex">
+                                                @if ($desig_position->position == 3)
+                                                    <div class=" col-md-6 mt-2">
+                                                        <label for="delivery_date">Delivery Date </label>
+                                                        <input type="date" id="delivery_date" name="delivery_date"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="col-md-6 mt-2 " style="margin-left: 10px;">
+                                                        <label for="delay_cause">Delay Cause </label>
+                                                        <textarea name="delay_cause" id="delay_cause" class="form-control" placeholder="Enter delay cause"
+                                                            style="height: 40px; "></textarea>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="col-md-2">
+
+                                                <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                    style="height: 40px;">Deliver</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        @endif
+                        {{-- <div class="forward col-md-12 mb-3">
                             <div>
                                 <h4 class="text-success">Forward</h4>
                                 <hr>
@@ -206,7 +306,7 @@ n
                                                         class="form-control">
                                                 </div>
                                                 <div class="col-md-6 mt-2 " style="margin-left: 10px;">
-                                                    <label for="delay_cause">Delivery Date </label>
+                                                    <label for="delay_cause">Delay Cause </label>
                                                     <textarea name="delay_cause" id="delay_cause" class="form-control" placeholder="Enter delay cause"
                                                         style="height: 40px; "></textarea>
                                                 </div>
@@ -221,7 +321,7 @@ n
                                 </form>
 
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="forward_status col-md-12 mb-3">
                             <div>
@@ -266,7 +366,7 @@ n
                                     <h4 class="text-success">Delay Cause</h4>
                                     <hr>
                                     <div class="table-responsive">
-                                       {{ $details->delay_cause}}
+                                        {{ $details->delay_cause }}
 
                                     </div>
                                 </div>

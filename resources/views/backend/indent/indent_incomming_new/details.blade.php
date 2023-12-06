@@ -251,10 +251,6 @@
                         @endif
 
 
-
-
-
-
                         <div class="forward_status col-md-12">
                             <div>
                                 <h4 class="text-success">Forward Status</h4>
