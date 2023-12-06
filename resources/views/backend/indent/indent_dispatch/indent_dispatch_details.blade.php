@@ -41,13 +41,14 @@
 
 
         .forward_status,
-        .forward {
+        .forward,
+        .delay_cause {
             background-color: #F5F7FB !important;
             /* Light gray */
             border-radius: 6px;
             padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
-
+            n
         }
 
         h4 {
@@ -69,9 +70,12 @@
             cursor: pointer;
         }
 
-
         .forward_status {
-            min-height: 250px
+            min-height: 200px
+        }
+
+        .delay_cause {
+            min-height: 100px
         }
 
         .remarks_status {
@@ -132,7 +136,7 @@
                                     @if (!empty($additional_documents_names))
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name}} </li>
+                                                <li>{{ $documents_name }} </li>
                                                 <!-- Adjust the key according to your array structure -->
                                             @endforeach
                                         </ul>
@@ -175,34 +179,78 @@
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="forward col-md-12 mb-3">
-                            <div>
-                                <h4 class="text-success">Forward</h4>
-                                <hr>
-                                <form action="">
-                                    <div class="row">
-                                        @if ($desig_position->position != 1)
-                                        <div class="col-md-6 mb-2">
-                                            <select name="designation" id="designations" class="form-control"
-                                                style="height: 40px;">
-                                                <option value="">Select To Receiver</option>
-                                                @foreach ($designations as $d)
-                                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @endif
-                                        <div class="col-md-6 mb-2">
-                                            <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <button class="btn btn-success" id="submitBtn"
-                                                style="height: 40px;">Deliver</button>
-                                        </div>
+                        @if ($DocumentTrack_hidden)
+
+                            @if ($desig_id == $DocumentTrack_hidden->reciever_desig_id)
+                                <div class="forward col-md-12 mb-3">
+                                    <div>
+                                        <h4 class="text-success">Forward</h4>
+                                        <hr>
+                                        <form action="">
+                                            <div class="row">
+                                                @if ($desig_position->position != 1)
+                                                    <div class="col-md-6 mb-2">
+                                                        <select name="designation" id="designations" class="form-control"
+                                                            style="height: 40px;">
+                                                            <option value="">Select To Receiver</option>
+                                                            @foreach ($designations as $d)
+                                                                <option value="{{ $d->id }}">{{ $d->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                @endif
+                                                <div class="col-md-6 mb-2">
+                                                    <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button class="btn btn-success" id="submitBtn"
+                                                        style="height: 40px;">Deliver</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
+                            @else
+                                {{-- blank --}}
+                            @endif
+
+                            @if ($desig_id == $DocumentTrack_hidden->sender_designation_id)
+                                {{-- blank --}}
+                            @endif
+                        @else
+                            <div class="forward col-md-12 mb-3">
+                                <div>
+                                    <h4 class="text-success">Forward</h4>
+                                    <hr>
+                                    <form action="">
+                                        <div class="row">
+                                            @if ($desig_position->position != 1)
+                                                <div class="col-md-6 mb-2">
+                                                    <select name="designation" id="designations" class="form-control"
+                                                        style="height: 40px;">
+                                                        <option value="">Select To Receiver</option>
+                                                        @foreach ($designations as $d)
+                                                            <option value="{{ $d->id }}">{{ $d->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+                                            <div class="col-md-6 mb-2">
+                                                <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-success" id="submitBtn"
+                                                    style="height: 40px;">Deliver</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+
+                        @endif
+
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -241,6 +289,18 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($details->delay_cause !== null)
+                            <div class="delay_cause col-md-12 mt-3">
+                                <div>
+                                    <h4 class="text-success">Delay Cause</h4>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        {{ $details->delay_cause }}
+
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
 

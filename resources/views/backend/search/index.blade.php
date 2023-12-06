@@ -14,6 +14,24 @@
         input {
             width:
         }
+
+        .title {
+            background-color: #1B4C43;
+            padding: 7px 10px;
+            color: #ffff;
+            border-radius: 7px 7px 0 0;
+        }
+
+        .forward_status {
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        }
+
+        .table-responsive {
+            padding: 0 10px;
+        }
+        .card-body form{
+        background-color: #1B4C43;
+        }
     </style>
 @endpush
 @section('main_menu', 'Search')
@@ -65,6 +83,8 @@
                 </div>
                 <div class="col-6" id="track_details">
 
+
+
                 </div>
 
             </div>
@@ -110,9 +130,19 @@
                             } else {
 
                                 var details = response.details;
-                                var doc_track_data = response.data;
+
+                                var arrivel = response.data_seen;
+                                var decision = response.data_approved;
+                                var vetted = response.data_vetted;
+                                var dispatch = response.data_dispatch;
+
+                                var concatenatedHTML = data_seen(arrivel) +
+                                    data_approved(decision) +
+                                    data_vetted(vetted) +
+                                    data_dispatch(dispatch);
+
                                 $('#indent_details').html(indent_details(details))
-                                $('#track_details').html(track_data(doc_track_data))
+                                $('#track_details').html(concatenatedHTML)
                                 // $('#track_details').html("ok")
                             }
                         }
@@ -193,18 +223,26 @@
 
         }
 
-        function track_data(data) {
+
+
+        function data_seen(data) {
             var html = '';
-            html += `<table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Sender</th>
-                        <th></th>
-                        <th>Receiver</th>
-                        <th>Forwarded Date Time</th>
-                    </tr>
-                </thead>
-                <tbody>`;
+            html += `<div class="forward_status col-md-12 mb-3">
+                        <div>
+                            <h4 class="title ">New Arrivel</h4>
+                            <hr>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sender</th>
+                                            <th></th>
+                                            <th>Receiver</th>
+                                            <th>Forwarded Date Time</th>
+                                            <th>Remark</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`
 
             if (data !== null) {
 
@@ -214,16 +252,155 @@
                     var date_time = formatDate(value.created_at)
 
                     html += `<tr>
-                        <td>${value.sender_designation_name}</td>
-                        <td><i class="fa fa-arrow-right text-success"></i></td>
-                        <td>${value.receiver_designation_name}</td>
-                        <td>${date_time}</td>
-                    </tr>`;
+                                <td>${value.sender_designation_name}</td>
+                                <td><i class="fa fa-arrow-right text-success"></i></td>
+                                <td>${value.receiver_designation_name}</td>
+                                <td>${date_time}</td>
+                                <td>${value.remarks}</td>
+                            </tr>`;
                 });
             }
 
             html += `</tbody>
-            </table>`;
+                                </table>
+                            </div>
+                        </div>
+                    </div>`;
+
+            return html;
+        }
+
+        function data_vetted(data) {
+            var html = '';
+            html += `<div class="forward_status col-md-12 mb-3">
+                        <div>
+                            <h4 class="title bg-info ">OutGoing</h4>
+                            <hr>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sender</th>
+                                            <th></th>
+                                            <th>Receiver</th>
+                                            <th>Forwarded Date Time</th>
+                                            <th>Remark</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`
+
+            if (data !== null) {
+
+
+                $.each(data, function(index, value) {
+
+                    var date_time = formatDate(value.created_at)
+
+                    html += `<tr>
+                                <td>${value.sender_designation_name}</td>
+                                <td><i class="fa fa-arrow-right text-success"></i></td>
+                                <td>${value.receiver_designation_name}</td>
+                                <td>${date_time}</td>
+                                <td>${value.remarks}</td>
+                            </tr>`;
+                });
+            }
+
+            html += `</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>`;
+
+            return html;
+        }
+
+        function data_approved(data) {
+            var html = '';
+            html += `<div class="forward_status col-md-12 mb-3">
+                        <div>
+                            <h4 class="title bg-secondary">Decision</h4>
+                            <hr>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sender</th>
+                                            <th></th>
+                                            <th>Receiver</th>
+                                            <th>Forwarded Date Time</th>
+                                            <th>Remark</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`
+
+            if (data !== null) {
+
+
+                $.each(data, function(index, value) {
+
+                    var date_time = formatDate(value.created_at)
+
+                    html += `<tr>
+                                <td>${value.sender_designation_name}</td>
+                                <td><i class="fa fa-arrow-right text-success"></i></td>
+                                <td>${value.receiver_designation_name}</td>
+                                <td>${date_time}</td>
+                                <td>${value.remarks}</td>
+                            </tr>`;
+                });
+            }
+
+            html += `</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>`;
+
+            return html;
+        }
+
+        function data_dispatch(data) {
+            var html = '';
+            html += `<div class="forward_status col-md-12 mb-3">
+                        <div>
+                            <h4 class="title bg-danger">Dispatch</h4>
+                            <hr>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sender</th>
+                                            <th></th>
+                                            <th>Receiver</th>
+                                            <th>Forwarded Date Time</th>
+                                            <th>Remark</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`
+
+            if (data !== null) {
+
+
+                $.each(data, function(index, value) {
+
+                    var date_time = formatDate(value.created_at)
+
+                    html += `<tr>
+                                <td>${value.sender_designation_name}</td>
+                                <td><i class="fa fa-arrow-right text-success"></i></td>
+                                <td>${value.receiver_designation_name}</td>
+                                <td>${date_time}</td>
+                                <td>${value.remarks}</td>
+                            </tr>`;
+                });
+            }
+
+            html += `</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>`;
 
             return html;
         }
@@ -238,7 +415,5 @@
 
             return `${day}-${month}-${year}`;
         }
-
-        
     </script>
 @endpush
