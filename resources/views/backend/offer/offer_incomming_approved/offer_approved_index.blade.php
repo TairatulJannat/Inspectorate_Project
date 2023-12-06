@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Approved)')
+@section('title', 'Offer (Approved)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -52,9 +52,9 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.indent/view') }}" type="button"
+                            <a href="{{ route('admin.offer/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
-                            <a href="{{ route('admin.indent_approved/view') }}" type="button"
+                            <a href="{{ route('admin.offer_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">Incoming (Approved)</a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
                                 class="btn btn-info text-white btn-sm">OutGoing</a>
@@ -76,8 +76,8 @@
                         <thead >
                             <tr>
                                 <th>SL No</th>
-                                <th>Reference Number</th>
-                                <th>Indent Number</th>
+                                <th>Reference No</th>
+                                <th>Tender Reference No</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
@@ -102,5 +102,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.indent.indent_incomming_approved.indent_approved_index_js')
+    @include('backend.offer.offer_incomming_approved.offer_approved_index_js')
 @endpush

@@ -54,7 +54,7 @@
                         <div class="col-9">
                             <a href="{{ route('admin.offer/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
-                            <a href="" type="button"
+                            <a href="{{ route('admin.offer_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">Incoming (Approved)</a>
                             <a href="" type="button"
                                 class="btn btn-info text-white btn-sm">OutGoing</a>
@@ -77,7 +77,7 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference No</th>
-                                <th>Tender Refernce No</th>
+                                <th>Tender Reference No</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
