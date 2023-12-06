@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Offer')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -91,7 +91,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
+@section('main_menu', 'Offer')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -99,7 +99,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Indent</h2>
+                <h2>Details of Offer</h2>
             </div>
             <div style="display: flex">
 
@@ -112,8 +112,8 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
-                                <th>Indent Number</td>
-                                <td>{{ $details->indent_number }}</td>
+                                <th>Tender Reference No</td>
+                                <td>{{ $details->tender_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
@@ -121,7 +121,7 @@
                             </tr>
                             <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->indent_received_date }}</td>
+                                <td>{{ $details->offer_rcv_ltr_dt }}</td>
                             </tr>
 
                             <tr>
@@ -153,30 +153,11 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature }}</td>
-                            </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}</td>
-                            </tr>
-                            <tr>
-                                <th>Model</td>
-                                <td>{{ $details->model }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly }}</td>
-                            </tr>
+                           
 
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                            href="">Parameter</a>
                     </div>
                 </div>
 
@@ -311,7 +292,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/indent/indent_tracking') }}',
+                            url: '{{ url('admin/offer/offer_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -333,7 +314,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent/view') }}",
+                                            "{{ route('admin.offer/view') }}",
                                             40000);
                                     }
                                 }

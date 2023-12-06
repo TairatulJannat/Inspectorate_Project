@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Offer')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -32,7 +32,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
+@section('main_menu', 'Offer')
 @section('active_menu', 'Incoming')
 @section('content')
 
@@ -52,7 +52,7 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="" type="button"
+                            <a href="{{ route('admin.offer/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
                             <a href="" type="button"
                                 class="btn btn-secondary btn-sm">Incoming (Approved)</a>

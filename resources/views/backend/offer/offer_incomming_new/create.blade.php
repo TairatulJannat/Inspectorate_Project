@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Offer')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -16,8 +16,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
-@section('active_menu', 'Add Indent')
+@section('main_menu', 'Offer')
+@section('active_menu', 'Add Offer')
 @section('content')
     <div class="col-sm-12 col-xl-12">
 

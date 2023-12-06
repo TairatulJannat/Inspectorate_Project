@@ -120,7 +120,7 @@ class OfferController extends Controller
                     } else {
 
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
+                        <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
                     }
 
@@ -188,6 +188,149 @@ class OfferController extends Controller
 
 
         $data->save();
+
+        return response()->json(['success' => 'Done']);
+    }
+
+    public function details($id)
+    {
+
+        $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
+            ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
+            ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
+            ->select(
+                'offers.*',
+                'item_types.name as item_type_name',
+                'offers.*',
+                'dte_managments.name as dte_managment_name',
+                'additional_documents.name as additional_documents_name',
+                'fin_years.year as fin_year_name'
+            )
+            ->where('offers.id', $id)
+            ->first();
+
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
+
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+
+            array_push($additional_documents_names, $additional_names);
+        }
+
+
+        $designations = Designation::all();
+        $admin_id = Auth::user()->id;
+        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
+        $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
+            ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
+            ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+            ->where('track_status', 1)
+            ->select(
+                'document_tracks.*',
+                'sender_designation.name as sender_designation_name',
+                'receiver_designation.name as receiver_designation_name'
+            )
+            ->get();
+
+        $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
+
+        if ($auth_designation_id) {
+            $desig_id = $auth_designation_id->desig_id;
+        }
+
+        //Start close forward Status...
+
+        $sender_designation_id = '';
+        foreach ($document_tracks as $track) {
+            if ($track->sender_designation_id === $desig_id) {
+                $sender_designation_id = $track->sender_designation_id;
+                break;
+            }
+        }
+
+        //End close forward Status...
+
+
+        //Start blade notes section....
+        $notes = '';
+
+        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
+            ->where('track_status', 1)
+            ->where('reciever_desig_id', $desig_id)->get();
+
+        if ($document_tracks_notes->isNotEmpty()) {
+            $notes = $document_tracks_notes;
+        }
+
+        //End blade notes section....
+
+
+
+        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','additional_documents_names'));
+
+    }
+
+    public function offerTracking(Request $request)
+    {
+
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
+        $doc_ref_id = $request->doc_ref_id;
+        $doc_reference_number = $request->doc_reference_number;
+        $remarks = $request->remarks;
+        $reciever_desig_id = $request->reciever_desig_id;
+        $section_id = $section_ids[0];
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
+
+        $data = new DocumentTrack();
+        $data->ins_id = $ins_id;
+        $data->section_id = $section_id;
+        $data->doc_type_id = $doc_type_id;
+        $data->doc_ref_id = $doc_ref_id;
+        $data->doc_reference_number = $doc_reference_number;
+        $data->track_status = 1;
+        $data->reciever_desig_id = $reciever_desig_id;
+        $data->sender_designation_id = $sender_designation_id;
+        $data->remarks = $remarks;
+        $data->created_at = Carbon::now();
+        $data->updated_at = Carbon::now();
+        $data->save();
+
+
+        if ($desig_position->position == 7) {
+
+            $data = Indent::find($doc_ref_id);
+
+            if ($data) {
+
+                $data->status = 3;
+                $data->save();
+
+                $value = new DocumentTrack();
+                $value->ins_id = $ins_id;
+                $value->section_id = $section_id;
+                $value->doc_type_id = $doc_type_id;
+                $value->doc_ref_id = $doc_ref_id;
+                $value->doc_reference_number = $doc_reference_number;
+                $value->track_status = 3;
+                $value->reciever_desig_id = $reciever_desig_id;
+                $value->sender_designation_id = $sender_designation_id;
+                $value->remarks = $remarks;
+                $value->created_at = Carbon::now();
+                $value->updated_at = Carbon::now();
+                $value->save();
+            }
+        }
+
+
+
 
         return response()->json(['success' => 'Done']);
     }
