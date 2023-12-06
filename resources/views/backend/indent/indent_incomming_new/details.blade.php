@@ -185,6 +185,44 @@
 
                 <div class="card-body">
                     <div class="row">
+                        @if ($DocumentTrack_hidden)
+
+                            @if ($desig_id  == $DocumentTrack_hidden->reciever_desig_id)
+                            <div class="forward col-md-12 mb-3">
+                                <div>
+                                    <h4 class="text-success">Forward</h4>
+                                    <hr>
+                                    <form action="">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <select name="designation" id="designations" class="form-control" style="height: 40px;">
+                                                    <option value="">Select To Receiver</option>
+                                                    @foreach ($designations as $d)
+                                                        <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-success" id="submitBtn" style="height: 40px;">Forward</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            @else
+
+                            @endif
+
+                            @if ($desig_id  ==  $DocumentTrack_hidden->sender_designation_id)
+
+
+                            @endif
+
+                        @else
+
                         <div class="forward col-md-12 mb-3">
                             <div>
                                 <h4 class="text-success">Forward</h4>
@@ -209,6 +247,13 @@
                                 </form>
                             </div>
                         </div>
+
+                        @endif
+
+
+
+
+
 
                         <div class="forward_status col-md-12">
                             <div>
