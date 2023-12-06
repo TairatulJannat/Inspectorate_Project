@@ -145,31 +145,7 @@ n
                                 </td>
 
                             </tr>
-                            <tr>
-                                <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature }}</td>
-                            </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}</td>
-                            </tr>
-                            <tr>
-                                <th>Model</td>
-                                <td>{{ $details->model }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly }}</td>
-                            </tr>
-
+                          
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
