@@ -30,7 +30,8 @@
             padding: 0 10px;
         }
         .card-body form{
-        background-color: #1B4C43;
+        background-color: hsla(170, 37%, 66%, 0.384);
+        margin-bottom: 20px;
         }
     </style>
 @endpush
@@ -78,10 +79,10 @@
                 </form>
             </div>
             <div class="row details">
-                <div class="col-6" id="indent_details">
+                <div class="col-5" id="indent_details">
 
                 </div>
-                <div class="col-6" id="track_details">
+                <div class="col-7" id="track_details">
 
 
 

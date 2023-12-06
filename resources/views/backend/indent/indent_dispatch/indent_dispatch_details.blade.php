@@ -322,8 +322,7 @@
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();
-                reciever_desig_text =
-                    to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>
+
 
             });
 
@@ -336,7 +335,8 @@
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
                 swal({
-                    title: Are you sure to delivered ${reciever_desig_text}?,
+                    title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">
+                        ${reciever_desig_text}</span>?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
