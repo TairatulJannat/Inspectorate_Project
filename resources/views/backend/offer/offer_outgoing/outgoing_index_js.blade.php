@@ -39,10 +39,13 @@
                     searchable: false
                 },
                 {
-
                     data: 'reference_no',
                     name: 'reference_no',
-
+                    orderable: false
+                },
+                {
+                    data: 'tender_reference_no',
+                    name: 'tender_reference_no',
                     orderable: false
                 },
                 {
@@ -58,8 +61,8 @@
 
 
                 {
-                    data: 'indent_received_date',
-                    name: 'indent_received_date',
+                    data: 'offer_rcv_ltr_dt',
+                    name: 'offer_rcv_ltr_dt',
                     orderable: false
                 },
                 {
