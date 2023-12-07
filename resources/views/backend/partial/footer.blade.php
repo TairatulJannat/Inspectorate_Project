@@ -1,12 +1,19 @@
+<style>
+    .footer-copyright p a:hover {
+        color:#059c74;
+    }
+</style>
 <footer class="footer">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 footer-copyright">
-                <p class="mb-0">{{ __('Copyright © ' . date('Y') . ' | All Rights Reserved by Bangladesh Army') }}</p>
+                <p class="mb-0">Developed By <a href="https://tilbd.net/" target="_blank" style="hover:"> Trust Innovation
+                        Limited</a></p>
             </div>
-            <div class="col-md-6">
-                {{--                <p class="pull-right mb-0">Developed By <a href="https://portfolio-ratin.com/" target="_blank"> Trust Innovation Limited</a></p> --}}
-            </div>
+            {{-- <div class="col-md-6">
+                               <p class="pull-right mb-0">Developed By <a href="https://tilbd.net/" target="_blank"> Trust Innovation Limited</a></p>
+                               {{ __('Copyright © ' . date('Y') . ' | All Rights Reserved by Bangladesh Army') }}
+            </div> --}}
         </div>
     </div>
 </footer>
