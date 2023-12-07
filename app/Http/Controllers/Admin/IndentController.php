@@ -131,7 +131,7 @@ class IndentController extends Controller
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit">Doc Status</a>
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
                             <a href="' . url('admin/indent/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
@@ -144,7 +144,7 @@ class IndentController extends Controller
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit ">Doc Status</a>
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
                         <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit ">Forward</a>
                         </div>';
                     }
