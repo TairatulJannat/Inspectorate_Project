@@ -372,7 +372,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/outgoing_indent/tracking') }}',
+                            url: '{{ url('admin/outgoing_offer/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,

@@ -9,6 +9,7 @@ use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Indent;
 use App\Models\Offer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -52,7 +53,7 @@ class OutgoingOfferController extends Controller
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
                     ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('offers.id', $offerIds)
-                    ->where('indenoffersts.status', '=', 1)
+                    ->where('offers.status', '=', 1)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
@@ -207,5 +208,73 @@ class OutgoingOfferController extends Controller
 
 
         return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+    }
+
+    public function OutgoingOfferTracking(Request $request)
+    {
+        // dd($request->id);
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $doc_type_id = 3; // 3 for doc type indent from doctype table column doc_serial
+        $doc_ref_id = $request->doc_ref_id;
+        $doc_reference_number = $request->doc_reference_number;
+        $remarks = $request->remarks;
+        $reciever_desig_id = $request->reciever_desig_id;
+        $section_id = $section_ids[0];
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
+        // dd( $desig_position);
+        $data = new DocumentTrack();
+        $data->ins_id = $ins_id;
+        $data->section_id = $section_id;
+        $data->doc_type_id = $doc_type_id;
+        $data->doc_ref_id = $doc_ref_id;
+        $data->doc_reference_number = $doc_reference_number;
+        $data->track_status = 2;
+        $data->remarks = $remarks;
+
+        $data->reciever_desig_id = $reciever_desig_id;
+        $data->sender_designation_id = $sender_designation_id;
+        $data->created_at = Carbon::now();
+        $data->updated_at = Carbon::now();
+        $data->save();
+
+        // ----delay_cause start here
+        if ($desig_position->position == 3) {
+            $indent_data = Offer::find($doc_ref_id);
+            $indent_data->delay_cause = $request->delay_cause;
+            $indent_data->delivery_date = $request->delivery_date;
+            $indent_data->delivery_by = Auth::user()->id;
+            $indent_data->save();
+        }
+        // ----delay_cause end here
+
+        if ($desig_position->position == 7) {
+
+            $data = Offer::find($doc_ref_id);
+
+            if ($data) {
+
+                $data->status = 4;
+                $data->save();
+                $value = new DocumentTrack();
+                $value->ins_id = $ins_id;
+                $value->section_id = $section_id;
+                $value->doc_type_id = $doc_type_id;
+                $value->doc_ref_id = $doc_ref_id;
+                $value->doc_reference_number = $doc_reference_number;
+                $value->track_status = 4;
+                $value->remarks = $remarks;
+                $value->reciever_desig_id = $reciever_desig_id;
+                $value->sender_designation_id = $sender_designation_id;
+                $value->created_at = Carbon::now();
+                $value->updated_at = Carbon::now();
+                $value->save();
+            }
+        }
+
+        return response()->json(['success' => 'Done']);
     }
 }

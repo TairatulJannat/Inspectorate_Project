@@ -121,25 +121,25 @@ class OfferApprovedController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                            
-                            <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
+                            <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
                           
-                            <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
+                            <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                             
-                            <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
+                            <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
                        
-                        <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
+                        <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
                     }
 

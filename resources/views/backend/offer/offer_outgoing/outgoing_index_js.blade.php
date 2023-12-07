@@ -27,7 +27,7 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-                url: "{{ url('admin/outgoing_indent/all_data') }}",
+                url: "{{ url('admin/outgoing_offer/all_data') }}",
                 type: 'GET',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
