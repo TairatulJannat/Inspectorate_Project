@@ -228,7 +228,7 @@ class IndentDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden'));
+        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
@@ -257,8 +257,8 @@ class IndentDispatchController extends Controller
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at = Carbon::now('Asia/Dhaka');
+        $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
 
@@ -276,13 +276,13 @@ class IndentDispatchController extends Controller
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                $data->doc_reference_number = $doc_reference_number;
+                $value->doc_reference_number = $doc_reference_number;
                 $value->track_status = 4;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $data->remarks = $remarks;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->remarks = $remarks;
+                $value->created_at = Carbon::now('Asia/Dhaka');
+                $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }

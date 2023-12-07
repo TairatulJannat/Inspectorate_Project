@@ -30,6 +30,15 @@
         .badge-secondary{
             background-color: #1B4C43 !important;
         }
+        .btn-group .doc,.btn-group .edit,.btn-group .update{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            background-color: #1B4C43;
+            border-radius: 5px;
+            margin:2px;
+                    }
     </style>
 @endpush
 @section('main_menu', 'Indent')

@@ -257,8 +257,8 @@ class IndentApprovedController extends Controller
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at = Carbon::now('Asia/Dhaka');
+        $data->updated_at = Carbon::now('Asia/Dhaka');;
         $data->save();
 
 
@@ -281,8 +281,8 @@ class IndentApprovedController extends Controller
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
                 $value->remarks = $remarks;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->created_at = Carbon::now('Asia/Dhaka');
+                $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }
