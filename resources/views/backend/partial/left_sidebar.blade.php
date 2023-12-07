@@ -239,8 +239,10 @@ $currentControllerName = Request::segment(2);
                                     data-feather="list"></i><span>Excel Files</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/import-indent-spec-data-index') }}"
-                                        class="{{ Request::is('*/admin/import-indent-spec-data-index') ? 'active' : '' }} text-white">Excel
-                                        CSV Index</a>
+                                        class="{{ Request::is('*/admin/import-indent-spec-data-index') ? 'active' : '' }} text-white">Indent Spec Excel</a>
+                                </li>
+                                <li><a href="{{ url('admin/import-supplier-spec-data-index') }}"
+                                        class="{{ Request::is('*/admin/import-supplier-spec-data-index') ? 'active' : '' }} text-white">Supplier Spec Excel</a>
                                 </li>
                             </ul>
                         </li>
