@@ -13,6 +13,8 @@ use App\Models\Item_type;
 use App\Models\ParameterGroup;
 use App\Models\AssignParameterValue;
 use App\Models\Inspectorate;
+use App\Models\Indent;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -184,5 +186,18 @@ class ExcelController extends Controller
 
     protected function exportIndentEditedData()
     {
+    }
+
+    protected function supplierIndex()
+    {
+        try {
+            $items = Items::all();
+            $itemTypes = Item_type::all();
+            $indents = Indent::all();
+            $suppliers = Supplier::all();
+        } catch (\Exception $e) {
+            return back()->withError('Failed to retrieve from Database.');
+        }
+        return view('backend.excel-files.import-supplier-spec-data', compact('items', 'itemTypes', 'indents', 'suppliers'));
     }
 }
