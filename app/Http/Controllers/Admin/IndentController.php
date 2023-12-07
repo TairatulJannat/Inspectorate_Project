@@ -23,7 +23,7 @@ class IndentController extends Controller
     //
     public function index()
     {
-
+        
         return view('backend.indent.indent_incomming_new.index');
     }
 

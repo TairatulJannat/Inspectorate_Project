@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'Import Indent Spec Excel File')
+@section('title', 'Import Supplier Spec Excel File')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
@@ -8,7 +8,7 @@
 @endpush
 
 @section('main_menu', 'Excel Files')
-@section('active_menu', 'Import Indent Spec Excel File')
+@section('active_menu', 'Import Supplier Spec Excel File')
 
 @section('content')
     @if (session('status'))
@@ -30,7 +30,7 @@
     @endif
 
     <div class="card" style="background-color: darkseagreen;">
-        <form id="import-indent-spec-data-form" method="POST" action="{{ url('admin/import-indent-spec-data') }}"
+        <form id="import-supplier-spec-data-form" method="POST" action="{{ url('admin/import-supplier-spec-data') }}"
             accept-charset="utf-8" enctype="multipart/form-data">
             @csrf
             <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
@@ -72,6 +72,44 @@
                         <span class="text-danger error-text item-id-error"></span>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-2 mt-2">
+                        <h6>Indent Reference No.: </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <select class="form-control select2 indent-id" id="indentId" name="indent-id"
+                                style="width: 100% !important;">
+                                <option value="" selected disabled>Select Indent Reference No./</option>
+                                @foreach ($indents as $indent)
+                                    <option value="{{ $indent->id }}">{{ $indent->reference_no }}</option>
+                                @endforeach
+                            </select>
+                            @error('indent-id')
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <span class="text-danger error-text indent-id-error"></span>
+                    </div>
+                    <div class="col-md-2 mt-2">
+                        <h6 class="card-title">Supplier: </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <select class="form-control select2 supplier-id" id="supplierId" name="supplier-id"
+                                style="width: 100% !important;">
+                                <option value="" selected disabled>Select Supplier</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
+                                @endforeach
+                            </select>
+                            @error('supplier-id')
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <span class="text-danger error-text supplier-id-error"></span>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -101,5 +139,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- Developer's JS file for brand page -->
-    @include('backend.excel-files.indent-index-js')
+    @include('backend.excel-files.supplier-index-js')
 @endpush
