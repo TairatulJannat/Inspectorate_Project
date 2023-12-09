@@ -2,6 +2,7 @@
 @section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
     <style>
         .card .card-header {
             padding: 0px;
@@ -37,23 +38,6 @@
             background-color: #1B4C43 !important;
         }
 
-        .btn-group .doc,
-        .btn-group .edit,
-        .btn-group .update {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-width: 100px;
-            border-radius: 5px;
-            margin: 2px;
-            padding: 6px 0;
-        }
-
-        .btn-group .doc {
-            border: 1px solid darkgoldenrod;
-            color: darkgoldenrod;
-
-        }
     </style>
 @endpush
 @section('main_menu', 'Indent')

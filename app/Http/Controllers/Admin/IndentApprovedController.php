@@ -93,21 +93,13 @@ class IndentApprovedController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-primary btn-sm">New</button>';
-                    }
-                    if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
-                    }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
+                    
                     if ($data->status == '3') {
-                        return '<button class="btn btn-info btn-sm">Approved</button>';
+                        return '<button class="btn btn-secondary btn-sm">Approved</button>';
+                    }else{
+                        return '<button class="btn btn-secondary btn-sm">None</button>';
                     }
-                    if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
-                    }
+                    
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
@@ -118,26 +110,26 @@ class IndentApprovedController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
@@ -183,7 +175,7 @@ class IndentApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('track_status', 3)
+            ->whereIn('track_status', [1,3])
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',

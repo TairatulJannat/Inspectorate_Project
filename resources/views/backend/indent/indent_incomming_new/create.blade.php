@@ -29,7 +29,7 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="additional_documents">Select Section</label>
+                                <label for="admin_section">Select Section</label>
                                 <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
@@ -105,7 +105,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
-                                <select class="form-control " id="item_type_id" name="item_type_id">
+                                <select class="form-control" id="item_type_id" name="item_type_id">
 
                                     <option selected disabled value="">Please Select</option>
 
@@ -122,7 +122,7 @@
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
-                                <select class="form-control" id="item_id" name="item_id">
+                                <select class="form-control select2" id="item_id" name="item_id">
 
                                     <option value="">Please Select </option>
                                 </select>
@@ -285,10 +285,10 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.indent.indent_incomming_new.index_js')
     <script>
-
         $(document).ready(function() {
 
             $('.select2').select2();
+            
 
             $("#item_type_id").off('change').on('change', function() {
 

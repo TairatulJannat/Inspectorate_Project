@@ -2,7 +2,8 @@
 @section('title', 'Indent (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
-    <style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
+   <style>
         .card .card-header {
             padding: 0px;
             border-bottom: 1px solid rgba(182, 182, 182 , .6);

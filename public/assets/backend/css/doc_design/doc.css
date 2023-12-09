@@ -1,0 +1,37 @@
+
+.btn-group .doc,
+.btn-group .edit,
+.btn-group .update {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 6px 0;
+}
+
+.btn-group .doc {
+    background: radial-gradient(circle, #3a3a3a,#666666) ;
+    color: #fff;
+}
+.btn-group .doc:hover {
+    background:  #3a3a3a ;
+    color: #fff;
+}
+.btn-group .edit{
+    background: radial-gradient(circle, #FF8E36, #FFC03E) ;
+    color: #fff;
+}
+.btn-group .edit:hover{
+    background: #FF8E36 ;
+    color: #fff;
+}
+.btn-group .update{
+    background: radial-gradient(circle, #0d6da8, #2fa4ec) ;
+    color: #fff;
+}
+.btn-group .update:hover{
+    background: #0d6da8 ;
+    color: #fff;
+}

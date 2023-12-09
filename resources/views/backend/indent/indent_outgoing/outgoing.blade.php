@@ -2,6 +2,7 @@
 @section('title', 'Indent (Outgoing)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
     <style>
         .card .card-header {
             padding: 0px;
@@ -38,6 +39,9 @@
         }
         .badge-secondary{
             background-color: #31D2F2 !important;
+        }
+        .dataTables_wrapper button{
+            background-color: #31D2F2;
         }
     </style>
 @endpush
