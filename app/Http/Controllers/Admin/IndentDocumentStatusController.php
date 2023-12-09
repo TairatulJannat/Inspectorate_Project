@@ -46,7 +46,7 @@ class IndentDocumentStatusController extends Controller
 
 
                 $actionBtn = '<div class="btn-group" role="group">
-                        <a href="javascript:void(0)" class="edit btn btn-info btn-sm onclick="edit_data('.$data->id.')"" data-bs-toggle="modal"
+                        <a href="javascript:void(0)" class="edit_doc btn btn-info btn-sm" data-id="'. $data->id.'"  data-bs-toggle="modal"
                         data-bs-target="#editItemTypeModal">Edit</a>
 
                         <a href="javascript:void(0)" class="delete btn btn-danger btn-sm" onclick="delete_data('.$data->id.')">Delete</a>

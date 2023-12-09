@@ -39,11 +39,11 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit Document</h5>
             </div>
-            <form action="" id="save_info">
+            <form action="" id="update_info">
                 @csrf
                 <input type="hidden" id="doc_id" >
                 <div class="modal-body">
-                    <input type="hidden" id="indent_id" name="indent_id" value="{{ $indentId }}">
+    
                     <div class="mb-3">
                         <label for="indent_doc_id" class="form-label">Document</label>
                         <select name="indent_doc_id" id="indent_doc_id" class="form-control">
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" >Create</button>
+                    <button type="submit" class="btn btn-primary" >Update</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
