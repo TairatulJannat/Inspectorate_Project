@@ -17,9 +17,9 @@ return new class extends Migration
             $table->longText('parameter_value');
             $table->unsignedBigInteger('parameter_group_id');
 
-            $table->foreign('parameter_group_id')
-                ->references('id')->on('parameter_groups')
-                ->onDelete('cascade');
+            // $table->foreign('parameter_group_id')
+            //     ->references('id')->on('parameter_groups')
+            //     ->onDelete('cascade');
 
             $table->timestamps();
         });
