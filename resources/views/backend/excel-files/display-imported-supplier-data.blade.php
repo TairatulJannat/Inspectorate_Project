@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-body" style="background-color: honeydew !important;">
             @if ($parameterGroups)
-                <form method="post" action="{{ url('admin/save-indent-spec-data') }}" id="editIndentExcelInput">
+                <form method="post" action="{{ url('admin/save-supplier-spec-data') }}" id="editIndentExcelInput">
                     @csrf
 
                     <div class="row mb-3">
@@ -53,7 +53,7 @@
                                     </tr>
                                     @foreach ($parameters as $parameter)
                                         <tr>
-                                            <td class="col-md-1 py-1">{{ $slNo + 1 }}</td>
+                                            <td class="col-md-1 py-1 text-center">{{ $slNo + 1 }}</td>
                                             <td class="col-md-5 py-1">
                                                 <input type="text" class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]"
@@ -81,7 +81,7 @@
             @endif
         </div>
         <div class="card-footer py-3" style="background-color: teal !important;">
-            <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-danger float-end">Cancel</a>
+            <a href="{{ url('admin/import-supplier-spec-data-index') }}" class="btn btn-danger float-end">Cancel</a>
         </div>
     </div>
 @endsection
