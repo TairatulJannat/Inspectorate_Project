@@ -21,9 +21,80 @@ use App\Models\SupplierSpecData;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Validator;
 
 class ExcelController extends Controller
 {
+    protected function csrIndex()
+    {
+        try {
+            $items = Items::all();
+            $itemTypes = Item_type::all();
+        } catch (\Exception $e) {
+            return back()->withError('Failed to retrieve from Database.');
+        }
+        return view('backend.csr.csr-index', compact('items', 'itemTypes'));
+    }
+
+    public function getCSRData(Request $request)
+    {
+        $customMessages = [
+            'item-type-id.required' => 'Please select an Item Type.',
+            'item-id.required' => 'Please select an Item.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'item-type-id' => ['required', 'exists:item_types,id'],
+            'item-id' => ['required', 'exists:items,id'],
+        ], $customMessages);
+
+        if ($validator->passes()) {
+            $itemId = $request->input('item-id');
+            $itemTypeId = $request->input('item-type-id');
+
+            $item = Items::findOrFail($itemId);
+            $itemName = $item ? $item->name : 'Unknown Item';
+
+            $itemType = Item_Type::findOrFail($itemTypeId);
+            $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+
+            $parameterGroups = ParameterGroup::with('assignParameterValues')
+                ->where('item_id', $itemId)
+                ->get();
+
+            $supplierParameterGroups = ParameterGroup::with('supplierSpecData')
+                ->where('item_id', $itemId)
+                ->get();
+
+            $treeViewData = [];
+            foreach ($parameterGroups as $parameterGroup) {
+                $treeNode = [
+                    'parameterGroupId' => $parameterGroup->id,
+                    'parameterGroupName' => $parameterGroup->name,
+                    'parameterValues' => $parameterGroup->assignParameterValues->toArray(),
+                ];
+
+                $treeViewData[] = $treeNode;
+            }
+
+            return response()->json([
+                'isSuccess' => true,
+                'message' => 'Parameters Data successfully retrieved!',
+                'treeViewData' => $treeViewData,
+                'itemTypeId' => $itemTypeId,
+                'itemTypeName' => $itemTypeName,
+                'itemId' => $itemId,
+                'itemName' => $itemName,
+            ], 200);
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => "Validation failed. Please check the inputs!",
+                'error' => $validator->errors()->toArray()
+            ], 200);
+        }
+    }
+
     public function indentIndex()
     {
         try {
