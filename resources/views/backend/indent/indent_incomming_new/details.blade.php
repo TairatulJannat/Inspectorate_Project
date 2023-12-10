@@ -289,18 +289,8 @@
                         </div>
                     </div>
 
-                    <!-- Notes Sectio
-                        n - Uncomment if needed -->
-                    {{-- <div class="col-md-6">
-                        @if ($notes == !null)
-                            ... <!-- Your notes HTML here -->
-                        @endif
-                    </div> --}}
                 </div>
 
-
-
-                {{-- @endif --}}
             </div>
 
         </div>
