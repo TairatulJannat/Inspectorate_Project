@@ -3,7 +3,12 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/animate.css') }}">
     <style>
-
+.nav-tabs .nav-link{
+    width: 20% !important;
+    font-size: 32px;
+    font-weight: bold;
+    background-color: #ffff;
+}
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -24,7 +29,9 @@
         <div class="tab-pane fade show active" id="nav-indent" role="tabpanel" aria-labelledby="nav-indent-tab">
             @include('backend.dashboard.indent')
         </div>
-        <div class="tab-pane fade" id="nav-offer" role="tabpanel" aria-labelledby="nav-offer-tab">...</div>
+        <div class="tab-pane fade" id="nav-offer" role="tabpanel" aria-labelledby="nav-offer-tab">
+            @include('backend.dashboard.offer')
+        </div>
 
     </div>
 

@@ -14,6 +14,12 @@
         input {
             width:
         }
+        .bg-info{
+            background-color: #0DCAF0 !important;
+        }
+        .bg-danger{
+            background-color: #F7454A !important;
+        }
 
         .title {
             background-color: #1B4C43;
@@ -216,7 +222,7 @@
                         <div><h5 class="m-0">Current Status :</h5></div>`;
 
             if (details.status == 0) {
-                html += `<div><h4 class="m-0 bg-warning">New Arrival</h4></div>`;
+                html += `<div><h4 class="m-0 bg-success">New Arrival</h4></div>`;
             } else if (details.status == 1) {
                 html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
             } else if (details.status == 2) {
@@ -289,85 +295,9 @@
 
                         </table>`
 
-            html += `<div class="current_status">
-                        <div><h5 class="m-0">Current Status :</h5></div>`;
-
-            if (details.status == 0) {
-                html += `<div><h4 class="m-0 bg-warning">New Arrival</h4></div>`;
-            } else if (details.status == 1) {
-                html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
-            } else if (details.status == 2) {
-                html += `<div><h4 class="m-0 bg-success">Completed</h4></div>`;
-            } else if (details.status == 3) {
-                html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
-            } else if (details.status == 4) {
-                html += `<div><h4 class="m-0 bg-danger">Dispatched</h4></div>`;
-            } else {
-                html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
-            }
-
-            html += `</div>`;
-
-
-            html += `<table class="table table-bordered ">
-                            <tr>
-                                <th>Referance No</td>
-                                <td>${details.reference_no }</td>
-                            </tr>
-                            <tr>
-                                <th>Indent Number</td>
-                                <td>${details.indent_number}</td>
-                            </tr>
-                            <tr>
-                                <th>User Directorate</td>
-                                <td>${details.dte_managment_name }</td>
-                            </tr>
-                            <tr>
-                                <th>Receive Date</td>
-                                <td>${details.indent_received_date }</td>
-                            </tr>
-
-                            <tr>
-                                <th>Name of Eqpt</td>
-                                <td>${details.item_type_name}</td>
-                            </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>${details.attribute}</td>
-                            </tr>
-                            <tr>
-                                <th>Additional Documents</td>
-                                <td>${details.additional_documents_name}</td>
-                            </tr>
-                            <tr>
-                                <th>Financial Year</td>
-                                <td>${details.fin_year_name }</td>
-                            </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>${details.nomenclature }</td>
-                            </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>${ details.make }</td>
-                            </tr>
-                            <tr>
-                                <th>Model</td>
-                                <td>${ details.model }</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Origin</td>
-                                <td>${ details.country_of_origin }</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Assembly</td>
-                                <td>${ details.country_of_assembly }</td>
-                            </tr>
-
-                        </table>`
-
-            // html += `<a class="btn btn-success mt-3 btn-parameter"
-            // href="{{ route('admin.indent/parameter', ['indent_id' => ${details . id}]) }}">Parameter</a>`;
+            html += `<a class="btn btn-success mt-3 btn-parameter"
+                        href="javascript:void(0)"
+                        onclick="redirectToParameter(${details.id})">Parameter</a>`;
 
 
             return html;
@@ -375,6 +305,11 @@
         }
 
 
+        function redirectToParameter(indentId) {
+            var url = "{{ route('admin.indent/parameter', ['indent_id' => '']) }}" + indentId;
+            // You can perform actions with the constructed URL here, for example:
+            window.location.href = url; // Redirect to the constructed URL
+        }
 
         function data_seen(data) {
             var html = '';

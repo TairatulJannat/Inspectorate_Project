@@ -225,13 +225,13 @@
                 <div class="card-body new-arrival-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>38 <sub>Indent</sub></h1>
+                        <h1>10 <sub>Offer</sub></h1>
 
                     </div>
                 </div>
                 <div class="footer new-arrival-footer">
                     <div class="code-box-copy">
-                        <a href="{{ route('admin.indent/view') }}">View Details</a>
+                        <a href="{{ route('admin.offer/view') }}">View Details</a>
                     </div>
                 </div>
             </div>
@@ -247,13 +247,13 @@
                 <div class="card-body approved-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>20 <sub>Indent</sub></h1>
+                        <h1>12 <sub>Offer</sub></h1>
 
                     </div>
                 </div>
                 <div class="footer approved-footer">
                     <div class="code-box-copy">
-                        <a href="{{ route('admin.indent_approved/view') }}">View Details</a>
+                        <a href="{{ route('admin.offer_approved/view') }}">View Details</a>
                     </div>
                 </div>
             </div>
@@ -269,13 +269,13 @@
                 <div class="card-body outgoing-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>16 <sub>Indent</sub></h1>
+                        <h1>16 <sub>Offer</sub></h1>
 
                     </div>
                 </div>
                 <div class="footer outgoing-footer">
                     <div class="code-box-copy">
-                        <a href="{{ route('admin.indent/outgoing') }}">View Details</a>
+                        <a href="{{ route('admin.offer/outgoing') }}">View Details</a>
                     </div>
                 </div>
             </div>
@@ -291,13 +291,13 @@
                 <div class="card-body dispatch-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>10 <sub>Indent</sub></h1>
+                        <h1>10 <sub>Offer</sub></h1>
 
                     </div>
                 </div>
                 <div class="footer dispatch-footer">
                     <div class="code-box-copy">
-                        <a href="{{ route('admin.indent_dispatch/view') }}">View Details</a>
+                        <a href="">View Details</a>
                     </div>
                 </div>
             </div>
@@ -307,7 +307,7 @@
 
     </div>
 </div>
-<div class="row">
+{{-- <div class="row">
     <div class="col-sm-12 col-xl-6 box-col-6">
         <div class="card">
           <div class="card-header pb-0">
@@ -329,4 +329,4 @@
         </div>
     </div>
 
-</div>
+</div> --}}
