@@ -17,8 +17,17 @@
                             <div class="text-center">
                                 <div class="item-id f-30">{{ $itemName }}</div>
                                 <input type="hidden" name="item-id" value="{{ $itemId }}">
-                                <div class="item-type-id f-20">{{ $itemTypeName }}</div>
+                                <div class="item-type-id f-28">{{ $itemTypeName }}</div>
                                 <input type="hidden" name="item-type-id" value="{{ $itemTypeId }}">
+                                <div class="indent-id f-20">Tender Ref. No: <span class="fw-bold">{{ $indentRefNo }}</span>
+                                </div>
+                                <input type="hidden" name="indent-id" value="{{ $indentId }}">
+                                <div class="tender-id f-20">Tender Ref. No: <span class="fw-bold">{{ $tenderRefNo }}</span>
+                                </div>
+                                <input type="hidden" name="tender-id" value="{{ $tenderId }}">
+                                <div class="supplier-id f-20">Supplier Firm name: <span
+                                        class="fw-bold">{{ $supplierFirmName }}</span></div>
+                                <input type="hidden" name="supplier-id" value="{{ $supplierId }}">
                             </div>
                         </div>
                     </div>
@@ -39,7 +48,7 @@
                                         <td colspan="3">
                                             <input type="text" class="form-control bg-success"
                                                 name="editedData[{{ $groupName }}][parameter_group_name]"
-                                                value="{{ $groupName }}">
+                                                value="{{ $groupName }}" disabled>
                                         </td>
                                     </tr>
                                     @foreach ($parameters as $parameter)
