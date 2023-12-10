@@ -95,7 +95,6 @@ class ExcelController extends Controller
         }
     }
 
-
     public function saveIndentEditedData(Request $request)
     {
         try {
@@ -105,11 +104,15 @@ class ExcelController extends Controller
             $itemId = $request->input('item-id');
             $itemTypeId = $request->input('item-type-id');
 
+            $this->deleteAllParameterGroupsAndValues($itemId);
+
             foreach ($jsonData as $groupName => $parameterGroup) {
-                $existingGroup = $this->getParameterGroup($groupName, $itemId, $itemTypeId);
+                $modifiedGroupName = $request->input("editedData.$groupName.parameter_group_name");
+
+                $existingGroup = $this->getParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
 
                 if (!$existingGroup) {
-                    $newGroup = $this->createParameterGroup($groupName, $itemId, $itemTypeId);
+                    $newGroup = $this->createParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
                     $lastInsertedId = $newGroup->id;
                 } else {
                     $lastInsertedId = $existingGroup->id;
@@ -126,6 +129,16 @@ class ExcelController extends Controller
             \Log::error('Error saving data: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'Error saving data. Please check the logs for details.');
+        }
+    }
+
+    private function deleteAllParameterGroupsAndValues($itemId)
+    {
+        $parameterGroups = ParameterGroup::where('item_id', $itemId)->get();
+
+        foreach ($parameterGroups as $group) {
+            $group->assignParameterValues()->delete();
+            $group->delete();
         }
     }
 
