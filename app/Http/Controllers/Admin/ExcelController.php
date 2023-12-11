@@ -18,6 +18,7 @@ use App\Models\Indent;
 use App\Models\Supplier;
 use App\Models\Tender;
 use App\Models\SupplierSpecData;
+use App\Models\SupplierOffer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -72,11 +73,26 @@ class ExcelController extends Controller
                     'parameterGroupId' => $parameterGroup->id,
                     'parameterGroupName' => $parameterGroup->name,
                     'parameterValues' => $parameterGroup->assignParameterValues->toArray(),
+                    'supplierSpecData' => [], // Initialize an empty array for supplier spec data
                 ];
 
+                // Check if supplier spec data is available for the parameter group
+                if ($parameterGroup->supplierSpecData->count() > 0) {
+                    // Assuming you want to include specific columns from supplier spec data
+                    $supplierSpecData = $parameterGroup->supplierSpecData->mapWithKeys(function ($data) {
+                        return [
+                            $data->parameter_name => [
+                                'parameter_value' => $data->parameter_value,
+                                'indent_id' => $data->indent_id,
+                                'supplier_id' => $data->supplier_id,
+                                'tender_id' => $data->tender_id,
+                            ],
+                        ];
+                    })->toArray();
+                    $treeNode['supplierSpecData'] = $supplierSpecData;
+                }
                 $treeViewData[] = $treeNode;
             }
-
             return response()->json([
                 'isSuccess' => true,
                 'message' => 'Parameters Data successfully retrieved!',
@@ -394,6 +410,7 @@ class ExcelController extends Controller
             $indentId = $request->input('indent-id');
             $tenderId = $request->input('tender-id');
             $supplierId = $request->input('supplier-id');
+            $offerRemarks = request('offer_remarks');
 
             $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
             $databaseParameterGroupCount = $indentParameterGroups->count();
@@ -429,6 +446,7 @@ class ExcelController extends Controller
             }
 
             if ($flag) {
+                $tableName = 'assign_parameter_values';
                 foreach ($indentParameterGroups as $indentParameterGroup) {
                     $parameterGroupId = $indentParameterGroup->id;
 
@@ -438,7 +456,14 @@ class ExcelController extends Controller
                                 $newParameter = new SupplierSpecData();
                                 $newParameter->parameter_group_id = $parameterGroupId;
                                 $newParameter->parameter_name = $pGroup['parameter_name'];
+                                $result = DB::table($tableName)
+                                    ->select('id')
+                                    ->where('parameter_group_id', $parameterGroupId)
+                                    ->where('parameter_name', $pGroup['parameter_name'])
+                                    ->first();
+                                $newParameter->parameter_id = $result->id;
                                 $newParameter->parameter_value = $pGroup['parameter_value'];
+                                $newParameter->remarks = $pGroup['remarks'];
                                 $newParameter->indent_id = $indentId;
                                 $newParameter->supplier_id = $supplierId;
                                 $newParameter->tender_id = $tenderId;
@@ -448,6 +473,22 @@ class ExcelController extends Controller
                         }
                     }
                 }
+
+                $supplierOfferTableName = 'supplier_offers';
+                $resultFlag = DB::table($supplierOfferTableName)
+                    ->select('id')
+                    ->where('supplier_id', $supplierId)
+                    ->where('item_id', $itemId)
+                    ->first();
+
+                if ($resultFlag == null) {
+                    $newSupplierOffer = new SupplierOffer();
+                    $newSupplierOffer->supplier_id = $supplierId;
+                    $newSupplierOffer->item_id = $itemId;
+                    $newSupplierOffer->offer_remarks = $offerRemarks;
+                    $newSupplierOffer->save();
+                }
+
                 DB::commit();
                 return redirect()->to('admin/import-supplier-spec-data-index')->with('success', 'Supplier\'s Spec saved successfully.');
             } else {

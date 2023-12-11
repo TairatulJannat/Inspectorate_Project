@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('supplier_spec_data', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('parameter_group_id');
+            $table->unsignedBigInteger('parameter_id');
             $table->string('parameter_name');
             $table->longText('parameter_value');
+            $table->string('remarks');
             $table->unsignedBigInteger('indent_id');
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('tender_id');

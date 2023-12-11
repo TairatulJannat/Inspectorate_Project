@@ -19,7 +19,7 @@
                                 <input type="hidden" name="item-id" value="{{ $itemId }}">
                                 <div class="item-type-id f-28">{{ $itemTypeName }}</div>
                                 <input type="hidden" name="item-type-id" value="{{ $itemTypeId }}">
-                                <div class="indent-id f-20">Tender Ref. No: <span class="fw-bold">{{ $indentRefNo }}</span>
+                                <div class="indent-id f-20">Indent Ref. No: <span class="fw-bold">{{ $indentRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="indent-id" value="{{ $indentId }}">
                                 <div class="tender-id f-20">Tender Ref. No: <span class="fw-bold">{{ $tenderRefNo }}</span>
@@ -45,7 +45,7 @@
                             @foreach ($parameterGroups as $groupName => $parameters)
                                 <tbody>
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <input type="text" class="form-control bg-success"
                                                 name="editedData[{{ $groupName }}][parameter_group_name]"
                                                 value="{{ $groupName }}" disabled>
@@ -54,15 +54,23 @@
                                     @foreach ($parameters as $parameter)
                                         <tr>
                                             <td class="col-md-1 py-1 text-center">{{ $slNo + 1 }}</td>
-                                            <td class="col-md-5 py-1">
+                                            <td class="col-md-4 py-1">
                                                 <input type="text" class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]"
                                                     value="{{ $parameter['parameter_name'] }}">
                                             </td>
-                                            <td class="col-md-6 py-1">
+                                            <td class="col-md-5 py-1">
                                                 <input type="text" class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]"
                                                     value="{{ $parameter['parameter_value'] }}">
+                                            </td>
+                                            <td class="col-md-2 py-1">
+                                                <select class="form-control select2"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][remarks]">
+                                                    <option value="Comply" selected>Comply</option>
+                                                    <option value="Partially Comply">Partially Comply</option>
+                                                    <option value="Non Comply">Non Comply</option>
+                                                </select>
                                             </td>
                                         </tr>
                                         @php $slNo++; @endphp
@@ -73,6 +81,11 @@
                     </div>
 
                     <div class="text-center">
+                        <h4 class="bg-warning">Offer Remarks:</h4>
+                        <select class="form-control select2" name="offer_remarks">
+                            <option value="Responsive" selected>Responsive</option>
+                            <option value="Non Responsive">Non Responsive</option>
+                        </select>
                         <button type="submit" class="btn btn-success mt-3">Save Changes</button>
                     </div>
                 </form>
