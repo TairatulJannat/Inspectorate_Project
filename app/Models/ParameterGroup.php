@@ -41,4 +41,9 @@ class ParameterGroup extends Model
     {
         return $this->hasMany(AssignParameterValue::class, 'parameter_group_id');
     }
+
+    public function supplierSpecData()
+    {
+        return $this->hasMany(SupplierSpecData::class, 'parameter_group_id');
+    }
 }

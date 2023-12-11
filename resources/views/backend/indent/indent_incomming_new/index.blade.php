@@ -25,7 +25,6 @@
             color: #ffff
         }
 
-    
 
         .dt-buttons {
             margin-left: 8px;
