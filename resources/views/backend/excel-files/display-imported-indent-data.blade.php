@@ -44,7 +44,7 @@
                                     </tr>
                                     @foreach ($parameters as $parameter)
                                         <tr>
-                                            <td class="col-md-1 py-1">{{ $slNo + 1 }}</td>
+                                            <td class="col-md-1 py-1 text-center">{{ $slNo + 1 }}</td>
                                             <td class="col-md-5 py-1">
                                                 <input type="text" class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]"

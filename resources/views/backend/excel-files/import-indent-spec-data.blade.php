@@ -60,7 +60,7 @@
                         <div class="mb-3">
                             <select class="form-control select2 item-id" id="itemId" name="item-id"
                                 style="width: 100% !important;">
-                                <option value="" selected disabled>Select an item</option>
+                                <option value="" selected disabled>Select an Item</option>
                                 @foreach ($items as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach

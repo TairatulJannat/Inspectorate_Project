@@ -86,9 +86,11 @@ class IndentDispatchController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    
+
                     if ($data->status == '4') {
                         return '<button class="btn btn-danger btn-sm">Dispatched</button>';
+                    }else {
+                        return '<button class="btn btn-danger btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
@@ -203,7 +205,7 @@ class IndentDispatchController extends Controller
         $notes = '';
 
         $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 4)
+            ->whereIn('track_status',[2,4])
             ->where('reciever_desig_id', $desig_id)->get();
 
         if ($document_tracks_notes->isNotEmpty()) {

@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Exceptions\UnreadableFileException;
 use Maatwebsite\Excel\Exceptions\SheetNotFoundException;
-use App\Imports\AssignParameterValuesImport;
+use App\Imports\IndentSpecImport;
+use App\Imports\SupplierSpecImport;
 use App\Models\Items;
 use App\Models\Item_type;
 use App\Models\ParameterGroup;
@@ -15,11 +16,101 @@ use App\Models\AssignParameterValue;
 use App\Models\Inspectorate;
 use App\Models\Indent;
 use App\Models\Supplier;
+use App\Models\Tender;
+use App\Models\SupplierSpecData;
+use App\Models\SupplierOffer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Validator;
 
 class ExcelController extends Controller
 {
+    protected function csrIndex()
+    {
+        try {
+            $items = Items::all();
+            $itemTypes = Item_type::all();
+        } catch (\Exception $e) {
+            return back()->withError('Failed to retrieve from Database.');
+        }
+        return view('backend.csr.csr-index', compact('items', 'itemTypes'));
+    }
+
+    public function getCSRData(Request $request)
+    {
+        $customMessages = [
+            'item-type-id.required' => 'Please select an Item Type.',
+            'item-id.required' => 'Please select an Item.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'item-type-id' => ['required', 'exists:item_types,id'],
+            'item-id' => ['required', 'exists:items,id'],
+        ], $customMessages);
+
+        if ($validator->passes()) {
+            $itemId = $request->input('item-id');
+            $itemTypeId = $request->input('item-type-id');
+
+            $item = Items::findOrFail($itemId);
+            $itemName = $item ? $item->name : 'Unknown Item';
+
+            $itemType = Item_Type::findOrFail($itemTypeId);
+            $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+
+            $parameterGroups = ParameterGroup::with('assignParameterValues')
+                ->where('item_id', $itemId)
+                ->get();
+
+            $supplierParameterGroups = ParameterGroup::with('supplierSpecData')
+                ->where('item_id', $itemId)
+                ->get();
+
+            $treeViewData = [];
+            foreach ($parameterGroups as $parameterGroup) {
+                $treeNode = [
+                    'parameterGroupId' => $parameterGroup->id,
+                    'parameterGroupName' => $parameterGroup->name,
+                    'parameterValues' => $parameterGroup->assignParameterValues->toArray(),
+                    'supplierSpecData' => [], // Initialize an empty array for supplier spec data
+                ];
+
+                // Check if supplier spec data is available for the parameter group
+                if ($parameterGroup->supplierSpecData->count() > 0) {
+                    // Assuming you want to include specific columns from supplier spec data
+                    $supplierSpecData = $parameterGroup->supplierSpecData->mapWithKeys(function ($data) {
+                        return [
+                            $data->parameter_name => [
+                                'parameter_value' => $data->parameter_value,
+                                'indent_id' => $data->indent_id,
+                                'supplier_id' => $data->supplier_id,
+                                'tender_id' => $data->tender_id,
+                            ],
+                        ];
+                    })->toArray();
+                    $treeNode['supplierSpecData'] = $supplierSpecData;
+                }
+                $treeViewData[] = $treeNode;
+            }
+            return response()->json([
+                'isSuccess' => true,
+                'message' => 'Parameters Data successfully retrieved!',
+                'treeViewData' => $treeViewData,
+                'itemTypeId' => $itemTypeId,
+                'itemTypeName' => $itemTypeName,
+                'itemId' => $itemId,
+                'itemName' => $itemName,
+            ], 200);
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => "Validation failed. Please check the inputs!",
+                'error' => $validator->errors()->toArray()
+            ], 200);
+        }
+    }
+
     public function indentIndex()
     {
         try {
@@ -46,7 +137,7 @@ class ExcelController extends Controller
         ]);
 
         try {
-            $importedData = Excel::toCollection(new AssignParameterValuesImport, $request->file('file'))->first();
+            $importedData = Excel::toCollection(new IndentSpecImport, $request->file('file'))->first();
 
             $parameterGroups = [];
             $currentGroupName = null;
@@ -77,7 +168,7 @@ class ExcelController extends Controller
             $itemType = Item_Type::find($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-            return view('backend.excel-files.display-imported-data', [
+            return view('backend.excel-files.display-imported-indent-data', [
                 'parameterGroups' => $parameterGroups,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
@@ -93,7 +184,6 @@ class ExcelController extends Controller
         }
     }
 
-
     public function saveIndentEditedData(Request $request)
     {
         try {
@@ -103,11 +193,15 @@ class ExcelController extends Controller
             $itemId = $request->input('item-id');
             $itemTypeId = $request->input('item-type-id');
 
+            $this->deleteAllParameterGroupsAndValues($itemId);
+
             foreach ($jsonData as $groupName => $parameterGroup) {
-                $existingGroup = $this->getParameterGroup($groupName, $itemId, $itemTypeId);
+                $modifiedGroupName = $request->input("editedData.$groupName.parameter_group_name");
+
+                $existingGroup = $this->getParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
 
                 if (!$existingGroup) {
-                    $newGroup = $this->createParameterGroup($groupName, $itemId, $itemTypeId);
+                    $newGroup = $this->createParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
                     $lastInsertedId = $newGroup->id;
                 } else {
                     $lastInsertedId = $existingGroup->id;
@@ -124,6 +218,16 @@ class ExcelController extends Controller
             \Log::error('Error saving data: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'Error saving data. Please check the logs for details.');
+        }
+    }
+
+    private function deleteAllParameterGroupsAndValues($itemId)
+    {
+        $parameterGroups = ParameterGroup::where('item_id', $itemId)->get();
+
+        foreach ($parameterGroups as $group) {
+            $group->assignParameterValues()->delete();
+            $group->delete();
         }
     }
 
@@ -159,27 +263,35 @@ class ExcelController extends Controller
 
     protected function saveAssignParameterValues($parameterGroupId, $parameterGroup)
     {
-        // foreach ($parameterGroup as $parameterName => $parameterData) {
-        //     $parameterValue = is_array($parameterData) ? $parameterData['parameter_value'] : $parameterData;
-
-        //     AssignParameterValue::create([
-        //         'parameter_group_id' => $parameterGroupId,
-        //         'parameter_name' => $parameterName,
-        //         'parameter_value' => $parameterValue,
-        //     ]);
-        // }
         foreach ($parameterGroup as $parameterName => $parameterData) {
             if (is_array($parameterData)) {
-                $parameterName = $parameterData['parameter_name'];
                 $parameterValue = $parameterData['parameter_value'];
 
                 AssignParameterValue::create([
                     'parameter_group_id' => $parameterGroupId,
                     'parameter_name' => $parameterName,
                     'parameter_value' => $parameterValue,
-                ]);
-            } else {
-                continue;
+                ])->fresh();
+
+                // try {
+                //     // Try to update the existing record
+                //     AssignParameterValue::updateOrCreate(
+                //         [
+                //             'parameter_group_id' => $parameterGroupId,
+                //             'parameter_name' => $parameterName,
+                //         ],
+                //         [
+                //             'parameter_value' => $parameterValue,
+                //         ]
+                //     );
+                // } catch (ModelNotFoundException $e) {
+                //     // If the record doesn't exist, catch the exception and create a new one
+                //     AssignParameterValue::create([
+                //         'parameter_group_id' => $parameterGroupId,
+                //         'parameter_name' => $parameterName,
+                //         'parameter_value' => $parameterValue,
+                //     ]);
+                // }
             }
         }
     }
@@ -195,9 +307,203 @@ class ExcelController extends Controller
             $itemTypes = Item_type::all();
             $indents = Indent::all();
             $suppliers = Supplier::all();
+            $tenders = Tender::all();
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve from Database.');
         }
-        return view('backend.excel-files.import-supplier-spec-data', compact('items', 'itemTypes', 'indents', 'suppliers'));
+        return view('backend.excel-files.import-supplier-spec-data', compact('items', 'itemTypes', 'indents', 'suppliers', 'tenders'));
+    }
+
+    public function importSupplierEditedData(Request $request)
+    {
+        $request->validate([
+            'item-type-id' => ['required', 'exists:item_types,id'],
+            'item-id' => ['required', 'exists:items,id'],
+            'indent-id' => ['required', 'exists:indents,id'],
+            'supplier-id' => ['required', 'exists:suppliers,id'],
+            'tender-id' => ['required', 'exists:tenders,id'],
+            'file' => 'required|mimes:xlsx,csv|max:2048',
+        ], [
+            'item-type-id.required' => __('Please choose an Item Type ID.'),
+            'item-id.required' => __('Please choose an Item ID.'),
+            'indent-id.required' => __('Please choose an Indent ID.'),
+            'supplier-id.required' => __('Please choose an Supplier ID.'),
+            'tender-id.required' => __('Please choose an Tender ID.'),
+            'file.required' => __('Please choose an Excel/CSV file.'),
+            'file.mimes' => __('The file must be of type: xlsx, csv.'),
+            'file.max' => __('The file size must not exceed 2048 kilobytes.'),
+        ]);
+
+        try {
+            $importedData = Excel::toCollection(new SupplierSpecImport, $request->file('file'))->first();
+
+            $parameterGroups = [];
+            $currentGroupName = null;
+
+            foreach ($importedData->toArray() as $row) {
+                $groupName = $row[0];
+
+                if ($groupName !== null) {
+                    $currentGroupName = $groupName;
+                    $parameterGroups[$currentGroupName] = [];
+                    continue;
+                } else {
+                    $groupName = $currentGroupName;
+                }
+
+                $parameterGroups[$groupName][] = [
+                    'parameter_name' => $row[1],
+                    'parameter_value' => $row[3],
+                ];
+            }
+
+            $itemId = $request->input('item-id');
+            $itemTypeId = $request->input('item-type-id');
+            $indentId = $request->input('indent-id');
+            $supplierId = $request->input('supplier-id');
+            $tenderId = $request->input('tender-id');
+
+            $item = Items::find($itemId);
+            $itemName = $item ? $item->name : 'Unknown Item';
+
+            $itemType = Item_Type::find($itemTypeId);
+            $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+
+            $indent = Indent::find($indentId);
+            $indentRefNo = $indent ? $indent->reference_no : 'Unknown Indent';
+
+            $supplier = Supplier::find($supplierId);
+            $supplierFirmName = $supplier ? $supplier->firm_name : 'Unknown Supplier';
+
+            $tender = Tender::find($tenderId);
+            $tenderRefNo = $tender ? $tender->reference_no : 'Unknown Tender';
+
+            return view('backend.excel-files.display-imported-supplier-data', [
+                'parameterGroups' => $parameterGroups,
+                'itemTypeId' => $itemTypeId,
+                'itemTypeName' => $itemTypeName,
+                'itemId' => $itemId,
+                'itemName' => $itemName,
+                'indentId' => $indentId,
+                'indentRefNo' => $indentRefNo,
+                'supplierId' => $supplierId,
+                'supplierFirmName' => $supplierFirmName,
+                'tenderId' => $tenderId,
+                'tenderRefNo' => $tenderRefNo,
+            ]);
+        } catch (UnreadableFileException $e) {
+            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'The uploaded file is unreadable.');
+        } catch (SheetNotFoundException $e) {
+            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
+        } catch (\Exception $e) {
+            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
+        }
+    }
+
+    public function saveSupplierEditedData(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $jsonData = $request->input('editedData');
+            $itemId = $request->input('item-id');
+            $indentId = $request->input('indent-id');
+            $tenderId = $request->input('tender-id');
+            $supplierId = $request->input('supplier-id');
+            $offerRemarks = request('offer_remarks');
+
+            $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
+            $databaseParameterGroupCount = $indentParameterGroups->count();
+
+            $parameterGroupCount = count($jsonData);
+
+            if ($parameterGroupCount !== $databaseParameterGroupCount) {
+                DB::rollBack();
+                return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Parameter group count mismatch. Please check the Excel File.');
+            }
+
+            // Delete existing data for the supplier and parameter groups
+            foreach ($indentParameterGroups as $indentParameterGroup) {
+                $parameterGroupId = $indentParameterGroup->id;
+
+                SupplierSpecData::where('supplier_id', $supplierId)
+                    ->where('parameter_group_id', $parameterGroupId)
+                    ->delete();
+            }
+
+            $flag = true;
+
+            foreach ($jsonData as $groupName => $parameterGroup) {
+
+                $flag = false;
+
+                foreach ($indentParameterGroups as $indentParameterGroup) {
+                    if ($groupName == $indentParameterGroup->name) {
+                        $flag = true;
+                        break;
+                    }
+                }
+            }
+
+            if ($flag) {
+                $tableName = 'assign_parameter_values';
+                foreach ($indentParameterGroups as $indentParameterGroup) {
+                    $parameterGroupId = $indentParameterGroup->id;
+
+                    foreach ($jsonData as $groupName => $parameterGroup) {
+                        if ($indentParameterGroup->name == $groupName) {
+                            foreach ($parameterGroup as $pGroup) {
+                                $newParameter = new SupplierSpecData();
+                                $newParameter->parameter_group_id = $parameterGroupId;
+                                $newParameter->parameter_name = $pGroup['parameter_name'];
+                                $result = DB::table($tableName)
+                                    ->select('id')
+                                    ->where('parameter_group_id', $parameterGroupId)
+                                    ->where('parameter_name', $pGroup['parameter_name'])
+                                    ->first();
+                                $newParameter->parameter_id = $result->id;
+                                $newParameter->parameter_value = $pGroup['parameter_value'];
+                                $newParameter->remarks = $pGroup['remarks'];
+                                $newParameter->indent_id = $indentId;
+                                $newParameter->supplier_id = $supplierId;
+                                $newParameter->tender_id = $tenderId;
+
+                                $newParameter->save();
+                            }
+                        }
+                    }
+                }
+
+                $supplierOfferTableName = 'supplier_offers';
+                $resultFlag = DB::table($supplierOfferTableName)
+                    ->select('id')
+                    ->where('supplier_id', $supplierId)
+                    ->where('item_id', $itemId)
+                    ->first();
+
+                if ($resultFlag == null) {
+                    $newSupplierOffer = new SupplierOffer();
+                    $newSupplierOffer->supplier_id = $supplierId;
+                    $newSupplierOffer->item_id = $itemId;
+                    $newSupplierOffer->offer_remarks = $offerRemarks;
+                    $newSupplierOffer->save();
+                }
+
+                DB::commit();
+                return redirect()->to('admin/import-supplier-spec-data-index')->with('success', 'Supplier\'s Spec saved successfully.');
+            } else {
+                DB::rollBack();
+                return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Parameter group Name mismatch. Please check the Excel File.');
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Error saving data: ' . $e->getMessage());
+
+            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Error saving data. ' . $e->getMessage());
+        }
+    }
+
+    protected function exportSupplierEditedData()
+    {
     }
 }
