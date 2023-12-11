@@ -54,12 +54,12 @@
 
                         <div class="col-9">
                             <a href="{{ route('admin.offer/view') }}" type="button"
-                                class="btn btn-success btn-sm">New Arrival</a>
+                            class="btn btn-success btn-sm">New Arrival</a>
                             <a href="{{ route('admin.offer_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">Incoming (Approved)</a>
                             <a href="{{ route('admin.offer/outgoing') }}" type="button"
                                 class="btn btn-info text-white btn-sm">OutGoing</a>
-                            <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
+                            <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 
                         </div>

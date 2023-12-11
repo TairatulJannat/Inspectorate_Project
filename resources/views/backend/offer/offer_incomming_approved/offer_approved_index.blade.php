@@ -32,7 +32,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Approved)')
+@section('main_menu', 'Offer (Approved)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -56,9 +56,9 @@
                             class="btn btn-success btn-sm">New Arrival</a>
                             <a href="{{ route('admin.offer_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">Incoming (Approved)</a>
-                            <a href="{{ route('admin.indent/outgoing') }}" type="button"
+                            <a href="{{ route('admin.offer/outgoing') }}" type="button"
                                 class="btn btn-info text-white btn-sm">OutGoing</a>
-                            <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
+                            <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 
                         </div>
