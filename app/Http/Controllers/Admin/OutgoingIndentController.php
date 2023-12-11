@@ -81,21 +81,13 @@ class OutgoingIndentController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-primary btn-sm">New</button>';
-                    }
+                   
                     if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Vetting On Process</button>';
+                        return '<button class="btn  btn-info text-white btn-sm">Vetted</button>';
+                    }else{
+                        return '<button class="btn btn-info text-white  btn-sm">None</button>';
                     }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
-                    if ($data->status == '3') {
-                        return '<button class="btn btn-info btn-sm">Approved</button>';
-                    }
-                    if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
-                    }
+                    
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
@@ -106,26 +98,26 @@ class OutgoingIndentController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                    <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                    <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
+                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit">Vetted</a>
                     </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Vetted</a>
+                            <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="update">Vetted</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Vetted</a>
+                            <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="update">Vetted</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                    <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                    <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
+                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit">Vetted</a>
                     </div>';
                     }
 
@@ -244,8 +236,8 @@ class OutgoingIndentController extends Controller
 
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at = Carbon::now('Asia/Dhaka');
+        $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
         // ----delay_cause start here
@@ -276,8 +268,8 @@ class OutgoingIndentController extends Controller
                 $value->remarks = $remarks;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->created_at = Carbon::now('Asia/Dhaka');
+                $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }

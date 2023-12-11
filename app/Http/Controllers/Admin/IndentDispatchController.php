@@ -86,20 +86,9 @@ class IndentDispatchController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-primary btn-sm">New</button>';
-                    }
-                    if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
-                    }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
-                    if ($data->status == '3') {
-                        return '<button class="btn btn-info btn-sm">Approved</button>';
-                    }
+                    
                     if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatched</button>';
+                        return '<button class="btn btn-danger btn-sm">Dispatched</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
@@ -111,26 +100,26 @@ class IndentDispatchController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                            <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Dispatch</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Dispatched</a>
                         </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Dispatched</a>
                         </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Dispatch</a>
                         </div>';
                     }
 
@@ -228,7 +217,7 @@ class IndentDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden'));
+        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
@@ -257,8 +246,8 @@ class IndentDispatchController extends Controller
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at = Carbon::now('Asia/Dhaka');
+        $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
 
@@ -276,13 +265,13 @@ class IndentDispatchController extends Controller
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                $data->doc_reference_number = $doc_reference_number;
+                $value->doc_reference_number = $doc_reference_number;
                 $value->track_status = 4;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $data->remarks = $remarks;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->remarks = $remarks;
+                $value->created_at = Carbon::now('Asia/Dhaka');
+                $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }

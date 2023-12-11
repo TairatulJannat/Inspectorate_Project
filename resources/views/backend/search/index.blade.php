@@ -14,6 +14,12 @@
         input {
             width:
         }
+        .bg-info{
+            background-color: #0DCAF0 !important;
+        }
+        .bg-danger{
+            background-color: #F7454A !important;
+        }
 
         .title {
             background-color: #1B4C43;
@@ -124,7 +130,7 @@
             </div>
 
             <div class="search_body">
-                <div class="search_title col-12 text-center  p-3 "> 
+                <div class="search_title col-12 text-center  p-3 ">
                     <h3>Searched details will appear here.</h3>
                 </div>
                 <div class="row details">
@@ -215,19 +221,19 @@
             html += `<div class="current_status">
                         <div><h5 class="m-0">Current Status :</h5></div>`;
 
-                        if (details.status == 0) {
-                            html += `<div><h4 class="m-0 bg-warning">New Arrival</h4></div>`;
-                        } else if (details.status == 1) {
-                            html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
-                        } else if (details.status == 2) {
-                            html += `<div><h4 class="m-0 bg-success">Completed</h4></div>`;
-                        } else if (details.status == 3) {
-                            html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
-                        } else if (details.status == 4) {
-                            html += `<div><h4 class="m-0 bg-danger">Dispatched</h4></div>`;
-                        } else {
-                            html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
-                        }
+            if (details.status == 0) {
+                html += `<div><h4 class="m-0 bg-success">New Arrival</h4></div>`;
+            } else if (details.status == 1) {
+                html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
+            } else if (details.status == 2) {
+                html += `<div><h4 class="m-0 bg-success">Completed</h4></div>`;
+            } else if (details.status == 3) {
+                html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
+            } else if (details.status == 4) {
+                html += `<div><h4 class="m-0 bg-danger">Dispatched</h4></div>`;
+            } else {
+                html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
+            }
 
             html += `</div>`;
 
@@ -289,11 +295,21 @@
 
                         </table>`
 
+            html += `<a class="btn btn-success mt-3 btn-parameter"
+                        href="javascript:void(0)"
+                        onclick="redirectToParameter(${details.id})">Parameter</a>`;
+
+
             return html;
 
         }
 
 
+        function redirectToParameter(indentId) {
+            var url = "{{ route('admin.indent/parameter', ['indent_id' => '']) }}" + indentId;
+            // You can perform actions with the constructed URL here, for example:
+            window.location.href = url; // Redirect to the constructed URL
+        }
 
         function data_seen(data) {
             var html = '';
@@ -308,7 +324,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -353,7 +369,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -398,7 +414,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -443,7 +459,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -459,7 +475,7 @@
                     html += `<tr>
                                 <td>${value.sender_designation_name}</td>
                                 <td><i class="fa fa-arrow-right text-success"></i></td>
-                                <td>${value.receiver_designation_name}</td>
+                                <td>${value.receiver_designation_name!==null? value.receiver_designation_name :'Delivered'}</td>
                                 <td>${date_time}</td>
                                 <td>${value.remarks}</td>
                             </tr>`;

@@ -21,7 +21,11 @@ Route::group(['prefix' => 'admin'], function () {
     Auth::routes(['register' => false]);
 });
 
-
+//start redirect '/ or home' to '/admin/login'
+Route::get('/', function () {
+    return redirect('/admin/login');
+});
+//start redirect '/ or home' to '/admin/login'
 
 Route::post('/admin_logout', [AdminDashboarController::class, 'admin_logout'])->name('admin_logout');
 

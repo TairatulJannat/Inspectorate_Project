@@ -2,7 +2,8 @@
 @section('title', 'Indent (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
-    <style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
+   <style>
         .card .card-header {
             padding: 0px;
             border-bottom: 1px solid rgba(182, 182, 182 , .6);
@@ -13,7 +14,7 @@
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
         .table thead{
-            background: #D22D3D;
+            background: #b53f4b;
             color: #ffff
         }
         .table thead tr th{
@@ -21,15 +22,19 @@
             color: #ffff
         }
 
-        .dt-buttons .buttons-html5{
-            background-color: #D22D3D !important;
-            border:none;
-        }
         .dt-buttons{
             margin-left:8px;
         }
         .badge-secondary{
-            background-color: #D22D3D !important;
+            background-color: #b53f4b !important;
+        }
+
+        .dt-buttons .buttons-html5{
+            background-color: #A1B53A !important;
+            border:none;
+        }
+        .btn-danger{
+            background-color: #b53f4b !important;
         }
     </style>
 @endpush

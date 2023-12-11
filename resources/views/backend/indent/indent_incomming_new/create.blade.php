@@ -8,11 +8,19 @@
             padding: 10px
         }
 
-
         .form-check-input {
             width: 70px !important;
 
             height: 35px;
+        }
+        .header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: aliceblue;
+            padding: 20px 10px 0 20px;
+            border-radius: 10px;
+            margin-bottom: 20px !important: 
         }
     </style>
 @endpush
@@ -26,11 +34,11 @@
                 @csrf
 
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="additional_documents">Select Section</label>
-                                <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
+                    <div class=" header">
+                        <div class="col-md-3">
+                            <div class="form-group d-flex">
+                                <label class="col-6 pt-2" for="">Select Section:</label>
+                                <select class="form-control" id="admin_section" name="admin_section">
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
@@ -39,8 +47,13 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <a href="{{url('admin/import-indent-spec-data-index')}}" class="btn btn-success">Import Excel</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-4">
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -105,7 +118,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
-                                <select class="form-control " id="item_type_id" name="item_type_id">
+                                <select class="form-control" id="item_type_id" name="item_type_id">
 
                                     <option selected disabled value="">Please Select</option>
 
@@ -122,7 +135,7 @@
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
-                                <select class="form-control" id="item_id" name="item_id">
+                                <select class="form-control select2" id="item_id" name="item_id">
 
                                     <option value="">Please Select </option>
                                 </select>
@@ -285,10 +298,10 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.indent.indent_incomming_new.index_js')
     <script>
-
         $(document).ready(function() {
 
             $('.select2').select2();
+            
 
             $("#item_type_id").off('change').on('change', function() {
 

@@ -2,34 +2,46 @@
 @section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
     <style>
         .card .card-header {
             padding: 0px;
-            border-bottom: 1px solid rgba(182, 182, 182 , .6);
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
 
         }
-        .table{
-            border-radius:10px !important;
+
+        .table {
+            border-radius: 10px !important;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
-        .table thead{
+
+        .table thead {
             background: #1B4C43;
             color: #ffff
         }
-        .table thead tr th{
+
+        .table thead tr th {
 
             color: #ffff
         }
-        .dt-buttons .buttons-html5{
+
+    
+
+        .dt-buttons {
+            margin-left: 8px;
+        }
+
+        .badge-secondary {
             background-color: #1B4C43 !important;
+        }
+        .dt-buttons .buttons-html5{
+            background-color: #A1B53A !important;
             border:none;
         }
-        .dt-buttons{
-            margin-left:8px;
+        .btn-danger{
+            background-color: #b53f4b !important;
         }
-        .badge-secondary{
-            background-color: #1B4C43 !important;
-        }
+
     </style>
 @endpush
 @section('main_menu', 'Indent')
@@ -52,8 +64,8 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.indent/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival</a>
+                            <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival</a>
                             <a href="{{ route('admin.indent_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">Incoming (Approved)</a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"

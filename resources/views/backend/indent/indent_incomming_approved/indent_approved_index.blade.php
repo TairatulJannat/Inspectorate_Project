@@ -2,7 +2,8 @@
 @section('title', 'Indent (Approved)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
-    <style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
+   <style>
         .card .card-header {
             padding: 0px;
             border-bottom: 1px solid rgba(182, 182, 182 , .6);
@@ -20,15 +21,18 @@
 
             color: #ffff
         }
-        .dt-buttons .buttons-html5{
-            background-color: #BA895D !important;
-            border:none;
-        }
         .dt-buttons{
             margin-left:8px;
         }
         .badge-secondary{
             background-color: #BA895D !important;
+        }
+        .dt-buttons .buttons-html5{
+            background-color: #A1B53A !important;
+            border:none;
+        }
+        .btn-danger{
+            background-color: #b53f4b !important;
         }
     </style>
 @endpush
