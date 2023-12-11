@@ -30,10 +30,7 @@
 
             color: #ffff
         }
-        .dt-buttons .buttons-html5{
-            background-color: #31D2F2 !important;
-            border:none;
-        }
+
         .dt-buttons{
             margin-left:8px;
         }
@@ -42,6 +39,13 @@
         }
         .dataTables_wrapper button{
             background-color: #31D2F2;
+        }
+        .dt-buttons .buttons-html5{
+            background-color: #A1B53A !important;
+            border:none;
+        }
+        .btn-danger{
+            background-color: #b53f4b !important;
         }
     </style>
 @endpush

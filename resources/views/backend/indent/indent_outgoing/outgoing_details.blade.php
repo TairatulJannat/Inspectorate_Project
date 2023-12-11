@@ -325,7 +325,7 @@
 
                         <div class="forward_status col-md-12 mb-3">
                             <div>
-                                <h4 class="text-success">Vetted Status</h4>
+                                <h4 class="text-success">Vetting Status</h4>
                                 <hr>
                                 <div class="table-responsive">
                                     <table class="table">
@@ -345,7 +345,7 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i') }}</td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach

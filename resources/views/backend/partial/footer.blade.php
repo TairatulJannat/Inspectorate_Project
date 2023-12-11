@@ -70,7 +70,7 @@
         xaxis: {
             categories: [ 'Sep', 'Oct', 'Nov', 'Dec'],
         },
-        colors: [vihoAdminConfig.primary]
+        colors: ['#B263C5']
     }
 
     var chart2 = new ApexCharts(

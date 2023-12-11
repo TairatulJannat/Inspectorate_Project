@@ -270,8 +270,8 @@
                                                     <tr>
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
-                                                        <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
+                                                        <td>{{ $document_track->receiver_designation_name!==null? $document_track->receiver_designation_name: 'Delivered' }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i') }}</td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach
@@ -318,10 +318,12 @@
 
     <script>
         $(document).ready(function() {
-            var reciever_desig_text = ''
+            var reciever_desig_text = '';
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();
+                reciever_desig_text =
+                    `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
 
 
             });
@@ -335,8 +337,8 @@
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
                 swal({
-                    title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">
-                        ${reciever_desig_text}</span>?`,
+                    title: `Are you sure to delivered
+                        ${reciever_desig_text}?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,

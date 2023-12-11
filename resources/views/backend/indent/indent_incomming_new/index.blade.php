@@ -25,10 +25,7 @@
             color: #ffff
         }
 
-        .dt-buttons .buttons-html5 {
-            background-color: #1B4C43 !important;
-            border: none;
-        }
+    
 
         .dt-buttons {
             margin-left: 8px;
@@ -36,6 +33,13 @@
 
         .badge-secondary {
             background-color: #1B4C43 !important;
+        }
+        .dt-buttons .buttons-html5{
+            background-color: #A1B53A !important;
+            border:none;
+        }
+        .btn-danger{
+            background-color: #b53f4b !important;
         }
 
     </style>

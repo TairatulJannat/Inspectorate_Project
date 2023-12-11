@@ -324,7 +324,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -369,7 +369,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -414,7 +414,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -459,7 +459,7 @@
                                             <th>Sender</th>
                                             <th></th>
                                             <th>Receiver</th>
-                                            <th>Forwarded Date Time</th>
+                                            <th>Forwarded Date</th>
                                             <th>Remark</th>
                                         </tr>
                                     </thead>
@@ -475,7 +475,7 @@
                     html += `<tr>
                                 <td>${value.sender_designation_name}</td>
                                 <td><i class="fa fa-arrow-right text-success"></i></td>
-                                <td>${value.receiver_designation_name}</td>
+                                <td>${value.receiver_designation_name!==null? value.receiver_designation_name :'Delivered'}</td>
                                 <td>${date_time}</td>
                                 <td>${value.remarks}</td>
                             </tr>`;
