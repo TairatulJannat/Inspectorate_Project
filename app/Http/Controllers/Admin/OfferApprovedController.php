@@ -178,7 +178,7 @@ class OfferApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('track_status', 3)
+            ->whereIn('track_status', [1,3])
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',

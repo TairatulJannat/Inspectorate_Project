@@ -320,7 +320,7 @@
 
     <script>
         $(document).ready(function() {
-            var reciever_desig_text = ''
+            var reciever_desig_text = '';
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();

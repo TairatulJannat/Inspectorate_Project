@@ -207,7 +207,7 @@ class OfferDispatchController extends Controller
         $notes = '';
 
         $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 4)
+            ->where('track_status',4)
             ->where('reciever_desig_id', $desig_id)->get();
 
         if ($document_tracks_notes->isNotEmpty()) {

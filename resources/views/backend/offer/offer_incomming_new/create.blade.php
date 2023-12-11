@@ -10,9 +10,19 @@
 
 
         .form-check-input {
-            width: 70px !important;
+            margin-left: 10px; 
+            width: 30px !important;
 
-            height: 35px;
+            height: 20px;
+        }
+        .header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: aliceblue;
+            padding: 20px 10px 0 20px;
+            border-radius: 10px;
+            margin-bottom: 20px !important: 
         }
     </style>
 @endpush
@@ -26,7 +36,7 @@
                 @csrf
 
                 <div class="card-body">
-                    <div class="row">
+                    <div  class=" header">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="additional_documents">Select Section</label>
@@ -37,6 +47,11 @@
 
                                 </select>
                                 <span id="error_admin_section" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <a href="{{url('admin/import-indent-spec-data-index')}}" class="btn btn-success">Supplier Import Excel</a>
                             </div>
                         </div>
                     </div>
@@ -124,21 +139,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <label class="form-check-label form-label" for="receive_status">Is Offer Vetted</label>
-                            <input class="form-check-input" type="checkbox" id="is_offer_vetted" name="is_offer_vetted" checked>
-                            <span class="text-danger error-text receive_status_error"></span>
-                        </div>
-                        <div class="col-md-4" id="offer_vetting_ltr_no">
-                            <label class=" form-label" for="receive_date">Offer Vetting Ltr No</label>
-                            <input class="form-control"  type="text" id="offer_vetting_ltr_no" name="offer_vetting_ltr_no" >
-                            <span class="text-danger error-text rreceive_date_error"></span>
-                        </div>
-                        <div class="col-md-4" id="offer_vetting_ltr_dt">
-                            <label class=" form-label" for="asking_date">Offer vetting Ltr Date</label>
-                            <input class="form-control" type="date" id="offer_vetting_ltr_dt" name="offer_vetting_ltr_dt" >
-                            <span class="text-danger error-text receiveDate_error"></span>
-                        </div>
+                       
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -208,7 +209,23 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        
+                       
+                        <div class="col-md-4">
+                            <label for="receive_status">Is Offer Vetted</label>
+                            <input class="form-check-input" type="checkbox" id="is_offer_vetted" name="is_offer_vetted" checked>
+                            <span class="text-danger error-text receive_status_error"></span>
+                        </div>
+                        <div class="col-md-4" id="offer_vetting_ltr_no">
+                            <label  for="receive_date">Offer Vetting Ltr No</label>
+                            <input class="form-control"  type="text" id="offer_vetting_ltr_no" name="offer_vetting_ltr_no" >
+                            <span class="text-danger error-text rreceive_date_error"></span>
+                        </div>
+                        <div class="col-md-4" id="offer_vetting_ltr_dt">
+                            <label  for="asking_date">Offer vetting Ltr Date</label>                   
+                            <input class="form-control" type="date" id="offer_vetting_ltr_dt" name="offer_vetting_ltr_dt" >
+                            <span class="text-danger error-text receiveDate_error"></span>
+                        </div>
+                         
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="received_by">Received By</label>
