@@ -153,6 +153,26 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
+                            <tr>
+                                <th>supplier Name</td>
+                                <td>{{ $details->suppliers_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Receiver Letter No</td>
+                                <td>{{ $details->offer_rcv_ltr_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Vetting Letter No</td>
+                                <td>{{ $details->offer_vetting_ltr_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Vetting Letter Date</td>
+                                <td>{{ $details->offer_vetting_ltr_dt }}</td>
+                            </tr>
+                            <tr>
+                                <th>Quantity</td>
+                                <td>{{ $details->qty }}</td>
+                            </tr>
                            
 
                         </table>
@@ -258,7 +278,7 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i') }}</td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach

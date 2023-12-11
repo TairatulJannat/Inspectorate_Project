@@ -2,6 +2,7 @@
 @section('title', 'Offer (Outgoing)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
     <style>
         .card .card-header {
             padding: 0px;
@@ -29,15 +30,18 @@
 
             color: #ffff
         }
-        .dt-buttons .buttons-html5{
-            background-color: #31D2F2 !important;
-            border:none;
-        }
         .dt-buttons{
             margin-left:8px;
         }
         .badge-secondary{
             background-color: #31D2F2 !important;
+        }
+        .dt-buttons .buttons-html5{
+            background-color: #A1B53A !important;
+            border:none;
+        }
+        .btn-danger{
+            background-color: #b53f4b !important;
         }
     </style>
 @endpush

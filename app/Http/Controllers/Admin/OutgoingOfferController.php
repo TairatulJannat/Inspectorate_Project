@@ -84,20 +84,10 @@ class OutgoingOfferController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-primary btn-sm">New</button>';
-                    }
                     if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Vetting On Process</button>';
-                    }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
-                    if ($data->status == '3') {
                         return '<button class="btn btn-info btn-sm">Approved</button>';
-                    }
-                    if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
+                    }else {
+                        return '<button class="btn btn-info btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
@@ -110,25 +100,25 @@ class OutgoingOfferController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                    
-                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Vetted</a>
                     </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
                             
-                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Vetted</a>
+                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Vetted</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                             
-                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Vetted</a>
+                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Vetted</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
                
-                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Vetted</a>
+                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Vetted</a>
                     </div>';
                     }
 
@@ -144,9 +134,19 @@ class OutgoingOfferController extends Controller
 
         $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-            ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name')
+            ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
+            ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('suppliers', 'offers.supplier_id', '=', 'suppliers.id')
+            ->select(
+                'offers.*',
+                'item_types.name as item_type_name',
+                'offers.*',
+                'dte_managments.name as dte_managment_name',
+                'additional_documents.name as additional_documents_name',
+                'fin_years.year as fin_year_name',
+                'suppliers.firm_name as suppliers_name'
+            )
             ->where('offers.id', $id)
-            ->where('offers.status', 1)
             ->first();
 
         $details->additional_documents = json_decode($details->additional_documents, true);
@@ -216,7 +216,7 @@ class OutgoingOfferController extends Controller
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 3; // 3 for doc type indent from doctype table column doc_serial
+        $doc_type_id = 5; // 5 for doc type offers from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
@@ -237,8 +237,8 @@ class OutgoingOfferController extends Controller
 
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at =  Carbon::now('Asia/Dhaka');
+        $data->updated_at =  Carbon::now('Asia/Dhaka');
         $data->save();
 
         // ----delay_cause start here
@@ -269,8 +269,8 @@ class OutgoingOfferController extends Controller
                 $value->remarks = $remarks;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->created_at =  Carbon::now('Asia/Dhaka');
+                $value->updated_at =  Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }

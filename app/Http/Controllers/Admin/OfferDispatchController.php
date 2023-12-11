@@ -89,20 +89,10 @@ class OfferDispatchController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-primary btn-sm">New</button>';
-                    }
-                    if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
-                    }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
-                    if ($data->status == '3') {
-                        return '<button class="btn btn-info btn-sm">Approved</button>';
-                    }
                     if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatched</button>';
+                        return '<button class="btn btn-danger btn-sm">Dispatched</button>';
+                    }else {
+                        return '<button class="btn btn-danger btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
@@ -151,13 +141,15 @@ class OfferDispatchController extends Controller
             ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
             ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
             ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('suppliers', 'offers.supplier_id', '=', 'suppliers.id')
             ->select(
                 'offers.*',
                 'item_types.name as item_type_name',
                 'offers.*',
                 'dte_managments.name as dte_managment_name',
                 'additional_documents.name as additional_documents_name',
-                'fin_years.year as fin_year_name'
+                'fin_years.year as fin_year_name',
+                'suppliers.firm_name as suppliers_name'
             )
             ->where('offers.id', $id)
             ->first();
@@ -239,7 +231,7 @@ class OfferDispatchController extends Controller
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
+        $doc_type_id = 5; //...... 5 for indent from offers table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
@@ -259,8 +251,8 @@ class OfferDispatchController extends Controller
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at =  Carbon::now('Asia/Dhaka');
+        $data->updated_at =  Carbon::now('Asia/Dhaka');
         $data->save();
 
 
@@ -283,8 +275,8 @@ class OfferDispatchController extends Controller
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
                 $data->remarks = $remarks;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->created_at =  Carbon::now('Asia/Dhaka');
+                $value->updated_at =  Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }
