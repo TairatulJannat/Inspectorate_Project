@@ -14,10 +14,12 @@
         input {
             width:
         }
-        .bg-info{
+
+        .bg-info {
             background-color: #0DCAF0 !important;
         }
-        .bg-danger{
+
+        .bg-danger {
             background-color: #F7454A !important;
         }
 
@@ -131,7 +133,7 @@
 
             <div class="search_body">
                 <div class="search_title col-12 text-center  p-3 ">
-                    <h3>Searched details will appear here.</h3>
+                    <h3>Searched details will be appeared here.</h3>
                 </div>
                 <div class="row details">
                     <div class="col-5" id="indent_details">
@@ -226,7 +228,7 @@
             } else if (details.status == 1) {
                 html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
             } else if (details.status == 2) {
-                html += `<div><h4 class="m-0 bg-success">Completed</h4></div>`;
+                html += `<div><h4 class="m-0 bg-primary">Completed</h4></div>`;
             } else if (details.status == 3) {
                 html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
             } else if (details.status == 4) {
@@ -315,7 +317,7 @@
             var html = '';
             html += `<div class="forward_status col-md-12 mb-3">
                         <div>
-                            <h4 class="title text-center ">New Arrivel</h4>
+                            <h4 class="title text-center ">New Arrival</h4>
 
                             <div class="table-responsive">
                                 <table class="table">

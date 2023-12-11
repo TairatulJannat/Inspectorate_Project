@@ -103,20 +103,11 @@ class IndentController extends Controller
                 ->addColumn('status', function ($data) {
 
                     if ($data->status == '0') {
-                        return '<button class="btn btn-suucess btn-sm">New</button>';
+                        return '<button class="btn btn-success btn-sm">New</button>';
+                    }else {
+                        return '<button class="btn btn-success btn-sm">None</button>';
                     }
-                    if ($data->status == '1') {
-                        return '<button class="btn btn-info  btn-sm">Vetted</button>';
-                    }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
-                    if ($data->status == '3') {
-                        return '<button class="btn btn-secondary btn-sm">Approved</button>';
-                    }
-                    if ($data->status == '4') {
-                        return '<button class="btn btn-danger btn-sm">Dispatch</button>';
-                    }
+
                 })
 
                 ->addColumn('action', function ($data) {
@@ -182,7 +173,7 @@ class IndentController extends Controller
             'qty' => 'required|integer',
             'indent_received_date' => 'required',
             'estimated_value' => 'required|integer',
-          
+
 
         ]);
         $insp_id = Auth::user()->inspectorate_id;
