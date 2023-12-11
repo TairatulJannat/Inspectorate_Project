@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{url('admin/import-indent-spec-data-index')}}" class="btn btn-success">Supplier Import Excel</a>
+                                <a href=" " class="btn btn-success">Supplier Import Excel</a>
                             </div>
                         </div>
                     </div>
