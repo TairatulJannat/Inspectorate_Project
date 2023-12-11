@@ -133,7 +133,7 @@
 
             <div class="search_body">
                 <div class="search_title col-12 text-center  p-3 ">
-                    <h3>Searched details will be appeared here.</h3>
+                    <h3>Search details will be appeared here.</h3>
                 </div>
                 <div class="row details">
                     <div class="col-5" id="indent_details">
