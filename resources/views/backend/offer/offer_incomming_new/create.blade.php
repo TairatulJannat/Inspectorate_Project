@@ -10,7 +10,7 @@
 
 
         .form-check-input {
-            margin-left: 10px; 
+            margin-left: 10px;
             width: 30px !important;
 
             height: 20px;
@@ -22,7 +22,7 @@
             background-color: aliceblue;
             padding: 20px 10px 0 20px;
             border-radius: 10px;
-            margin-bottom: 20px !important: 
+            margin-bottom: 20px !important:
         }
     </style>
 @endpush
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{url('admin/import-indent-spec-data-index')}}" class="btn btn-success">Supplier Import Excel</a>
+                                <a href="{{url('admin/import-supplier-spec-data-index')}}" class="btn btn-success">Supplier Import Excel</a>
                             </div>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                             </div>
                         </div>
 
-                       
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -192,7 +192,7 @@
                                 <span id="error_attribute" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fin_year_id">Financial Year </label>
@@ -209,7 +209,7 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                       
+
                         <div class="col-md-4">
                             <label for="receive_status">Is Offer Vetted</label>
                             <input class="form-check-input" type="checkbox" id="is_offer_vetted" name="is_offer_vetted" checked>
@@ -221,11 +221,11 @@
                             <span class="text-danger error-text rreceive_date_error"></span>
                         </div>
                         <div class="col-md-4" id="offer_vetting_ltr_dt">
-                            <label  for="asking_date">Offer vetting Ltr Date</label>                   
+                            <label  for="asking_date">Offer vetting Ltr Date</label>
                             <input class="form-control" type="date" id="offer_vetting_ltr_dt" name="offer_vetting_ltr_dt" >
                             <span class="text-danger error-text receiveDate_error"></span>
                         </div>
-                         
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="received_by">Received By</label>

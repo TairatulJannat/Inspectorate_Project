@@ -172,7 +172,7 @@
                             </tr>
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                            href="{{url('admin/csr/index') }}">CSR</a>
                     </div>
                 </div>
 
@@ -278,7 +278,7 @@
                             </div>
 
                         @endif
-                     
+
 
                         <div class="forward_status col-md-12 mb-3">
                             <div>

@@ -177,8 +177,8 @@
 
 
                         </table>
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a> --}}
+                        <a class="btn btn-success mt-3 btn-parameter"
+                        href="{{url('admin/csr/index') }}">CSR</a>
                     </div>
                 </div>
 
