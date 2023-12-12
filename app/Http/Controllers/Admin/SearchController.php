@@ -24,26 +24,15 @@ class SearchController extends Controller
         $docTypeId = $request->docTypeId;
         $docReferenceNumber = $request->docReferenceNumber;
         $Model = "";
-
-        // dd($data);
-        if ($docTypeId == 3) {
-            $Model = "Indent";
-            return   $this->dataFetching($docTypeId,  $docReferenceNumber, $Model);
-        } elseif ($docTypeId == 5) {
-            $Model = "Offer";
-            return $this->dataFetching($docTypeId,  $docReferenceNumber, $Model);
-        } else {
-
-            return response()->json(['error' => 'No Result Found']);
-        }
-    }
-    private function dataFetching($docTypeId, $docReferenceNumber, $Model)
-    {
         try {
             $data_seen = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number', $docReferenceNumber)
                 ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
                 ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
                 ->where('track_status', 1)
+                ->whereNot(function ($query) {
+                    $query->where('sender_designation.id', 7)
+                        ->where('receiver_designation.id', 5);
+                })
                 ->select(
                     'document_tracks.*',
                     'sender_designation.name as sender_designation_name',
@@ -56,18 +45,21 @@ class SearchController extends Controller
                 ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
                 ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
                 ->where('track_status', 2)
+                ->whereNot(function ($query) {
+                    $query->where('sender_designation.id', 5)
+                        ->where('receiver_designation.id', 3);
+                })
+                ->whereNot(function ($query) {
+                    $query->where('sender_designation.id', 7)
+                        ->where('receiver_designation.id', 3);
+                })
                 ->select(
                     'document_tracks.*',
                     'sender_designation.name as sender_designation_name',
                     'receiver_designation.name as receiver_designation_name'
                 )
                 ->get();
-            if ($data_vetted->count() > 1) {
-
-                $$data_seen = $data_seen->slice(1, -1);
-            } else {
-                $data_vetted;
-            }
+            
             $data_approved = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
                 ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
                 ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -143,5 +135,7 @@ class SearchController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Document Not Found'], 500);
         }
+       
     }
+    
 }
