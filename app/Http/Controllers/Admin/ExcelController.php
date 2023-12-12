@@ -59,49 +59,77 @@ class ExcelController extends Controller
             $itemType = Item_Type::findOrFail($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-            $parameterGroups = ParameterGroup::with('assignParameterValues')
-                ->where('item_id', $itemId)
-                ->get();
+            $parameterGroupsExist = ParameterGroup::where('item_id', $itemId)
+                ->exists();
 
-            $supplierParameterGroups = ParameterGroup::with('supplierSpecData')
-                ->where('item_id', $itemId)
-                ->get();
+            if ($parameterGroupsExist) {
+                $supplierParameterGroups = ParameterGroup::with('supplierSpecData')
+                    ->where('item_id', $itemId)
+                    ->get();
 
-            $treeViewData = [];
-            foreach ($parameterGroups as $parameterGroup) {
-                $treeNode = [
-                    'parameterGroupId' => $parameterGroup->id,
-                    'parameterGroupName' => $parameterGroup->name,
-                    'parameterValues' => $parameterGroup->assignParameterValues->toArray(),
-                    'supplierSpecData' => [], // Initialize an empty array for supplier spec data
-                ];
+                $organizedSupplierData = $this->organizeData($supplierParameterGroups);
 
-                // Check if supplier spec data is available for the parameter group
-                if ($parameterGroup->supplierSpecData->count() > 0) {
-                    // Assuming you want to include specific columns from supplier spec data
-                    $supplierSpecData = $parameterGroup->supplierSpecData->mapWithKeys(function ($data) {
-                        return [
-                            $data->parameter_name => [
-                                'parameter_value' => $data->parameter_value,
-                                'indent_id' => $data->indent_id,
-                                'supplier_id' => $data->supplier_id,
-                                'tender_id' => $data->tender_id,
-                            ],
-                        ];
-                    })->toArray();
-                    $treeNode['supplierSpecData'] = $supplierSpecData;
+                $parameterGroups = ParameterGroup::with('assignParameterValues')
+                    ->where('item_id', $itemId)
+                    ->get();
+
+                $responseData = $parameterGroups->map(function ($parameterGroup) {
+                    $groupName = $parameterGroup->name;
+
+                    return [
+                        $groupName => $parameterGroup->assignParameterValues->map(function ($parameter) {
+                            return [
+                                'id' => $parameter->id,
+                                'parameter_name' => $parameter->parameter_name,
+                                'parameter_value' => $parameter->parameter_value,
+                            ];
+                        })
+                    ];
+                })->values()->all();
+
+                foreach ($responseData as $group => &$parameterGroup) {
+                    if (is_array($parameterGroup)) {
+                        foreach ($parameterGroup as &$parameters) {
+                            foreach ($parameters as &$parameter) {
+                                if (is_array($parameter) && isset($parameter['id'])) {
+                                    $parameterId = $parameter['id'];
+
+                                    if (is_array($organizedSupplierData)) {
+                                        foreach ($organizedSupplierData as $index => $spValues) {
+                                            foreach ($spValues as $key => $spValue) {
+                                                if (is_array($spValue) && isset($spValue['parameter_value'])) {
+                                                    $parameter["sp" . ($key + 1) . "_value"] = $spValue['parameter_value'];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                $treeViewData[] = $treeNode;
+
+                // Move the response outside of the loop
+                return response()->json([
+                    'isSuccess' => true,
+                    'message' => $responseData,
+                ], 200);
+
+                return response()->json([
+                    'isSuccess' => true,
+                    'message' => 'Parameters Data successfully retrieved!',
+                    'treeViewData' => $treeViewData,
+                    'itemTypeId' => $itemTypeId,
+                    'itemTypeName' => $itemTypeName,
+                    'itemId' => $itemId,
+                    'itemName' => $itemName,
+                ], 200);
+            } else {
+                return response()->json([
+                    'isSuccess' => false,
+                    'message' => "Data not found for this Item. Please check the inputs!",
+                ], 200);
             }
-            return response()->json([
-                'isSuccess' => true,
-                'message' => 'Parameters Data successfully retrieved!',
-                'treeViewData' => $treeViewData,
-                'itemTypeId' => $itemTypeId,
-                'itemTypeName' => $itemTypeName,
-                'itemId' => $itemId,
-                'itemName' => $itemName,
-            ], 200);
         } else {
             return response()->json([
                 'isSuccess' => false,
@@ -109,6 +137,26 @@ class ExcelController extends Controller
                 'error' => $validator->errors()->toArray()
             ], 200);
         }
+    }
+
+    private function organizeData($parameterGroups)
+    {
+        $result = [];
+
+        foreach ($parameterGroups as $parameterGroup) {
+            foreach ($parameterGroup->supplierSpecData as $parameter) {
+                $parameterId = $parameter->parameter_id;
+
+                if (!isset($result[$parameterId])) {
+                    $result[$parameterId] = [];
+                }
+
+                $result[$parameterId][] = [
+                    'parameter_value' => $parameter->parameter_value,
+                ];
+            }
+        }
+        return $result;
     }
 
     public function indentIndex()
@@ -353,6 +401,7 @@ class ExcelController extends Controller
 
                 $parameterGroups[$groupName][] = [
                     'parameter_name' => $row[1],
+                    'indent_parameter_value' => $row[2],
                     'parameter_value' => $row[3],
                 ];
             }

@@ -23,7 +23,7 @@
 
         function populateItemsDropdown(items) {
             $('#itemId').empty();
-            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
+            $('#itemId').append('<option value="" selected disabled>Select an Item</option>');
 
             $.each(items, function(key, value) {
                 $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
@@ -52,16 +52,17 @@
                     $(form).find("span.error-text").text("");
                 },
                 success: function(response) {
+                    log.warn(response);
                     if (response.isSuccess === false) {
                         $.each(response.error, function(prefix, val) {
                             $(form).find("span." + prefix + "-error").text(val[0]);
                         });
                         toastr.error(response.message);
                     } else if (response.isSuccess === true) {
-                        log.warn(response.treeViewData);
                         toastr.success(response.message);
                         renderTreeView(response.treeViewData, response.itemTypeName, response
                             .itemName);
+                        // log.warn(response.treeViewData);
                     }
 
                     searchButton.html(originalSearchButtonHtml);
@@ -72,8 +73,6 @@
                     searchButton.html(originalSearchButtonHtml);
                     var searchedDataContainer = $(".searched-data");
                     searchedDataContainer.empty();
-                    searchedDataContainer.html(
-                        '<div class="text-center"><h2>CSR file will appear here.</h2></div>');
                 },
             });
         }
@@ -88,64 +87,43 @@
                     '<div class="item-id f-30">' + itemName + '</div>' +
                     '<div class="item-type-id f-20">' + itemTypeName + '</div>' +
                     '</div>' +
-                    '<div class="content">' +
-                    '<div class="row">';
+                    '<div class="content">';
 
-                // Display Parameter Groups
                 $.each(treeViewData, function(index, node) {
-                    html += '<div class="col-md-6">' +
-                        '<div class="parameter-group mt-5 edit-row">' +
+                    html += '<div class="row parameter-group mt-5 edit-row">' +
                         '<span><h5 class="parameter-group-name text-uppercase text-underline fw-bold">' +
-                        node.parameterGroupName + '</h5>' +
-                        '<button style="display: none;" class="btn btn-outline-warning btn-sm fa fa-edit edit-group float-end" data-group-id="' +
-                        node.parameterGroupId +
-                        '" data-group-name="' + node.parameterGroupName +
-                        '" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></button></span>' +
-                        '<table class="parameter-table table table-border-vertical table-hover">' +
-                        '<thead>' +
-                        '<tr>' +
-                        '<th class="col-md-4">Parameter Name</th>' +
-                        '<th class="col-md-6">Parameter Value</th>';
+                        node.parameterGroupName + '</h5></span>' +
+                        '<table class="parameter-table table table-border-vertical table-hover">';
 
-                    // Dynamically create columns for supplier data
-                    $.each(node.supplierSpecData, function(supplierName, supplierData) {
-                        html += '<th class="col-md-6">' + supplierName + ' Value</th>';
-                    });
-
-                    html += '</tr></thead><tbody>';
-
-                    // Iterate through parameter values
                     $.each(node.parameterValues, function(i, parameterValue) {
                         html += '<tr>' +
-                            '<td class="col-md-4 parameter-name">' + parameterValue
+                            '<td class="col-md-2 parameter-name">' + parameterValue
                             .parameter_name + '</td>' +
-                            '<td class="col-md-6 parameter-value">' + parameterValue
-                            .parameter_value + '</td>';
-
-                        // Iterate through supplier data and display corresponding parameter values
-                        $.each(node.supplierSpecData, function(supplierName, supplierData) {
-                            var matchingSupplierValue = supplierData[parameterValue
-                                .parameter_name];
-
-                            html += '<td class="col-md-6">' + (matchingSupplierValue ?
-                                    matchingSupplierValue.parameter_value : '') +
-                                '</td>';
-                        });
-
-                        html += '</tr>';
+                            '<td class="col-md-2 parameter-value">' + parameterValue
+                            .parameter_value + '</td>' +
+                            '</tr>';
                     });
 
-                    html += '</tbody></table></div></div></div>';
+                    // Access supplierSpecData and append it to the table
+                    $.each(node.supplierSpecData, function(i, supplierData) {
+                        log.warn(supplierData);
+                        html += '<tr>' +
+                            // '<td class="col-md-4 parameter-name">' + supplierData
+                            // .parameter_name + '</td>' +
+                            '<td class="col-md-2 parameter-value">' + supplierData
+                            .parameter_value + '</td>' +
+                            '</tr>';
+                    });
+
+                    html += '</table></div>';
                 });
 
-                html += '</div></div></div></div>';
+                html += '</div></div>';
                 searchedDataContainer.append(html);
             } else {
-                searchedDataContainer.html('<h2>Searched CSR File will appear here.</h2>');
+                searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
             }
         }
-
-
 
     });
 </script>
