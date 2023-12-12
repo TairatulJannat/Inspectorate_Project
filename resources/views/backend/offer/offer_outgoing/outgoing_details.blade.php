@@ -206,7 +206,7 @@
                                                         <div class=" col-md-6 mt-2">
                                                             <label for="delivery_date">Delivery Date </label>
                                                             <input type="date" id="delivery_date" name="delivery_date"
-                                                                class="form-control">
+                                                                class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                                                         </div>
                                                         <div class="col-md-6 mt-2 " style="margin-left: 10px;">
                                                             <label for="delay_cause">Delay Cause </label>

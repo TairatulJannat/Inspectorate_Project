@@ -132,9 +132,9 @@
             </div>
 
             <div class="search_body">
-                <div class="search_title col-12 text-center  p-3 ">
+                {{-- <div class="search_title col-12 text-center  p-3 ">
                     <h3>Search details will be appeared here.</h3>
-                </div>
+                </div> --}}
                 <div class="row details">
                     <div class="col-5" id="indent_details">
 
@@ -160,9 +160,11 @@
 
     <script>
         $(document).ready(function() {
+            $('.search_body').hide();
 
             $('#searchButton').on('click', function(e) {
                 e.preventDefault()
+                $('.search_body').show();
                 var docTypeId = $("#docTypeId").val();
                 var docReferenceNumber = $("#reference_number").val();
 
@@ -188,26 +190,36 @@
                             } else {
 
                                 var details = response.details;
-
                                 var arrivel = response.data_seen;
                                 var decision = response.data_approved;
                                 var vetted = response.data_vetted;
                                 var dispatch = response.data_dispatch;
+                                var docTypeId = response.docTypeId;
 
-                                var concatenatedHTML = data_seen(arrivel) +
+                                var docTrackHTML = data_seen(arrivel) +
                                     data_approved(decision) +
                                     data_vetted(vetted) +
                                     data_dispatch(dispatch);
 
-                                $('#indent_details').html(indent_details(details))
-                                $('#track_details').html(concatenatedHTML)
+                                var docDetailsHtml = '';
+                                if (docTypeId == 3) {
+                                    docDetailsHtml= indent_details(details)
+                                }else if(docTypeId == 5) {
+                                    docDetailsHtml= offer_details(details)
+                                }
+
+                                $('#indent_details').html(docDetailsHtml )
+                                $('#track_details').html(docTrackHTML)
                                 // $('#track_details').html("ok")
+                                toastr.success(
+                            ' Request Document is found',
+                            'Success');
                             }
                         }
                     },
                     error: function(xhr, status, error) {
 
-                        console.error(xhr.responseText);
+
                         toastr.error(
                             'An error occurred while processing the request',
                             'Error');
@@ -300,6 +312,82 @@
             html += `<a class="btn btn-success mt-3 btn-parameter"
                         href="javascript:void(0)"
                         onclick="redirectToParameter(${details.id})">Parameter</a>`;
+
+
+            return html;
+
+        }
+        function offer_details(details) {
+            html = '';
+            html += `<div class="current_status">
+                        <div><h5 class="m-0">Current Status :</h5></div>`;
+
+            if (details.status == 0) {
+                html += `<div><h4 class="m-0 bg-success">New Arrival</h4></div>`;
+            } else if (details.status == 1) {
+                html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
+            } else if (details.status == 2) {
+                html += `<div><h4 class="m-0 bg-primary">Completed</h4></div>`;
+            } else if (details.status == 3) {
+                html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
+            } else if (details.status == 4) {
+                html += `<div><h4 class="m-0 bg-danger">Dispatched</h4></div>`;
+            } else {
+                html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
+            }
+
+            html += `</div>`;
+
+
+            html += `<table class="table table-bordered ">
+                            <tr>
+                                <th>Referance No</td>
+                                <td>${details.reference_no }</td>
+                            </tr>
+                            <tr>
+                                <th>Tender Reference No </td>
+                                <td>${details.tender_reference_no}</td>
+                            </tr>
+                            <tr>
+                                <th>User Directorate</td>
+                                <td>${details.dte_managment_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Receive Date</td>
+                                <td>${details.offer_rcv_ltr_dt }</td>
+                            </tr>
+
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>${details.item_name}</td>
+                            </tr>
+                            <tr>
+                                <th>Type of Eqpt</td>
+                                <td>${details.item_type_name}</td>
+                            </tr>
+                            <tr>
+                                <th>Type of Eqpt</td>
+                                <td>${details.qty}</td>
+                            </tr>
+                            <tr>
+                                <th>Attribute</td>
+                                <td>${details.attribute}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Financial Year</td>
+                                <td>${details.fin_year_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Receiver Letter No</td>
+                                <td>${details.offer_rcv_ltr_no }</td>
+                            </tr>
+
+
+                        </table>`
+
+            html += `<a class="btn btn-success mt-3 btn-parameter"
+                            href="{{url('admin/csr/index') }}">CSR</a>`;
 
 
             return html;
