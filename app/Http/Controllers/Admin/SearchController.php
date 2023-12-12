@@ -23,69 +23,74 @@ class SearchController extends Controller
 
         $docTypeId = $request->docTypeId;
         $docReferenceNumber = $request->docReferenceNumber;
-        $Model="";
+        $Model = "";
 
         // dd($data);
         if ($docTypeId == 3) {
-            $Model="Indent";
+            $Model = "Indent";
             return   $this->dataFetching($docTypeId,  $docReferenceNumber, $Model);
-        }elseif ($docTypeId == 5) {
-            $Model="Offer";
+        } elseif ($docTypeId == 5) {
+            $Model = "Offer";
             return $this->dataFetching($docTypeId,  $docReferenceNumber, $Model);
-        }else {
+        } else {
 
             return response()->json(['error' => 'No Result Found']);
         }
-
-
     }
-   private function dataFetching($docTypeId, $docReferenceNumber , $Model)
-        {
-            try {
-                $data_seen = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number', $docReferenceNumber)
-                    ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
-                    ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-                    ->where('track_status', 1)
-                    ->select(
-                        'document_tracks.*',
-                        'sender_designation.name as sender_designation_name',
-                        'receiver_designation.name as receiver_designation_name'
-                    )
-                    ->get();
+    private function dataFetching($docTypeId, $docReferenceNumber, $Model)
+    {
+        try {
+            $data_seen = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number', $docReferenceNumber)
+                ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
+                ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+                ->where('track_status', 1)
+                ->select(
+                    'document_tracks.*',
+                    'sender_designation.name as sender_designation_name',
+                    'receiver_designation.name as receiver_designation_name'
+                )
+                ->get();
 
-                $data_vetted = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
-                    ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
-                    ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-                    ->where('track_status', 2)
-                    ->select(
-                        'document_tracks.*',
-                        'sender_designation.name as sender_designation_name',
-                        'receiver_designation.name as receiver_designation_name'
-                    )
-                    ->get();
-                $data_approved = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
-                    ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
-                    ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-                    ->where('track_status', 3)
-                    ->select(
-                        'document_tracks.*',
-                        'sender_designation.name as sender_designation_name',
-                        'receiver_designation.name as receiver_designation_name'
-                    )
-                    ->get();
-                $data_dispatch = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
-                    ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
-                    ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-                    ->where('track_status', 4)
-                    ->select(
-                        'document_tracks.*',
-                        'sender_designation.name as sender_designation_name',
-                        'receiver_designation.name as receiver_designation_name'
-                    )
-                    ->get();
 
-                if ($docTypeId==3) {
-                    $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+            $data_vetted = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
+                ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
+                ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+                ->where('track_status', 2)
+                ->select(
+                    'document_tracks.*',
+                    'sender_designation.name as sender_designation_name',
+                    'receiver_designation.name as receiver_designation_name'
+                )
+                ->get();
+            if ($data_vetted->count() > 1) {
+
+                $$data_seen = $data_seen->slice(1, -1);
+            } else {
+                $data_vetted;
+            }
+            $data_approved = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
+                ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
+                ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+                ->where('track_status', 3)
+                ->select(
+                    'document_tracks.*',
+                    'sender_designation.name as sender_designation_name',
+                    'receiver_designation.name as receiver_designation_name'
+                )
+                ->get();
+            $data_dispatch = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
+                ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
+                ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+                ->where('track_status', 4)
+                ->select(
+                    'document_tracks.*',
+                    'sender_designation.name as sender_designation_name',
+                    'receiver_designation.name as receiver_designation_name'
+                )
+                ->get();
+
+            if ($docTypeId == 3) {
+                $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
                     ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
@@ -99,8 +104,8 @@ class SearchController extends Controller
                         'fin_years.year as fin_year_name'
                     )->where('indents.reference_no', $docReferenceNumber)
                     ->first();
-                }elseif ($docTypeId==5) {
-                    $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+            } elseif ($docTypeId == 5) {
+                $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
                     ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
@@ -115,28 +120,28 @@ class SearchController extends Controller
                         'fin_years.year as fin_year_name'
                     )->where('offers.reference_no', $docReferenceNumber)
                     ->first();
-                }
-
-
-
-                    if ($details) {
-                    return response()->json(
-                        [
-                            'details' => $details,
-                            'data_seen' => $data_seen,
-                            'data_vetted' => $data_vetted,
-                            'data_approved' => $data_approved,
-                            'data_dispatch' => $data_dispatch,
-                            'docTypeId'=> $docTypeId,
-                            'success' => "Search document found"
-                        ], 200
-                    );
-                }else {
-                    return response()->json(['error' => 'Document not found'], 404);
-                }
-
-            } catch (\Exception $e) {
-                return response()->json(['error' => 'An error occurred while fetching data'], 500);
             }
+
+
+
+            if ($details) {
+                return response()->json(
+                    [
+                        'details' => $details,
+                        'data_seen' => $data_seen,
+                        'data_vetted' => $data_vetted,
+                        'data_approved' => $data_approved,
+                        'data_dispatch' => $data_dispatch,
+                        'docTypeId' => $docTypeId,
+                        'success' => "Search document found"
+                    ],
+                    200
+                );
+            } else {
+                return response()->json(['error' => 'Document Not Found'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Document Not Found'], 500);
         }
+    }
 }

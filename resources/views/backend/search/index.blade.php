@@ -164,7 +164,10 @@
 
             $('#searchButton').on('click', function(e) {
                 e.preventDefault()
+
+                cleardata()
                 $('.search_body').show();
+
                 var docTypeId = $("#docTypeId").val();
                 var docReferenceNumber = $("#reference_number").val();
 
@@ -203,26 +206,24 @@
 
                                 var docDetailsHtml = '';
                                 if (docTypeId == 3) {
-                                    docDetailsHtml= indent_details(details)
-                                }else if(docTypeId == 5) {
-                                    docDetailsHtml= offer_details(details)
+                                    docDetailsHtml = indent_details(details)
+                                } else if (docTypeId == 5) {
+                                    docDetailsHtml = offer_details(details)
                                 }
 
-                                $('#indent_details').html(docDetailsHtml )
+                                $('#indent_details').html(docDetailsHtml)
                                 $('#track_details').html(docTrackHTML)
                                 // $('#track_details').html("ok")
                                 toastr.success(
-                            ' Request Document is found',
-                            'Success');
+                                    ' Request Document is found',
+                                    'Success');
                             }
                         }
                     },
                     error: function(xhr, status, error) {
 
 
-                        toastr.error(
-                            'An error occurred while processing the request',
-                            'Error');
+                        toastr.error(error);
                     }
                 });
             })
@@ -317,6 +318,7 @@
             return html;
 
         }
+
         function offer_details(details) {
             html = '';
             html += `<div class="current_status">
@@ -387,7 +389,7 @@
                         </table>`
 
             html += `<a class="btn btn-success mt-3 btn-parameter"
-                            href="{{url('admin/csr/index') }}">CSR</a>`;
+                            href="{{ url('admin/csr/index') }}">CSR</a>`;
 
 
             return html;
@@ -403,7 +405,8 @@
 
         function data_seen(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center ">New Arrival</h4>
 
@@ -420,8 +423,6 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
-
 
                 $.each(data, function(index, value) {
 
@@ -435,20 +436,28 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
 
-            html += `</tbody>
+
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
+            } else {
+                html += `<div class="forward_status col-md-12 mb-3">
+                    <div>
+                        <p class='p-3'>No Forward Status Found </p>
+                    </div>
+                </div>`
+            }
 
             return html;
         }
 
         function data_vetted(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center bg-info ">OutGoing</h4>
 
@@ -465,7 +474,7 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
+
 
 
                 $.each(data, function(index, value) {
@@ -480,20 +489,20 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
-
-            html += `</tbody>
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
+            }
 
             return html;
         }
 
         function data_approved(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center bg-secondary">Decision</h4>
 
@@ -510,8 +519,6 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
-
 
                 $.each(data, function(index, value) {
 
@@ -525,20 +532,22 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
 
-            html += `</tbody>
+
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
 
+            }
             return html;
         }
 
         function data_dispatch(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center bg-danger">Dispatch</h4>
 
@@ -555,13 +564,10 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
-
 
                 $.each(data, function(index, value) {
 
                     var date_time = formatDate(value.created_at)
-
                     html += `<tr>
                                 <td>${value.sender_designation_name}</td>
                                 <td><i class="fa fa-arrow-right text-success"></i></td>
@@ -570,14 +576,14 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
 
-            html += `</tbody>
+
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
-
+            }
             return html;
         }
 
@@ -590,6 +596,12 @@
             var day = selectedDate.getDate().toString().padStart(2, '0');
 
             return `${day}-${month}-${year}`;
+        }
+
+        function cleardata() {
+            $('.search_body').hide();
+            $('#indent_details').html('');
+            $('#track_details').html('');
         }
     </script>
 @endpush
