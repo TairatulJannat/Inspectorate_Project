@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'CSR')
+@section('title', 'Comparative Statement Report')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">

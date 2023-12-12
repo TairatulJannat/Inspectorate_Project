@@ -90,18 +90,22 @@ class ExcelController extends Controller
                 foreach ($responseData as $group => &$parameterGroup) {
                     if (is_array($parameterGroup)) {
                         foreach ($parameterGroup as &$parameters) {
-                            foreach ($parameters as &$parameter) {
+                            for ($i = 0; $i < count($parameters); $i++) {
+                                $parameter = $parameters[$i];
+
                                 if (is_array($parameter) && isset($parameter['id'])) {
                                     $parameterId = $parameter['id'];
 
-                                    if (is_array($organizedSupplierData)) {
-                                        foreach ($organizedSupplierData as $index => $spValues) {
-                                            foreach ($spValues as $key => $spValue) {
-                                                if (is_array($spValue) && isset($spValue['parameter_value'])) {
-                                                    $parameter["sp" . ($key + 1) . "_value"] = $spValue['parameter_value'];
-                                                }
-                                            }
+                                    if (isset($organizedSupplierData[$parameterId])) {
+                                        $spValues = $organizedSupplierData[$parameterId];
+
+                                        $newParameter = $parameter;
+
+                                        foreach ($spValues as $index => $spValue) {
+                                            $newParameter["SupplierId_" . $spValue['supplier_id']] = $spValue['parameter_value'];
                                         }
+
+                                        $parameters[$i] = $newParameter;
                                     }
                                 }
                             }
@@ -109,16 +113,10 @@ class ExcelController extends Controller
                     }
                 }
 
-                // Move the response outside of the loop
-                return response()->json([
-                    'isSuccess' => true,
-                    'message' => $responseData,
-                ], 200);
-
                 return response()->json([
                     'isSuccess' => true,
                     'message' => 'Parameters Data successfully retrieved!',
-                    'treeViewData' => $treeViewData,
+                    'combinedData' => $responseData,
                     'itemTypeId' => $itemTypeId,
                     'itemTypeName' => $itemTypeName,
                     'itemId' => $itemId,
@@ -153,6 +151,7 @@ class ExcelController extends Controller
 
                 $result[$parameterId][] = [
                     'parameter_value' => $parameter->parameter_value,
+                    'supplier_id' => $parameter->supplier_id,
                 ];
             }
         }

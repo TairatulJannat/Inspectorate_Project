@@ -52,7 +52,6 @@
                     $(form).find("span.error-text").text("");
                 },
                 success: function(response) {
-                    log.warn(response);
                     if (response.isSuccess === false) {
                         $.each(response.error, function(prefix, val) {
                             $(form).find("span." + prefix + "-error").text(val[0]);
@@ -60,9 +59,8 @@
                         toastr.error(response.message);
                     } else if (response.isSuccess === true) {
                         toastr.success(response.message);
-                        renderTreeView(response.treeViewData, response.itemTypeName, response
+                        renderTreeView(response.combinedData, response.itemTypeName, response
                             .itemName);
-                        // log.warn(response.treeViewData);
                     }
 
                     searchButton.html(originalSearchButtonHtml);
@@ -77,11 +75,11 @@
             });
         }
 
-        function renderTreeView(treeViewData, itemTypeName, itemName) {
+        function renderTreeView(combinedData, itemTypeName, itemName) {
             var searchedDataContainer = $(".searched-data");
             searchedDataContainer.empty();
 
-            if (treeViewData && treeViewData.length > 0) {
+            if (combinedData && combinedData.length > 0) {
                 var html = '<div class="p-md-3 paper-document">' +
                     '<div class="header text-center">' +
                     '<div class="item-id f-30">' + itemName + '</div>' +
@@ -89,33 +87,58 @@
                     '</div>' +
                     '<div class="content">';
 
-                $.each(treeViewData, function(index, node) {
+                $.each(combinedData, function(index, group) {
+                    var groupName = Object.keys(group)[0];
+                    var node = group[groupName];
+
                     html += '<div class="row parameter-group mt-5 edit-row">' +
                         '<span><h5 class="parameter-group-name text-uppercase text-underline fw-bold">' +
-                        node.parameterGroupName + '</h5></span>' +
-                        '<table class="parameter-table table table-border-vertical table-hover">';
+                        groupName + '</h5></span>' +
+                        '<table class="parameter-table table table-border-vertical table-hover">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>Parameter Name</th>' +
+                        '<th>Parameter Value</th>';
 
-                    $.each(node.parameterValues, function(i, parameterValue) {
+                    // Determine unique SupplierIds
+                    var uniqueSupplierIds = [];
+                    $.each(node, function(i, parameterValue) {
+                        $.each(parameterValue, function(key, value) {
+                            log.warn(value);
+                            if (key.startsWith("SupplierId_") && !uniqueSupplierIds
+                                .includes(key)) {
+                                uniqueSupplierIds.push(key);
+                            }
+                        });
+                    });
+
+                    // Add Supplier columns dynamically based on unique SupplierIds
+                    $.each(uniqueSupplierIds, function(i, supplierId) {
+                        var supplierNumber = supplierId.split("_")[1];
+                        html += '<th>Supplier ' + supplierNumber + "'s Value</th>";
+                    });
+
+                    html += '</tr>' +
+                        '</thead>' +
+                        '<tbody>';
+
+                    $.each(node, function(i, parameterValue) {
                         html += '<tr>' +
                             '<td class="col-md-2 parameter-name">' + parameterValue
                             .parameter_name + '</td>' +
                             '<td class="col-md-2 parameter-value">' + parameterValue
-                            .parameter_value + '</td>' +
-                            '</tr>';
+                            .parameter_value + '</td>';
+
+                        // Loop through unique SupplierIds
+                        $.each(uniqueSupplierIds, function(j, supplierId) {
+                            html += '<td class="col-md-2 parameter-value">' +
+                                parameterValue[supplierId] + '</td>';
+                        });
+
+                        html += '</tr>';
                     });
 
-                    // Access supplierSpecData and append it to the table
-                    $.each(node.supplierSpecData, function(i, supplierData) {
-                        log.warn(supplierData);
-                        html += '<tr>' +
-                            // '<td class="col-md-4 parameter-name">' + supplierData
-                            // .parameter_name + '</td>' +
-                            '<td class="col-md-2 parameter-value">' + supplierData
-                            .parameter_value + '</td>' +
-                            '</tr>';
-                    });
-
-                    html += '</table></div>';
+                    html += '</tbody></table></div>';
                 });
 
                 html += '</div></div>';
@@ -124,6 +147,7 @@
                 searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
             }
         }
+
 
     });
 </script>
