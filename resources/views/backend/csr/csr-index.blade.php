@@ -1,13 +1,13 @@
 @extends('backend.app')
 
-@section('title', 'CSR Index')
+@section('title', 'Comparative Statement Report')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.min.css') }}">
 @endpush
 
-@section('main_menu', 'CSR')
+@section('main_menu', 'Comparative Statement Report (CSR)')
 @section('active_menu', 'CSR Index')
 
 @section('content')
@@ -36,7 +36,7 @@
                 <div class="mb-2">
                     <select class="form-control select2 item-id" id="itemId" name="item-id"
                         style="width: 100% !important;">
-                        <option value="" selected disabled>Select an item</option>
+                        <option value="" selected disabled>Select an Item</option>
                         @foreach ($items as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
@@ -53,9 +53,9 @@
     </form>
     <div class="row bg-body p-3" style="background-color: honeydew !important;">
         <div class="text-success searched-data">
-            <div class="text-center">
+            {{-- <div class="text-center">
                 <h2>CSR file will appear here.</h2>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection
