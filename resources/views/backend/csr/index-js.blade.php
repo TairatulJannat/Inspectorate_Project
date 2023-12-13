@@ -83,7 +83,7 @@
                 var html = '<div class="p-md-3 paper-document">' +
                     '<div class="header text-center">' +
                     '<div class="item-id f-30">' + itemName + '</div>' +
-                    '<div class="item-type-id f-20">' + itemTypeName + '</div>' +
+                    '<div class="item-type-id f-26">' + itemTypeName + '</div>' +
                     '</div>' +
                     '<div class="content">';
 
