@@ -13,6 +13,7 @@ class SupplierSpecImport implements ToModel
         return new SupplierSpecData([
             'parameter_group_name' => $row[0],
             'parameter_name' => $row[1],
+            'indent_parameter_value' => $row[2],
             'parameter_value' => $row[3],
             'created_at' => now(),
             'updated_at' => now(),

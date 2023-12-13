@@ -225,14 +225,14 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
-                    {{-- Side Menu Button Links for CSR --}}
+                    {{-- Side Menu Button Links for Comparative Statement Report (CSR) --}}
                     @if (count(menu_check('Excel')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
-                                    data-feather="list"></i><span>CSR</span></a>
+                                    data-feather="list"></i><span>Comparative Statement</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/csr/index') }}"
-                                        class="{{ Request::is('*/admin/csr/index') ? 'active' : '' }} text-white">CSR
-                                        Index</a>
+                                        class="{{ Request::is('*/admin/csr/index') ? 'active' : '' }} text-white">Comparative
+                                        Statement Index</a>
                                 </li>
                             </ul>
                         </li>
