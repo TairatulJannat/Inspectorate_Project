@@ -132,9 +132,9 @@
             </div>
 
             <div class="search_body">
-                <div class="search_title col-12 text-center  p-3 ">
+                {{-- <div class="search_title col-12 text-center  p-3 ">
                     <h3>Search details will be appeared here.</h3>
-                </div>
+                </div> --}}
                 <div class="row details">
                     <div class="col-5" id="indent_details">
 
@@ -160,9 +160,14 @@
 
     <script>
         $(document).ready(function() {
+            $('.search_body').hide();
 
             $('#searchButton').on('click', function(e) {
                 e.preventDefault()
+
+                cleardata()
+                $('.search_body').show();
+
                 var docTypeId = $("#docTypeId").val();
                 var docReferenceNumber = $("#reference_number").val();
 
@@ -188,29 +193,37 @@
                             } else {
 
                                 var details = response.details;
-
                                 var arrivel = response.data_seen;
                                 var decision = response.data_approved;
                                 var vetted = response.data_vetted;
                                 var dispatch = response.data_dispatch;
+                                var docTypeId = response.docTypeId;
 
-                                var concatenatedHTML = data_seen(arrivel) +
+                                var docTrackHTML = data_seen(arrivel) +
                                     data_approved(decision) +
                                     data_vetted(vetted) +
                                     data_dispatch(dispatch);
 
-                                $('#indent_details').html(indent_details(details))
-                                $('#track_details').html(concatenatedHTML)
+                                var docDetailsHtml = '';
+                                if (docTypeId == 3) {
+                                    docDetailsHtml = indent_details(details)
+                                } else if (docTypeId == 5) {
+                                    docDetailsHtml = offer_details(details)
+                                }
+
+                                $('#indent_details').html(docDetailsHtml)
+                                $('#track_details').html(docTrackHTML)
                                 // $('#track_details').html("ok")
+                                toastr.success(
+                                    ' Request Document is found',
+                                    'Success');
                             }
                         }
                     },
                     error: function(xhr, status, error) {
 
-                        console.error(xhr.responseText);
-                        toastr.error(
-                            'An error occurred while processing the request',
-                            'Error');
+
+                        toastr.error(error);
                     }
                 });
             })
@@ -306,6 +319,83 @@
 
         }
 
+        function offer_details(details) {
+            html = '';
+            html += `<div class="current_status">
+                        <div><h5 class="m-0">Current Status :</h5></div>`;
+
+            if (details.status == 0) {
+                html += `<div><h4 class="m-0 bg-success">New Arrival</h4></div>`;
+            } else if (details.status == 1) {
+                html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
+            } else if (details.status == 2) {
+                html += `<div><h4 class="m-0 bg-primary">Completed</h4></div>`;
+            } else if (details.status == 3) {
+                html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
+            } else if (details.status == 4) {
+                html += `<div><h4 class="m-0 bg-danger">Dispatched</h4></div>`;
+            } else {
+                html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
+            }
+
+            html += `</div>`;
+
+
+            html += `<table class="table table-bordered ">
+                            <tr>
+                                <th>Referance No</td>
+                                <td>${details.reference_no }</td>
+                            </tr>
+                            <tr>
+                                <th>Tender Reference No </td>
+                                <td>${details.tender_reference_no}</td>
+                            </tr>
+                            <tr>
+                                <th>User Directorate</td>
+                                <td>${details.dte_managment_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Receive Date</td>
+                                <td>${details.offer_rcv_ltr_dt }</td>
+                            </tr>
+
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>${details.item_name}</td>
+                            </tr>
+                            <tr>
+                                <th>Type of Eqpt</td>
+                                <td>${details.item_type_name}</td>
+                            </tr>
+                            <tr>
+                                <th>Type of Eqpt</td>
+                                <td>${details.qty}</td>
+                            </tr>
+                            <tr>
+                                <th>Attribute</td>
+                                <td>${details.attribute}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Financial Year</td>
+                                <td>${details.fin_year_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Receiver Letter No</td>
+                                <td>${details.offer_rcv_ltr_no }</td>
+                            </tr>
+
+
+                        </table>`
+
+            html += `<a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ url('admin/csr/index') }}">CSR</a>`;
+
+
+            return html;
+
+        }
+
 
         function redirectToParameter(indentId) {
             var url = "{{ route('admin.indent/parameter', ['indent_id' => '']) }}" + indentId;
@@ -315,7 +405,8 @@
 
         function data_seen(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center ">New Arrival</h4>
 
@@ -332,8 +423,6 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
-
 
                 $.each(data, function(index, value) {
 
@@ -347,20 +436,28 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
 
-            html += `</tbody>
+
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
+            } else {
+                html += `<div class="forward_status col-md-12 mb-3">
+                    <div>
+                        <p class='p-3'>No Forward Status Found </p>
+                    </div>
+                </div>`
+            }
 
             return html;
         }
 
         function data_vetted(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center bg-info ">OutGoing</h4>
 
@@ -377,7 +474,7 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
+
 
 
                 $.each(data, function(index, value) {
@@ -392,20 +489,20 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
-
-            html += `</tbody>
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
+            }
 
             return html;
         }
 
         function data_approved(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center bg-secondary">Decision</h4>
 
@@ -422,8 +519,6 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
-
 
                 $.each(data, function(index, value) {
 
@@ -437,20 +532,22 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
 
-            html += `</tbody>
+
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
 
+            }
             return html;
         }
 
         function data_dispatch(data) {
             var html = '';
-            html += `<div class="forward_status col-md-12 mb-3">
+            if (data.length !== 0) {
+                html += `<div class="forward_status col-md-12 mb-3">
                         <div>
                             <h4 class="title text-center bg-danger">Dispatch</h4>
 
@@ -467,13 +564,10 @@
                                     </thead>
                                     <tbody>`
 
-            if (data !== null) {
-
 
                 $.each(data, function(index, value) {
 
                     var date_time = formatDate(value.created_at)
-
                     html += `<tr>
                                 <td>${value.sender_designation_name}</td>
                                 <td><i class="fa fa-arrow-right text-success"></i></td>
@@ -482,14 +576,14 @@
                                 <td>${value.remarks}</td>
                             </tr>`;
                 });
-            }
 
-            html += `</tbody>
+
+                html += `</tbody>
                                 </table>
                             </div>
                         </div>
                     </div>`;
-
+            }
             return html;
         }
 
@@ -502,6 +596,12 @@
             var day = selectedDate.getDate().toString().padStart(2, '0');
 
             return `${day}-${month}-${year}`;
+        }
+
+        function cleardata() {
+            $('.search_body').hide();
+            $('#indent_details').html('');
+            $('#track_details').html('');
         }
     </script>
 @endpush

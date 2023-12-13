@@ -31,7 +31,7 @@ class OfferDispatchController extends Controller
 
     public function all_data(Request $request)
     {
-        
+
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
@@ -104,25 +104,25 @@ class OfferDispatchController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                         
+
                             <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                      
+
                         <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
                         </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                     
+
                         <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
                         </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                   
+
                         <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
                         </div>';
                     }
@@ -169,7 +169,14 @@ class OfferDispatchController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('track_status', 4)
+            ->whereIn('track_status',[2,4])
+            ->whereNot(function ($query) {
+                $query->where('sender_designation.id', 7)
+                    ->where('receiver_designation.id', 3)
+                    ->where('document_tracks.track_status', 2);
+            })
+            ->skip(1) // Skip the first row
+            ->take(PHP_INT_MAX)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -270,11 +277,11 @@ class OfferDispatchController extends Controller
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                $data->doc_reference_number = $doc_reference_number;
+                // $value->doc_reference_number = $doc_reference_number;
                 $value->track_status = 4;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $data->remarks = $remarks;
+                $value->remarks = $remarks;
                 $value->created_at =  Carbon::now('Asia/Dhaka');
                 $value->updated_at =  Carbon::now('Asia/Dhaka');
                 $value->save();

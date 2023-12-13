@@ -172,7 +172,7 @@
                             </tr>
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                            href="{{url('admin/csr/index') }}">CSR</a>
                     </div>
                 </div>
 
@@ -206,7 +206,7 @@
                                                         <div class=" col-md-6 mt-2">
                                                             <label for="delivery_date">Delivery Date </label>
                                                             <input type="date" id="delivery_date" name="delivery_date"
-                                                                class="form-control">
+                                                                class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                                                         </div>
                                                         <div class="col-md-6 mt-2 " style="margin-left: 10px;">
                                                             <label for="delay_cause">Delay Cause </label>
@@ -278,7 +278,7 @@
                             </div>
 
                         @endif
-                     
+
 
                         <div class="forward_status col-md-12 mb-3">
                             <div>
@@ -302,7 +302,7 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i') }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach

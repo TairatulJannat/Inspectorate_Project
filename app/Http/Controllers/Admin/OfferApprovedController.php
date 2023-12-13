@@ -110,25 +110,25 @@ class OfferApprovedController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                           
+
                             <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                          
+
                             <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            
+
                             <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                       
+
                         <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
@@ -179,6 +179,11 @@ class OfferApprovedController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->whereIn('track_status', [1,3])
+            ->whereNot(function ($query) {
+                $query->where('sender_designation.id', 7)
+                    ->where('receiver_designation.id', 5)
+                    ->where('document_tracks.track_status', 1);
+            })
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',

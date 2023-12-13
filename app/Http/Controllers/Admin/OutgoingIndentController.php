@@ -81,13 +81,12 @@ class OutgoingIndentController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                   
+
                     if ($data->status == '1') {
                         return '<button class="btn  btn-info text-white btn-sm">Vetted</button>';
-                    }else{
+                    } else {
                         return '<button class="btn btn-info text-white  btn-sm">None</button>';
                     }
-                    
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
@@ -165,6 +164,8 @@ class OutgoingIndentController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
+            ->skip(1) // Skip the first row
+            ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',

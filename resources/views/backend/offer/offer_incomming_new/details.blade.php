@@ -173,11 +173,11 @@
                                 <th>Quantity</td>
                                 <td>{{ $details->qty }}</td>
                             </tr>
-                           
+
 
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
-                            href="">Parameter</a>
+                            href="{{url('admin/csr/index') }}">CSR</a>
                     </div>
                 </div>
 
@@ -278,7 +278,7 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i') }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach

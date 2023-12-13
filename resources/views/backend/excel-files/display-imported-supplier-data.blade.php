@@ -38,14 +38,16 @@
                                 <tr>
                                     <th>Sl No.</th>
                                     <th>Parameter name</th>
-                                    <th>Parameter value</th>
+                                    <th>Indent Parameter value</th>
+                                    <th>Supplier Parameter value</th>
+                                    <th>Remarks</th>
                                 </tr>
                             </thead>
                             @php $slNo = 0; @endphp
                             @foreach ($parameterGroups as $groupName => $parameters)
                                 <tbody>
                                     <tr>
-                                        <td colspan="4">
+                                        <td colspan="5">
                                             <input type="text" class="form-control bg-success"
                                                 name="editedData[{{ $groupName }}][parameter_group_name]"
                                                 value="{{ $groupName }}" disabled>
@@ -54,12 +56,17 @@
                                     @foreach ($parameters as $parameter)
                                         <tr>
                                             <td class="col-md-1 py-1 text-center">{{ $slNo + 1 }}</td>
-                                            <td class="col-md-4 py-1">
+                                            <td class="col-md-3 py-1">
                                                 <input type="text" class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]"
                                                     value="{{ $parameter['parameter_name'] }}">
                                             </td>
-                                            <td class="col-md-5 py-1">
+                                            <td class="col-md-3 py-1">
+                                                <input type="text" class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]"
+                                                    value="{{ $parameter['indent_parameter_value'] }}">
+                                            </td>
+                                            <td class="col-md-3 py-1">
                                                 <input type="text" class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]"
                                                     value="{{ $parameter['parameter_value'] }}">
@@ -80,13 +87,17 @@
                         </table>
                     </div>
 
-                    <div class="text-center">
-                        <h4 class="bg-warning">Offer Remarks:</h4>
-                        <select class="form-control select2" name="offer_remarks">
-                            <option value="Responsive" selected>Responsive</option>
-                            <option value="Non Responsive">Non Responsive</option>
-                        </select>
-                        <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+                    <div class="row">
+                        <div class="col-md-3 bg-warning">
+                            <p class="bg-warning px-1 pt-1 mb-0">Offer Remarks:</p>
+                            <select class="form-control select2 mb-2" name="offer_remarks">
+                                <option value="Responsive" selected>Responsive</option>
+                                <option value="Non Responsive">Non Responsive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-9">
+                            <button type="submit" class="btn btn-success-gradien mt-3 float-end">Save Changes</button>
+                        </div>
                     </div>
                 </form>
             @else
@@ -94,7 +105,8 @@
             @endif
         </div>
         <div class="card-footer py-3" style="background-color: teal !important;">
-            <a href="{{ url('admin/import-supplier-spec-data-index') }}" class="btn btn-danger float-end">Cancel</a>
+            <a href="{{ url('admin/import-supplier-spec-data-index') }}"
+                class="btn btn-danger-gradien float-end">Cancel</a>
         </div>
     </div>
 @endsection
