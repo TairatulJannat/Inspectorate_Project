@@ -8,11 +8,32 @@
         $('.select2').select2();
         // toastr.options.preventDuplicates = true;
 
+        function updatePrintButtonUrl() {
+            var selectedItemType = $("#itemTypeId").val();
+            var selectedItem = $("#itemId").val();
+            var printButton = $("#printButton");
+
+            if (selectedItemType && selectedItem) {
+                var printButtonUrl = '{{ url('admin/csr-generate-pdf') }}?item-type-id=' + selectedItemType +
+                    '&item-id=' + selectedItem;
+                printButton.attr('href', printButtonUrl);
+            } else {
+                printButton.addClass('disabled');
+            }
+        }
+
+        // $("#itemTypeId").change(function() {
+        //     $("#printButton").removeClass('disabled');
+        // });
+
         $('#searchCSRForm').submit(function(e) {
             e.preventDefault();
             var form = this;
             performSearch(form);
+            updatePrintButtonUrl();
         });
+
+        updatePrintButtonUrl();
 
         $('#itemTypeId').on('change', function() {
             var itemTypeId = $(this).val();
@@ -57,10 +78,16 @@
                             $(form).find("span." + prefix + "-error").text(val[0]);
                         });
                         toastr.error(response.message);
+                        var buttonLink = $('#printButton');
+                        buttonLink.addClass('disabled');
+                        var searchedDataContainer = $(".searched-data");
+                        searchedDataContainer.empty();
                     } else if (response.isSuccess === true) {
                         toastr.success(response.message);
                         renderTreeView(response.combinedData, response.itemTypeName, response
                             .itemName);
+                        var buttonLink = $('#printButton');
+                        buttonLink.removeClass('disabled');
                     }
 
                     searchButton.html(originalSearchButtonHtml);
@@ -146,7 +173,5 @@
                 searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
             }
         }
-
-
     });
 </script>

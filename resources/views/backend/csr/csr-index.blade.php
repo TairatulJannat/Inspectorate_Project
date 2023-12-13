@@ -48,14 +48,13 @@
             <div class="col-md-2">
                 <button type="submit" class="btn btn-success-gradien search-button" id="searchButton">Search<span> <i
                             class="fa fa-search"></i></span></button>
+                <a href="{{ url('admin/csr-generate-pdf') }}" type="button" id="printButton"
+                    class="btn btn-success-gradien fa fa-print disabled"></a>
             </div>
         </div>
     </form>
     <div class="row bg-body p-3" style="background-color: honeydew !important;">
         <div class="text-success searched-data">
-            {{-- <div class="text-center">
-                <h2>CSR file will appear here.</h2>
-            </div> --}}
         </div>
     </div>
 @endsection
