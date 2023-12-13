@@ -280,7 +280,7 @@
                                                             <td>{{ $document_track->sender_designation_name }}</td>
                                                             <td><i class="fa fa-arrow-right text-success"></i></td>
                                                             <td>{{ $document_track->receiver_designation_name }}</td>
-                                                            <td>{{ $document_track->created_at->format('d-m-Y h:i') }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
                                                             <td>{{ $document_track->remarks }}</td>
                                                         </tr>
                                                     @else
@@ -288,7 +288,7 @@
                                                             <td>{{ $document_track->sender_designation_name }}</td>
                                                             <td><i class="fa fa-arrow-right text-success"></i></td>
                                                             <td>{{ $document_track->receiver_designation_name }}</td>
-                                                            <td>{{ $document_track->created_at->format('d-m-Y h:i') }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
                                                             <td>{{ $document_track->remarks }}</td>
                                                         </tr @endif
                                                     @endforeach

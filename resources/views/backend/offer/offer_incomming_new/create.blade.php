@@ -172,7 +172,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="qty">Item QTY</label>
+                                <label for="qty">Item Qty</label>
                                 <input type="text" class="form-control" id="qty" name="qty">
 
                                 <span id="error_qty" class="text-danger error_field"></span>
@@ -210,7 +210,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label for="receive_status">Is Offer Vetted</label>
                             <input class="form-check-input" type="checkbox" id="is_offer_vetted" name="is_offer_vetted" checked>
                             <span class="text-danger error-text receive_status_error"></span>
@@ -224,7 +224,7 @@
                             <label  for="asking_date">Offer vetting Ltr Date</label>
                             <input class="form-control" type="date" id="offer_vetting_ltr_dt" name="offer_vetting_ltr_dt" >
                             <span class="text-danger error-text receiveDate_error"></span>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-4">
                             <div class="form-group">
