@@ -104,8 +104,7 @@
                     var uniqueSupplierIds = [];
                     $.each(node, function(i, parameterValue) {
                         $.each(parameterValue, function(key, value) {
-                            log.warn(value);
-                            if (key.startsWith("SupplierId_") && !uniqueSupplierIds
+                            if (key.startsWith("Supplier_") && !uniqueSupplierIds
                                 .includes(key)) {
                                 uniqueSupplierIds.push(key);
                             }
@@ -115,7 +114,7 @@
                     // Add Supplier columns dynamically based on unique SupplierIds
                     $.each(uniqueSupplierIds, function(i, supplierId) {
                         var supplierNumber = supplierId.split("_")[1];
-                        html += '<th>Supplier ' + supplierNumber + "'s Value</th>";
+                        html += '<th>' + supplierNumber + "</th>";
                     });
 
                     html += '</tr>' +

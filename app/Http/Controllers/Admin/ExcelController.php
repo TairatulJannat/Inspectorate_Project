@@ -102,7 +102,8 @@ class ExcelController extends Controller
                                         $newParameter = $parameter;
 
                                         foreach ($spValues as $index => $spValue) {
-                                            $newParameter["SupplierId_" . $spValue['supplier_id']] = $spValue['parameter_value'];
+                                            $spName = Supplier::where('id', $spValue['supplier_id'])->first();
+                                            $newParameter["Supplier_" . $spName->firm_name] = $spValue['parameter_value'];
                                         }
 
                                         $parameters[$i] = $newParameter;
