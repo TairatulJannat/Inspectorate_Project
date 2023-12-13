@@ -312,7 +312,10 @@
 
             html += `<a class="btn btn-success mt-3 btn-parameter"
                         href="javascript:void(0)"
-                        onclick="redirectToParameter(${details.id})">Parameter</a>`;
+                        onclick="redirectToParameter(${details.id})">Parameter</a>
+                    <a class="btn btn-success mt-3 "
+                        href="{{url('/pdf/indent')}}">Download PDF</a>
+                    `;
 
 
             return html;
