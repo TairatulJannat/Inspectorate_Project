@@ -59,6 +59,22 @@ class ExcelController extends Controller
             $itemType = Item_Type::findOrFail($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
+            $indentData = Indent::where('item_id', $itemId)->get();
+
+            if ($indentData->isNotEmpty()) {
+                $indentRefNo = $indentData[0]['reference_no'];
+            } else {
+                $indentRefNo = 'Indent Reference Number not found';
+            }
+
+            $tenderData = Tender::where('item_id', $itemId)->get();
+            
+            if ($tenderData->isNotEmpty()) {
+                $tenderRefNo = $tenderData[0]['reference_no'];
+            } else {
+                $tenderRefNo = 'Tender Reference Number not found';
+            }
+
             $parameterGroupsExist = ParameterGroup::where('item_id', $itemId)
                 ->exists();
 
@@ -122,6 +138,8 @@ class ExcelController extends Controller
                     'itemTypeName' => $itemTypeName,
                     'itemId' => $itemId,
                     'itemName' => $itemName,
+                    'indentRefNo' => $indentRefNo,
+                    'tenderRefNo' => $tenderRefNo,
                 ], 200);
             } else {
                 return response()->json([
