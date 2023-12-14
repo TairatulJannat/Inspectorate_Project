@@ -22,10 +22,6 @@
             }
         }
 
-        // $("#itemTypeId").change(function() {
-        //     $("#printButton").removeClass('disabled');
-        // });
-
         $('#searchCSRForm').submit(function(e) {
             e.preventDefault();
             var form = this;

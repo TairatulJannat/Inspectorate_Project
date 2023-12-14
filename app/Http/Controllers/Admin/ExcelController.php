@@ -31,6 +31,9 @@ class ExcelController extends Controller
         try {
             $items = Items::all();
             $itemTypes = Item_type::all();
+            $indents = Indent::all();
+            $suppliers = Supplier::all();
+            $tenders = Tender::all();
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve from Database.');
         }
@@ -68,7 +71,7 @@ class ExcelController extends Controller
             }
 
             $tenderData = Tender::where('item_id', $itemId)->get();
-            
+
             if ($tenderData->isNotEmpty()) {
                 $tenderRefNo = $tenderData[0]['reference_no'];
             } else {
@@ -572,5 +575,21 @@ class ExcelController extends Controller
 
     protected function exportSupplierEditedData()
     {
+    }
+
+    public function fetchSupplierData(Request $request)
+    {
+        $tenderId = $request->input('tenderId');
+
+        // Get unique supplier_id values from SupplierSpecData
+        $supplierIds = SupplierSpecData::groupBy('supplier_id')->pluck('supplier_id');
+
+        // Fetch data from the suppliers table using the obtained supplier_ids
+        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
+
+        return response()->json([
+            'isSuccess' => true,
+            'suppliersData' => $suppliersData,
+        ]);
     }
 }
