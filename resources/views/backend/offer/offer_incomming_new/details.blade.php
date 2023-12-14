@@ -153,22 +153,22 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <th>supplier Name</td>
                                 <td>{{ $details->suppliers_name }}</td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <th>Offer Receiver Letter No</td>
                                 <td>{{ $details->offer_rcv_ltr_no }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <th>Offer Vetting Letter No</td>
                                 <td>{{ $details->offer_vetting_ltr_no }}</td>
                             </tr>
                             <tr>
                                 <th>Offer Vetting Letter Date</td>
                                 <td>{{ $details->offer_vetting_ltr_dt }}</td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <th>Quantity</td>
                                 <td>{{ $details->qty }}</td>

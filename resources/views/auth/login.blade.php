@@ -49,8 +49,8 @@
                 <div class="col-xl-6 p-0">
 
                     <div class="login-card d-flex">
-                        <h3>
-                            Welcome to Inspectorate
+                        <h3 style="text-align: center">
+                            Welcome to Inspectorate of Electrical Equipments & Instruments
                             Login Portal
                         </h3>
                         <div>
