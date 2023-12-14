@@ -4,6 +4,11 @@
 
     $(document).ready(function() {
         var itemsData = {!! $items !!};
+        var itemTypesData = {!! $itemTypes !!};
+        var tendersData = {!! $tenders !!};
+        var $indentsData = {!! $indents !!};
+        var $suppliersData = {!! $suppliers !!};
+
         populateItemsDropdown(itemsData);
 
         $('.select2').select2();
@@ -14,6 +19,51 @@
             var form = this;
             performSearch(form);
         });
+
+        $('#tenderId').on('change', function() {
+            var tenderId = $(this).val();
+
+            $.ajax({
+                url: '{{ url('admin/fetch-supplier-data') }}',
+                method: 'GET',
+                data: {
+                    tenderId: tenderId
+                },
+                dataType: 'JSON',
+                success: function(response) {
+                    if (response.isSuccess === true) {
+                        populateSupplierDropdown(response.suppliersData);
+                    } else {
+                        console.error("Data not found!");
+                    }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+        var supplierDataContainer = $(".supplier-data");
+        supplierDataContainer.hide();
+
+        function populateSupplierDropdown(suppliersData) {
+            var container = document.getElementById('supplierTableContainer');
+            var tbody = container.querySelector('tbody');
+
+            tbody.innerHTML = '';
+
+            suppliersData.forEach(function(supplier) {
+                var row = document.createElement('tr');
+                var firmNameCell = document.createElement('td');
+                firmNameCell.textContent = supplier.firm_name;
+                row.appendChild(firmNameCell);
+
+                tbody.appendChild(row);
+            });
+
+            // No need to append the table again
+            supplierDataContainer.show();
+        }
 
         $('#itemTypeId').on('change', function() {
             var itemTypeId = $(this).val();

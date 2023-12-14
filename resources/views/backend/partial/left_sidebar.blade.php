@@ -208,6 +208,7 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
+
                     {{-- Side Menu Button Links for Excel Files --}}
                     @if (count(menu_check('Excel')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
@@ -224,6 +225,7 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+
 
                     {{-- Side Menu Button Links for Comparative Statement Report (CSR) --}}
                     @if (count(menu_check('Excel')) !== 0)

@@ -36,6 +36,44 @@
             <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
                 <div class="row">
                     <div class="col-md-2 mt-2">
+                        <h6>Tender Reference No.: </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <select class="form-control select2 tender-id" id="tenderId" name="tender-id"
+                                style="width: 100% !important;">
+                                <option value="" selected disabled>Select Tender Reference No.</option>
+                                @foreach ($tenders as $tender)
+                                    <option value="{{ $tender->id }}">{{ $tender->reference_no }}</option>
+                                @endforeach
+                            </select>
+                            @error('tender-id')
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <span class="text-danger error-text tender-id-error"></span>
+                    </div>
+                    <div class="col-md-2 mt-2">
+                        <h6>Indent Reference No.: </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <select class="form-control select2 indent-id" id="indentId" name="indent-id"
+                                style="width: 100% !important;">
+                                <option value="" selected disabled>Select Indent Reference No.</option>
+                                @foreach ($indents as $indent)
+                                    <option value="{{ $indent->id }}">{{ $indent->reference_no }}</option>
+                                @endforeach
+                            </select>
+                            @error('indent-id')
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <span class="text-danger error-text indent-id-error"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mt-2">
                         <h6>Item Type: </h6>
                     </div>
                     <div class="col-md-4">
@@ -74,24 +112,6 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 mt-2">
-                        <h6>Indent Reference No.: </h6>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <select class="form-control select2 indent-id" id="indentId" name="indent-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select Indent Reference No.</option>
-                                @foreach ($indents as $indent)
-                                    <option value="{{ $indent->id }}">{{ $indent->reference_no }}</option>
-                                @endforeach
-                            </select>
-                            @error('indent-id')
-                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <span class="text-danger error-text indent-id-error"></span>
-                    </div>
-                    <div class="col-md-2 mt-2">
                         <h6 class="card-title">Supplier: </h6>
                     </div>
                     <div class="col-md-4">
@@ -111,23 +131,20 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2 mt-2">
-                        <h6>Tender Reference No.: </h6>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <select class="form-control select2 tender-id" id="tenderId" name="tender-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select Tender Reference No.</option>
-                                @foreach ($tenders as $tender)
-                                    <option value="{{ $tender->id }}">{{ $tender->reference_no }}</option>
-                                @endforeach
-                            </select>
-                            @error('tender-id')
-                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
-                            @enderror
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="supplier-data" id="supplierTableContainer">
+                            <table class="table-bordered w-100" style="background-color: burlywood;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center f-16">Already Submitted Supplier:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Existing rows will be appended here -->
+                                </tbody>
+                            </table>
                         </div>
-                        <span class="text-danger error-text tender-id-error"></span>
                     </div>
                 </div>
             </div>

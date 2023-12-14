@@ -31,6 +31,9 @@ class ExcelController extends Controller
         try {
             $items = Items::all();
             $itemTypes = Item_type::all();
+            $indents = Indent::all();
+            $suppliers = Supplier::all();
+            $tenders = Tender::all();
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve from Database.');
         }
@@ -58,6 +61,22 @@ class ExcelController extends Controller
 
             $itemType = Item_Type::findOrFail($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+
+            $indentData = Indent::where('item_id', $itemId)->get();
+
+            if ($indentData->isNotEmpty()) {
+                $indentRefNo = $indentData[0]['reference_no'];
+            } else {
+                $indentRefNo = 'Indent Reference Number not found';
+            }
+
+            $tenderData = Tender::where('item_id', $itemId)->get();
+
+            if ($tenderData->isNotEmpty()) {
+                $tenderRefNo = $tenderData[0]['reference_no'];
+            } else {
+                $tenderRefNo = 'Tender Reference Number not found';
+            }
 
             $parameterGroupsExist = ParameterGroup::where('item_id', $itemId)
                 ->exists();
@@ -122,6 +141,8 @@ class ExcelController extends Controller
                     'itemTypeName' => $itemTypeName,
                     'itemId' => $itemId,
                     'itemName' => $itemName,
+                    'indentRefNo' => $indentRefNo,
+                    'tenderRefNo' => $tenderRefNo,
                 ], 200);
             } else {
                 return response()->json([
@@ -554,5 +575,21 @@ class ExcelController extends Controller
 
     protected function exportSupplierEditedData()
     {
+    }
+
+    public function fetchSupplierData(Request $request)
+    {
+        $tenderId = $request->input('tenderId');
+
+        // Get unique supplier_id values from SupplierSpecData
+        $supplierIds = SupplierSpecData::groupBy('supplier_id')->pluck('supplier_id');
+
+        // Fetch data from the suppliers table using the obtained supplier_ids
+        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
+
+        return response()->json([
+            'isSuccess' => true,
+            'suppliersData' => $suppliersData,
+        ]);
     }
 }
