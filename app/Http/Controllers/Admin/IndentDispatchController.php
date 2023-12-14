@@ -44,8 +44,7 @@ class IndentDispatchController extends Controller
                     ->where('indents.status', 4)
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
-            }
-             else {
+            } else {
 
                 $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
@@ -87,37 +86,44 @@ class IndentDispatchController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-primary btn-sm">New</button>';
-                    }
-                    if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
-                    }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
-                    if ($data->status == '3') {
-                        return '<button class="btn btn-info btn-sm">Approved</button>';
-                    }
+
                     if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
+                        return '<button class="btn btn-danger btn-sm">Dispatched</button>';
+                    }else {
+                        return '<button class="btn btn-danger btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
 
+                    // start Forward Btn Change for index
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
+                    // start Forward Btn Change for index
+                    if ($DocumentTrack) {
+                        if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Dispatch</a>
+                            </div>';
+                        } else {
+                            $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Dispatched</a>
+                        </div>';
+                        }
 
-                    if ($data->status == '2') {
-                        $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
-                        <a href="" class="edit btn btn-success btn-sm" disable>Completed</a>';
+                        if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Dispatched</a>
+                        </div>';
+                        }
                     } else {
-
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Dispatch</a>
                         </div>';
                     }
-                    
 
                     return $actionBtn;
                 })
@@ -145,16 +151,34 @@ class IndentDispatchController extends Controller
             )
             ->where('indents.id', $id)
             ->first();
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
 
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+
+            array_push($additional_documents_names, $additional_names);
+        }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
+
+
+        // dd($skipId);
+
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('track_status', 4)
+            ->whereIn('track_status',[2,4])
+            ->whereNot(function ($query) {
+                $query->where('sender_designation.id', 7)
+                    ->where('receiver_designation.id', 3)
+                    ->where('document_tracks.track_status', 2);
+            })
+            ->skip(1) // Skip the first row
+            ->take(PHP_INT_MAX)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -192,7 +216,7 @@ class IndentDispatchController extends Controller
         $notes = '';
 
         $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 4)
+            ->whereIn('track_status',[2,4])
             ->where('reciever_desig_id', $desig_id)->get();
 
         if ($document_tracks_notes->isNotEmpty()) {
@@ -200,14 +224,17 @@ class IndentDispatchController extends Controller
         }
 
         //End blade notes section....
+        //Start blade forward on off section....
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+
+        //End blade forward on off section....
 
 
-        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','desig_position'));
+        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
     {
-
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -231,8 +258,8 @@ class IndentDispatchController extends Controller
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at = Carbon::now('Asia/Dhaka');
+        $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
 
@@ -250,13 +277,13 @@ class IndentDispatchController extends Controller
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                $data->doc_reference_number = $doc_reference_number;
+                // $value->doc_reference_number = $doc_reference_number;
                 $value->track_status = 4;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $data->remarks = $remarks;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->remarks = $remarks;
+                $value->created_at = Carbon::now('Asia/Dhaka');
+                $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }

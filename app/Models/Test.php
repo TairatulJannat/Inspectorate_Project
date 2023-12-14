@@ -11,3 +11,4 @@ class Test extends Model
 
     protected $fillable = ['parameter_group_name', 'parameter_name', 'parameter_value'];
 }
+

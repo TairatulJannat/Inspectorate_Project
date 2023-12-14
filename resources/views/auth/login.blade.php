@@ -44,14 +44,14 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-6"><img class="bg-img-cover bg-center"
-                        src="{{ asset('assets/backend/images/logo/bg_3.jpg') }}" alt="looginpage">
+                        src="{{ asset('assets/backend/images/logo/bg_3.jpg') }}" alt="loginpage">
                 </div>
                 <div class="col-xl-6 p-0">
 
                     <div class="login-card d-flex">
-                        <h3>
-                            Welcome to Inspectorate
-                            Department Login Portal
+                        <h3 style="text-align: center">
+                            Welcome to Inspectorate of Electrical Equipments & Instruments
+                            Login Portal
                         </h3>
                         <div>
                             <form class="theme-form login-form" action="{{ route('login') }}" method="post">
@@ -89,12 +89,12 @@
                                         <div class="show-hide"><span class="show" onclick="myFunction()"></span></div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <div class="checkbox">
                                         <input id="checkbox1" type="checkbox">
                                         <label class="text-muted" for="checkbox1">Remember password</label>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <button class="btn btn-success btn-block" type="submit">Login</button>
                                 </div>

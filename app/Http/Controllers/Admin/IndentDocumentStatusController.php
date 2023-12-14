@@ -39,10 +39,16 @@ class IndentDocumentStatusController extends Controller
                 }
             })
             ->addColumn('action', function ($data) {
+                // <button type="button" class="btn btn-success float-md-end" data-bs-toggle="modal"
+                //             data-bs-target="#createItemTypeModal">
+                //            Add Document
+                //         </button>
 
 
                 $actionBtn = '<div class="btn-group" role="group">
-                        <a href="" class="edit btn btn-info btn-sm">Edit</a>
+                        <a href="javascript:void(0)" class="edit_doc btn btn-info btn-sm" data-id="'. $data->id.'"  data-bs-toggle="modal"
+                        data-bs-target="#editItemTypeModal">Edit</a>
+
                         <a href="javascript:void(0)" class="delete btn btn-danger btn-sm" onclick="delete_data('.$data->id.')">Delete</a>
                         </div>';
                 return $actionBtn;
@@ -95,9 +101,12 @@ class IndentDocumentStatusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit( $id)
     {
-        //
+        // $indentId = $id;
+        // $additional_documents
+        $additional_documents = Additional_document::where('id', $id )->first();
+        return view('backend.indent.document_status.index', compact( 'additional_documents'));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboarController;
 use App\dynamic_route;
+use App\Http\Controllers\Admin\PDFController;
 use App\Http\Controllers\website\WebsiteController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,11 @@ Route::group(['prefix' => 'admin'], function () {
     Auth::routes(['register' => false]);
 });
 
-
+//start redirect '/ or home' to '/admin/login'
+Route::get('/', function () {
+    return redirect('/admin/login');
+});
+//start redirect '/ or home' to '/admin/login'
 
 Route::post('/admin_logout', [AdminDashboarController::class, 'admin_logout'])->name('admin_logout');
 
@@ -36,3 +41,6 @@ Route::middleware(['auth', 'routeprifix'])->prefix('{roleBased}')->group(functio
         }
     });
 });
+
+
+Route::get('/pdf/indent', [PDFController::class, 'generatePDF'])->name('generate_pdf');

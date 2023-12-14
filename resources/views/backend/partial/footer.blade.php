@@ -1,12 +1,19 @@
+<style>
+    .footer-copyright p a:hover {
+        color: #059c74;
+    }
+</style>
 <footer class="footer">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 footer-copyright">
-                <p class="mb-0">{{ __('Copyright © ' . date('Y') . ' | All Rights Reserved by Bangladesh Army') }}</p>
+                <p class="mb-0">Developed By <a href="https://tilbd.net/" target="_blank" style="hover:"> Trust Innovation
+                        Limited</a></p>
             </div>
-            <div class="col-md-6">
-                {{--                <p class="pull-right mb-0">Developed By <a href="https://portfolio-ratin.com/" target="_blank"> Trust Innovation Limited</a></p> --}}
-            </div>
+            {{-- <div class="col-md-6">
+                               <p class="pull-right mb-0">Developed By <a href="https://tilbd.net/" target="_blank"> Trust Innovation Limited</a></p>
+                               {{ __('Copyright © ' . date('Y') . ' | All Rights Reserved by Bangladesh Army') }}
+            </div> --}}
         </div>
     </div>
 </footer>
@@ -40,33 +47,38 @@
 
 
 
-    // var options = {
-    // chart: {
-    //     type: 'pie'
-    // },
-    // series: [44, 55, 13, 33],
-    //     labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
+    var options2 = {
+        chart: {
+            height: 230,
+            width: 450,
+            type: 'bar',
+            toolbar: {
+                show: false
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: true,
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        series: [{
+            data: [ 100, 200, 300, 400]
+        }],
+        xaxis: {
+            categories: [ 'Sep', 'Oct', 'Nov', 'Dec'],
+        },
+        colors: ['#B263C5']
+    }
 
-    // }
+    var chart2 = new ApexCharts(
+        document.querySelector("#basic-bar"),
+        options2
+    );
 
-    // var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
-
-    // chart.render();
-
-
-    // var options = {
-    // chart: {
-    //     type: 'pie'
-    // },
-    // series: [44, 55, 13, 33],
-    //     labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
-
-    // }
-
-    // var chart = new ApexCharts(document.querySelector("#mypiechart"), options);
-
-    // chart.render();
-
+    chart2.render();
 
     var options8 = {
         chart: {
@@ -89,12 +101,32 @@
         colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#222222', '#717171', '#e2c636']
     }
 
-    // var chart8 = new ApexCharts(
-    //     document.querySelector("#mypiechart"),
-    //     options8
-    // );
+    var options9 = {
+        chart: {
+            width: 380,
+            type: 'donut',
+        },
+        series: [44, 55, 41, 17],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }],
+        colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#31D2F2', '#D22D3D']
+    }
 
-    // chart8.render();
+    var chart9 = new ApexCharts(
+        document.querySelector("#donutchart"),
+        options9
+    );
+
+    chart9.render();
 </script>
 </body>
 

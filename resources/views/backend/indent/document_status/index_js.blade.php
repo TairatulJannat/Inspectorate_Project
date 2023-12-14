@@ -153,28 +153,31 @@
         })
 
         // // Edit Item Type
-        // $(document).on('click', '.edit_item_type', function(e) {
-        //     e.preventDefault();
-        //     let id = $(this).attr('id');
-        //     $.ajax({
-        //         url: '{{ url('admin/item_types/edit') }}',
-        //         method: 'post',
-        //         data: {
-        //             id: id,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             $("#edit_item_type_id").val(id);
-        //             $("#editItemTypeName").val(response.name);
-        //             $("#editItemTypeStatus").prop('checked', response.status == 1);
+        $(document).on('click', '.edit_doc', function(e) {
+            e.preventDefault();
+            
+            var id = $(this).data('id');
 
-        //             $('#editItemTypeModal').modal('show');
-        //         }
-        //     });
-        // });
+            $.ajax({
+                url: "{{ url('admin/indent/doc_status/edit') }}/" + id,
+                method: 'get',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    
+                    $("#edit_item_type_id").val(id);
+                    $("#editItemTypeName").val(response.name);
+                    $("#editItemTypeStatus").prop('checked', response.status == 1);
+
+                    $('#editItemTypeModal').modal('show');
+                }
+            });
+        });
 
         // // Update Item Type
-        // $("#editItemTypeForm").on("submit", function(e) {
+        // $("#update_info").on("submit", function(e) {
         //     e.preventDefault();
         //     var form = this;
         //     var editButton = $("#editButton");

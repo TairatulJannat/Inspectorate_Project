@@ -2,7 +2,8 @@
 @section('title', 'Indent (Approved)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
-    <style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
+   <style>
         .card .card-header {
             padding: 0px;
             border-bottom: 1px solid rgba(182, 182, 182 , .6);
@@ -20,15 +21,18 @@
 
             color: #ffff
         }
-        .dt-buttons .buttons-html5{
-            background-color: #BA895D !important;
-            border:none;
-        }
         .dt-buttons{
             margin-left:8px;
         }
         .badge-secondary{
             background-color: #BA895D !important;
+        }
+        .dt-buttons .buttons-html5{
+            background-color: #A1B53A !important;
+            border:none;
+        }
+        .btn-danger{
+            background-color: #b53f4b !important;
         }
     </style>
 @endpush
@@ -50,6 +54,7 @@
                 <div class="row justify-content-between align-items-center">
 
                     <div class="d-flex justify-content-between px-4 py-2">
+
                         <div class="col-9">
                             <a href="{{ route('admin.indent/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
@@ -59,6 +64,7 @@
                                 class="btn btn-info text-white btn-sm">OutGoing</a>
                             <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
+
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>

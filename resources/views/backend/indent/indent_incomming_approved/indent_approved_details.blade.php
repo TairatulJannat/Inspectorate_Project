@@ -39,6 +39,7 @@
             padding: 10px 15px !important;
         }
 
+
         .forward_status,
         .forward {
             background-color: #F5F7FB !important;
@@ -46,6 +47,7 @@
             border-radius: 6px;
             padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+
         }
 
         h4 {
@@ -101,7 +103,9 @@
                 <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
+
                 <div class="card-body col-4">
+
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -130,8 +134,21 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-                                <th>Additional Documents</td>
-                                <td>{{ $details->additional_documents_name }}</td>
+
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name }} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
+
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
@@ -166,34 +183,76 @@
 
 
                 {{-- @if (!$sender_designation_id) --}}
+
                 <div class="card-body">
                     <div class="row">
-                        <div class="forward col-md-12 mb-3">
-                            <div>
-                                <h4 class="text-success">Forward</h4>
-                                <hr>
-                                <form action="">
-                                    <div class="row">
-                                        <div class="col-md-4 mb-2">
-                                            <select name="designation" id="designations" class="form-control"
-                                                style="height: 40px;">
-                                                <option value="">Select To Receiver</option>
-                                                @foreach ($designations as $d)
-                                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4 mb-2">
-                                            <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <button class="btn btn-success" id="submitBtn"
-                                                style="height: 40px;">Forward</button>
-                                        </div>
+                        @if ($DocumentTrack_hidden)
+
+                            @if ($desig_id == $DocumentTrack_hidden->reciever_desig_id)
+                                <div class="forward col-md-12 mb-3">
+                                    <div>
+                                        <h4 class="text-success">Forward</h4>
+                                        <hr>
+                                        <form action="">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <select name="designation" id="designations" class="form-control"
+                                                        style="height: 40px;">
+                                                        <option value="">Select To Receiver</option>
+                                                        @foreach ($designations as $d)
+                                                            <option value="{{ $d->id }}">{{ $d->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button class="btn btn-success" id="submitBtn"
+                                                        style="height: 40px;">Forward</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
+                            @else
+                                {{-- blank --}}
+                            @endif
+
+                            @if ($desig_id == $DocumentTrack_hidden->sender_designation_id)
+                                {{-- blank --}}
+                            @endif
+                        @else
+                            <div class="forward col-md-12 mb-3">
+                                <div>
+                                    <h4 class="text-success">Forward</h4>
+                                    <hr>
+                                    <form action="">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-2">
+                                                <select name="designation" id="designations" class="form-control"
+                                                    style="height: 40px;">
+                                                    <option value="">Select To Receiver</option>
+                                                    @foreach ($designations as $d)
+                                                        <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-success" id="submitBtn"
+                                                    style="height: 40px;">Forward</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+
+                        @endif
+
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -213,13 +272,23 @@
                                         <tbody>
                                             @if ($document_tracks !== null)
                                                 @foreach ($document_tracks as $document_track)
-                                                    <tr>
-                                                        <td>{{ $document_track->sender_designation_name }}</td>
-                                                        <td><i class="fa fa-arrow-right text-success"></i></td>
-                                                        <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y h:i A') }}</td>
-                                                        <td>{{ $document_track->remarks }}</td>
-                                                    </tr>
+                                                    @if ($document_track->track_status == 1)
+                                                        <tr style="background-color: #045a4a28">
+                                                            <td>{{ $document_track->sender_designation_name }}</td>
+                                                            <td><i class="fa fa-arrow-right text-success"></i></td>
+                                                            <td>{{ $document_track->receiver_designation_name }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                            <td>{{ $document_track->remarks }}</td>
+                                                        </tr>
+                                                    @else
+                                                        <tr style="background-color: #ba885d6f">
+                                                            <td>{{ $document_track->sender_designation_name }}</td>
+                                                            <td><i class="fa fa-arrow-right text-success"></i></td>
+                                                            <td>{{ $document_track->receiver_designation_name }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                            <td>{{ $document_track->remarks }}</td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
                                             @else
                                                 <tr>
@@ -234,13 +303,8 @@
                         </div>
                     </div>
 
-                    <!-- Notes Sectio
-                                n - Uncomment if needed -->
-                    {{-- <div class="col-md-6">
-                        @if ($notes == !null)
-                            ... <!-- Your notes HTML here -->
-                        @endif
-                    </div> --}}
+
+
                 </div>
 
                 {{-- @endif --}}
@@ -261,7 +325,7 @@
 
     <script>
         $(document).ready(function() {
-            var reciever_desig_text
+            var reciever_desig_text = '';
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();

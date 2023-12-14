@@ -77,7 +77,7 @@ class IndentApprovedController extends Controller
 
                 $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
                     ->where('reciever_desig_id', $designation_id)
-                    ->where('track_status','3')
+                    ->where('track_status', '3')
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
@@ -93,34 +93,43 @@ class IndentApprovedController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-primary btn-sm">New</button>';
-                    }
-                    if ($data->status == '1') {
-                        return '<button class="btn btn-warning  btn-sm">Under Vetted</button>';
-                    }
-                    if ($data->status == '2') {
-                        return '<button class="btn btn-success btn-sm">Delivered</button>';
-                    }
+
                     if ($data->status == '3') {
-                        return '<button class="btn btn-info btn-sm">Approved</button>';
+                        return '<button class="btn btn-secondary btn-sm">Approved</button>';
+                    }else{
+                        return '<button class="btn btn-secondary btn-sm">None</button>';
                     }
-                    if ($data->status == '4') {
-                        return '<button class="btn btn-secondary btn-sm">Dispatch</button>';
-                    }
+
                 })
                 ->addColumn('action', function ($data) {
+                    // start Forward Btn Change for index
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
+                    // start Forward Btn Change for index
 
+                    if ($DocumentTrack) {
+                        if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit">Forward</a>
+                            </div>';
+                        } else {
+                            $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            </div>';
+                        }
 
-                    if ($data->status == '2') {
-                        $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Doc Status</a>
-                        <a href="" class="edit btn btn-success btn-sm" disable>Completed</a>';
+                        if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
+                            $actionBtn = '<div class="btn-group" role="group">
+                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            </div>';
+                        }
                     } else {
-
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="edit btn btn-info btn-sm">Doc Status</a>
-                        <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
+                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
@@ -150,6 +159,14 @@ class IndentApprovedController extends Controller
             ->where('indents.id', $id)
             ->first();
 
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
+
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+
+            array_push($additional_documents_names, $additional_names);
+        }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -158,7 +175,12 @@ class IndentApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('track_status', 3)
+            ->whereIn('track_status', [1,3])
+            ->whereNot(function ($query) {
+                $query->where('sender_designation.id', 7)
+                    ->where('receiver_designation.id', 5)
+                    ->where('document_tracks.track_status', 1);
+            })
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -184,22 +206,26 @@ class IndentApprovedController extends Controller
 
         //End close forward Status...
 
+        //Start blade notes section....
+        $notes = '';
 
-         //Start blade notes section....
-         $notes = '';
+        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
+            ->where('track_status', 1)
+            ->where('reciever_desig_id', $desig_id)->get();
 
-         $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-             ->where('track_status', 1)
-             ->where('reciever_desig_id', $desig_id)->get();
+        if ($document_tracks_notes->isNotEmpty()) {
+            $notes = $document_tracks_notes;
+        }
 
-         if ($document_tracks_notes->isNotEmpty()) {
-             $notes = $document_tracks_notes;
-         }
+        //End blade notes section....
 
-         //End blade notes section....
+        //Start blade forward on off section....
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+
+        //End blade forward on off section....
 
 
-        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id'));
+        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
@@ -228,8 +254,8 @@ class IndentApprovedController extends Controller
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
-        $data->created_at = Carbon::now();
-        $data->updated_at = Carbon::now();
+        $data->created_at = Carbon::now('Asia/Dhaka');
+        $data->updated_at = Carbon::now('Asia/Dhaka');;
         $data->save();
 
 
@@ -252,8 +278,8 @@ class IndentApprovedController extends Controller
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
                 $value->remarks = $remarks;
-                $value->created_at = Carbon::now();
-                $value->updated_at = Carbon::now();
+                $value->created_at = Carbon::now('Asia/Dhaka');
+                $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();
             }
         }

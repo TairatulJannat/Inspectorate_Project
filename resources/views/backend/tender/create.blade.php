@@ -69,8 +69,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="receive_date">Tender Received Date</label>
-                                <input type="date" class="form-control" id="receive_date"
-                                    name="receive_date">
+                                <input type="date" class="form-control" id="receive_date" name="receive_date">
                                 <span id="error_receive_date" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -97,7 +96,7 @@
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="tender_number">Tender Number</label>
@@ -108,10 +107,12 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="additional_documents">Additional Documents</label>
-                                <select class="form-control select2" id="additional_documents" name="additional_documents[]" multiple>
+                                <select class="form-control select2" id="additional_documents" name="additional_documents[]"
+                                    multiple>
                                     <option value="">Please Select</option>
                                     @foreach ($additional_documents as $additional_document)
-                                        <option value="{{ $additional_document->id }}">{{ $additional_document->name }}</option>
+                                        <option value="{{ $additional_document->id }}">{{ $additional_document->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <span id="error_additional_documents" class="text-danger error_field"></span>
@@ -195,10 +196,9 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.tender.index_js')
     <script>
-      
         $(document).ready(function() {
-    
-        $('.select2').select2();
+
+            $('.select2').select2();
 
             $("#item_type_id").off('change').on('change', function() {
 
@@ -225,8 +225,5 @@
                 }
             });
         });
-
-
-        
     </script>
 @endpush

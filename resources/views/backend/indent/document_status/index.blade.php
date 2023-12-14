@@ -3,6 +3,13 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.min.css') }}">
+    <style>
+        .form-check-input {
+            width: 50px !important;
+            height: 30px;
+            border-radius: 50px !important; 
+        }
+    </style>
 @endpush
 @section('main_menu', 'Document Status')
 @section('active_menu', 'details')
@@ -17,9 +24,9 @@
                     </div>
                     <!-- Button to trigger the modal -->
                     <div class="col-6">
-                        <button type="button" class="btn btn-primary float-md-end" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-success float-md-end" data-bs-toggle="modal"
                             data-bs-target="#createItemTypeModal">
-                           Add Document
+                            Add Document
                         </button>
                     </div>
                 </div>
