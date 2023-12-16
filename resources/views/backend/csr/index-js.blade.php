@@ -122,12 +122,14 @@
                     html += '<div class="row parameter-group mt-5 edit-row">' +
                         '<span><h5 class="parameter-group-name text-uppercase text-underline fw-bold">' +
                         groupName + '</h5></span>' +
+                        '<div class="table-responsive" style="overflow-x: auto; max-width: 100%;">' +
+                        // Add this line
                         '<table class="parameter-table table table-bordered table-hover">' +
                         '<thead>' +
                         '<tr>' +
-                        '<th style="background-color: #69bdc6">Serial No.</th>' +
-                        '<th style="background-color: #69bdc6">Parameter Name</th>' +
-                        '<th style="background-color: #69bdc6">Indent Parameter Value</th>';
+                        '<th style="background-color: #bdf5fb">Serial No.</th>' +
+                        '<th style="background-color: #bdf5fb">Parameter Name</th>' +
+                        '<th style="background-color: #bdf5fb">Indent Parameter Value</th>';
 
                     // Determine unique SupplierIds
                     var uniqueSupplierIds = [];
@@ -153,14 +155,12 @@
 
                     $.each(node, function(i, parameterValue) {
                         html += '<tr>' +
-                            '<td class="col-md-1" style="background-color: #69bdc6">' +
+                            '<td class="col-md-1" style="background-color: #bdf5fb">' +
                             globalSerialNumber++ + '</td>' +
-                            '<td class="col-md-2 parameter-name" style="background-color: #69bdc6">' +
-                            parameterValue
-                            .parameter_name + '</td>' +
-                            '<td class="col-md-2 parameter-value" style="background-color: #69bdc6">' +
-                            parameterValue
-                            .parameter_value + '</td>';
+                            '<td class="col-md-2 parameter-name" style="background-color: #bdf5fb">' +
+                            parameterValue.parameter_name + '</td>' +
+                            '<td class="col-md-2 parameter-value" style="background-color: #bdf5fb">' +
+                            parameterValue.parameter_value + '</td>';
 
                         // Loop through unique SupplierIds
                         $.each(uniqueSupplierIds, function(j, supplierId) {
@@ -172,7 +172,7 @@
                         html += '</tr>';
                     });
 
-                    html += '</tbody></table></div>';
+                    html += '</tbody></table></div></div>'; // Add this line
                 });
 
                 html += '</div></div>';
