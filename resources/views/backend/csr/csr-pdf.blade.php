@@ -1,9 +1,17 @@
 <style>
+    @font-face {
+        font-family: 'Siyam Rupali';
+        src: url('/fonts/Siyamrupali.ttf') format('truetype');
+    }
+
+    body {
+        font-family: 'Siyam Rupali', sans-serif;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
-        /* Add any additional styling as needed */
     }
 
     table,
@@ -11,7 +19,6 @@
     td {
         border: 1px solid #ddd;
         padding: 8px;
-        /* text-align: center; */
     }
 </style>
 
@@ -29,7 +36,7 @@
             Date:
             {{ $tenderData->opening_date }}</div>
     </div>
-    <div class="content">
+    <div class="content" style="font-family: 'SiyamRupali', sans-serif;">
         <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr>
