@@ -97,7 +97,11 @@
                                 <option value="Rejected">Rejected</option>
                             </select>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-7 bg-warning">
+                            <p class="bg-warning px-1 pt-1 mb-0">Remarks:</p>
+                            <textarea class="w-100" name="remarks" id="remarks"></textarea>
+                        </div>
+                        <div class="col-md-2">
                             <button type="submit" class="btn btn-success-gradien mt-3 float-end">Save Changes</button>
                         </div>
                     </div>

@@ -8,14 +8,14 @@
         $('.select2').select2();
         // toastr.options.preventDuplicates = true;
 
-        function updatePrintButtonUrl() {
+        function updatePrintButtonUrl(tenderRefNo) {
             var selectedItemType = $("#itemTypeId").val();
             var selectedItem = $("#itemId").val();
+            var tenderRefNo = tenderRefNo;
             var printButton = $("#printButton");
 
             if (selectedItemType && selectedItem) {
-                var printButtonUrl = '{{ url('admin/csr-generate-pdf') }}?item-type-id=' + selectedItemType +
-                    '&item-id=' + selectedItem;
+                var printButtonUrl = '{{ url('admin/csr-generate-pdf') }}?tenderRefNo=' + tenderRefNo;
                 printButton.attr('href', printButtonUrl);
             } else {
                 printButton.addClass('disabled');
@@ -26,10 +26,10 @@
             e.preventDefault();
             var form = this;
             performSearch(form);
-            updatePrintButtonUrl();
         });
 
-        updatePrintButtonUrl();
+        var printButton = $("#printButton");
+        printButton.addClass('disabled');
 
         $('#itemTypeId').on('change', function() {
             var itemTypeId = $(this).val();
@@ -84,6 +84,7 @@
                             .itemName, response.indentRefNo, response.tenderRefNo);
                         var buttonLink = $('#printButton');
                         buttonLink.removeClass('disabled');
+                        updatePrintButtonUrl(response.tenderRefNo);
                     }
 
                     searchButton.html(originalSearchButtonHtml);

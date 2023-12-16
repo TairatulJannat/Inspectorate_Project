@@ -32,9 +32,11 @@
                 dataType: 'JSON',
                 success: function(response) {
                     if (response.isSuccess === true) {
-                        $("#indentId").val(response.indentId).change();
-                        $("#itemTypeId").val(response.itemTypeId).change();
-                        $("#itemId").val(response.itemId).change();
+                        $("#indentId").val(response.indentId).prop('selected', true)
+                        .change();
+                        $("#itemTypeId").val(response.itemTypeId).prop('selected', true)
+                            .change();
+                        $("#itemId").val(response.itemId).prop('selected', true).change();
                         populateSupplierDropdown(response.suppliersData);
                         toastr.success("Data found for this Tender!");
                     } else {

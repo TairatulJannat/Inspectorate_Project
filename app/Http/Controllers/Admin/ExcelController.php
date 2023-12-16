@@ -481,6 +481,7 @@ class ExcelController extends Controller
             $tenderId = $request->input('tender-id');
             $supplierId = $request->input('supplier-id');
             $offerRemarks = request('offer_remarks');
+            $remarks = request('remarks');
 
             $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
             $databaseParameterGroupCount = $indentParameterGroups->count();
@@ -545,17 +546,28 @@ class ExcelController extends Controller
                 }
 
                 $supplierOfferTableName = 'supplier_offers';
-                $resultFlag = DB::table($supplierOfferTableName)
+
+                // Check if the record exists
+                $existingRecord = DB::table($supplierOfferTableName)
                     ->select('id')
                     ->where('supplier_id', $supplierId)
                     ->where('item_id', $itemId)
                     ->first();
 
-                if ($resultFlag == null) {
+                if ($existingRecord) {
+                    // Update the existing record
+                    DB::table($supplierOfferTableName)
+                        ->where('id', $existingRecord->id)
+                        ->update([
+                            'offer_remarks' => $offerRemarks,
+                            'remarks' => $remarks,
+                        ]);
+                } else {
                     $newSupplierOffer = new SupplierOffer();
                     $newSupplierOffer->supplier_id = $supplierId;
                     $newSupplierOffer->item_id = $itemId;
                     $newSupplierOffer->offer_remarks = $offerRemarks;
+                    $newSupplierOffer->remarks = $remarks;
                     $newSupplierOffer->save();
                 }
 
@@ -580,17 +592,18 @@ class ExcelController extends Controller
     public function fetchSupplierData(Request $request)
     {
         $tenderId = $request->input('tenderId');
-
+        
         $tendersData = Tender::findOrFail($tenderId);
-
+        
         if (!$tendersData) {
             return response()->json([
                 'isSuccess' => false,
                 'message' => 'Tender not found.',
             ]);
         }
-
+        
         $indentsData = Indent::where('reference_no', $tendersData->indent_reference_no)->first();
+        dd($indentsData);
 
         if (!$indentsData) {
             return response()->json([
@@ -614,9 +627,9 @@ class ExcelController extends Controller
             'isSuccess' => true,
             'suppliersData' => $suppliersData,
             'tendersData' => $tendersData->indent_reference_no,
-            'indentId' => $indentsData-> id,
-            'itemTypeId' => $indentsData-> item_type_id,
-            'itemId' => $indentsData-> item_id,
+            'indentId' => $indentsData->id,
+            'itemTypeId' => $indentsData->item_type_id,
+            'itemId' => $indentsData->item_id,
         ]);
     }
 }

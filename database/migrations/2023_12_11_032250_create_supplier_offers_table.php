@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('item_id');
             $table->string('offer_remarks');
+            $table->longText('remarks');
             $table->timestamps();
         });
     }
