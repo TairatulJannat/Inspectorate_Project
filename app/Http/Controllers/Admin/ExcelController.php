@@ -603,7 +603,6 @@ class ExcelController extends Controller
         }
 
         $indentsData = Indent::where('reference_no', $tendersData->indent_reference_no)->first();
-        dd($indentsData);
 
         if (!$indentsData) {
             return response()->json([

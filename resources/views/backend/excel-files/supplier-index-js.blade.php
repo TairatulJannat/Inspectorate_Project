@@ -3,6 +3,11 @@
     var xhr;
 
     $(document).ready(function() {
+
+        $('#import-supplier-spec-data-form').submit(function() {
+            $('#itemTypeId, #indentId, #itemId').prop('disabled', false);
+        });
+
         var itemsData = {!! $items !!};
         var itemTypesData = {!! $itemTypes !!};
         var tendersData = {!! $tenders !!};
