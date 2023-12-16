@@ -32,9 +32,16 @@
                 dataType: 'JSON',
                 success: function(response) {
                     if (response.isSuccess === true) {
+                        $("#indentId").val(response.indentId).change();
+                        $("#itemTypeId").val(response.itemTypeId).change();
+                        $("#itemId").val(response.itemId).change();
                         populateSupplierDropdown(response.suppliersData);
+                        toastr.success("Data found for this Tender!");
                     } else {
-                        console.error("Data not found!");
+                        toastr.error("Data not found for this Tender!");
+                        console.error("Data not found for this Tender!");
+                        var supplierDataContainer = $(".supplier-data");
+                        supplierDataContainer.hide();
                     }
                 },
                 error: function(error) {
@@ -52,16 +59,18 @@
 
             tbody.innerHTML = '';
 
-            suppliersData.forEach(function(supplier) {
-                var row = document.createElement('tr');
-                var firmNameCell = document.createElement('td');
-                firmNameCell.textContent = supplier.firm_name;
-                row.appendChild(firmNameCell);
+            var row = document.createElement('tr');
+            var firmNameCell = document.createElement('td');
 
-                tbody.appendChild(row);
-            });
+            var firmNames = suppliersData.map(function(supplier, index) {
+                return (index + 1) + ') ' + supplier.firm_name;
+            }).join(', ');
 
-            // No need to append the table again
+            firmNameCell.textContent = firmNames;
+            row.appendChild(firmNameCell);
+
+            tbody.appendChild(row);
+
             supplierDataContainer.show();
         }
 

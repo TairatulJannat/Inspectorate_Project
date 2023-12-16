@@ -581,15 +581,42 @@ class ExcelController extends Controller
     {
         $tenderId = $request->input('tenderId');
 
-        // Get unique supplier_id values from SupplierSpecData
+        $tendersData = Tender::findOrFail($tenderId);
+
+        if (!$tendersData) {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Tender not found.',
+            ]);
+        }
+
+        $indentsData = Indent::where('reference_no', $tendersData->indent_reference_no)->first();
+
+        if (!$indentsData) {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Indents data not found.',
+            ]);
+        }
+
         $supplierIds = SupplierSpecData::groupBy('supplier_id')->pluck('supplier_id');
 
-        // Fetch data from the suppliers table using the obtained supplier_ids
         $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
+
+        if ($suppliersData->isEmpty()) {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'No suppliers found.',
+            ]);
+        }
 
         return response()->json([
             'isSuccess' => true,
             'suppliersData' => $suppliersData,
+            'tendersData' => $tendersData->indent_reference_no,
+            'indentId' => $indentsData-> id,
+            'itemTypeId' => $indentsData-> item_type_id,
+            'itemId' => $indentsData-> item_id,
         ]);
     }
 }
