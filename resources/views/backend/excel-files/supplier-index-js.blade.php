@@ -33,7 +33,7 @@
                 success: function(response) {
                     if (response.isSuccess === true) {
                         $("#indentId").val(response.indentId).prop('selected', true)
-                        .change();
+                            .change();
                         $("#itemTypeId").val(response.itemTypeId).prop('selected', true)
                             .change();
                         $("#itemId").val(response.itemId).prop('selected', true).change();

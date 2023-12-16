@@ -90,18 +90,20 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-3 bg-warning">
+                        <div class="col-md-12 bg-warning">
                             <p class="bg-warning px-1 pt-1 mb-0">Offer Remarks:</p>
-                            <select class="form-control select2 mb-2" name="offer_remarks">
+                            <textarea class="form-control offer_remarks" name="offer_remarks" id="offer_remarks" style="color: black !important"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 bg-warning">
+                            <p class="bg-warning px-1 pt-1 mb-0">Final Remarks:</p>
+                            <select class="form-control select2 mb-2" name="final_remarks">
                                 <option value="Accepted" selected>Accepted</option>
                                 <option value="Rejected">Rejected</option>
                             </select>
                         </div>
-                        <div class="col-md-7 bg-warning">
-                            <p class="bg-warning px-1 pt-1 mb-0">Remarks:</p>
-                            <textarea class="w-100" name="remarks" id="remarks"></textarea>
-                        </div>
-                        <div class="col-md-2">
+                        <div class="col-md-9">
                             <button type="submit" class="btn btn-success-gradien mt-3 float-end">Save Changes</button>
                         </div>
                     </div>
@@ -116,3 +118,16 @@
         </div>
     </div>
 @endsection
+
+@push('custom-scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
+        integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#offer_remarks'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+@endpush

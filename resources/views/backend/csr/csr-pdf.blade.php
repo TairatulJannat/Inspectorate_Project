@@ -1,3 +1,20 @@
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        /* Add any additional styling as needed */
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        /* text-align: center; */
+    }
+</style>
+
 <div class="p-md-3 paper-document" style="font-family: Arial, sans-serif;">
     <div class="header" style="margin-bottom: 20px;">
         <div style="padding: 3px; text-align: center; font-size: 20px;">{{ $itemName }}</div>
@@ -19,7 +36,7 @@
                     <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Index</th>
                     <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Suppliers Specification
                         Details</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Remarks</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Final Remarks</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,10 +44,14 @@
                     <tr>
                         <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ $index + 1 }}</td>
                         <td style="border: 1px solid #ddd; padding: 8px;">
-                            {{ $supplier['firm_name'] }}<br><br>Offer
-                            Remarks:<br>{{ $supplier['supplier_offers'][0]['remarks'] ?? '' }}</td>
+                            {{ $supplier['firm_name'] }}<br><br>
+                            <div style="border: 1px solid #ddd; padding: 8px;">
+                                Offer Offer Remarks:<br>
+                                {!! $supplier['supplier_offers'][0]['offer_remarks'] ?? '' !!}
+                            </div>
+                        </td>
                         <td style="border: 1px solid #ddd; padding: 8px;">
-                            {{ $supplier['supplier_offers'][0]['offer_remarks'] ?? '' }}</td>
+                            {{ $supplier['supplier_offers'][0]['final_remarks'] ?? '' }}</td>
                     </tr>
                 @empty
                     <tr>
