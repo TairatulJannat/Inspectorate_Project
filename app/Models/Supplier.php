@@ -19,4 +19,9 @@ class Supplier extends Model
         'email',
         'created_by',
     ];
+
+    public function supplierOffers()
+    {
+        return $this->hasMany(SupplierOffer::class, 'supplier_id', 'id');
+    }
 }

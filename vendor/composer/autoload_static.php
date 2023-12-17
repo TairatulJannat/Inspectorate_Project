@@ -3920,6 +3920,7 @@ class ComposerStaticInitdfb8d8adf430c64563d226b939e12a2a
         'Maatwebsite\\Excel\\Imports\\ModelManager' => __DIR__ . '/..' . '/maatwebsite/excel/src/Imports/ModelManager.php',
         'Maatwebsite\\Excel\\Jobs\\AfterImportJob' => __DIR__ . '/..' . '/maatwebsite/excel/src/Jobs/AfterImportJob.php',
         'Maatwebsite\\Excel\\Jobs\\AppendDataToSheet' => __DIR__ . '/..' . '/maatwebsite/excel/src/Jobs/AppendDataToSheet.php',
+        'Maatwebsite\\Excel\\Jobs\\AppendPaginatedToSheet' => __DIR__ . '/..' . '/maatwebsite/excel/src/Jobs/AppendPaginatedToSheet.php',
         'Maatwebsite\\Excel\\Jobs\\AppendQueryToSheet' => __DIR__ . '/..' . '/maatwebsite/excel/src/Jobs/AppendQueryToSheet.php',
         'Maatwebsite\\Excel\\Jobs\\AppendViewToSheet' => __DIR__ . '/..' . '/maatwebsite/excel/src/Jobs/AppendViewToSheet.php',
         'Maatwebsite\\Excel\\Jobs\\CloseSheet' => __DIR__ . '/..' . '/maatwebsite/excel/src/Jobs/CloseSheet.php',
