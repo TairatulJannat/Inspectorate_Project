@@ -11,10 +11,12 @@ use App\Models\Tender;
 use App\Models\SupplierSpecData;
 use PDF;
 
-class PdfController extends Controller
+
+class PDFController extends Controller
 {
-    public function csrGeneratePdf(Request $request)
+    public function generatePDF()
     {
+
         $tenderRefNo = $request->input('tenderRefNo');
         $tenderData = Tender::where('reference_no', $tenderRefNo)->first();
 
@@ -64,5 +66,6 @@ class PdfController extends Controller
         $pdf = PDF::loadView('backend.csr.csr-pdf', $data)->setPaper('a4');
 
         return $pdf->stream('csr-pdf.pdf');
+
     }
 }
