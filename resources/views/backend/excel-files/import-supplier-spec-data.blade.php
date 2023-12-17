@@ -58,9 +58,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <select class="form-control select2 indent-id" id="indentId" name="indent-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select Indent Reference No.</option>
+                            <select class="form-control indent-id" id="indentId" name="indent-id"
+                                style="width: 100% !important;" disabled>
+                                <option value="" selected disabled>Indent Reference No.</option>
                                 @foreach ($indents as $indent)
                                     <option value="{{ $indent->id }}">{{ $indent->reference_no }}</option>
                                 @endforeach
@@ -78,9 +78,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <select class="form-control select2 item-type-id" id="itemTypeId" name="item-type-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select Item Type</option>
+                            <select class="form-control item-type-id" id="itemTypeId" name="item-type-id"
+                                style="width: 100% !important;" disabled>
+                                <option value="" selected disabled>Item Type</option>
                                 @foreach ($itemTypes as $itemType)
                                     <option value="{{ $itemType->id }}">{{ $itemType->name }}</option>
                                 @endforeach
@@ -96,9 +96,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <select class="form-control select2 item-id" id="itemId" name="item-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select an Item</option>
+                            <select class="form-control item-id" id="itemId" name="item-id"
+                                style="width: 100% !important;" disabled>
+                                <option value="" selected disabled>Item</option>
                                 @foreach ($items as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
