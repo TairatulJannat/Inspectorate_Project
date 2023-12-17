@@ -3,7 +3,17 @@
     var xhr;
 
     $(document).ready(function() {
+
+        $('#import-supplier-spec-data-form').submit(function() {
+            $('#itemTypeId, #indentId, #itemId').prop('disabled', false);
+        });
+
         var itemsData = {!! $items !!};
+        var itemTypesData = {!! $itemTypes !!};
+        var tendersData = {!! $tenders !!};
+        var $indentsData = {!! $indents !!};
+        var $suppliersData = {!! $suppliers !!};
+
         populateItemsDropdown(itemsData);
 
         $('.select2').select2();
@@ -14,6 +24,62 @@
             var form = this;
             performSearch(form);
         });
+
+        $('#tenderId').on('change', function() {
+            var tenderId = $(this).val();
+
+            $.ajax({
+                url: '{{ url('admin/fetch-supplier-data') }}',
+                method: 'GET',
+                data: {
+                    tenderId: tenderId
+                },
+                dataType: 'JSON',
+                success: function(response) {
+                    if (response.isSuccess === true) {
+                        $("#indentId").val(response.indentId).prop('selected', true)
+                            .change();
+                        $("#itemTypeId").val(response.itemTypeId).prop('selected', true)
+                            .change();
+                        $("#itemId").val(response.itemId).prop('selected', true).change();
+                        populateSupplierDropdown(response.suppliersData);
+                        toastr.success("Data found for this Tender!");
+                    } else {
+                        toastr.error("Data not found for this Tender!");
+                        console.error("Data not found for this Tender!");
+                        var supplierDataContainer = $(".supplier-data");
+                        supplierDataContainer.hide();
+                    }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+        var supplierDataContainer = $(".supplier-data");
+        supplierDataContainer.hide();
+
+        function populateSupplierDropdown(suppliersData) {
+            var container = document.getElementById('supplierTableContainer');
+            var tbody = container.querySelector('tbody');
+
+            tbody.innerHTML = '';
+
+            var row = document.createElement('tr');
+            var firmNameCell = document.createElement('td');
+
+            var firmNames = suppliersData.map(function(supplier, index) {
+                return (index + 1) + ') ' + supplier.firm_name;
+            }).join(', ');
+
+            firmNameCell.textContent = firmNames;
+            row.appendChild(firmNameCell);
+
+            tbody.appendChild(row);
+
+            supplierDataContainer.show();
+        }
 
         $('#itemTypeId').on('change', function() {
             var itemTypeId = $(this).val();

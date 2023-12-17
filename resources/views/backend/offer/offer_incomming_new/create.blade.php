@@ -106,7 +106,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="supplier_id">Suppiler</label>
@@ -121,7 +121,7 @@
                                 </select>
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_rcv_ltr_no">Offer Rcv Ltr No</label>
