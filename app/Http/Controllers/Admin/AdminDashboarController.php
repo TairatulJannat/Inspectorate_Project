@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Admin;
 use App\Http\Controllers\Controller;
-use App\Models\Indent;
-use App\Models\Offer;
 use App\Models\Provider\JobModel;
 use App\Models\User\JobSeekerDetailsModel;
 use App\Models\User\UserCourseDetailsModel;
@@ -23,16 +21,11 @@ class AdminDashboarController extends Controller
 {
     public function index()
     {
-        $indentNew=Indent::where('status', 0)->count();
-        $indentForward=Indent::where('status', 3)->count();
-        $indentDownward=Indent::where('status', 1)->count();
-        $indentDispatch=Indent::where('status', 4)->count();
-
-        $offerNew=Offer::where('status', 0)->count();
-        $offerForward=Offer::where('status', 3)->count();
-        $offerDownward=Offer::where('status', 1)->count();
-        $offerDispatch=Offer::where('status', 4)->count();
-        return view('backend.dashboard.dashboard' , compact('indentNew', 'indentForward', 'indentDownward', 'indentDispatch', 'offerNew', 'offerForward', 'offerDownward', 'offerDispatch'));
+        $total_entry = User::all()->count();
+        $approve_entry = User::where('submit_status', 3)->count();
+        $pending_entry = User::where('submit_status', 1)->count();
+        //        dd($total_entry,$approve_entry,$pending_entry);
+        return view('backend.dashboard.dashboard', compact('total_entry', 'approve_entry', 'pending_entry'));
     }
 
 
