@@ -5,6 +5,14 @@
 @section('main_menu', 'Excel Files')
 @section('active_menu', 'Edit Imported Data')
 
+@push('css')
+    <style>
+        .ck {
+            color: black;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="card">
         <div class="card-body" style="background-color: honeydew !important;">

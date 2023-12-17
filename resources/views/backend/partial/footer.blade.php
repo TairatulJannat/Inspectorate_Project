@@ -47,39 +47,6 @@
 
 
 
-    var offeroptions2 = {
-        chart: {
-            height: 230,
-            width: 450,
-            type: 'bar',
-            toolbar: {
-                show: false
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        series: [{
-            data: [100, 200, 300, 400]
-        }],
-        xaxis: {
-            categories: ['Sep', 'Oct', 'Nov', 'Dec'],
-        },
-        colors: ['#B263C5']
-    }
-
-    var offer2 = new ApexCharts(
-        document.querySelector("#basic-bar-offer"),
-        offeroptions2
-    );
-
-    offer2.render();
-
     var options2 = {
         chart: {
             height: 230,
@@ -98,10 +65,10 @@
             enabled: false
         },
         series: [{
-            data: [100, 200, 300, 400]
+            data: [ 100, 200, 300, 400]
         }],
         xaxis: {
-            categories: ['Sep', 'Oct', 'Nov', 'Dec'],
+            categories: [ 'Sep', 'Oct', 'Nov', 'Dec'],
         },
         colors: ['#B263C5']
     }
@@ -140,7 +107,6 @@
             type: 'donut',
         },
         series: [44, 55, 41, 17],
-        labels: ['New Arrival', 'Decision', 'Outgoing', 'Dispatch'],
         responsive: [{
             breakpoint: 480,
             options: {
@@ -161,34 +127,6 @@
     );
 
     chart9.render();
-
-    var offer = {
-        chart: {
-            width: 380,
-            type: 'donut',
-        },
-        series: [44, 55, 41, 17],
-        labels: ['New Arrival', 'Decision', 'Outgoing', 'Dispatch'],
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#31D2F2', '#D22D3D']
-    }
-
-    var offer = new ApexCharts(
-        document.querySelector("#donutchart-offer"),
-        offer
-    );
-
-    offer.render();
 </script>
 </body>
 
