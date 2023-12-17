@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Approved)')
+@section('title', 'Indent (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -36,7 +36,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Approved)')
+@section('main_menu', 'Indent (On Process)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -59,9 +59,9 @@
                             <a href="{{ route('admin.indent/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
                             <a href="{{ route('admin.indent_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">Incoming (Approved)</a>
+                                class="btn btn-secondary btn-sm">On Process </a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">OutGoing</a>
+                                class="btn btn-info text-white btn-sm">Completed</a>
                             <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 
