@@ -105,8 +105,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3 bg-warning">
-                            <p class="bg-warning px-1 pt-1 mb-0">Final Remarks:</p>
-                            <select class="form-control select2 mb-2" name="final_remarks">
+                            <p class="bg-warning px-1 pt-1 mb-0">Offer Status:</p>
+                            <select class="form-control select2 mb-2" name="offer_status">
                                 <option value="Accepted" selected>Accepted</option>
                                 <option value="Rejected">Rejected</option>
                             </select>

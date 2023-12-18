@@ -480,7 +480,7 @@ class ExcelController extends Controller
             $indentId = $request->input('indent-id');
             $tenderId = $request->input('tender-id');
             $supplierId = $request->input('supplier-id');
-            $finalRemarks = request('final_remarks');
+            $offerStatus = request('offer_status');
             $offerRemarks = request('offer_remarks');
 
             $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
@@ -559,14 +559,14 @@ class ExcelController extends Controller
                     DB::table($supplierOfferTableName)
                         ->where('id', $existingRecord->id)
                         ->update([
-                            'final_remarks' => $finalRemarks,
+                            'offer_status' => $offerStatus,
                             'offer_remarks' => $offerRemarks,
                         ]);
                 } else {
                     $newSupplierOffer = new SupplierOffer();
                     $newSupplierOffer->supplier_id = $supplierId;
                     $newSupplierOffer->item_id = $itemId;
-                    $newSupplierOffer->final_remarks = $finalRemarks;
+                    $newSupplierOffer->offer_status = $offerStatus;
                     $newSupplierOffer->offer_remarks = $offerRemarks;
                     $newSupplierOffer->save();
                 }

@@ -66,7 +66,7 @@
                             </div>
                         </td>
                         <td style="border: 1px solid #ddd; padding: 8px;">
-                            {{ $supplier['supplier_offers'][0]['final_remarks'] ?? '' }}</td>
+                            {{ $supplier['supplier_offers'][0]['offer_status'] ?? '' }}</td>
                     </tr>
                 @empty
                     <tr>
