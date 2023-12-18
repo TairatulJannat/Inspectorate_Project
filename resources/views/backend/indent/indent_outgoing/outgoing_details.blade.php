@@ -207,7 +207,8 @@
                                                         <div class=" col-md-6 mt-2">
                                                             <label for="delivery_date">Delivery Date </label>
                                                             <input type="date" id="delivery_date" name="delivery_date"
-                                                                class="form-control" value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
+                                                                class="form-control"
+                                                                value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
                                                         </div>
                                                         <div class="col-md-6 mt-2 " style="margin-left: 10px;">
                                                             <label for="delay_cause">Delay Cause </label>
@@ -215,6 +216,19 @@
                                                                 style="height: 40px; "></textarea>
                                                         </div>
                                                     @endif
+                                                </div>
+                                                <div class="d-flex">
+
+                                                    <div class="col-md-6 mt-2 ">
+                                                        <textarea name="" class="form-control" cols="30" rows="10" id="terms"></textarea>
+                                                    </div>
+                                                    <div class="col-md-6 mt-2 ">
+                                                        <button class="btn btn-warning text-light" type="button"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target=".bd-example-modal-lg">Cover Letter</button>
+                                                    </div>
+
+
                                                 </div>
                                                 <div class="col-md-2">
 
@@ -268,7 +282,9 @@
                                                     </div>
                                                 @endif
                                             </div>
+
                                             <div class="col-md-2">
+
 
                                                 <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
                                                     style="height: 40px;">Deliver</button>
@@ -280,49 +296,7 @@
                             </div>
 
                         @endif
-                        {{-- <div class="forward col-md-12 mb-3">
-                            <div>
-                                <h4 class="text-success">Forward</h4>
-                                <hr>
-                                <form action="">
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex">
 
-                                            <select name="designation" id="designations" class="form-control "
-                                                style="height: 40px; margin-right">
-                                                <option value="">Select To Receiver </option>
-                                                @foreach ($designations as $d)
-                                                    <option value={{ $d->id }}>{{ $d->name }}</option>
-                                                @endforeach
-                                            </select>
-
-                                            <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
-                                                style="height: 40px; margin-left: 10px;"></textarea>
-                                        </div>
-                                        <div class="d-flex">
-                                            @if ($desig_position->position == 3)
-                                                <div class=" col-md-6 mt-2">
-                                                    <label for="delivery_date">Delivery Date </label>
-                                                    <input type="date" id="delivery_date" name="delivery_date"
-                                                        class="form-control">
-                                                </div>
-                                                <div class="col-md-6 mt-2 " style="margin-left: 10px;">
-                                                    <label for="delay_cause">Delay Cause </label>
-                                                    <textarea name="delay_cause" id="delay_cause" class="form-control" placeholder="Enter delay cause"
-                                                        style="height: 40px; "></textarea>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="col-md-2">
-
-                                            <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
-                                                style="height: 40px;">Deliver</button>
-                                        </div>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div> --}}
 
                         <div class="forward_status col-md-12 mb-3">
                             <div>
@@ -347,7 +321,8 @@
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
                                                         <td>{{ $document_track->created_at->format('d-m-Y
-                                                        ') }}</td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ') }}
+                                                        </td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach
@@ -381,8 +356,25 @@
 
         </div>
     </div>
+    {{-- start Modal for cover letter --}}
 
 
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myLargeModalLabel">Cover Letter</h4>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    content
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- start Modal for cover letter --}}
 @endsection
 @push('js')
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
@@ -391,6 +383,16 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
+        integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#terms'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -401,8 +403,6 @@
                 reciever_desig_text = $(this).find('option:selected').text();
                 reciever_desig_text =
                     `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
-
-
             });
 
 
