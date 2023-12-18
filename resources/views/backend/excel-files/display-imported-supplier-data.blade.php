@@ -99,8 +99,8 @@
 
                     <div class="row">
                         <div class="col-md-12 bg-warning">
-                            <p class="bg-warning px-1 pt-1 mb-0">Offer Remarks:</p>
-                            <textarea class="form-control offer_remarks" name="offer_remarks" id="offer_remarks" style="color: black !important"></textarea>
+                            <p class="bg-warning px-1 pt-1 mb-0">Remarks Summary:</p>
+                            <textarea class="form-control remarks_summary" name="remarks_summary" id="remarks_summary" style="color: black !important"></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -133,7 +133,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         ClassicEditor
-            .create(document.querySelector('#offer_remarks'))
+            .create(document.querySelector('#remarks_summary'))
             .catch(error => {
                 console.error(error);
             });

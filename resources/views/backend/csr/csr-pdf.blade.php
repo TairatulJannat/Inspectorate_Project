@@ -62,7 +62,7 @@
                         <td style="border: 1px solid #ddd; padding: 8px; font-weight: bold;">
                             {{ $supplier['firm_name'] }}<br>
                             <div class="bn" style="font-weight: regular;">
-                                {!! $supplier['supplier_offers'][0]['offer_remarks'] ?? '' !!}
+                                {!! $supplier['supplier_offers'][0]['remarks_summary'] ?? '' !!}
                             </div>
                         </td>
                         <td style="border: 1px solid #ddd; padding: 8px;">
