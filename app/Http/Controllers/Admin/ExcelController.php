@@ -534,6 +534,7 @@ class ExcelController extends Controller
                                     ->first();
                                 $newParameter->parameter_id = $result->id;
                                 $newParameter->parameter_value = $pGroup['parameter_value'];
+                                $newParameter->compliance_status = $pGroup['compliance_status'];
                                 $newParameter->remarks = $pGroup['remarks'];
                                 $newParameter->indent_id = $indentId;
                                 $newParameter->supplier_id = $supplierId;
