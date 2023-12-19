@@ -55,7 +55,6 @@ $currentControllerName = Request::segment(2);
                                 @endif
                             </ul>
                         </li>
-
                     @endif
 
                     @if (count(menu_check('Tender')) !== 0)
@@ -76,7 +75,6 @@ $currentControllerName = Request::segment(2);
                                 @endif
                             </ul>
                         </li>
-
                     @endif
 
                     @if (count(menu_check('Offer')) !== 0)
@@ -97,7 +95,116 @@ $currentControllerName = Request::segment(2);
                                 @endif
                             </ul>
                         </li>
+                    @endif
 
+                    {{-- Dummy Contract Links --}}
+                    @if (count(menu_check('Offer')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                <span>Contract</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('offer/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                            Contracts</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('offer/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            Contract</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Dummy SI Links --}}
+                    @if (count(menu_check('Offer')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                <span>SI</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('offer/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                            SI</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('offer/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            SI</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Dummy PSI/QAC Links --}}
+                    @if (count(menu_check('Offer')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                <span>PSI/QAC</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('offer/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                            PSI/QAC</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('offer/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            PSI/QAC</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Dummy JPSI Links --}}
+                    @if (count(menu_check('Offer')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                <span>JPSI</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('offer/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                            JPSI</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('offer/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            JPSI</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Dummy I-Note Links --}}
+                    @if (count(menu_check('Offer')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                <span>I-Note</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('offer/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                            I-Note</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('offer/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            I-Note</a></li>
+                                @endif
+                            </ul>
+                        </li>
                     @endif
 
                     {{-- @if (count(menu_check('PrelimGeneral')) !== 0)

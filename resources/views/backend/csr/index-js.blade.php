@@ -8,9 +8,9 @@
         $('.select2').select2();
         // toastr.options.preventDuplicates = true;
 
-        function updatePrintButtonUrl(tenderRefNo) {
-            var selectedItemType = $("#itemTypeId").val();
-            var selectedItem = $("#itemId").val();
+        function updatePrintButtonUrl(tenderRefNo, itemTypeId, itemId) {
+            var selectedItemType = itemTypeId;
+            var selectedItem = itemId;
             var tenderRefNo = tenderRefNo;
             var printButton = $("#printButton");
 
@@ -84,7 +84,8 @@
                             .itemName, response.indentRefNo, response.tenderRefNo);
                         var buttonLink = $('#printButton');
                         buttonLink.removeClass('disabled');
-                        updatePrintButtonUrl(response.tenderRefNo);
+                        updatePrintButtonUrl(response.tenderRefNo, response.itemTypeId, response
+                            .itemId);
                     }
 
                     searchButton.html(originalSearchButtonHtml);
