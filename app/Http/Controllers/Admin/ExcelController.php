@@ -33,28 +33,32 @@ class ExcelController extends Controller
             $itemTypes = Item_type::all();
             $indents = Indent::all();
             $suppliers = Supplier::all();
-            $tenders = Tender::all();
+            $tenders = Tender::with('indent')->get();
+            foreach ($tenders as $tender) {
+                if ($tender->indent) {
+                    $tender->reference_no = $tender->reference_no . ' (' . $tender->indent->reference_no . ')';
+                }
+            }
         } catch (\Exception $e) {
-            return back()->withError('Failed to retrieve from Database.');
+            return redirect()->to('admin/csr/index')->with('error', 'Failed to retrieve from Database.');
         }
-        return view('backend.csr.csr-index', compact('items', 'itemTypes'));
+        return view('backend.csr.csr-index', compact('items', 'itemTypes', 'tenders'));
     }
 
     public function getCSRData(Request $request)
     {
         $customMessages = [
-            'item-type-id.required' => 'Please select an Item Type.',
-            'item-id.required' => 'Please select an Item.',
+            'tender-id.required' => 'Please select an Tender.',
         ];
 
         $validator = Validator::make($request->all(), [
-            'item-type-id' => ['required', 'exists:item_types,id'],
-            'item-id' => ['required', 'exists:items,id'],
+            'tender-id' => ['required', 'exists:tenders,id'],
         ], $customMessages);
 
         if ($validator->passes()) {
-            $itemId = $request->input('item-id');
-            $itemTypeId = $request->input('item-type-id');
+            $tenderData = Tender::findOrFail($request->input('tender-id'));
+            $itemId = $tenderData->item_id;
+            $itemTypeId = $tenderData->item_type_id;
 
             $item = Items::findOrFail($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';

@@ -15,4 +15,8 @@ class Tender extends Model
         'additional_documents' => 'json',
     ];
 
+    public function indent()
+    {
+        return $this->belongsTo(Indent::class, 'indent_reference_no', 'reference_no');
+    }
 }
