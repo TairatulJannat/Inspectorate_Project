@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="row">
-                        <table class="table table-border-vertical table-hover mb-3">
+                        <table class="table table-bordered table-hover mb-3">
                             <thead>
                                 <tr>
                                     <th>Sl No.</th>

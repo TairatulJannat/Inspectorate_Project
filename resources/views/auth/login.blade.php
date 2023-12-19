@@ -44,14 +44,14 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-6"><img class="bg-img-cover bg-center"
-                        src="{{ asset('assets/backend/images/logo/bg_3.jpg') }}" alt="looginpage">
+                        src="{{ asset('assets/backend/images/logo/bg_3.jpg') }}" alt="loginpage">
                 </div>
                 <div class="col-xl-6 p-0">
 
                     <div class="login-card d-flex">
-                        <h3>
-                            Welcome to Inspectorate
-                            Department Login Portal
+                        <h3 style="text-align: center">
+                            Welcome to Inspectorate of Electrical Equipments & Instruments
+                            Login Portal
                         </h3>
                         <div>
                             <form class="theme-form login-form" action="{{ route('login') }}" method="post">

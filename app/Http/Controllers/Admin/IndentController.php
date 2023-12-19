@@ -174,7 +174,6 @@ class IndentController extends Controller
             'indent_received_date' => 'required',
             'estimated_value' => 'required|integer',
 
-
         ]);
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = $request->admin_section;

@@ -29,7 +29,7 @@
                 </div>
                 <span class="text-danger error-text item-type-id-error"></span>
             </div>
-            <div class="col-md-2 text-center mt-2">
+            <div class="col-md-1 text-center mt-2">
                 <h6 class="card-title">Item: </h6>
             </div>
             <div class="col-md-3">
@@ -45,17 +45,16 @@
                 <span class="text-danger error-text item-id-error"></span>
             </div>
             <!-- Search Button -->
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button type="submit" class="btn btn-success-gradien search-button" id="searchButton">Search<span> <i
                             class="fa fa-search"></i></span></button>
+                <a href="{{ url('admin/csr-generate-pdf') }}" type="button" id="printButton"
+                    class="btn btn-success-gradien fa fa-print disabled"></a>
             </div>
         </div>
     </form>
     <div class="row bg-body p-3" style="background-color: honeydew !important;">
         <div class="text-success searched-data">
-            {{-- <div class="text-center">
-                <h2>CSR file will appear here.</h2>
-            </div> --}}
         </div>
     </div>
 @endsection

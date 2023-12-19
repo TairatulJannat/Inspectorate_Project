@@ -20,7 +20,7 @@
             background-color: aliceblue;
             padding: 20px 10px 0 20px;
             border-radius: 10px;
-            margin-bottom: 20px !important: 
+            margin-bottom: 20px !important:
         }
     </style>
 @endpush
@@ -221,14 +221,14 @@
                                 <span id="error_nomenclature" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="make">Make</label>
                                 <input type="text" class="form-control" id="make" name="make">
 
                                 <span id="error_make" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="model">Model</label>
@@ -301,7 +301,7 @@
         $(document).ready(function() {
 
             $('.select2').select2();
-            
+
 
             $("#item_type_id").off('change').on('change', function() {
 
