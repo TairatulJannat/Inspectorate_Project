@@ -220,7 +220,7 @@
                                                 <div class="d-flex">
 
                                                     <div class="col-md-6 mt-2 ">
-                                                        <textarea name="" class="form-control" cols="30" rows="10" id="terms"></textarea>
+                                                        <textarea name="" class="form-control terms" cols="30" rows="10" id="terms"></textarea>
                                                     </div>
                                                     <div class="col-md-6 mt-2 ">
                                                         <button class="btn btn-warning text-light" type="button"
@@ -320,8 +320,7 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ') }}
+                                                        <td>{{ $document_track->created_at->format('d-m-Y') }}
                                                         </td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
@@ -368,7 +367,99 @@
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    content
+
+                    <div class="row">
+                        <form action="" id="myForm">
+                            @csrf
+                            <div class="col-12 text-center">RASTRICTED</div>
+                            <input type="hidden" id="insp_id" value="{{$details->insp_id}}">
+                            <input type="hidden" id="sec_id" value="{{$details->sec_id}}">
+                            <input type="hidden" id="doc_reference_no" value="{{$details->reference_no}}">
+                            <div class="row text-center">
+                                <div class="col-6 align-self-end">
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">23.01.901.051.</span>
+                                        </div>
+                                        <input type="text" class="form-control " id="letter_reference_no">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text ">.13.12.23</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <input type="text" class="form-control inspectorate_name"
+                                            id="inspectorate_name" name="inspectorate_name"
+                                            placeholder="Inspectorate Name">
+                                        <input type="text" class="form-control place" id="place" name="place"
+                                            placeholder="Address">
+                                        <input type="text" class="form-control mobile" id="mobile" name="mobile"
+                                            placeholder="Telephone">
+                                        <input type="text" class="form-control fax" id="fax" name="fax"
+                                            placeholder="fax">
+                                        <input type="text" class="form-control email" id="email" name="email"
+                                            placeholder="email">
+                                        <input type="text" class="form-control date" id="date" name="date"
+                                            placeholder="date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="text" id="subject" class="form-control" placeholder="Subject">
+                            </div>
+                            <div>
+                                <label for="body_1">Refs: </label>
+                                <textarea class="form-control body_1" name="body_1" id="body_1">
+                            </textarea>
+                            </div>
+                            <div>
+                                <label for="body_2">Additional Information </label>
+                                <textarea class="form-control body_2" name="body_2" id="body_2">
+                            </textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-4"></div>
+                                <div class="col-4"></div>
+                                <div class="col-4">
+
+                                    <input type="text" class="form-control" id="name" placeholder="Name">
+
+                                    <input type="text" class="form-control" id="designation"
+                                        placeholder="Designation">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <label for="anxs">Anxs: </label>
+                                    <textarea class="form-control" name="anxs" id="anxs">
+                                </textarea>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+
+                                    <input type="text" class="form-control" id="distr" placeholder="Distr">
+                                    <input type="text" class="form-control" id="extl" placeholder="Extl">
+                                    <input type="text" class="form-control" id="act" placeholder="Act">
+                                    <input type="text" class="form-control" id="info" placeholder="info">
+
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">RASTRICTED</div>
+
+                            <div>
+                                <button type="submit"> Save </button>
+                            </div>
+
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -388,7 +479,22 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         ClassicEditor
-            .create(document.querySelector('#terms'))
+            .create(document.querySelector('.terms'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxs'))
             .catch(error => {
                 console.error(error);
             });
@@ -489,6 +595,34 @@
 
             });
 
+        });
+        $('#myForm').submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            var formData = {}; // Object to store form data
+
+            $(this).find('input, textarea').each(function() {
+                var fieldId = $(this).attr('id');
+                var fieldValue = $(this).val();
+                formData[fieldId] = fieldValue;
+            });
+
+            console.log(formData);
+
+            $.ajax({
+                url: '{{ url('admin/cover_letter/create') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    toastr.success('Information Saved', 'Saved');
+                },
+                error: function(error) {
+                    console.error('Error sending data:', error);
+                }
+            });
         });
     </script>
 @endpush
