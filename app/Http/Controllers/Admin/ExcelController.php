@@ -485,6 +485,7 @@ class ExcelController extends Controller
             $tenderId = $request->input('tender-id');
             $supplierId = $request->input('supplier-id');
             $offerStatus = request('offer_status');
+            $offerSummary = request('offer_summary');
             $remarksSummary = request('remarks_summary');
 
             $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
@@ -565,6 +566,7 @@ class ExcelController extends Controller
                         ->where('id', $existingRecord->id)
                         ->update([
                             'offer_status' => $offerStatus,
+                            'offer_summary' => $offerSummary,
                             'remarks_summary' => $remarksSummary,
                         ]);
                 } else {
@@ -572,6 +574,7 @@ class ExcelController extends Controller
                     $newSupplierOffer->supplier_id = $supplierId;
                     $newSupplierOffer->item_id = $itemId;
                     $newSupplierOffer->offer_status = $offerStatus;
+                    $newSupplierOffer->offer_summary = $offerSummary;
                     $newSupplierOffer->remarks_summary = $remarksSummary;
                     $newSupplierOffer->save();
                 }
@@ -603,7 +606,7 @@ class ExcelController extends Controller
         if (!$tendersData) {
             return response()->json([
                 'isSuccess' => false,
-                'message' => 'Tender not found.',
+                'message' => 'Tender not found!',
             ]);
         }
 
@@ -612,20 +615,26 @@ class ExcelController extends Controller
         if (!$indentsData) {
             return response()->json([
                 'isSuccess' => false,
-                'message' => 'Indents data not found.',
+                'message' => 'Indent not found for this Tender!',
             ]);
         }
 
-        $supplierIds = SupplierSpecData::groupBy('supplier_id')->pluck('supplier_id');
+        $supplierIds = SupplierSpecData::where('tender_id', $tenderId)
+            ->groupBy('supplier_id')
+            ->pluck('supplier_id');
 
-        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
-
-        if ($suppliersData->isEmpty()) {
+        if ($supplierIds->isEmpty()) {
             return response()->json([
                 'isSuccess' => false,
-                'message' => 'No suppliers found.',
+                'message' => 'No suppliers found for this Tender!',
+                'tendersData' => $tendersData->indent_reference_no,
+                'indentId' => $indentsData->id,
+                'itemTypeId' => $indentsData->item_type_id,
+                'itemId' => $indentsData->item_id,
             ]);
         }
+
+        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
 
         return response()->json([
             'isSuccess' => true,
