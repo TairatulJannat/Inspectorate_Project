@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Indent;
@@ -189,15 +190,15 @@ class OutgoingIndentController extends Controller
         // delay cause for sec IC start
 
         //Start blade notes section....
-        $notes = '';
+        // $notes = '';
 
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
+        // $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
+        //     ->where('track_status', 1)
+        //     ->where('reciever_desig_id', $desig_id)->get();
 
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
+        // if ($document_tracks_notes->isNotEmpty()) {
+        //     $notes = $document_tracks_notes;
+        // }
 
         //End blade notes section....
 
@@ -206,8 +207,14 @@ class OutgoingIndentController extends Controller
 
         //End blade forward on off section....
 
+        // start cover letter start
 
-        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        $cover_letter=CoverLetter::where('doc_reference_id', $details->reference_no)->first();
+
+        // end cover letter start
+
+
+        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'cover_letter'));
     }
 
     public function OutgoingIndentTracking(Request $request)
@@ -241,15 +248,16 @@ class OutgoingIndentController extends Controller
         $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
-        // ----delay_cause start here
+        // ----delay_cause and terms and conditions start here
         if ($desig_position->position == 3) {
             $indent_data = Indent::find($doc_ref_id);
             $indent_data->delay_cause = $request->delay_cause;
             $indent_data->delivery_date = $request->delivery_date;
+            $indent_data->terms_conditions = $request->terms_conditions;
             $indent_data->delivery_by = Auth::user()->id;
             $indent_data->save();
         }
-        // ----delay_cause end here
+        // ----delay_cause and terms and conditions end here
 
         if ($desig_position->position == 7) {
 

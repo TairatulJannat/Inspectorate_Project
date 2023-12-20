@@ -174,6 +174,15 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+
+                        @if ($cover_letter)
+                            <div class="col-md-3 mt-2 ml-2 ">
+                                <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                                    class="btn btn-warning" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                                    Letter</a>
+
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -218,22 +227,35 @@
                                                     @endif
                                                 </div>
                                                 <div class="d-flex">
+                                                    @if (!$details->terms_conditions)
+                                                        <div class="col-md-6 mt-2 ">
+                                                            <textarea name="" class="form-control terms" cols="30" rows="10" id="terms"></textarea>
+                                                        </div>
+                                                    @endif
 
-                                                    <div class="col-md-6 mt-2 ">
-                                                        <textarea name="" class="form-control terms" cols="30" rows="10" id="terms"></textarea>
-                                                    </div>
-                                                    <div class="col-md-6 mt-2 ">
-                                                        <button class="btn btn-warning text-light" type="button"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target=".bd-example-modal-lg">Cover Letter</button>
-                                                    </div>
+
+                                                    @if (!$cover_letter)
+                                                        <div class="col-md-6 m-2 d-flex justify-content-center align-items-center" >
+                                                            <button class="btn btn-warning text-light ml-2" style='height: 60px' type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Create Cover Letter</button>
+                                                        </div>
+                                                    @endif
+
+
 
 
                                                 </div>
-                                                <div class="col-md-2">
 
-                                                    <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
-                                                        style="height: 40px;">Deliver</button>
+
+                                                <div class="col-md-2">
+                                                    @if ($cover_letter)
+                                                        <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                            style="height: 40px;" >Deliver</button>
+                                                    @else
+                                                        <button class="delivery-btn btn btn-info text-white mt-2" id="disabledSubmitBtn" title="To Enable Button Create Cover Letter"
+                                                            style="height: 40px;" disabled >Deliver</button>
+                                                    @endif
+
+
                                                 </div>
                                             </div>
                                         </form>
@@ -348,6 +370,17 @@
                                 </div>
                             </div>
                         @endif
+                        @if ($details->terms_conditions)
+                            <div class="forward_status col-md-12 mb-3">
+                                <div>
+                                    <h4 class="text-success">Terms Conditions</h4>
+                                    <hr>
+                                    <div class="table-responsive">
+
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                 </div>
@@ -371,19 +404,20 @@
                     <div class="row">
                         <form action="" id="myForm">
                             @csrf
-                            <div class="col-12 text-center">RASTRICTED</div>
-                            <input type="hidden" id="insp_id" value="{{$details->insp_id}}">
-                            <input type="hidden" id="sec_id" value="{{$details->sec_id}}">
-                            <input type="hidden" id="doc_reference_no" value="{{$details->reference_no}}">
+                            <div class="col-12 text-center">RESTRICTED</div>
+                            <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
+                            <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                            <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">
                                     <div class="input-group ">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text ">23.01.901.051.</span>
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text">23.01.901.051. </span>
                                         </div>
                                         <input type="text" class="form-control " id="letter_reference_no">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text ">.13.12.23</span>
+                                        <div class="input-group-append ">
+                                            <span class="input-group-text "> .{{ \Carbon\Carbon::now()->format('d.m.y') }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -394,37 +428,37 @@
                                     <div>
                                         <input type="text" class="form-control inspectorate_name"
                                             id="inspectorate_name" name="inspectorate_name"
-                                            placeholder="Inspectorate Name">
+                                            placeholder="Inspectorate Name" value="I E & I">
                                         <input type="text" class="form-control place" id="place" name="place"
-                                            placeholder="Address">
+                                            placeholder="Address" value="Dhaka Cantt">
                                         <input type="text" class="form-control mobile" id="mobile" name="mobile"
-                                            placeholder="Telephone">
+                                            placeholder="Telephone" value="8711111 Ext-7122">
                                         <input type="text" class="form-control fax" id="fax" name="fax"
-                                            placeholder="fax">
+                                            placeholder="fax" value="9837120">
                                         <input type="text" class="form-control email" id="email" name="email"
-                                            placeholder="email">
+                                            placeholder="email" value="iei.dci@army.mil.bd">
                                         <input type="text" class="form-control date" id="date" name="date"
                                             placeholder="date">
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <input type="text" id="subject" class="form-control" placeholder="Subject">
+                                <input type="text" id="subject" class="form-control my-2" placeholder="Subject">
                             </div>
-                            <div>
+                            <div class="my-2">
                                 <label for="body_1">Refs: </label>
                                 <textarea class="form-control body_1" name="body_1" id="body_1">
                             </textarea>
                             </div>
-                            <div>
-                                <label for="body_2">Additional Information </label>
+                            <div class="mt-2">
+                                <label for="body_2">Body </label>
                                 <textarea class="form-control body_2" name="body_2" id="body_2">
                             </textarea>
                             </div>
                             <div class="row">
                                 <div class="col-4"></div>
                                 <div class="col-4"></div>
-                                <div class="col-4">
+                                <div class="col-4 mt-5">
 
                                     <input type="text" class="form-control" id="name" placeholder="Name">
 
@@ -442,7 +476,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-4 mt-2">
 
                                     <input type="text" class="form-control" id="distr" placeholder="Distr">
                                     <input type="text" class="form-control" id="extl" placeholder="Extl">
@@ -451,7 +485,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-12 text-center">RASTRICTED</div>
+                            <div class="col-12 text-center">RESTRICTED</div>
 
                             <div>
                                 <button type="submit"> Save </button>
@@ -523,6 +557,7 @@
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
+                var terms_conditions = $('#terms').val()
 
 
                 swal({
@@ -550,7 +585,8 @@
                                 'delay_cause': delay_cause,
                                 'delivery_date': delivery_date,
                                 'doc_reference_number': doc_reference_number,
-                                'remarks': remarks
+                                'remarks': remarks,
+                                'terms_conditions': terms_conditions
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -597,7 +633,6 @@
 
         });
         $('#myForm').submit(function(e) {
-            e.preventDefault(); // Prevent the default form submission
 
             var formData = {}; // Object to store form data
 
