@@ -226,9 +226,19 @@ class ExcelController extends Controller
                     $groupName = $currentGroupName;
                 }
 
+                $parameterName = trim($row[1]);
+                if (empty($parameterName)) {
+                    return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
+                }
+
+                $parameterValue = trim($row[2]);
+                if (empty($parameterValue)) {
+                    return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
+                }
+
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => $row[1],
-                    'parameter_value' => $row[2],
+                    'parameter_name' => $parameterName,
+                    'parameter_value' => $parameterValue,
                 ];
             }
 
