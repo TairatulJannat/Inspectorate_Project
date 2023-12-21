@@ -181,8 +181,8 @@
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                                 class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                                 Letter</a>
-                            <button class="btn btn-warning text-light ml-2 mt-2" type="button"
-                                data-bs-toggle="modal" data-bs-target=".edit-modal-lg">Edit Cover
+                            <button class="btn btn-warning text-light ml-2 mt-2" type="button" data-bs-toggle="modal"
+                                data-bs-target=".edit-modal-lg">Edit Cover
                                 Letter</button>
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
                                 Letter</a> --}}
@@ -536,7 +536,8 @@
                                 <div class="col-6 align-self-end">
                                     <div class="input-group ">
 
-                                        <input type="text" class="form-control " id="letter_reference_no" value="{{$cover_letter->letter_reference_no}}">
+                                        <input type="text" class="form-control " id="letter_reference_no"
+                                            value="{{ $cover_letter->letter_reference_no }}">
 
                                     </div>
                                 </div>
@@ -547,33 +548,35 @@
                                     <div>
                                         <input type="text" class="form-control inspectorate_name"
                                             id="inspectorate_name" name="inspectorate_name"
-                                            placeholder="Inspectorate Name" value="{{$cover_letter->inspectorate_name}}">
+                                            placeholder="Inspectorate Name"
+                                            value="{{ $cover_letter->inspectorate_name }}">
                                         <input type="text" class="form-control place" id="place" name="place"
-                                            placeholder="Address" value="{{$cover_letter->inspectorate_place}}">
+                                            placeholder="Address" value="{{ $cover_letter->inspectorate_place }}">
                                         <input type="text" class="form-control mobile" id="mobile" name="mobile"
-                                            placeholder="Telephone" value="{{$cover_letter->mobile}}">
+                                            placeholder="Telephone" value="{{ $cover_letter->mobile }}">
                                         <input type="text" class="form-control fax" id="fax" name="fax"
-                                            placeholder="fax" value="{{$cover_letter->fax}}">
+                                            placeholder="fax" value="{{ $cover_letter->fax }}">
                                         <input type="text" class="form-control email" id="email" name="email"
-                                            placeholder="email" value="{{$cover_letter->email}}">
+                                            placeholder="email" value="{{ $cover_letter->email }}">
                                         <input type="text" class="form-control date" id="date" name="date"
-                                            placeholder="date" value="{{$cover_letter->letter_date}}">
+                                            placeholder="date" value="{{ $cover_letter->letter_date }}">
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <input type="text" id="subject" class="form-control my-2" placeholder="Subject" value="{{$cover_letter->subject}}">
+                                <input type="text" id="subject" class="form-control my-2" placeholder="Subject"
+                                    value="{{ $cover_letter->subject }}">
                             </div>
                             <div class="my-2">
                                 <label for="body_1">Refs: </label>
                                 <textarea class="form-control body_1" name="bodyEdit_1" id="bodyEdit_1">
-                                    {!!$cover_letter->body_1!!}
+                                    {!! $cover_letter->body_1 !!}
                         </textarea>
                             </div>
                             <div class="mt-2">
                                 <label for="body_2">Body </label>
                                 <textarea class="form-control body_2" name="bodyEdit_2" id="bodyEdit_2">
-                                    {!!$cover_letter->body_2!!}
+                                    {!! $cover_letter->body_2 !!}
                         </textarea>
                             </div>
                             <div class="row">
@@ -581,10 +584,11 @@
                                 <div class="col-4"></div>
                                 <div class="col-4 mt-5">
 
-                                    <input type="text" class="form-control" id="name" placeholder="Name" value="{{$cover_letter->name}}" >
+                                    <input type="text" class="form-control" id="name" placeholder="Name"
+                                        value="{{ $cover_letter->name }}">
 
                                     <input type="text" class="form-control" id="designation"
-                                        placeholder="Designation" value="{{$cover_letter->designation}}">
+                                        placeholder="Designation" value="{{ $cover_letter->designation }}">
 
                                 </div>
                             </div>
@@ -592,7 +596,7 @@
                                 <div>
                                     <label for="anxs">Anxs: </label>
                                     <textarea class="form-control" name="anxs" id="anxsEdit">
-                                        {!!$cover_letter->anxs!!}
+                                        {!! $cover_letter->anxs !!}
                                     </textarea>
                                 </div>
 
@@ -600,10 +604,14 @@
                             <div class="row">
                                 <div class="col-4 mt-2">
 
-                                    <input type="text" class="form-control" id="distr" placeholder="Distr" value="{{$cover_letter->distr}}">
-                                    <input type="text" class="form-control" id="extl" placeholder="Extl" value="{{$cover_letter->extl}}">
-                                    <input type="text" class="form-control" id="act" placeholder="Act" value="{{$cover_letter->act}}">
-                                    <input type="text" class="form-control" id="info" placeholder="info" {{$cover_letter->info}}>
+                                    <input type="text" class="form-control" id="distr" placeholder="Distr"
+                                        value="{{ $cover_letter->distr }}">
+                                    <input type="text" class="form-control" id="extl" placeholder="Extl"
+                                        value="{{ $cover_letter->extl }}">
+                                    <input type="text" class="form-control" id="act" placeholder="Act"
+                                        value="{{ $cover_letter->act }}">
+                                    <input type="text" class="form-control" id="info" placeholder="info"
+                                        {{ $cover_letter->info }}>
 
                                 </div>
                             </div>
@@ -796,8 +804,6 @@
             });
         });
         $('#editForm').submit(function(e) {
-            e.preventDefault();
-
             var formData = {}; // Object to store form data
 
             $(this).find('input, textarea').each(function() {
