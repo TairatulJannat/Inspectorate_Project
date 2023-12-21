@@ -183,5 +183,62 @@
                 searchedDataContainer.html('<h2>Searched Item Parameters will appear here.</h2>');
             }
         }
+
+        var tenderRefNo = new URLSearchParams(window.location.search).get('tenderRefNo');
+
+        if (tenderRefNo) {
+            $("#searchCSRForm").hide();
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('admin/tender/info') }}",
+                data: {
+                    tenderRefNo: tenderRefNo
+                },
+                success: function(response) {
+                    var tenderId = response.Data[0].id;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('admin/tender/info-to-csr') }}",
+                        data: {
+                            tenderId: tenderId
+                        },
+                        success: function(secondResponse) {
+                            if (secondResponse.isSuccess === false) {
+                                $.each(secondResponse.error, function(prefix, val) {
+                                    $(form).find("span." + prefix + "-error")
+                                        .text(val[0]);
+                                });
+                                toastr.error(secondResponse.message);
+                                var buttonLink = $('#printButton');
+                                buttonLink.addClass('disabled');
+                                var searchedDataContainer = $(".searched-data");
+                                searchedDataContainer.empty();
+                            } else if (secondResponse.isSuccess === true) {
+                                toastr.success(secondResponse.message);
+                                renderTreeView(secondResponse.combinedData,
+                                    secondResponse.itemTypeName, secondResponse
+                                    .itemName, secondResponse.indentRefNo,
+                                    secondResponse.tenderRefNo);
+                                var buttonLink = $('#printButton');
+                                buttonLink.removeClass('disabled');
+                                updatePrintButtonUrl(secondResponse.tenderRefNo,
+                                    secondResponse.itemTypeId, secondResponse
+                                    .itemId);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+
     });
 </script>
