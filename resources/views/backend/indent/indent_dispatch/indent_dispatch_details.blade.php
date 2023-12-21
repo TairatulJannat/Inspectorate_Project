@@ -171,10 +171,15 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                            {{-- <a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
+                            <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                                Letter</a>
                     </div>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body col-8">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
@@ -249,7 +254,7 @@
                         @endif
 
 
-                        <div class="forward_status col-md-12">
+                        <div class="forward_status col-md-12 ">
                             <div>
                                 <h4 class="text-success">Dispatch Status</h4>
                                 <hr>
@@ -308,6 +313,17 @@
                                 </div>
                             </div>
                         @endif
+                        @if ($details->terms_conditions)
+                        <div class="forward_status col-md-12 mt-3">
+                            <div>
+                                <h4 class="text-success">Terms Conditions</h4>
+                                <hr>
+                                <div class="table-responsive">
+                                    {{$details->terms_conditions}}
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     </div>
 
 

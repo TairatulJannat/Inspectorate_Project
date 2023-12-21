@@ -28,6 +28,7 @@
             <p>E-mail: {{$cover_letter->email}}</p>
             <p>{{$cover_letter->letter_date}}</p>
         </div>
+
         <div style="clear: both; text-decoration: underline;"><h4>{{$cover_letter->subject}}</h4></div>
         <div>
             <p>Fefs:</p>
@@ -36,7 +37,17 @@
         </div>
     </div>
 
-    <div style="float: right; width: 30%; margin-top:50px;">{!!$cover_letter->name!!}</div>
+    <div style="float: right; width: 30%; margin-top:50px;">
+        {!!$cover_letter->name!!}
+        <br>
+
+        {!!$cover_letter->designation!!}
+        <br>
+        For Chief Inspector
+
+
+    </div>
+
     <div style="clear: both;">
         <p>Anxs:</p>
         <div>{!! $cover_letter->anxs !!}</div>

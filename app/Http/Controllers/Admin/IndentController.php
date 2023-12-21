@@ -12,11 +12,13 @@ use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
 use App\Models\Items;
+use App\Models\ParameterGroup;
 use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class IndentController extends Controller
 {
@@ -375,5 +377,27 @@ class IndentController extends Controller
         $item_id = $indent->item_id;
         $item_type_id = $indent->item_type_id;
         return view('backend.indent.parameter', compact('item_id', 'item_type_id'));
+    }
+    public function parameterPdf(Request $request)
+    {
+        $indent = Indent::find($request->indent_id);
+        $item_id = $indent->item_id;
+        $item_type_id = $indent->item_type_id;
+
+        $item = Items::find($item_id);
+            $itemName = $item ? $item->name : 'Unknown Item';
+
+            $itemType = Item_Type::find($item_type_id);
+            $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+            $parameterGroups = ParameterGroup::with('assignParameterValues')
+                ->where('item_id', $item_id)
+                ->get();
+                dd($parameterGroups);
+
+        // if ( $item_id ) {
+        //     $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
+        //     return $pdf->stream('cover_letter.pdf');
+        // }
+
     }
 }

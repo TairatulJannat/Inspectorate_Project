@@ -219,7 +219,6 @@ class OutgoingIndentController extends Controller
 
     public function OutgoingIndentTracking(Request $request)
     {
-        // dd($request->id);
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -254,6 +253,7 @@ class OutgoingIndentController extends Controller
             $indent_data->delay_cause = $request->delay_cause;
             $indent_data->delivery_date = $request->delivery_date;
             $indent_data->terms_conditions = $request->terms_conditions;
+
             $indent_data->delivery_by = Auth::user()->id;
             $indent_data->save();
         }
