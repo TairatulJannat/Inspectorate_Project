@@ -423,4 +423,25 @@ class TenderController extends Controller
             ], 200);
         }
     }
+
+    private function organizeData($parameterGroups)
+    {
+        $result = [];
+
+        foreach ($parameterGroups as $parameterGroup) {
+            foreach ($parameterGroup->supplierSpecData as $parameter) {
+                $parameterId = $parameter->parameter_id;
+
+                if (!isset($result[$parameterId])) {
+                    $result[$parameterId] = [];
+                }
+
+                $result[$parameterId][] = [
+                    'parameter_value' => $parameter->parameter_value,
+                    'supplier_id' => $parameter->supplier_id,
+                ];
+            }
+        }
+        return $result;
+    }
 }

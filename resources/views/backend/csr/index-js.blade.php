@@ -187,7 +187,8 @@
         var tenderRefNo = new URLSearchParams(window.location.search).get('tenderRefNo');
 
         if (tenderRefNo) {
-            $("#searchCSRForm").hide();
+            $(".infoHide").hide();
+            $(".infoShow").show();
 
             $.ajax({
                 type: 'GET',
@@ -229,7 +230,8 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
+                            // console.error(xhr.responseText);
+                            console.error("I am here");
                         }
                     });
                 },
