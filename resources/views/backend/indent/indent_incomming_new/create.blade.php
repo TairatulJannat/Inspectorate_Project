@@ -184,13 +184,19 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="checked_standard">Standard Checked</label>
-                                <div class="form-check form-switch">
+                                <label for="checked_standard">Standard / Non Standard </label>
+                                <select class="form-control" name="checked_standard" id="checked_standard">
+                                    <option value="">Please Select</option>
+                                    <option value="1">Standard</option>
+                                    <option value="2">Non Standard</option>
+                                </select>
+                                {{-- <div class="form-check form-switch">
+
 
                                     <input class="form-check-input" type="checkbox" id="checked_standard"
                                         name="checked_standard">
 
-                                </div>
+                                </div> --}}
 
                                 <span id="error_checked_standard" class="text-danger error_field"></span>
                             </div>
@@ -275,6 +281,13 @@
                                 <label for="remark">Remark</label>
                                 <textarea name="remark" id="remark" class="form-control"></textarea>
                                 <span id="error_remark" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="doc_file" >Upload Document</label>
+                                <input class="form-control" type="file" id="doc_file" name='doc_file'>
+                                <span id="doc_file" class="text-danger error_field"></span>
                             </div>
                         </div>
 

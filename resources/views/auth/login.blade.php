@@ -50,8 +50,7 @@
 
                     <div class="login-card d-flex">
                         <h3 style="text-align: center">
-                            Welcome to Inspectorate of Electrical Equipments & Instruments
-                            Login Portal
+                            Welcome to Inspectorate Automation System
                         </h3>
                         <div>
                             <form class="theme-form login-form" action="{{ route('login') }}" method="post">
