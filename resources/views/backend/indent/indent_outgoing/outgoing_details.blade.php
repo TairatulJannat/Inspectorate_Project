@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Outgoing)')
+@section('title', 'Indent (Completed)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,7 +90,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Outgoing)')
+@section('main_menu', 'Indent (Completed)')
 @section('active_menu', 'Outgoing Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
@@ -176,6 +176,8 @@
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                         {{-- <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
+                            <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                                target="_blank">Pdf Document</a>
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -514,120 +516,126 @@
     {{-- start Modal for cover letter --}}
 
     {{-- start edit cover letter --}}
-    <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myLargeModalLabel">Edit Cover Letter</h4>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row">
-                        <form action="" id="editForm">
-                            @csrf
-                            <div class="col-12 text-center">RESTRICTED</div>
-                            <input type="hidden" id="editId" value="{{ $cover_letter->id }}">
-                            <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
-                            <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
-                            <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
-                            <div class="row text-center">
-                                <div class="col-6 align-self-end">
-                                    <div class="input-group ">
-
-                                        <input type="text" class="form-control " id="letter_reference_no"
-                                            value="{{ $cover_letter->letter_reference_no }}">
-
-                                    </div>
-                                </div>
-                                <div class="col-2">
-
-                                </div>
-                                <div class="col-4">
-                                    <div>
-                                        <input type="text" class="form-control inspectorate_name"
-                                            id="inspectorate_name" name="inspectorate_name"
-                                            placeholder="Inspectorate Name"
-                                            value="{{ $cover_letter->inspectorate_name }}">
-                                        <input type="text" class="form-control place" id="place" name="place"
-                                            placeholder="Address" value="{{ $cover_letter->inspectorate_place }}">
-                                        <input type="text" class="form-control mobile" id="mobile" name="mobile"
-                                            placeholder="Telephone" value="{{ $cover_letter->mobile }}">
-                                        <input type="text" class="form-control fax" id="fax" name="fax"
-                                            placeholder="fax" value="{{ $cover_letter->fax }}">
-                                        <input type="text" class="form-control email" id="email" name="email"
-                                            placeholder="email" value="{{ $cover_letter->email }}">
-                                        <input type="text" class="form-control date" id="date" name="date"
-                                            placeholder="date" value="{{ $cover_letter->letter_date }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <input type="text" id="subject" class="form-control my-2" placeholder="Subject"
-                                    value="{{ $cover_letter->subject }}">
-                            </div>
-                            <div class="my-2">
-                                <label for="body_1">Refs: </label>
-                                <textarea class="form-control body_1" name="bodyEdit_1" id="bodyEdit_1">
-                                    {!! $cover_letter->body_1 !!}
-                        </textarea>
-                            </div>
-                            <div class="mt-2">
-                                <label for="body_2">Body </label>
-                                <textarea class="form-control body_2" name="bodyEdit_2" id="bodyEdit_2">
-                                    {!! $cover_letter->body_2 !!}
-                        </textarea>
-                            </div>
-                            <div class="row">
-                                <div class="col-4"></div>
-                                <div class="col-4"></div>
-                                <div class="col-4 mt-5">
-
-                                    <input type="text" class="form-control" id="name" placeholder="Name"
-                                        value="{{ $cover_letter->name }}">
-
-                                    <input type="text" class="form-control" id="designation"
-                                        placeholder="Designation" value="{{ $cover_letter->designation }}">
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div>
-                                    <label for="anxs">Anxs: </label>
-                                    <textarea class="form-control" name="anxs" id="anxsEdit">
-                                        {!! $cover_letter->anxs !!}
-                                    </textarea>
-                                </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-4 mt-2">
-
-                                    <input type="text" class="form-control" id="distr" placeholder="Distr"
-                                        value="{{ $cover_letter->distr }}">
-                                    <input type="text" class="form-control" id="extl" placeholder="Extl"
-                                        value="{{ $cover_letter->extl }}">
-                                    <input type="text" class="form-control" id="act" placeholder="Act"
-                                        value="{{ $cover_letter->act }}">
-                                    <input type="text" class="form-control" id="info" placeholder="info"
-                                        {{ $cover_letter->info }}>
-
-                                </div>
-                            </div>
-                            <div class="col-12 text-center">RESTRICTED</div>
-
-                            <div>
-                                <button type="submit" class="btn btn-primary"> Update </button>
-                            </div>
-
-                        </form>
+    @if ($cover_letter)
+        <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Edit Cover Letter</h4>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
 
+                        <div class="row">
+                            <form action="" id="editForm">
+                                @csrf
+                                <div class="col-12 text-center">RESTRICTED</div>
+                                <input type="hidden" id="editId" value="{{ $cover_letter->id }}">
+                                <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
+                                <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                                <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <div class="row text-center">
+                                    <div class="col-6 align-self-end">
+                                        <div class="input-group ">
+
+                                            <input type="text" class="form-control " id="letter_reference_no"
+                                                value="{{ $cover_letter->letter_reference_no }}">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+
+                                    </div>
+                                    <div class="col-4">
+                                        <div>
+                                            <input type="text" class="form-control inspectorate_name"
+                                                id="inspectorate_name" name="inspectorate_name"
+                                                placeholder="Inspectorate Name"
+                                                value="{{ $cover_letter->inspectorate_name }}">
+                                            <input type="text" class="form-control place" id="place"
+                                                name="place" placeholder="Address"
+                                                value="{{ $cover_letter->inspectorate_place }}">
+                                            <input type="text" class="form-control mobile" id="mobile"
+                                                name="mobile" placeholder="Telephone"
+                                                value="{{ $cover_letter->mobile }}">
+                                            <input type="text" class="form-control fax" id="fax" name="fax"
+                                                placeholder="fax" value="{{ $cover_letter->fax }}">
+                                            <input type="text" class="form-control email" id="email"
+                                                name="email" placeholder="email" value="{{ $cover_letter->email }}">
+                                            <input type="text" class="form-control date" id="date"
+                                                name="date" placeholder="date"
+                                                value="{{ $cover_letter->letter_date }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="text" id="subject" class="form-control my-2" placeholder="Subject"
+                                        value="{{ $cover_letter->subject }}">
+                                </div>
+                                <div class="my-2">
+                                    <label for="body_1">Refs: </label>
+                                    <textarea class="form-control body_1" name="bodyEdit_1" id="bodyEdit_1">
+                                {!! $cover_letter->body_1 !!}
+                    </textarea>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="body_2">Body </label>
+                                    <textarea class="form-control body_2" name="bodyEdit_2" id="bodyEdit_2">
+                                {!! $cover_letter->body_2 !!}
+                    </textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4"></div>
+                                    <div class="col-4 mt-5">
+
+                                        <input type="text" class="form-control" id="name" placeholder="Name"
+                                            value="{{ $cover_letter->name }}">
+
+                                        <input type="text" class="form-control" id="designation"
+                                            placeholder="Designation" value="{{ $cover_letter->designation }}">
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div>
+                                        <label for="anxs">Anxs: </label>
+                                        <textarea class="form-control" name="anxs" id="anxsEdit">
+                                    {!! $cover_letter->anxs !!}
+                                </textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 mt-2">
+
+                                        <input type="text" class="form-control" id="distr" placeholder="Distr"
+                                            value="{{ $cover_letter->distr }}">
+                                        <input type="text" class="form-control" id="extl" placeholder="Extl"
+                                            value="{{ $cover_letter->extl }}">
+                                        <input type="text" class="form-control" id="act" placeholder="Act"
+                                            value="{{ $cover_letter->act }}">
+                                        <input type="text" class="form-control" id="info" placeholder="info"
+                                            {{ $cover_letter->info }}>
+
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">RESTRICTED</div>
+
+                                <div>
+                                    <button type="submit" class="btn btn-primary"> Update </button>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
+
 
     {{-- start edit cover letter --}}
 @endsection

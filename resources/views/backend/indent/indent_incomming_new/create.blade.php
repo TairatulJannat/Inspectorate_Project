@@ -187,8 +187,8 @@
                                 <label for="checked_standard">Standard / Non Standard </label>
                                 <select class="form-control" name="checked_standard" id="checked_standard">
                                     <option value="">Please Select</option>
-                                    <option value="1">Standard</option>
-                                    <option value="2">Non Standard</option>
+                                    <option value="0">Standard</option>
+                                    <option value="1">Non Standard</option>
                                 </select>
                                 {{-- <div class="form-check form-switch">
 

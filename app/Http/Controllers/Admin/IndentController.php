@@ -59,7 +59,6 @@ class IndentController extends Controller
                     ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('indents.status', 0)
                     ->get();
-
             } else {
 
                 $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
@@ -106,10 +105,9 @@ class IndentController extends Controller
 
                     if ($data->status == '0') {
                         return '<button class="btn btn-success btn-sm">New</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-success btn-sm">None</button>';
                     }
-
                 })
 
                 ->addColumn('action', function ($data) {
@@ -158,7 +156,7 @@ class IndentController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->where('inspectorate_id',$inspectorate_id)->get();
+        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         $item = Items::all();
         $fin_years = FinancialYear::all();
         return view('backend.indent.indent_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
@@ -197,7 +195,7 @@ class IndentController extends Controller
         $data->fin_year_id = $request->fin_year_id;
         $data->attribute = $request->attribute;
         $data->spare = $request->spare;
-        $data->checked_standard = $request->checked_standard == 'on' ? 0 : 1;
+        $data->checked_standard = $request->checked_standard;
         $data->nomenclature = $request->nomenclature;
         $data->make = $request->make;
         $data->model = $request->model;
@@ -208,7 +206,13 @@ class IndentController extends Controller
         $data->remark = $request->remark;
         $data->status = 0;
         $data->created_at = Carbon::now()->format('Y-m-d');
-        $data->updated_at = Carbon::now()->format('Y-m-d');;
+        $data->updated_at = Carbon::now()->format('Y-m-d');
+
+        if ($request->hasFile('doc_file')) {
+
+            $path = $request->file('doc_file')->store('uploads', 'public');
+            $data->doc_file = $path;
+        }
 
         // $data->created_by = auth()->id();
         // $data->updated_by = auth()->id();
@@ -298,7 +302,7 @@ class IndentController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names','DocumentTrack_hidden'));
+        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
@@ -386,14 +390,14 @@ class IndentController extends Controller
         $item_type_id = $indent->item_type_id;
 
         $item = Items::find($item_id);
-            $itemName = $item ? $item->name : 'Unknown Item';
+        $itemName = $item ? $item->name : 'Unknown Item';
 
-            $itemType = Item_Type::find($item_type_id);
-            $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
-            $parameterGroups = ParameterGroup::with('assignParameterValues')
-                ->where('item_id', $item_id)
-                ->get();
-                dd($parameterGroups);
+        $itemType = Item_Type::find($item_type_id);
+        $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+        $parameterGroups = ParameterGroup::with('assignParameterValues')
+            ->where('item_id', $item_id)
+            ->get();
+        dd($parameterGroups);
 
         // if ( $item_id ) {
         //     $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
