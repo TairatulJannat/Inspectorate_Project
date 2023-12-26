@@ -33,28 +33,32 @@ class ExcelController extends Controller
             $itemTypes = Item_type::all();
             $indents = Indent::all();
             $suppliers = Supplier::all();
-            $tenders = Tender::all();
+            $tenders = Tender::with('indent')->get();
+            foreach ($tenders as $tender) {
+                if ($tender->indent) {
+                    $tender->reference_no = $tender->reference_no . ' (' . $tender->indent->reference_no . ')';
+                }
+            }
         } catch (\Exception $e) {
-            return back()->withError('Failed to retrieve from Database.');
+            return redirect()->to('admin/csr/index')->with('error', 'Failed to retrieve from Database.');
         }
-        return view('backend.csr.csr-index', compact('items', 'itemTypes'));
+        return view('backend.csr.csr-index', compact('items', 'itemTypes', 'tenders'));
     }
 
     public function getCSRData(Request $request)
     {
         $customMessages = [
-            'item-type-id.required' => 'Please select an Item Type.',
-            'item-id.required' => 'Please select an Item.',
+            'tender-id.required' => 'Please select an Tender.',
         ];
 
         $validator = Validator::make($request->all(), [
-            'item-type-id' => ['required', 'exists:item_types,id'],
-            'item-id' => ['required', 'exists:items,id'],
+            'tender-id' => ['required', 'exists:tenders,id'],
         ], $customMessages);
 
         if ($validator->passes()) {
-            $itemId = $request->input('item-id');
-            $itemTypeId = $request->input('item-type-id');
+            $tenderData = Tender::findOrFail($request->input('tender-id'));
+            $itemId = $tenderData->item_id;
+            $itemTypeId = $tenderData->item_type_id;
 
             $item = Items::findOrFail($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';
@@ -480,8 +484,8 @@ class ExcelController extends Controller
             $indentId = $request->input('indent-id');
             $tenderId = $request->input('tender-id');
             $supplierId = $request->input('supplier-id');
-            $finalRemarks = request('final_remarks');
-            $offerRemarks = request('offer_remarks');
+            $offerStatus = request('offer_status');
+            $remarksSummary = request('remarks_summary');
 
             $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
             $databaseParameterGroupCount = $indentParameterGroups->count();
@@ -534,6 +538,7 @@ class ExcelController extends Controller
                                     ->first();
                                 $newParameter->parameter_id = $result->id;
                                 $newParameter->parameter_value = $pGroup['parameter_value'];
+                                $newParameter->compliance_status = $pGroup['compliance_status'];
                                 $newParameter->remarks = $pGroup['remarks'];
                                 $newParameter->indent_id = $indentId;
                                 $newParameter->supplier_id = $supplierId;
@@ -559,15 +564,15 @@ class ExcelController extends Controller
                     DB::table($supplierOfferTableName)
                         ->where('id', $existingRecord->id)
                         ->update([
-                            'final_remarks' => $finalRemarks,
-                            'offer_remarks' => $offerRemarks,
+                            'offer_status' => $offerStatus,
+                            'remarks_summary' => $remarksSummary,
                         ]);
                 } else {
                     $newSupplierOffer = new SupplierOffer();
                     $newSupplierOffer->supplier_id = $supplierId;
                     $newSupplierOffer->item_id = $itemId;
-                    $newSupplierOffer->final_remarks = $finalRemarks;
-                    $newSupplierOffer->offer_remarks = $offerRemarks;
+                    $newSupplierOffer->offer_status = $offerStatus;
+                    $newSupplierOffer->remarks_summary = $remarksSummary;
                     $newSupplierOffer->save();
                 }
 

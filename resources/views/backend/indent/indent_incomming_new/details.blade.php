@@ -178,6 +178,14 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                            target="_blank">Pdf Document</a>
+
+
+
+
+
+
                     </div>
                 </div>
 

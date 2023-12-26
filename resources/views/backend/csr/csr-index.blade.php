@@ -15,34 +15,21 @@
         @csrf
         <div class="row bg-body p-3">
             <div class="col-md-2 text-center mt-2">
-                <h6>Item Type: </h6>
+                <h6>Tender Ref No: </h6>
             </div>
             <div class="col-md-3">
                 <div class="mb-2">
-                    <select class="form-control select2 item-type-id" id="itemTypeId" name="item-type-id"
+                    <select class="form-control select2 tender-id" id="tenderId" name="tender-id"
                         style="width: 100% !important;">
-                        <option value="" selected disabled>Select Item Type</option>
-                        @foreach ($itemTypes as $itemType)
-                            <option value="{{ $itemType->id }}">{{ $itemType->name }}</option>
+                        <option value="" selected disabled>Select here</option>
+                        @foreach ($tenders as $tender)
+                            <option value="{{ $tender->id }}">{{ $tender->reference_no }}</option>
                         @endforeach
                     </select>
                 </div>
-                <span class="text-danger error-text item-type-id-error"></span>
+                <span class="text-danger error-text tender-id-error"></span>
             </div>
-            <div class="col-md-1 text-center mt-2">
-                <h6 class="card-title">Item: </h6>
-            </div>
-            <div class="col-md-3">
-                <div class="mb-2">
-                    <select class="form-control select2 item-id" id="itemId" name="item-id"
-                        style="width: 100% !important;">
-                        <option value="" selected disabled>Select an Item</option>
-                        @foreach ($items as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <span class="text-danger error-text item-id-error"></span>
+            <div class="col-md-4">
             </div>
             <!-- Search Button -->
             <div class="col-md-3">

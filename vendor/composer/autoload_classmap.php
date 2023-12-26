@@ -33,6 +33,7 @@ return array(
     'App\\Http\\Controllers\\Admin\\PDFController' => $baseDir . '/app/Http/Controllers/Admin/PDFController.php',
     'App\\Http\\Controllers\\Admin\\ParameterController' => $baseDir . '/app/Http/Controllers/Admin/ParameterController.php',
     'App\\Http\\Controllers\\Admin\\ParameterGroupController' => $baseDir . '/app/Http/Controllers/Admin/ParameterGroupController.php',
+    'App\\Http\\Controllers\\Admin\\PdfController' => $baseDir . '/app/Http/Controllers/Admin/PdfController.php',
     'App\\Http\\Controllers\\Admin\\PermissionController' => $baseDir . '/app/Http/Controllers/Admin/PermissionController.php',
     'App\\Http\\Controllers\\Admin\\PrelimGenRevisionController' => $baseDir . '/app/Http/Controllers/Admin/PrelimGenRevisionController.php',
     'App\\Http\\Controllers\\Admin\\PrelimGeneralController' => $baseDir . '/app/Http/Controllers/Admin/PrelimGeneralController.php',

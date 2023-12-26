@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Outgoing)')
+@section('title', 'Indent (Completed)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,7 +90,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Outgoing)')
+@section('main_menu', 'Indent (Completed)')
 @section('active_menu', 'Outgoing Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
@@ -174,11 +174,26 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                        {{-- <a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
+                            <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                                target="_blank">Pdf Document</a>
+
+                        @if ($cover_letter)
+                            <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                                Letter</a>
+                            <button class="btn btn-warning text-light ml-2 mt-2" type="button" data-bs-toggle="modal"
+                                data-bs-target=".edit-modal-lg">Edit Cover
+                                Letter</button>
+                            {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
+                                Letter</a> --}}
+                        @endif
                     </div>
                 </div>
 
 
-                <div class="card-body">
+                <div class="card-body col-8">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
@@ -207,7 +222,8 @@
                                                         <div class=" col-md-6 mt-2">
                                                             <label for="delivery_date">Delivery Date </label>
                                                             <input type="date" id="delivery_date" name="delivery_date"
-                                                                class="form-control" value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
+                                                                class="form-control"
+                                                                value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
                                                         </div>
                                                         <div class="col-md-6 mt-2 " style="margin-left: 10px;">
                                                             <label for="delay_cause">Delay Cause </label>
@@ -216,10 +232,44 @@
                                                         </div>
                                                     @endif
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="d-flex">
+                                                    @if (!$details->terms_conditions)
+                                                        <div class="col-md-6 mt-2 ">
+                                                            <label for=""></label>
+                                                            <textarea name="terms" class="form-control terms_conditions_text" cols="20" rows="5"
+                                                                id="terms_conditions_text" placeholder="Please write terms and conditions"></textarea>
+                                                        </div>
+                                                    @endif
 
-                                                    <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
-                                                        style="height: 40px;">Deliver</button>
+
+                                                    @if (!$cover_letter)
+                                                        <div
+                                                            class="col-md-6 m-2 d-flex justify-content-center align-items-center">
+                                                            <button class="btn btn-warning text-light ml-2"
+                                                                style='height: 60px' type="button" data-bs-toggle="modal"
+                                                                data-bs-target=".bd-example-modal-lg">Create Cover
+                                                                Letter</button>
+                                                        </div>
+                                                    @endif
+
+
+
+
+                                                </div>
+
+
+                                                <div class="col-md-2">
+                                                    @if ($cover_letter)
+                                                        <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                            style="height: 40px;">Deliver</button>
+                                                    @else
+                                                        <button class="delivery-btn btn btn-info text-white mt-2"
+                                                            id="disabledSubmitBtn"
+                                                            title="To Enable Button Create Cover Letter"
+                                                            style="height: 40px;" disabled>Deliver</button>
+                                                    @endif
+
+
                                                 </div>
                                             </div>
                                         </form>
@@ -268,7 +318,9 @@
                                                     </div>
                                                 @endif
                                             </div>
+
                                             <div class="col-md-2">
+
 
                                                 <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
                                                     style="height: 40px;">Deliver</button>
@@ -280,49 +332,7 @@
                             </div>
 
                         @endif
-                        {{-- <div class="forward col-md-12 mb-3">
-                            <div>
-                                <h4 class="text-success">Forward</h4>
-                                <hr>
-                                <form action="">
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex">
 
-                                            <select name="designation" id="designations" class="form-control "
-                                                style="height: 40px; margin-right">
-                                                <option value="">Select To Receiver </option>
-                                                @foreach ($designations as $d)
-                                                    <option value={{ $d->id }}>{{ $d->name }}</option>
-                                                @endforeach
-                                            </select>
-
-                                            <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
-                                                style="height: 40px; margin-left: 10px;"></textarea>
-                                        </div>
-                                        <div class="d-flex">
-                                            @if ($desig_position->position == 3)
-                                                <div class=" col-md-6 mt-2">
-                                                    <label for="delivery_date">Delivery Date </label>
-                                                    <input type="date" id="delivery_date" name="delivery_date"
-                                                        class="form-control">
-                                                </div>
-                                                <div class="col-md-6 mt-2 " style="margin-left: 10px;">
-                                                    <label for="delay_cause">Delay Cause </label>
-                                                    <textarea name="delay_cause" id="delay_cause" class="form-control" placeholder="Enter delay cause"
-                                                        style="height: 40px; "></textarea>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="col-md-2">
-
-                                            <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
-                                                style="height: 40px;">Deliver</button>
-                                        </div>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div> --}}
 
                         <div class="forward_status col-md-12 mb-3">
                             <div>
@@ -346,8 +356,8 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y
-                                                        ') }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y') }}
+                                                        </td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach
@@ -363,13 +373,24 @@
                             </div>
                         </div>
                         @if ($details->delay_cause !== null)
-                            <div class="delay_cause col-md-12">
+                            <div class="delay_cause col-md-12  mb-3">
                                 <div>
                                     <h4 class="text-success">Delay Cause</h4>
                                     <hr>
                                     <div class="table-responsive">
                                         {{ $details->delay_cause }}
 
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if ($details->terms_conditions)
+                            <div class="forward_status col-md-12 mb-3">
+                                <div>
+                                    <h4 class="text-success">Terms Conditions</h4>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        {{ $details->terms_conditions }}
                                     </div>
                                 </div>
                             </div>
@@ -381,8 +402,242 @@
 
         </div>
     </div>
+    {{-- start Modal for cover letter --}}
 
 
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myLargeModalLabel">Cover Letter</h4>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <form action="" id="myForm">
+                            @csrf
+                            <div class="col-12 text-center">RESTRICTED</div>
+                            <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
+                            <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                            <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                            <div class="row text-center">
+                                <div class="col-6 align-self-end">
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text">23.01.901.051. </span>
+                                        </div>
+                                        <input type="text" class="form-control " id="letter_reference_no">
+                                        <div class="input-group-append ">
+                                            <span class="input-group-text "> .{{ \Carbon\Carbon::now()->format('d.m.y') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <input type="text" class="form-control inspectorate_name"
+                                            id="inspectorate_name" name="inspectorate_name"
+                                            placeholder="Inspectorate Name" value="I E & I">
+                                        <input type="text" class="form-control place" id="place" name="place"
+                                            placeholder="Address" value="Dhaka Cantt">
+                                        <input type="text" class="form-control mobile" id="mobile" name="mobile"
+                                            placeholder="Telephone" value="8711111 Ext-7122">
+                                        <input type="text" class="form-control fax" id="fax" name="fax"
+                                            placeholder="fax" value="9837120">
+                                        <input type="text" class="form-control email" id="email" name="email"
+                                            placeholder="email" value="iei.dci@army.mil.bd">
+                                        <input type="text" class="form-control date" id="date" name="date"
+                                            placeholder="date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="text" id="subject" class="form-control my-2" placeholder="Subject">
+                            </div>
+                            <div class="my-2">
+                                <label for="body_1">Refs: </label>
+                                <textarea class="form-control body_1" name="body_1" id="body_1">
+                            </textarea>
+                            </div>
+                            <div class="mt-2">
+                                <label for="body_2">Body </label>
+                                <textarea class="form-control body_2" name="body_2" id="body_2">
+                            </textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-4"></div>
+                                <div class="col-4"></div>
+                                <div class="col-4 mt-5">
+
+                                    <input type="text" class="form-control" id="name" placeholder="Name">
+
+                                    <input type="text" class="form-control" id="designation"
+                                        placeholder="Designation">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <label for="anxs">Anxs: </label>
+                                    <textarea class="form-control" name="anxs" id="anxs">
+                                </textarea>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mt-2">
+
+                                    <input type="text" class="form-control" id="distr" placeholder="Distr">
+                                    <input type="text" class="form-control" id="extl" placeholder="Extl">
+                                    <input type="text" class="form-control" id="act" placeholder="Act">
+                                    <input type="text" class="form-control" id="info" placeholder="info">
+
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">RESTRICTED</div>
+
+                            <div>
+                                <button type="submit"> Save </button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- start Modal for cover letter --}}
+
+    {{-- start edit cover letter --}}
+    @if ($cover_letter)
+        <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Edit Cover Letter</h4>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <form action="" id="editForm">
+                                @csrf
+                                <div class="col-12 text-center">RESTRICTED</div>
+                                <input type="hidden" id="editId" value="{{ $cover_letter->id }}">
+                                <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
+                                <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                                <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <div class="row text-center">
+                                    <div class="col-6 align-self-end">
+                                        <div class="input-group ">
+
+                                            <input type="text" class="form-control " id="letter_reference_no"
+                                                value="{{ $cover_letter->letter_reference_no }}">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+
+                                    </div>
+                                    <div class="col-4">
+                                        <div>
+                                            <input type="text" class="form-control inspectorate_name"
+                                                id="inspectorate_name" name="inspectorate_name"
+                                                placeholder="Inspectorate Name"
+                                                value="{{ $cover_letter->inspectorate_name }}">
+                                            <input type="text" class="form-control place" id="place"
+                                                name="place" placeholder="Address"
+                                                value="{{ $cover_letter->inspectorate_place }}">
+                                            <input type="text" class="form-control mobile" id="mobile"
+                                                name="mobile" placeholder="Telephone"
+                                                value="{{ $cover_letter->mobile }}">
+                                            <input type="text" class="form-control fax" id="fax" name="fax"
+                                                placeholder="fax" value="{{ $cover_letter->fax }}">
+                                            <input type="text" class="form-control email" id="email"
+                                                name="email" placeholder="email" value="{{ $cover_letter->email }}">
+                                            <input type="text" class="form-control date" id="date"
+                                                name="date" placeholder="date"
+                                                value="{{ $cover_letter->letter_date }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="text" id="subject" class="form-control my-2" placeholder="Subject"
+                                        value="{{ $cover_letter->subject }}">
+                                </div>
+                                <div class="my-2">
+                                    <label for="body_1">Refs: </label>
+                                    <textarea class="form-control body_1" name="bodyEdit_1" id="bodyEdit_1">
+                                {!! $cover_letter->body_1 !!}
+                    </textarea>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="body_2">Body </label>
+                                    <textarea class="form-control body_2" name="bodyEdit_2" id="bodyEdit_2">
+                                {!! $cover_letter->body_2 !!}
+                    </textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4"></div>
+                                    <div class="col-4 mt-5">
+
+                                        <input type="text" class="form-control" id="name" placeholder="Name"
+                                            value="{{ $cover_letter->name }}">
+
+                                        <input type="text" class="form-control" id="designation"
+                                            placeholder="Designation" value="{{ $cover_letter->designation }}">
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div>
+                                        <label for="anxs">Anxs: </label>
+                                        <textarea class="form-control" name="anxs" id="anxsEdit">
+                                    {!! $cover_letter->anxs !!}
+                                </textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 mt-2">
+
+                                        <input type="text" class="form-control" id="distr" placeholder="Distr"
+                                            value="{{ $cover_letter->distr }}">
+                                        <input type="text" class="form-control" id="extl" placeholder="Extl"
+                                            value="{{ $cover_letter->extl }}">
+                                        <input type="text" class="form-control" id="act" placeholder="Act"
+                                            value="{{ $cover_letter->act }}">
+                                        <input type="text" class="form-control" id="info" placeholder="info"
+                                            {{ $cover_letter->info }}>
+
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">RESTRICTED</div>
+
+                                <div>
+                                    <button type="submit" class="btn btn-primary"> Update </button>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
+    {{-- start edit cover letter --}}
 @endsection
 @push('js')
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
@@ -391,6 +646,46 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
+        integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // ClassicEditor
+        //     .create(document.querySelector(''))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        ClassicEditor
+            .create(document.querySelector('#body_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxs'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxsEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -401,8 +696,6 @@
                 reciever_desig_text = $(this).find('option:selected').text();
                 reciever_desig_text =
                     `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
-
-
             });
 
 
@@ -417,7 +710,7 @@
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
-
+                var terms_conditions = $('#terms_conditions_text').val();
 
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
@@ -444,7 +737,8 @@
                                 'delay_cause': delay_cause,
                                 'delivery_date': delivery_date,
                                 'doc_reference_number': doc_reference_number,
-                                'remarks': remarks
+                                'remarks': remarks,
+                                'terms_conditions': terms_conditions
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -489,6 +783,57 @@
 
             });
 
+        });
+        $('#myForm').submit(function(e) {
+
+            var formData = {}; // Object to store form data
+
+            $(this).find('input, textarea').each(function() {
+                var fieldId = $(this).attr('id');
+                var fieldValue = $(this).val();
+                formData[fieldId] = fieldValue;
+            });
+
+            console.log(formData);
+
+            $.ajax({
+                url: '{{ url('admin/cover_letter/create') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    toastr.success('Information Saved', 'Saved');
+                },
+                error: function(error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+        });
+        $('#editForm').submit(function(e) {
+            var formData = {}; // Object to store form data
+
+            $(this).find('input, textarea').each(function() {
+                var fieldId = $(this).attr('id');
+                var fieldValue = $(this).val();
+                formData[fieldId] = fieldValue;
+            });
+
+            $.ajax({
+                url: '{{ url('admin/cover_letter/edit') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    toastr.success('Information Updated', 'Saved');
+                },
+                error: function(error) {
+                    console.error('Error sending data:', error);
+                }
+            });
         });
     </script>
 @endpush
