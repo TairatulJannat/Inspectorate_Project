@@ -139,8 +139,7 @@
                                     @if (!empty($additional_documents_names))
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name}} </li>
-                                                <!-- Adjust the key according to your array structure -->
+                                                <li>{{ $documents_name}} </li> 
                                             @endforeach
                                         </ul>
                                     @else
@@ -153,22 +152,24 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            {{-- <tr>
-                                <th>supplier Name</td>
-                                <td>{{ $details->suppliers_name }}</td>
-                            </tr> --}}
+                            <tr>
+                                <th>Supplier Name</th>
+                                <td>
+                                    @if (!empty($supplier_names_names))
+                                        <ul>
+                                            @foreach ($supplier_names_names as $supplierName)
+                                                <li>{{ $supplierName }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No supplier names available.
+                                    @endif
+                                </td>
+                            </tr>
                             <tr>
                                 <th>Offer Receiver Letter No</td>
                                 <td>{{ $details->offer_rcv_ltr_no }}</td>
                             </tr>
-                            {{-- <tr>
-                                <th>Offer Vetting Letter No</td>
-                                <td>{{ $details->offer_vetting_ltr_no }}</td>
-                            </tr>
-                            <tr>
-                                <th>Offer Vetting Letter Date</td>
-                                <td>{{ $details->offer_vetting_ltr_dt }}</td>
-                            </tr> --}}
                             <tr>
                                 <th>Quantity</td>
                                 <td>{{ $details->qty }}</td>
@@ -178,6 +179,7 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{url('admin/csr/index') }}">CSR</a>
+                           <a class="btn btn-warning mt-3 btn-parameter" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Show PDF</a>
                     </div>
                 </div>
 

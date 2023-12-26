@@ -15,8 +15,10 @@ use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Indent;
 use App\Models\Offer;
 use App\Models\Supplier;
+use App\Models\Tender;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -152,7 +154,9 @@ class OfferController extends Controller
         $item = Items::all();
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
-        return view('backend.offer.offer_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'suppliers'));
+        $tender_reference_numbers = Tender::all();
+        $indent_reference_numbers = Indent::all();
+        return view('backend.offer.offer_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'suppliers','tender_reference_numbers','indent_reference_numbers'));
     }
 
     public function store(Request $request)
@@ -175,18 +179,20 @@ class OfferController extends Controller
         $data->sec_id = $sec_id;
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
+        $data->offer_reference_date = $request->offer_reference_date;
         $data->tender_reference_no = $request->tender_reference_no;
         $data->attribute = $request->attribute;
         $data->additional_documents = json_encode($request->additional_documents);
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
-        $data->supplier_id = $request->supplier_id;
+        $data->supplier_id = json_encode($request->supplier_id);
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
-        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        $data->offer_vetting_ltr_no = $request->offer_vetting_ltr_no;
-        $data->offer_vetting_ltr_dt = $request->offer_vetting_ltr_dt;
+        $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
+        // $data->offer_vetting_ltr_no = $request->offer_vetting_ltr_no;
+        // $data->offer_vetting_ltr_dt = $request->offer_vetting_ltr_dt;
 
 
         $data->received_by = Auth::user()->id;
@@ -229,6 +235,17 @@ class OfferController extends Controller
 
             array_push($additional_documents_names, $additional_names);
         }
+        
+        $details->suppliers = json_decode($details->supplier_id, true);
+     
+        $supplier_names_names = [];
+     
+        foreach ($details->suppliers as $Supplier_id) {
+            $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+//    dd($supplier_names);
+            array_push($supplier_names_names, $supplier_names);
+        }
+        
 
 
         $designations = Designation::all();
@@ -284,7 +301,7 @@ class OfferController extends Controller
           //End blade forward on off section....
 
 
-        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names','DocumentTrack_hidden'));
+        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names','DocumentTrack_hidden', 'supplier_names_names'));
     }
 
     public function offerTracking(Request $request)
@@ -348,4 +365,13 @@ class OfferController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
+
+//         public function offerViewPdf($id)
+//     {
+//         $pdf = Offer::findOrFail($id);
+//         $path = storage_path("app/public/{$pdf->pdf_path}");
+// dd( $path);
+//         // Return the PDF file as a response
+//         return response()->file($path);
+//     }
 }

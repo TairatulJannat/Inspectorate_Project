@@ -30,6 +30,7 @@ return array(
     'App\\Http\\Controllers\\Admin\\OutgoingOfferController' => $baseDir . '/app/Http/Controllers/Admin/OutgoingOfferController.php',
     'App\\Http\\Controllers\\Admin\\OutgoingPrelimGeneral' => $baseDir . '/app/Http/Controllers/Admin/OutgoingPrelimGeneral.php',
     'App\\Http\\Controllers\\Admin\\OutgoingTenderController' => $baseDir . '/app/Http/Controllers/Admin/OutgoingTenderController.php',
+    'App\\Http\\Controllers\\Admin\\PDFController' => $baseDir . '/app/Http/Controllers/Admin/PDFController.php',
     'App\\Http\\Controllers\\Admin\\ParameterController' => $baseDir . '/app/Http/Controllers/Admin/ParameterController.php',
     'App\\Http\\Controllers\\Admin\\ParameterGroupController' => $baseDir . '/app/Http/Controllers/Admin/ParameterGroupController.php',
     'App\\Http\\Controllers\\Admin\\PdfController' => $baseDir . '/app/Http/Controllers/Admin/PdfController.php',
