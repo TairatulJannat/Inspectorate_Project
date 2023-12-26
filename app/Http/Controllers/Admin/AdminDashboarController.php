@@ -26,6 +26,7 @@ class AdminDashboarController extends Controller
     {
         $x=Indent::where('status', 0)->get();
         foreach ( $x as $indent) {
+            
             $indentNew=DocumentTrack::where('doc_reference_number', $indent->reference_no)->count();
         }
 
