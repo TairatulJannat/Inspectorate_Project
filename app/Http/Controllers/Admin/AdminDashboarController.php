@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Admin;
 use App\Http\Controllers\Controller;
+use App\Models\DocumentTrack;
 use App\Models\Indent;
 use App\Models\Offer;
 use App\Models\Provider\JobModel;
@@ -23,7 +24,11 @@ class AdminDashboarController extends Controller
 {
     public function index()
     {
-        $indentNew=Indent::where('status', 0)->count();
+        $x=Indent::where('status', 0)->get();
+        foreach ( $x as $indent) {
+            $indentNew=DocumentTrack::where('doc_reference_number', $indent->reference_no)->count();
+        }
+
         $indentForward=Indent::where('status', 3)->count();
         $indentDownward=Indent::where('status', 1)->count();
         $indentDispatch=Indent::where('status', 4)->count();
