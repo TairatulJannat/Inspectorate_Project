@@ -1,282 +1,313 @@
 @extends('backend.app')
-@section('title', 'Hall Pricing Managemnent')
+@section('title', 'Indent (Edit)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
 @endpush
-@section('main_menu', 'Hall Pricing')
-@section('active_menu', 'Edit Hall Pricing')
+@section('main_menu', 'Indent')
+@section('active_menu', 'Edit')
 @section('content')
-    <div class="col-sm-12 col-xl-8">
+    <div class="col-sm-12 col-xl-12">
         <div class="card">
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    <div class="row">
+                    <div class=" header">
+                        {{-- <div class="col-md-3">
+                            <div class="form-group d-flex">
+                                <label class="col-6 pt-2" for="">Select Section:</label>
+                                <select class="form-control" id="admin_section" name="admin_section">
+                                    @foreach ($sections as $section)
+                                        <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                    @endforeach
 
-                        <input type="hidden" name="edit_id" value="{{ $hallPrice->id }}">
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="hall_id">Hall</label>
-                                <select class="form-control" id="hall_id" name="hall_id">
-                                    <option value="">Please Select Hall</option>
-                                    @if ($hall)
-                                        @foreach ($hall as $id => $name)
-                                            <option value="{{ $id }}"
-                                                {{ $hallPrice->hall_id == $id ? 'selected' : '' }}>
-                                                {{ $name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
                                 </select>
-                                <span id="error_hall_id" class="text-danger error_field"></span>
+                                <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            {{-- <div class="form-group">
-                                <label for="floor_id">Floor</label>
-                                <select class="form-control" id="floor_id" name="floor_id">
-                                    <option value="">Please Select Floor</option>
-                                    @if ($floor)
-                                        @foreach ($floor as $id => $name)
-                                            <option value="{{ $id }}"
-                                                {{ $hallPrice->floor_id == $id ? 'selected' : '' }}>
-                                                {{ $name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <span id="error_floor_id" class="text-danger error_field"></span>
-                            </div> --}}
-                            <div class="mb-2">
-                                <label class="">Floor</label>
-                                <select class="js-example-basic-multiple col-sm-12 select2" name="floor_id[]"
-                                    multiple="multiple" id="floor_id">
-                                    @if ($floor)
-                                        @foreach ($floor as $id => $name)
-                                            <option value="{{ $id }}"
-                                                {{ in_array($id, $floor_id) ? 'selected' : '' }}>{{ $name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <span id="error_floor_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            {{-- <div class="form-group">
-                                <label for="user_category_id">User Category</label>
-                                <select class="form-control" id="user_category_id" name="user_category_id">
-                                    <option value="">Please Select User Category</option>
-                                    @if ($userCategory)
-                                        @foreach ($userCategory as $id => $name)
-                                            <option value="{{ $id }}"
-                                                {{ $hallPrice->user_category_id == $id ? 'selected' : '' }}>
-                                                {{ $name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <span id="error_user_category_id" class="text-danger error_field"></span>
-                            </div> --}}
-
-                            <div class="mb-2 mt-2">
-                                <label class="">User Category</label>
-                                <select class="js-example-basic-multiple col-sm-12 select2" name="user_category_id[]"
-                                    multiple="multiple" id="user_category_id">
-                                    @if ($userCategory)
-                                        @foreach ($userCategory as $id => $name)
-                                            <option value="{{ $id }}"
-                                                {{ in_array($id, $user_category_id) ? 'selected' : '' }}>
-                                                {{ $name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <span id="error_user_category_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 m-t-10">
-                            <div class="form-group shift-container">
-                                {{-- style="{{ $hallPrice->specify_shift_charge == 'on' ? '' : 'display: none' }}"> --}}
-                                <label for="shift_id">Shift</label>
-                                <select class="form-control" id="shift_id" name="shift_id">
-                                    <option value="">Please Select Shift</option>
-                                    @if ($shift)
-                                        @foreach ($shift as $id => $name)
-                                            <option value="{{ $id }}"
-                                                {{ $hallPrice->shift_id == $id ? 'selected' : '' }}>
-                                                {{ $name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <span id="error_shift_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 m-t-20">
-                            <div class="media">
-                                <label class="col-form-label m-r-10">Specify Event</label>
-                                <div class="media-body text-end">
-                                    <label class="switch">
-                                        <input type="checkbox" name="specify_event" id="specify_event"
-                                            {{ $hallPrice->specify_event == 'on' ? 'checked' : '' }}>
-                                        <span class="switch-state"></span>
-                                    </label>
-                                </div>
-                                <span id="error_specify_event" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group event-name-container"
-                                style="{{ $hallPrice->specify_event == 'on' ? '' : 'display: none' }}">
-                                <label class="control-label">Event Name</label>
-                                <input class="form-control" type="text" name="event_name" placeholder="Enter event name"
-                                    value="{{ $hallPrice->event_name ?? '' }}">
-                                <span id="error_event_name" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12"></div>
-                        <div class="col-md-6 m-t-40">
-                            <div class="media">
-                                <label class="col-form-label m-r-10">Specify Month</label>
-                                <div class="media-body text-end">
-                                    <label class="switch">
-                                        <input type="checkbox" name="specify_month" id="specify_month"
-                                            {{ $hallPrice->specify_month == 'on' ? 'checked' : '' }}>
-                                        <span class="switch-state"></span>
-                                    </label>
-                                </div>
-                                <span id="error_specify_month" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-2 months-container"
-                                style="{{ $hallPrice->specify_month == 'on' ? '' : 'display: none' }}">
-                                <label class="col-form-label">Month</label>
-                                <select class="js-example-basic-multiple col-sm-12 select2" name="months[]"
-                                    multiple="multiple">
-                                    <option value="January" {{ in_array('January', $months) ? 'selected' : '' }}>
-                                        January
-                                    </option>
-                                    <option value="February" {{ in_array('February', $months) ? 'selected' : '' }}>
-                                        February
-                                    </option>
-                                    <option value="March" {{ in_array('March', $months) ? 'selected' : '' }}>
-                                        March
-                                    </option>
-                                    <option value="April" {{ in_array('April', $months) ? 'selected' : '' }}>
-                                        April
-                                    </option>
-                                    <option value="May" {{ in_array('May', $months) ? 'selected' : '' }}>
-                                        May
-                                    </option>
-                                    <option value="June" {{ in_array('June', $months) ? 'selected' : '' }}>
-                                        June
-                                    </option>
-                                    <option value="July" {{ in_array('July', $months) ? 'selected' : '' }}>
-                                        July
-                                    </option>
-                                    <option value="August" {{ in_array('August', $months) ? 'selected' : '' }}>
-                                        August
-                                    </option>
-                                    <option value="September" {{ in_array('September', $months) ? 'selected' : '' }}>
-                                        September
-                                    </option>
-                                    <option value="October" {{ in_array('October', $months) ? 'selected' : '' }}>
-                                        October
-                                    </option>
-                                    <option value="November" {{ in_array('November', $months) ? 'selected' : '' }}>
-                                        November
-                                    </option>
-                                    <option value="December" {{ in_array('December', $months) ? 'selected' : '' }}>
-                                        December
-                                    </option>
-                                </select>
-                                <span id="error_months" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12"></div>
-                        <div class="col-md-6 m-t-40">
-                            <div class="media">
-                                <label class="col-form-label m-r-10">Specify Ramadan</label>
-                                <div class="media-body text-end">
-                                    <label class="switch">
-                                        <input type="checkbox" name="specify_ramadan" id="specify_ramadan"
-                                            {{ $hallPrice->specify_ramadan == 'on' ? 'checked' : '' }}>
-                                        <span class="switch-state"></span>
-                                    </label>
-                                </div>
-                                <span id="error_specify_ramadan" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12"></div>
-                        <div class="col-md-6 m-t-40">
-                            <div class="media">
-                                <label class="col-form-label m-r-10">Specify Holiday</label>
-                                <div class="media-body text-end">
-                                    <label class="switch">
-                                        <input type="checkbox" name="specify_holiday" id="specify_holiday"
-                                            {{ $hallPrice->specify_holiday == 'on' ? 'checked' : '' }}>
-                                        <span class="switch-state"></span>
-                                    </label>
-                                </div>
-                                <span id="error_specify_holiday" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12"></div>
-                        {{-- <div class="col-md-6 m-t-40">
-                            <div class="media">
-                                <label class="col-form-label m-r-10">Specify Shift Charge</label>
-                                <div class="media-body text-end">
-                                    <label class="switch">
-                                        <input type="checkbox" name="specify_shift_charge" id="specify_shift_charge"
-                                            {{ $hallPrice->specify_shift_charge == 'on' ? 'checked' : '' }}>
-                                        <span class="switch-state"></span>
-                                    </label>
-                                </div>
-                            </div>
-                            <span id="error_specify_shift_charge" class="text-danger error_field"></span>
                         </div> --}}
-
-                        <div class="col-md-6 m-t-30">
+                        <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Price</label>
-                                <input class="form-control" type="number" name="price"
-                                    value="{{ $hallPrice->price ?? '' }}" placeholder="Enter booking price (taka)">
-                                <span id="error_price" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 m-t-30">
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" id="status" name="status">
-                                    <option value="1" {{ $hallPrice->status == '1' ? 'selected' : '' }}>
-                                        Active
-                                    </option>
-                                    <option value="0"{{ $hallPrice->status == '0' ? 'selected' : '' }}>
-                                        Inactive
-                                    </option>
-                                </select>
+                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import
+                                    Excel</a>
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-4">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="sender">Sender</label>
+                                <select class="form-control " id="sender" name="sender">
+
+                                    <option value="">Please Select</option>
+
+                                    @foreach ($dte_managments as $dte)
+                                        <option value="{{ $dte->id }}"
+                                            {{ $dte->id == $indent->sender ? 'selected' : '' }}>{{ $dte->name }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_sender" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="reference_no">Reference No.</label>
+                                <input type="text" class="form-control" id="reference_no" name="reference_no"
+                                    value="{{ $indent->reference_no ? $indent->reference_no : '' }} ">
+                                <span id="error_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_number">Indent Number</label>
+
+                                <input type="text" class="form-control" id="indent_number" name="indent_number"
+                                    value="{{ $indent->indent_number ? $indent->indent_number : '' }}">
+
+                                <span id="error_indent_number" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_received_date">Indent Received Date</label>
+                                <input type="date" class="form-control" id="indent_received_date"
+                                    name="indent_received_date"
+                                    value="{{ $indent->indent_received_date ? $indent->indent_received_date : '' }}">
+                                <span id="error_indent_received_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_date">Indent Reference Date</label>
+                                <input type="date" class="form-control" id="indent_received_date"
+                                    name="indent_reference_date"
+                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date->date('m-d-Y') : '' }}">
+                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+
+                                <label for="additional_documents">Additional Documents</label>
+                                <select class="form-control select2" id="additional_documents" name="additional_documents[]"
+                                    multiple>
+                                    <option value="">Please Select</option>
+                                    @foreach ($additional_documnets as $additional_document)
+                                        <option value="{{ $additional_document->id }}">{{ $additional_document->name }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_additional_documents" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_type_id">Item Type</label>
+                                <select class="form-control" id="item_type_id" name="item_type_id">
+
+                                    <option selected disabled value="">Please Select</option>
+
+                                    @foreach ($item_types as $item_type)
+                                        <option value="{{ $item_type->id }}"
+                                            {{ $item_type->id == $indent->item_type_id ? 'selected' : '' }}>{{ $item_type->name }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_item_type_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_id">Item</label>
+
+                                <select class="form-control select2" id="item_id" name="item_id">
+
+                                    <option value="">Please Select </option>
+                                </select>
+
+                                <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="qty">Item QTY</label>
+                                <input type="text" class="form-control" id="qty" name="qty"
+                                    value="{{ $indent->qty ? $indent->qty : '' }}">
+
+                                <span id="error_qty" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="attribute">Attribute</label>
+
+                                <select class="form-control" name="attribute" id="attribute">
+                                    <option value="">Please Select</option>
+                                    <option value="Controlled" {{ $indent->attribute == 'Controlled' ? 'selected' : '' }}>
+                                        Controlled</option>
+                                    <option value="Uncontrolled"
+                                        {{ $indent->attribute == 'Uncontrolled' ? 'selected' : '' }}>Uncontrolled</option>
+                                </select>
+
+
+                                <span id="error_attribute" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="estimated_value">Estimated Value</label>
+                                <input type="text" class="form-control" id="estimated_value" name="estimated_value"
+                                    value="{{ $indent->estimated_value ? $indent->estimated_value : '' }}">
+
+                                <span id="error_estimated_value" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="spare">Spare</label>
+                                <input type="text" class="form-control" id="spare" name="spare"
+                                    value="{{ $indent->spare ? $indent->spare : '' }}">
+
+                                <span id="error_spare" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="checked_standard">Standard / Non Standard </label>
+                                <select class="form-control" name="checked_standard" id="checked_standard">
+                                    <option value="">Please Select</option>
+                                    <option value="0" {{ $indent->checked_standard == '0' ? 'selected' : '' }}>
+                                        Standard
+                                    </option>
+                                    <option value="1" {{ $indent->checked_standard == '1' ? 'selected' : '' }}>Non
+                                        Standard</option>
+                                </select>
+                                {{-- <div class="form-check form-switch">
+
+
+                                    <input class="form-check-input" type="checkbox" id="checked_standard"
+                                        name="checked_standard">
+
+                                </div> --}}
+
+                                <span id="error_checked_standard" class="text-danger error_field"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fin_year_id">Financial Year </label>
+
+                                <select class="form-control" id="fin_year_id" name="fin_year_id">
+
+                                    <option value="">Please Select Year </option>
+                                    @foreach ($fin_years as $fin_year)
+                                        <option value={{ $fin_year->id }}
+                                            {{ $fin_year->id == $indent->fin_year_id ? 'selected' : '' }}>
+                                            {{ $fin_year->year }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+
+                                <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="nomenclature">Nomenclature</label>
+                                <input type="text" class="form-control" id="nomenclature" name="nomenclature"
+                                    value="{{ $indent->nomenclature ? $indent->nomenclature : '' }}">
+
+                                <span id="error_nomenclature" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        {{-- <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="make">Make</label>
+                                <input type="text" class="form-control" id="make" name="make">
+
+                                <span id="error_make" class="text-danger error_field"></span>
+                            </div>
+                        </div> --}}
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="model">Model</label>
+                                <input type="text" class="form-control" id="model" name="model"
+                                    value="{{ $indent->model ? $indent->model : '' }}">
+
+                                <span id="error_model" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="country_of_origin">Country of Origin</label>
+
+                                <input type="text" class="form-control" id="country_of_origin"
+                                    name="country_of_origin"
+                                    value="{{ $indent->country_of_origin ? $indent->country_of_origin : '' }}">
+
+
+                                <span id="error_country_of_origin" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="country_of_assembly">Country of Assembly</label>
+
+                                <input type="text" class="form-control" id="country_of_assembly"
+                                    name="country_of_assembly"
+                                    value="{{ $indent->country_of_assembly ? $indent->country_of_assembly : '' }}">
+
+                                <span id="error_country_of_assembly" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="received_by">Received By</label>
+                                <input type="text" value="{{ \Illuminate\Support\Facades\Auth::user()->name }}"
+                                    readonly class="form-control" id="received_by" name="received_by">
+                                <span id="error_received_by" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="remark">Remark</label>
+                                <textarea name="remark" id="remark" class="form-control"> {{ $indent->remark ? $indent->remark : '' }}</textarea>
+                                <span id="error_remark" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="doc_file">Upload Document</label>
+                                <input class="form-control" type="file" id="doc_file" name='doc_file'>
+                                <span id="doc_file" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
-                        <a href="{{ route('admin.hall_price') }}" type="button" class="btn btn-secondary">Cancel</a>
+                        <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-secondary">Cancel</a>
                         <button class="btn btn-primary" type="submit" id="form_submission_button">Update</button>
                     </div>
                 </div>
@@ -399,7 +430,7 @@
             var formData = new FormData($('#update_form')[0]);
             disableButton()
             $.ajax({
-                url: "{{ url('admin/hall_price/update') }}",
+                url: "{{ url('admin/indent/update') }}",
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -418,74 +449,74 @@
                         toastr.success('Information Updated', 'Saved');
                         $('#edit_model').modal('hide');
                     }
-                    setTimeout(window.location.href = "{{ route('admin.hall_price') }}", 40000);
+                    setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
                     clear_error_field();
                     error_notification('Please fill up the form correctly and try again')
-                    $('#error_hall_id').text(response.responseJSON.errors.hall_id);
-                    $('#error_floor_id').text(response.responseJSON.errors.floor_id);
-                    $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
-                    $('#error_specify_event').text(response.responseJSON.errors.specify_event);
-                    $('#error_event_name').text(response.responseJSON.errors.event_name);
-                    $('#error_specify_month').text(response.responseJSON.errors.specify_month);
-                    $('#error_months').text(response.responseJSON.errors.months);
-                    $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
-                    $('#error_specify_shift_charge').text(response.responseJSON.errors
-                        .specify_shift_charge);
-                    $('#error_shift_id').text(response.responseJSON.errors.shift_id);
-                    $('#error_price').text(response.responseJSON.errors.price);
-                    $('#error_status').text(response.responseJSON.errors.status);
+                    // $('#error_hall_id').text(response.responseJSON.errors.hall_id);
+                    // $('#error_floor_id').text(response.responseJSON.errors.floor_id);
+                    // $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
+                    // $('#error_specify_event').text(response.responseJSON.errors.specify_event);
+                    // $('#error_event_name').text(response.responseJSON.errors.event_name);
+                    // $('#error_specify_month').text(response.responseJSON.errors.specify_month);
+                    // $('#error_months').text(response.responseJSON.errors.months);
+                    // $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
+                    // $('#error_specify_shift_charge').text(response.responseJSON.errors
+                    //     .specify_shift_charge);
+                    // $('#error_shift_id').text(response.responseJSON.errors.shift_id);
+                    // $('#error_price').text(response.responseJSON.errors.price);
+                    // $('#error_status').text(response.responseJSON.errors.status);
                 }
             });
         })
         //End:: Update information
 
         // Start:: delete user
-        function delete_data(id) {
-            swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
-                confirmButtonClass: 'btn btn-success',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false,
-                reverseButtons: true
-            }).then((result) => {
-                if (result.value) {
-                    event.preventDefault();
-                    $.ajax({
-                        type: 'get',
-                        url: '{{ url('admin/hall_price/delete') }}/' + id,
-                        success: function(response) {
-                            if (response) {
-                                if (response.permission == false) {
-                                    toastr.warning('you dont have that Permission',
-                                        'Permission Denied');
-                                } else {
-                                    toastr.success('Deleted Successful', 'Deleted');
-                                    $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                                }
-                            }
-                        }
-                    });
-                } else if (
-                    result.dismiss === swal.DismissReason.cancel
-                ) {
-                    swal(
-                        'Cancelled',
-                        'Your data is safe :)',
-                        'error'
-                    )
-                }
-            })
-        }
+        // function delete_data(id) {
+        //     swal({
+        //         title: 'Are you sure?',
+        //         text: "You won't be able to revert this!",
+        //         type: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#3085d6',
+        //         cancelButtonColor: '#d33',
+        //         confirmButtonText: 'Yes, delete it!',
+        //         cancelButtonText: 'No, cancel!',
+        //         confirmButtonClass: 'btn btn-success',
+        //         cancelButtonClass: 'btn btn-danger',
+        //         buttonsStyling: false,
+        //         reverseButtons: true
+        //     }).then((result) => {
+        //         if (result.value) {
+        //             event.preventDefault();
+        //             $.ajax({
+        //                 type: 'get',
+        //                 url: '{{ url('admin/hall_price/delete') }}/' + id,
+        //                 success: function(response) {
+        //                     if (response) {
+        //                         if (response.permission == false) {
+        //                             toastr.warning('you dont have that Permission',
+        //                                 'Permission Denied');
+        //                         } else {
+        //                             toastr.success('Deleted Successful', 'Deleted');
+        //                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
+        //                         }
+        //                     }
+        //                 }
+        //             });
+        //         } else if (
+        //             result.dismiss === swal.DismissReason.cancel
+        //         ) {
+        //             swal(
+        //                 'Cancelled',
+        //                 'Your data is safe :)',
+        //                 'error'
+        //             )
+        //         }
+        //     })
+        // }
         // End:: delete user
 
         function form_reset() {
@@ -520,5 +551,37 @@
                 timer: 300
             });
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            $('.select2').select2();
+
+
+            $("#item_type_id").off('change').on('change', function() {
+
+                //  alert('123');
+                var itemtype_id = $('#item_type_id').val();
+
+                if (itemtype_id > 0) {
+                    $.ajax({
+                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
+                            '/' + itemtype_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            console.log(res);
+
+                            var _html = '<option value="">Select an item</option>';
+                            $.each(res, function(index, item) {
+                                _html += '<option value="' + item.id + '">' + item
+                                    .name + '</option>';
+                            });
+                            $('#item_id').html(_html);
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endpush
