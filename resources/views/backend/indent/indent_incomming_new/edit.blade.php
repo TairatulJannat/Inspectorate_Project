@@ -36,6 +36,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
+                                <input type="hidden" value=" {{$indent->id}}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -86,22 +87,26 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_reference_date">Indent Reference Date</label>
-                                <input type="date" class="form-control" id="indent_received_date"
+                                <input type="date" class="form-control" id="indent_reference_date"
                                     name="indent_reference_date"
-                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date->date('m-d-Y') : '' }}">
+                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date : '' }}">
                                 <span id="error_indent_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
-
                                 <label for="additional_documents">Additional Documents</label>
                                 <select class="form-control select2" id="additional_documents" name="additional_documents[]"
                                     multiple>
                                     <option value="">Please Select</option>
                                     @foreach ($additional_documnets as $additional_document)
-                                        <option value="{{ $additional_document->id }}">{{ $additional_document->name }}
+                                        @php
+                                            $documentIds = json_decode($indent->additional_documents);
+                                            $isSelected = in_array($additional_document->id, $documentIds? $documentIds:[]) ? 'selected' : '';
+                                        @endphp
+                                        <option value="{{ $additional_document->id }}" {{ $isSelected }}>
+                                            {{ $additional_document->name }}
                                         </option>
                                     @endforeach
 
@@ -109,6 +114,7 @@
                                 <span id="error_additional_documents" class="text-danger error_field"></span>
                             </div>
                         </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -119,7 +125,8 @@
 
                                     @foreach ($item_types as $item_type)
                                         <option value="{{ $item_type->id }}"
-                                            {{ $item_type->id == $indent->item_type_id ? 'selected' : '' }}>{{ $item_type->name }}
+                                            {{ $item_type->id == $indent->item_type_id ? 'selected' : '' }}>
+                                            {{ $item_type->name }}
                                         </option>
                                     @endforeach
 
@@ -133,9 +140,12 @@
                                 <label for="item_id">Item</label>
 
                                 <select class="form-control select2" id="item_id" name="item_id">
-
-                                    <option value="">Please Select </option>
+                                    <option value="">Please Select</option>
+                                    @if ($item)
+                                        <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
+                                    @endif
                                 </select>
+
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
@@ -444,7 +454,7 @@
                         enableeButton()
                     }
                     if (response.success) {
-                        enableeButton()
+                        // enableeButton()
                         $('.yajra-datatable').DataTable().ajax.reload(null, false);
                         toastr.success('Information Updated', 'Saved');
                         $('#edit_model').modal('hide');

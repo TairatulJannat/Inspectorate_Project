@@ -116,25 +116,41 @@ class IndentController extends Controller
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
-                            $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            $actionBtn = '<div class="btn-group" role="group">';
+
+                            if ($designation_id == 3) {
+                                $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            }
+                            $actionBtn .= '<a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
                             <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit ">Forward</a>
                             </div>';
                         } else {
-                            $actionBtn = '<div class="btn-group" role="group">
+                            $actionBtn = '<div class="btn-group" role="group">';
+                            if ($designation_id == 3) {
+                                $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            }
+                            $actionBtn .= '
                             <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
                             <a href="' . url('admin/indent/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
-                            $actionBtn = '<div class="btn-group" role="group">
+                            $actionBtn = '<div class="btn-group" role="group">';
+                            if ($designation_id == 3) {
+                                $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            }
+                            $actionBtn .= '
                             <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
                             <a href="' . url('admin/indent/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
-                        $actionBtn = '<div class="btn-group" role="group">
+                        $actionBtn = '<div class="btn-group" role="group">';
+                            if ($designation_id == 3) {
+                                $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            }
+                            $actionBtn .= '
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
                         <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit ">Forward</a>
                         </div>';
@@ -168,13 +184,8 @@ class IndentController extends Controller
             'sender' => 'required',
             'admin_section' => 'required',
             'reference_no' => 'required',
-            'additional_documents' => 'required',
-            'item_type_id' => 'required',
-            'item_id' => 'required',
-            'qty' => 'required|integer',
             'indent_received_date' => 'required',
-            'estimated_value' => 'required|integer',
-
+            'indent_reference_date' => 'required',
         ]);
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = $request->admin_section;
@@ -192,6 +203,7 @@ class IndentController extends Controller
         $data->qty = $request->qty;
         $data->estimated_value = $request->estimated_value;
         $data->indent_received_date = $request->indent_received_date;
+        $data->indent_reference_date = $request->indent_reference_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->attribute = $request->attribute;
         $data->spare = $request->spare;
@@ -221,9 +233,10 @@ class IndentController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function edit($id){
+    public function edit($id)
+    {
 
-        $indent=Indent::find($id);
+        $indent = Indent::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         // $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -231,21 +244,71 @@ class IndentController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
+
+        // $selected_document =$indent->additional_documents;
+        // dd( $selected_document);
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
-        $item = Items::all();
+        $item = Items::where('id', $indent->item_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.indent.indent_incomming_new.edit', compact('indent','item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.indent.indent_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
     }
+
+    public function update(Request $request)
+    {
+
+        $data = Indent::findOrFail($request->editId);
+
+        $data->sender = $request->sender;
+        $data->reference_no = $request->reference_no;
+        $data->indent_number = $request->indent_number;
+
+        $data->additional_documents = json_encode($request->additional_documents);
+        $data->item_id = $request->item_id;
+        $data->item_type_id = $request->item_type_id;
+        $data->qty = $request->qty;
+        $data->estimated_value = $request->estimated_value;
+        $data->indent_received_date = $request->indent_received_date;
+        $data->indent_reference_date = $request->indent_reference_date;
+        $data->fin_year_id = $request->fin_year_id;
+        $data->attribute = $request->attribute;
+        $data->spare = $request->spare;
+        $data->checked_standard = $request->checked_standard;
+        $data->nomenclature = $request->nomenclature;
+        $data->make = $request->make;
+        $data->model = $request->model;
+        $data->country_of_origin = $request->country_of_origin;
+        $data->country_of_assembly = $request->country_of_assembly;
+        $data->remark = $request->remark;
+        $data->updated_by = Auth::user()->id;
+
+        $data->updated_at = Carbon::now()->format('Y-m-d');
+
+        if ($request->hasFile('doc_file')) {
+
+            $path = $request->file('doc_file')->store('uploads', 'public');
+            $data->doc_file = $path;
+        }
+
+        // $data->created_by = auth()->id();
+        // $data->updated_by = auth()->id();
+
+        $data->save();
+
+        return response()->json(['success' => 'Done']);
+    }
+
     public function details($id)
     {
 
         $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
+            ->leftJoin('items', 'indents.item_id', '=', 'items.id')
             ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
             ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
             ->select(
                 'indents.*',
                 'item_types.name as item_type_name',
+                'items.name as item_name',
                 'indents.*',
                 'dte_managments.name as dte_managment_name',
                 'additional_documents.name as additional_documents_name',
@@ -255,6 +318,7 @@ class IndentController extends Controller
             ->first();
 
         $details->additional_documents = json_decode($details->additional_documents, true);
+        $details->additional_documents =  $details->additional_documents ?  $details->additional_documents : [];
         $additional_documents_names = [];
 
         foreach ($details->additional_documents as $document_id) {
