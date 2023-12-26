@@ -138,7 +138,7 @@
                             </div>
                         </div>
 
-                        {{-- <div class="col-md-4">
+                        <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="supplier_id">Suppiler</label>
@@ -153,7 +153,7 @@
                                 </select>
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_rcv_ltr_no">Offer Receive Letter No</label>
@@ -275,8 +275,19 @@
                             </div>
                         </div>
 
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="pdf_file" style="color: yellow"><button type="button" class="btn btn-warning">Upload PDF</b></button></label><br>
+                                <input type="file" class="form-control-file" id="pdf_file" name="pdf_file">
+                                <span id="error_pdf_file" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+               
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
                         <a href="" type="button" class="btn btn-secondary">Cancel</a>
