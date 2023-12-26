@@ -677,6 +677,7 @@ class ComposerStaticInitdfb8d8adf430c64563d226b939e12a2a
         'App\\Http\\Controllers\\Admin\\OutgoingOfferController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OutgoingOfferController.php',
         'App\\Http\\Controllers\\Admin\\OutgoingPrelimGeneral' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OutgoingPrelimGeneral.php',
         'App\\Http\\Controllers\\Admin\\OutgoingTenderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OutgoingTenderController.php',
+        'App\\Http\\Controllers\\Admin\\PDFController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PDFController.php',
         'App\\Http\\Controllers\\Admin\\ParameterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ParameterController.php',
         'App\\Http\\Controllers\\Admin\\ParameterGroupController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ParameterGroupController.php',
         'App\\Http\\Controllers\\Admin\\PdfController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PdfController.php',

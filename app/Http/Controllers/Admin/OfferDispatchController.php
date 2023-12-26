@@ -14,6 +14,7 @@ use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\Offer;
 use App\Models\Section;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -162,6 +163,16 @@ class OfferDispatchController extends Controller
             array_push($additional_documents_names, $additional_names);
         }
 
+        $details->suppliers = json_decode($details->supplier_id, true);
+     
+        $supplier_names_names = [];
+     
+        foreach ($details->suppliers as $Supplier_id) {
+            $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+//    dd($supplier_names);
+            array_push($supplier_names_names, $supplier_names);
+        }
+
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -228,7 +239,7 @@ class OfferDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.offer.offer_dispatch.offer_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden'));
+        return view('backend.offer.offer_dispatch.offer_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden','supplier_names_names'));
     }
 
 
