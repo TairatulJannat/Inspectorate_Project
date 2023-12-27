@@ -424,6 +424,10 @@ class ExcelController extends Controller
             $currentGroupName = null;
 
             foreach ($importedData->toArray() as $row) {
+                if (empty(array_filter($row))) {
+                    continue;
+                }
+
                 $groupName = $row[0];
 
                 if ($groupName !== null) {
