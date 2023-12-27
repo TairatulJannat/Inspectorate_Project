@@ -235,7 +235,6 @@ class IndentController extends Controller
     }
     public function edit($id)
     {
-
         $indent = Indent::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
@@ -389,16 +388,18 @@ class IndentController extends Controller
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        // $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
+
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
+        // $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
+        $section_id=Indent::where('reference_no',$doc_reference_number)->pluck('sec_id')->first();
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
@@ -414,9 +415,7 @@ class IndentController extends Controller
         $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
-
         if ($desig_position->position == 7) {
-
             $data = Indent::find($doc_ref_id);
 
             if ($data) {

@@ -151,11 +151,13 @@ class OutgoingIndentController extends Controller
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
 
-        foreach ($details->additional_documents as $document_id) {
-            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-            array_push($additional_documents_names, $additional_names);
+        if ($details->additional_documents) {
+            foreach ($details->additional_documents as $document_id) {
+                $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+                array_push($additional_documents_names, $additional_names);
+            }
         }
+
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -209,7 +211,7 @@ class OutgoingIndentController extends Controller
 
         // start cover letter start
 
-        $cover_letter=CoverLetter::where('doc_reference_id', $details->reference_no)->first();
+        $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
 
         // end cover letter start
 
