@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer (Approved)')
+@section('title', 'Offer (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -21,7 +21,7 @@
 
             color: #ffff
         }
-       
+
         .dt-buttons{
             margin-left:8px;
         }
@@ -37,7 +37,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer (Approved)')
+@section('main_menu', 'Offer (On Process)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -60,9 +60,9 @@
                             <a href="{{ route('admin.offer/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
                             <a href="{{ route('admin.offer_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">Incoming (Approved)</a>
+                                class="btn btn-secondary btn-sm">On Process </a>
                             <a href="{{ route('admin.offer/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">OutGoing</a>
+                                class="btn btn-info text-white btn-sm">Completed</a>
                             <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 

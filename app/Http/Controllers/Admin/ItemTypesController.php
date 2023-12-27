@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Item_type;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class ItemTypesController extends Controller
@@ -20,7 +21,9 @@ class ItemTypesController extends Controller
 
     public function getAllData()
     {
-        $item_types = Item_type::select('id', 'name', 'status');
+        $inspectorate_id = Auth::user()->inspectorate_id;
+        $item_types = Item_type::select('id', 'name', 'status')
+                      ->where('inspectorate_id', $inspectorate_id);
 
         return DataTables::of($item_types)
             ->addColumn('DT_RowIndex', function ($item_type) {
@@ -53,9 +56,11 @@ class ItemTypesController extends Controller
         ]);
 
         if ($validator->passes()) {
+            $inspectorate_id = Auth::user()->inspectorate_id;
             $itemType = new Item_type();
 
             $itemType->name = $request->name;
+            $itemType->inspectorate_id = $inspectorate_id;
             $itemType->status = $request->has('status') ? 1 : 0;
 
             if ($itemType->save()) {
@@ -132,9 +137,11 @@ class ItemTypesController extends Controller
         if ($validator->passes()) {
             try {
                 $id = $request->edit_item_type_id;
+                $inspectorate_id = Auth::user()->inspectorate_id;
                 $itemType = Item_type::findOrFail($id);
 
                 $itemType->name = $request->edit_name;
+                $itemType->inspectorate_id = $inspectorate_id;
                 $itemType->status = $request->has('edit_status') ? 1 : 0;
 
                 if ($itemType->save()) {

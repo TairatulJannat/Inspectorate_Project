@@ -75,7 +75,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="reference_no">Reference No.</label>
+                                <label for="reference_no">Reference Number</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
@@ -83,9 +83,41 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="tender_reference_no">Tender Reference No.</label>
-                                <input type="text" class="form-control" id="tender_reference_no" name="tender_reference_no">
+                                <label for="tender_reference_no">Tender Reference Number</label>
+                                <select class="form-control " id="tender_reference_no" name="tender_reference_no">
+
+                                    <option value="">Please Select</option>
+
+                                    @foreach ($tender_reference_numbers as $tender_reference_no)
+                                        <option value="{{ $tender_reference_no->id }}">{{$tender_reference_no->reference_no }}</option>
+                                    @endforeach
+
+                                </select>
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_no">Indent Reference Number</label>
+                                {{-- <input type="text" class="form-control" id="indent_reference_no" name="indent_reference_no"> --}}
+
+                                <select class="form-control " id="indent_reference_no" name="indent_reference_no">
+
+                                    <option value="">Please Select</option>
+
+                                    @foreach ($indent_reference_numbers as $indent_reference_no)
+                                        <option value="{{ $indent_reference_no->id }}">{{$indent_reference_no->reference_no }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="offer_reference_date">Offer Reference Date</label>
+                                <input type="date" class="form-control" id="offer_reference_date" name="offer_reference_date">
+                                <span id="offer_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -106,25 +138,25 @@
                             </div>
                         </div>
 
-                        {{-- <div class="col-md-4">
+                        <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="supplier_id">Suppiler</label>
-                                <select class="form-control " id="supplier_id" name="supplier_id">
-
+                               
+                                <select class="form-control select2" id="supplier_id" name="supplier_id[]"
+                                    multiple>
                                     <option value="">Please Select</option>
-
                                     @foreach ($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
+                                    <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
                                     @endforeach
 
                                 </select>
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="offer_rcv_ltr_no">Offer Rcv Ltr No</label>
+                                <label for="offer_rcv_ltr_no">Offer Receive Letter No</label>
                                 <input type="text" class="form-control" id="offer_rcv_ltr_no"
                                     name="offer_rcv_ltr_no">
                                 <span id="error_offer_rcv_ltr_no" class="text-danger error_field"></span>
@@ -132,7 +164,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="offer_rcv_ltr_dt">Offer Rcv Ltr Date</label>
+                                <label for="offer_rcv_ltr_dt">Offer Receive Letter Date</label>
                                 <input type="date" class="form-control" id="offer_rcv_ltr_dt"
                                     name="offer_rcv_ltr_dt">
                                 <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>
@@ -243,8 +275,19 @@
                             </div>
                         </div>
 
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="pdf_file" style="color: yellow"><button type="button" class="btn btn-warning">Upload PDF</b></button></label><br>
+                                <input type="file" class="form-control-file" id="pdf_file" name="pdf_file">
+                                <span id="error_pdf_file" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+               
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
                         <a href="" type="button" class="btn btn-secondary">Cancel</a>

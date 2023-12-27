@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Approved)')
+@section('title', 'Indent (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Approved) ')
+@section('main_menu', 'Indent (On Process) ')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -178,6 +178,8 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                            target="_blank">Pdf Document</a>
                     </div>
                 </div>
 

@@ -14,6 +14,7 @@ use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\Offer;
 use App\Models\Section;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,7 @@ class OfferApprovedController extends Controller
 
                 $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $offerId)
                     ->where('reciever_desig_id', $designation_id)
-                    ->where('track_status','3')
+                    ->where('track_status', '3')
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
@@ -98,7 +99,7 @@ class OfferApprovedController extends Controller
                 ->addColumn('status', function ($data) {
                     if ($data->status == '3') {
                         return '<button class="btn btn-secondary btn-sm">Approved</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-secondary btn-sm">None</button>';
                     }
                 })
@@ -161,15 +162,24 @@ class OfferApprovedController extends Controller
             ->where('offers.id', $id)
             ->first();
 
-            $details->additional_documents = json_decode($details->additional_documents, true);
-            $additional_documents_names = [];
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
 
-            foreach ($details->additional_documents as $document_id) {
-                $additional_names=Additional_document::where('id',$document_id)->pluck('name')->first();
+        foreach ($details->additional_documents as $document_id) {
+            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-               array_push($additional_documents_names, $additional_names);
+            array_push($additional_documents_names, $additional_names);
+        }
 
-            }
+        $details->suppliers = json_decode($details->supplier_id, true);
+
+        $supplier_names_names = [];
+
+        foreach ($details->suppliers as $Supplier_id) {
+            $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+
+            array_push($supplier_names_names, $supplier_names);
+        }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -178,7 +188,7 @@ class OfferApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->whereIn('track_status', [1,3])
+            ->whereIn('track_status', [1, 3])
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 5)
@@ -210,28 +220,27 @@ class OfferApprovedController extends Controller
         //End close forward Status...
 
 
-         //Start blade notes section....
-         $notes = '';
+        //Start blade notes section....
+        $notes = '';
 
-         $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-             ->where('track_status', 1)
-             ->where('reciever_desig_id', $desig_id)->get();
+        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
+            ->where('track_status', 1)
+            ->where('reciever_desig_id', $desig_id)->get();
 
-         if ($document_tracks_notes->isNotEmpty()) {
-             $notes = $document_tracks_notes;
-         }
+        if ($document_tracks_notes->isNotEmpty()) {
+            $notes = $document_tracks_notes;
+        }
 
-         //End blade notes section....
+        //End blade notes section....
 
-         //Start blade forward on off section....
-         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        //Start blade forward on off section....
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
 
-         //End blade forward on off section....
+        //End blade forward on off section....
 
 
 
-        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id','additional_documents_names','DocumentTrack_hidden'));
-
+        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
     }
 
     public function offerTracking(Request $request)
