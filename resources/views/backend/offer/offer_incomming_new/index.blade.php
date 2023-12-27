@@ -36,8 +36,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer')
-@section('active_menu', 'Incoming')
+@section('main_menu', 'Offer (New Arrival)')
+@section('active_menu', 'All Data')
 @section('content')
 
     <div class="panel-heading">
@@ -59,9 +59,9 @@
                             <a href="{{ route('admin.offer/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
                             <a href="{{ route('admin.offer_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">Incoming (Approved)</a>
+                                class="btn btn-secondary btn-sm">On Process </a>
                             <a href="{{ route('admin.offer/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">OutGoing</a>
+                                class="btn btn-info text-white btn-sm">Completed</a>
                             <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 

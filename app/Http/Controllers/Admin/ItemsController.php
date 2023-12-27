@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminSection;
 use Illuminate\Http\Request;
 use App\Models\Items;
 use App\Models\Item_type;
@@ -17,8 +18,9 @@ class ItemsController extends Controller
      */
     public function index()
     {
+        $inspectorate_id = Auth::user()->inspectorate_id;
         try {
-            $item_types = Item_type::all();
+            $item_types = Item_type::where('inspectorate_id', $inspectorate_id)->get();
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve Item Type.');
         }
@@ -28,6 +30,9 @@ class ItemsController extends Controller
 
     public function getAllData()
     {
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
         $items = Items::select('id', 'name', 'item_type_id', 'attribute')
             ->with('item_type')
             ->get();
@@ -64,7 +69,6 @@ class ItemsController extends Controller
         if ($validator->passes()) {
 
             $item = new Items();
-
             $item->name = $request->name;
             $item->item_type_id = $request->item_type_id;
             $item->inspectorate_id = Auth::user()->inspectorate_id;

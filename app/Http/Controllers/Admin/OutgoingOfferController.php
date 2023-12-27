@@ -9,6 +9,7 @@ use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Indent;
 use App\Models\Offer;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -157,6 +158,15 @@ class OutgoingOfferController extends Controller
 
             array_push($additional_documents_names, $additional_names);
         }
+        $details->suppliers = json_decode($details->supplier_id, true);
+     
+        $supplier_names_names = [];
+     
+        foreach ($details->suppliers as $Supplier_id) {
+            $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+//    dd($supplier_names);
+            array_push($supplier_names_names, $supplier_names);
+        }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -207,7 +217,7 @@ class OutgoingOfferController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
     }
 
     public function OutgoingOfferTracking(Request $request)

@@ -47,11 +47,11 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             <div class="form-group">
                                 <a href="{{url('admin/import-indent-spec-data-index')}}" class="btn btn-success">Import Excel</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row mt-4">
 
@@ -79,7 +79,35 @@
                             </div>
                         </div>
 
+
+
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_number">Indent Number</label>
+
+                                <input type="text" class="form-control" id="indent_number" name="indent_number">
+
+                                <span id="error_indent_number" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_date">Indent Reference Date</label>
+                                <input type="date" class="form-control" id="indent_reference_date"
+                                    name="indent_reference_date">
+                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_received_date">Indent Received Date</label>
+                                <input type="date" class="form-control" id="indent_received_date"
+                                    name="indent_received_date">
+                                <span id="error_indent_received_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="additional_documents">Additional Documents</label>
@@ -94,28 +122,9 @@
                                 </select>
                                 <span id="error_additional_documents" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_number">Indent Number</label>
-
-                                <input type="text" class="form-control" id="indent_number" name="indent_number">
-
-                                <span id="error_indent_number" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_received_date">Indent Received Date</label>
-                                <input type="date" class="form-control" id="indent_received_date"
-                                    name="indent_received_date">
-                                <span id="error_indent_received_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
                                 <select class="form-control" id="item_type_id" name="item_type_id">
@@ -184,13 +193,13 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="checked_standard">Standard Checked</label>
-                                <div class="form-check form-switch">
+                                <label for="checked_standard">Standard / Non Standard </label>
+                                <select class="form-control" name="checked_standard" id="checked_standard">
+                                    <option value="">Please Select</option>
+                                    <option value="0">Standard</option>
+                                    <option value="1">Non Standard</option>
+                                </select>
 
-                                    <input class="form-check-input" type="checkbox" id="checked_standard"
-                                        name="checked_standard">
-
-                                </div>
 
                                 <span id="error_checked_standard" class="text-danger error_field"></span>
                             </div>
@@ -221,14 +230,14 @@
                                 <span id="error_nomenclature" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        {{-- <div class="col-md-4">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="make">Make</label>
                                 <input type="text" class="form-control" id="make" name="make">
 
                                 <span id="error_make" class="text-danger error_field"></span>
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="model">Model</label>
@@ -258,7 +267,7 @@
 
                                 <span id="error_country_of_assembly" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
 
                         <div class="col-md-4">
@@ -270,13 +279,20 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
                                 <textarea name="remark" id="remark" class="form-control"></textarea>
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="doc_file" >Upload Document</label>
+                                <input class="form-control" type="file" id="doc_file" name='doc_file'>
+                                <span id="doc_file" class="text-danger error_field"></span>
+                            </div>
+                        </div> --}}
 
                     </div>
                 </div>

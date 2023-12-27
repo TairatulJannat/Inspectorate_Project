@@ -1,6 +1,7 @@
 
 .btn-group .doc,
 .btn-group .edit,
+.btn-group .edit2,
 .btn-group .update {
     display: flex;
     justify-content: center;
@@ -24,6 +25,14 @@
     color: #fff;
 }
 .btn-group .edit:hover{
+    background: #FF8E36 ;
+    color: #fff;
+}
+.btn-group .edit2{
+    background: radial-gradient(circle, #7636ff, #895af0) ;
+    color: #fff;
+}
+.btn-group .edit2:hover{
     background: #FF8E36 ;
     color: #fff;
 }
