@@ -39,12 +39,12 @@
             padding: 10px 15px !important;
         }
 
-
-        .forward_status, .forward {
+        .forward_status,
+        .forward {
             background-color: #F5F7FB !important;
             /* Light gray */
             border-radius: 6px;
-            padding: 20px ;
+            padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
 
         }
@@ -79,10 +79,6 @@
             min-height: 250px
         }
 
-
-
-
-
         .documents {
             display: flex;
             justify-content: center;
@@ -94,7 +90,6 @@
 @section('main_menu', 'Offer')
 @section('active_menu', 'Details')
 @section('content')
-
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
@@ -113,7 +108,7 @@
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
-                                <td>{{ $details->tender_reference_no }}</td>
+                                <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
@@ -139,7 +134,10 @@
                                     @if (!empty($additional_documents_names))
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name}} </li> 
+
+                                                <li>{{ $documents_name }} </li>
+                                                <!-- Adjust the key according to your array structure -->
+
                                             @endforeach
                                         </ul>
                                     @else
@@ -175,22 +173,56 @@
                                 <td>{{ $details->qty }}</td>
                             </tr>
 
-
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{url('admin/csr/index') }}">CSR</a>
+
+                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{ url('admin/csr/index') }}">CSR</a>
+
                            <a class="btn btn-warning mt-3 btn-parameter" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Show PDF</a>
+
                     </div>
                 </div>
 
+                {{-- @if (!$sender_designation_id) --}}
 
-                 {{-- @if (!$sender_designation_id) --}}
-
-                 <div class="card-body">
+                <div class="card-body">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
-                            @if ($desig_id  == $DocumentTrack_hidden->reciever_desig_id)
+                            @if ($desig_id == $DocumentTrack_hidden->reciever_desig_id)
+                                <div class="forward col-md-12 mb-3">
+                                    <div>
+                                        <h4 class="text-success">Forward</h4>
+                                        <hr>
+                                        <form action="">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <select name="designation" id="designations" class="form-control"
+                                                        style="height: 40px;">
+                                                        <option value="">Select To Receiver</option>
+                                                        @foreach ($designations as $d)
+                                                            <option value="{{ $d->id }}">{{ $d->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button class="btn btn-success" id="submitBtn"
+                                                        style="height: 40px;">Forward</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            @else
+                            @endif
+
+                            @if ($desig_id == $DocumentTrack_hidden->sender_designation_id)
+                            @endif
+                        @else
                             <div class="forward col-md-12 mb-3">
                                 <div>
                                     <h4 class="text-success">Forward</h4>
@@ -198,7 +230,8 @@
                                     <form action="">
                                         <div class="row">
                                             <div class="col-md-6 mb-2">
-                                                <select name="designation" id="designations" class="form-control" style="height: 40px;">
+                                                <select name="designation" id="designations" class="form-control"
+                                                    style="height: 40px;">
                                                     <option value="">Select To Receiver</option>
                                                     @foreach ($designations as $d)
                                                         <option value="{{ $d->id }}">{{ $d->name }}</option>
@@ -209,54 +242,14 @@
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
-                                                <button class="btn btn-success" id="submitBtn" style="height: 40px;">Forward</button>
+                                                <button class="btn btn-success" id="submitBtn"
+                                                    style="height: 40px;">Forward</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            @else
-
-                            @endif
-
-                            @if ($desig_id  ==  $DocumentTrack_hidden->sender_designation_id)
-
-
-                            @endif
-
-                        @else
-
-                        <div class="forward col-md-12 mb-3">
-                            <div>
-                                <h4 class="text-success">Forward</h4>
-                                <hr>
-                                <form action="">
-                                    <div class="row">
-                                        <div class="col-md-6 mb-2">
-                                            <select name="designation" id="designations" class="form-control" style="height: 40px;">
-                                                <option value="">Select To Receiver</option>
-                                                @foreach ($designations as $d)
-                                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mb-2">
-                                            <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <button class="btn btn-success" id="submitBtn" style="height: 40px;">Forward</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
                         @endif
-
-
-
-
-
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -286,7 +279,8 @@
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="5"> <i class="fa fa-times text-danger" aria-hidden="true"></i> No forward status found </td>
+                                                    <td colspan="5"> <i class="fa fa-times text-danger"
+                                                            aria-hidden="true"></i> No forward status found </td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -297,22 +291,18 @@
                     </div>
 
                     <!-- Notes Sectio
-                        n - Uncomment if needed -->
+                                                                                                n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
                         @endif
                     </div> --}}
                 </div>
-
-
-
                 {{-- @endif --}}
             </div>
 
         </div>
     </div>
-
 
 @endsection
 @push('js')
@@ -331,7 +321,6 @@
                 reciever_desig_text = $(this).find('option:selected').text();
 
             });
-
 
             $('#submitBtn').off('click').on('click', function(event) {
 
@@ -398,7 +387,6 @@
                     } else if (
                         result.dismiss === swal.DismissReason.cancel
                     ) {
-
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -406,9 +394,18 @@
                         )
                     }
                 })
-
             });
 
+            $('#csrBtn').on('click', function(event) {
+                event.preventDefault();
+
+                var url = $(this).attr('href');
+                var tenderRefNo = $('#tenderRefNo').text();
+
+                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
+
+                window.location.href = redirectUrl;
+            });
 
         });
     </script>

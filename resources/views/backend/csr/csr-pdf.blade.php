@@ -29,21 +29,24 @@
         right: 0;
         font-size: 12px;
     }
+
+    ol {
+        padding-left: 15px;
+    }
 </style>
 
-<div class="p-md-3 paper-document" style="font-family: Arial, sans-serif;">
+<div class="p-md-3 paper-document" style="font-family: Arial, sans-serif; font-size: 12px;">
     <div class="header" style="margin-bottom: 20px;">
         <div style="padding: 3px; text-align: center; font-size: 25px;">Inspectorate of Electrical Equipments &
             Instruments</div><br>
-        <div style="padding: 3px; text-align: center; font-size: 18px;">{{ $itemName }}</div>
+        <div style="padding: 3px; text-align: center; font-size: 15px;">OFFER VETTING REPORT OF {{ $itemName }}</div>
         <div style="padding: 3px; text-align: center;">Item Type: {{ $itemTypeName }}</div>
-        <div style="padding: 3px; text-align: center;">Tender Reference No: {{ $tenderRefNo }}
+        <div style="padding: 3px; text-align: center;">Tender Reference No: {{ $tenderRefNo }} | Date:
+            {{ \Carbon\Carbon::parse($tenderData->opening_date)->format('d-m-Y') }}
+
         </div>
         <div style="padding: 3px; text-align: center;">Indent Reference No:
             {{ $tenderData->indent_reference_no }}</div>
-        <div style="padding: 3px; padding-bottom: 10px; text-align: right; margin-top: 10px;">Tender Opening
-            Date:
-            {{ $tenderData->opening_date }}</div>
     </div>
     <div class="content" style="font-family: 'SiyamRupali', sans-serif;">
         <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
@@ -51,7 +54,9 @@
                 <tr>
                     <th style="border: 1px solid #ddd; padding: 8px; text-align: center; white-space: nowrap">Sl. No.
                     </th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Details</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Offer No., Date & Supplier's
+                        Name</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Salient Points of Offer</th>
                     <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Remarks</th>
                 </tr>
             </thead>
@@ -59,9 +64,14 @@
                 @forelse ($combinedData as $index => $supplier)
                     <tr>
                         <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ $index + 1 }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; font-weight: bold;">
-                            {{ $supplier['firm_name'] }}<br>
-                            <div class="bn" style="font-weight: regular;">
+                        <td style="border: 1px solid #ddd; padding: 8px; width: 40%; vertical-align: top;">
+                            <span style="font-weight: bold">{{ $supplier['firm_name'] }}<br></span>
+                            <div class="bn" style="padding-left: 0px;">
+                                {!! $supplier['supplier_offers'][0]['offer_summary'] ?? '' !!}
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ddd; padding: 8px; width: 40%; vertical-align: top;">
+                            <div class="bn">
                                 {!! $supplier['supplier_offers'][0]['remarks_summary'] ?? '' !!}
                             </div>
                         </td>
