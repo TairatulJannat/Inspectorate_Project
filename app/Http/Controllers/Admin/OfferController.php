@@ -227,14 +227,17 @@ class OfferController extends Controller
             ->where('offers.id', $id)
             ->first();
 
-        $details->additional_documents = json_decode($details->additional_documents, true);
-        $additional_documents_names = [];
+     
 
-        foreach ($details->additional_documents as $document_id) {
-            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-            array_push($additional_documents_names, $additional_names);
-        }
+        
+            $details->additional_documents = json_decode($details->additional_documents, true);
+            $additional_documents_names = [];
+    
+            foreach ($details->additional_documents as $document_id) {
+                $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+    
+                array_push($additional_documents_names, $additional_names);
+            }
         
         $details->suppliers = json_decode($details->supplier_id, true);
      
@@ -301,7 +304,7 @@ class OfferController extends Controller
           //End blade forward on off section....
 
 
-        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names','DocumentTrack_hidden', 'supplier_names_names'));
+        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden','additional_documents_names', 'supplier_names_names'));
     }
 
     public function offerTracking(Request $request)

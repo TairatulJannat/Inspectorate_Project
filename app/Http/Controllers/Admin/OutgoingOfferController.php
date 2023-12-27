@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Indent;
@@ -176,6 +177,8 @@ class OutgoingOfferController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
+            ->skip(1) // Skip the first row
+            ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -216,8 +219,14 @@ class OutgoingOfferController extends Controller
 
         //End blade forward on off section....
 
+        // start cover letter start
 
-        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
+        $cover_letter=CoverLetter::where('doc_reference_id', $details->reference_no)->first();
+
+        // end cover letter start
+
+
+        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names','cover_letter'));
     }
 
     public function OutgoingOfferTracking(Request $request)

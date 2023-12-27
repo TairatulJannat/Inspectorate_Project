@@ -141,7 +141,6 @@
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
                                                 <li>{{ $documents_name }} </li>
-                                                <!-- Adjust the key according to your array structure -->
                                             @endforeach
                                         </ul>
                                     @else
