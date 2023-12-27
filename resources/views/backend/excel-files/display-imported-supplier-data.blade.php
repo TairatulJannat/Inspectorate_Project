@@ -74,14 +74,12 @@
                                                     value="{{ $parameter['parameter_name'] }}">
                                             </td>
                                             <td class="col-md-3 py-1" style="background-color: #bdf5fb">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]"
-                                                    value="{{ $parameter['indent_parameter_value'] }}">
+                                                <textarea class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]">{{ $parameter['indent_parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]"
-                                                    value="{{ $parameter['parameter_value'] }}">
+                                                <textarea class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
                                                 <select class="form-control select2"
