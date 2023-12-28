@@ -7,8 +7,9 @@
 
 @push('css')
     <style>
-        .ck {
+        .ck-editor__editable_inline {
             color: black;
+            min-height: 200px;
         }
     </style>
 @endpush
@@ -104,12 +105,17 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12 bg-warning">
+                        <div class="col-md-6 bg-warning">
+                            <p class="bg-warning px-1 pt-1 mb-0">Offer Summary:</p>
+                            <textarea class="form-control offer_summary" name="offer_summary" id="offer_summary" style="color: black !important"></textarea>
+                        </div>
+                        <div class="col-md-6 bg-warning">
                             <p class="bg-warning px-1 pt-1 mb-0">Remarks Summary:</p>
                             <textarea class="form-control remarks_summary" name="remarks_summary" id="remarks_summary"
                                 style="color: black !important"></textarea>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-3 bg-warning">
                             <p class="bg-warning px-1 pt-1 mb-0">Offer Status:</p>
@@ -138,6 +144,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#offer_summary'))
+            .then(editor => {
+                editor.setData(
+                    '<ol><li>Offer No: </li><li>Model: </li><li>Name of Manufacturer: </li><li>Name of Principal: </li><li>Name of Local Agent: </li><li>Country of Origin: Sweden</li><li>Country of Manufacture: Sweden</li><li>Country of Assembly: Sweden</li><li>Port of Shipment: Sweden</li></ol>'
+                );
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
     <script>
         ClassicEditor
             .create(document.querySelector('#remarks_summary'))

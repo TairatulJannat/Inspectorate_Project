@@ -44,9 +44,21 @@
                         $("#itemId").val(response.itemId).prop('selected', true).change();
                         populateSupplierDropdown(response.suppliersData);
                         toastr.success("Data found for this Tender!");
-                    } else {
-                        toastr.error("Data not found for this Tender!");
-                        console.error("Data not found for this Tender!");
+                    } else if (response.isSuccess === false) {
+                        toastr.error(response.message);
+                        if (response.indentId) {
+                            $("#indentId").val(response.indentId).prop('selected', true)
+                                .change();
+                        }
+                        if (response.itemTypeId) {
+                            $("#itemTypeId").val(response.itemTypeId).prop('selected', true)
+                                .change();
+                        }
+                        if (response.itemId) {
+                            $("#itemId").val(response.itemId).prop('selected', true)
+                            .change();
+                            populateSupplierDropdown(response.suppliersData);
+                        }
                         var supplierDataContainer = $(".supplier-data");
                         supplierDataContainer.hide();
                     }

@@ -23,7 +23,6 @@
         $('.select2').select2();
     });
 
-
     // Start:: All Data
     $(function() {
         var table = $('.yajra-datatable').DataTable({
@@ -47,7 +46,6 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-
                 url: "{{ url('admin/offer/all_data') }}",
                 type: 'GET',
                 data: function(d) {
@@ -79,8 +77,6 @@
                     name: 'sender',
                     orderable: false
                 },
-
-
                 {
                     data: 'offer_rcv_ltr_dt',
                     name: 'offer_rcv_ltr_dt',
@@ -96,19 +92,16 @@
                     name: 'qty',
                     orderable: false
                 },
-
                 {
                     data: 'status',
                     name: 'status',
                     orderable: false
                 },
-
                 {
                     data: 'action',
                     name: 'action',
                     orderable: true
                 },
-
             ],
             dom: 'lBfrtip',
             buttons: [
@@ -127,7 +120,6 @@
         event.preventDefault();
 
         var formData = new FormData($('#save_info')[0]);
-
 
         disableButton()
         $.ajax({
@@ -164,7 +156,6 @@
                 // $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
                 // $('#error_spec_received_date').text(response.responseJSON.errors
                 //     .spec_received_date);
-
             }
         });
     })

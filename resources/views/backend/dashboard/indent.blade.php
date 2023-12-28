@@ -247,7 +247,7 @@
                 <div class="card-body approved-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$indentForward}} <sub>Indent</sub></h1>
+                        <h1>{{$indentOnProcess}} <sub>Indent</sub></h1>
 
                     </div>
                 </div>
@@ -269,7 +269,7 @@
                 <div class="card-body outgoing-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$indentDownward}} <sub>Indent</sub></h1>
+                        <h1>{{$indentCompleted}} <sub>Indent</sub></h1>
 
                     </div>
                 </div>
