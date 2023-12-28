@@ -422,7 +422,6 @@ class ExcelController extends Controller
 
             $parameterGroups = [];
             $currentGroupName = null;
-            $previousParameterValue = null;
 
             foreach ($importedData->toArray() as $row) {
                 if (empty(array_filter($row))) {
@@ -439,19 +438,11 @@ class ExcelController extends Controller
                     $groupName = $currentGroupName;
                 }
 
-                $parameterValue = $row[3];
-
-                if ($parameterValue === '"') {
-                    $row[3] = $previousParameterValue;
-                }
-
                 $parameterGroups[$groupName][] = [
                     'parameter_name' => $row[1],
                     'indent_parameter_value' => $row[2],
                     'parameter_value' => $row[3],
                 ];
-
-                $previousParameterValue = $row[3];
             }
 
             $itemId = $request->input('item-id');

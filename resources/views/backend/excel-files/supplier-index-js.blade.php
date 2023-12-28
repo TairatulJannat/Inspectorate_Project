@@ -56,7 +56,7 @@
                         }
                         if (response.itemId) {
                             $("#itemId").val(response.itemId).prop('selected', true)
-                                .change();
+                            .change();
                             populateSupplierDropdown(response.suppliersData);
                         }
                         var supplierDataContainer = $(".supplier-data");
