@@ -150,6 +150,8 @@
                                             @foreach ($additional_documents_names as $documents_name)
                                                 <li>{{ $documents_name }} </li>
 
+
+
                                             @endforeach
                                         </ul>
                                     @else

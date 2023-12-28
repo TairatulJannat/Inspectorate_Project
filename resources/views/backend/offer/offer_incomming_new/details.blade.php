@@ -135,8 +135,8 @@
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
 
-                                                <li>{{ $documents_name }} </li>
-                                                <!-- Adjust the key according to your array structure -->
+                                                <li>{{ $documents_name }} </li>    
+
 
                                             @endforeach
                                         </ul>
@@ -174,11 +174,9 @@
                             </tr>
 
                         </table>
-
-                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
-                            href="{{ url('admin/csr/index') }}">CSR</a>
-
-                           <a class="btn btn-warning mt-3 btn-parameter" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Show PDF</a>
+                        <a  id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{url('admin/csr/index') }}">CSR</a>
+                           <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>             
 
                     </div>
                 </div>
