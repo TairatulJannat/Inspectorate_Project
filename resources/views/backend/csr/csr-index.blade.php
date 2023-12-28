@@ -14,10 +14,10 @@
     <form action="{{ url('admin/csr/get-csr-data') }}" method="POST" id="searchCSRForm" autocomplete="off">
         @csrf
         <div class="row bg-body p-3">
-            <div class="col-md-2 text-center mt-2">
+            <div class="col-md-2 text-center mt-2 infoHide">
                 <h6>Tender Ref No: </h6>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 infoHide">
                 <div class="mb-2">
                     <select class="form-control select2 tender-id" id="tenderId" name="tender-id"
                         style="width: 100% !important;">
@@ -29,12 +29,13 @@
                 </div>
                 <span class="text-danger error-text tender-id-error"></span>
             </div>
+            <div class="col-md-5 infoShow" style="display: none"></div>
             <div class="col-md-4">
             </div>
             <!-- Search Button -->
             <div class="col-md-3">
-                <button type="submit" class="btn btn-success-gradien search-button" id="searchButton">Search<span> <i
-                            class="fa fa-search"></i></span></button>
+                <button type="submit" class="btn btn-success-gradien search-button infoHide" id="searchButton">Search<span>
+                        <i class="fa fa-search"></i></span></button>
                 <a href="{{ url('admin/csr-generate-pdf') }}" type="button" id="printButton"
                     class="btn btn-success-gradien fa fa-print disabled"></a>
             </div>
