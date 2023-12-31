@@ -139,9 +139,7 @@
 @endsection
 
 @push('custom-scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
-        integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('assets/backend/js/ckeditor5/ckeditor.min.js') }}"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#offer_summary'))
