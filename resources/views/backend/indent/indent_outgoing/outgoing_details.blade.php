@@ -458,13 +458,11 @@
                             </div>
                             <div class="my-2">
                                 <label for="body_1">Refs: </label>
-                                <textarea class="form-control body_1" name="body_1" id="body_1">
-                            </textarea>
+                                <textarea class="form-control " name="body_1" id="body_1"></textarea>
                             </div>
                             <div class="mt-2">
                                 <label for="body_2">Body </label>
-                                <textarea class="form-control body_2" name="body_2" id="body_2">
-                            </textarea>
+                                <textarea class="form-control " name="body_2" id="body_2"></textarea>
                             </div>
                             <div class="row">
                                 <div class="col-4"></div>
@@ -481,8 +479,7 @@
                             <div class="row">
                                 <div>
                                     <label for="anxs">Anxs: </label>
-                                    <textarea class="form-control" name="anxs" id="anxs">
-                                </textarea>
+                                    <textarea class="form-control" name="anxs" id="anxs"></textarea>
                                 </div>
 
                             </div>
@@ -499,7 +496,7 @@
                             <div class="col-12 text-center">RESTRICTED</div>
 
                             <div>
-                                <button type="submit"> Save </button>
+                                <button type="submit" class="btn btn-success"> Save </button>
                             </div>
 
                         </form>
@@ -652,36 +649,38 @@
         //     .catch(error => {
         //         console.error(error);
         //     });
-        ClassicEditor
-            .create(document.querySelector('#body_1'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#body_2'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#anxs'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#bodyEdit_1'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#bodyEdit_2'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
+        // ClassicEditor
+        //     .create(document.querySelector('#body_1'))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        // ClassicEditor
+        //     .create(document.querySelector('#body_2'))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        // ClassicEditor
+        //     .create(document.querySelector('#anxs'))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        // ClassicEditor
+        //     .create(document.querySelector('#bodyEdit_1'))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        // ClassicEditor
+        //     .create(document.querySelector('#bodyEdit_2'))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        // ClassicEditor
             .create(document.querySelector('#anxsEdit'))
             .catch(error => {
                 console.error(error);
             });
+
+
     </script>
 
     <script>

@@ -3,6 +3,30 @@
         font-family: 'Nikosh';
         src: url('http://sonnetdp.github.io/nikosh/css/nikosh.css') format('truetype');
     }
+    @page {
+            margin-top: 75px;
+            margin-bottom: 45px;
+        }
+
+        header {
+            position: fixed;
+            top: -80px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            height: 30px;
+            text-align: center;
+            padding: 10px;
+        }
     .header p{
         padding: 2px;
         margin: 0;
@@ -15,11 +39,12 @@
 </style>
 
 <div class="row">
-    <div style="width: 100%; text-align: center; margin-bottom:30px;">
+    <header>
         <p>RESTRICTED</p>
-    </div>
+    </header>
+
     <div style="overflow: auto;">
-        <div style="float: left; width: 40%;">{{$cover_letter->letter_reference_no}}</div>
+        <div style="float: left; width: 40%; position:fixed; top:100px;">{{$cover_letter->letter_reference_no}}</div>
         <div class="header" style="float: right; width: 30%;">
             <p>{{$cover_letter->inspectorate_name}}</p>
             <p>{{$cover_letter->inspectorate_place}}</p>
@@ -29,15 +54,15 @@
             <p>{{$cover_letter->letter_date}}</p>
         </div>
 
-        <div style="clear: both; text-decoration: underline;"><h4>{{$cover_letter->subject}}</h4></div>
-        <div>
-            <p>Fefs:</p>
-            <div>{!! $cover_letter->body_1 !!}</div>
-            <div>{!! $cover_letter->body_2 !!}</div>
+        <div style="clear: both; text-decoration: underline;"><h4 style="padding:0px; margin-top:5px">{{$cover_letter->subject}}</h4></div>
+        <div style="padding:0px; margin:0px">
+            <p style="padding:0px; padding-top:5px; margin:0px">Fefs:</p>
+            <div><p>{!! $cover_letter->body_1 !!}</p></div>
+            <div><p>{!! $cover_letter->body_2 !!}</p></div>
         </div>
     </div>
 
-    <div style="float: right; width: 30%; margin-top:50px;">
+    <div style="float: right; width: 30%; margin-top:70px;">
         {!!$cover_letter->name!!}
         <br>
 
@@ -69,9 +94,10 @@
         <p>Info:</p>
         <div>{!! $cover_letter->info !!}</div>
     </div>
-    <div style="width: 100%; text-align: center; margin-top:20px">
+
+    <footer>
         <p>RESTRICTED</p>
-    </div>
+    </footer>
 
 </div>
 
