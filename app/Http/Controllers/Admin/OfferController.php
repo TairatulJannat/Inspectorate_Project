@@ -111,27 +111,40 @@ class OfferController extends Controller
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
-                            $actionBtn = '<div class="btn-group" role="group">
+                            $actionBtn = '<div class="btn-group" role="group">';
+                            
+                            if ($designation_id == 3) {
+                                $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            }
+                            
                            
-                            <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
+                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
-                            $actionBtn = '<div class="btn-group" role="group">
-                          
-                            <a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn = '<div class="btn-group" role="group">';
+                            if ($designation_id == 3) {
+                                $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            }
+                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
-                            $actionBtn = '<div class="btn-group" role="group">
+                            $actionBtn = '<div class="btn-group" role="group">';
+                            if ($designation_id == 3) {
+                                $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            }
                             
-                            <a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
-                        $actionBtn = '<div class="btn-group" role="group">
+                        $actionBtn = '<div class="btn-group" role="group">';
+                        if ($designation_id == 3) {
+                            $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                        }
                        
-                        <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
+                        $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
@@ -161,6 +174,7 @@ class OfferController extends Controller
 
     public function store(Request $request)
     {
+// dd($request->all());
         // $this->validate($request, [
         //     'sender' => 'required',
         //     'admin_section' => 'required',
@@ -177,6 +191,62 @@ class OfferController extends Controller
         $data = new Offer();
         $data->insp_id = $insp_id;
         $data->sec_id = $sec_id;
+        $data->sender = $request->sender;
+        $data->reference_no = $request->reference_no;
+        $data->offer_reference_date = $request->offer_reference_date;
+        $data->tender_reference_no = $request->tender_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
+        $data->attribute = $request->attribute;
+        $data->additional_documents = json_encode($request->additional_documents);
+        $data->item_id = $request->item_id;
+        $data->item_type_id = $request->item_type_id;
+        $data->qty = $request->qty;
+        $data->supplier_id = json_encode($request->supplier_id);
+        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
+        $data->fin_year_id = $request->fin_year_id;
+        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
+        // $data->offer_vetting_ltr_no = $request->offer_vetting_ltr_no;
+        // $data->offer_vetting_ltr_dt = $request->offer_vetting_ltr_dt;
+
+
+        $data->received_by = Auth::user()->id;
+        $data->remark = $request->remark;
+        $data->status = 0;
+        $data->created_at = Carbon::now()->format('Y-m-d');
+        $data->updated_at = Carbon::now()->format('Y-m-d');;
+
+
+        $data->save();
+
+        return response()->json(['success' => 'Done']);
+    }
+
+    public function edit($id)
+    {
+        $offer = Offer::find($id);
+        $admin_id = Auth::user()->id;
+        $inspectorate_id = Auth::user()->inspectorate_id;
+        $dte_managments = Dte_managment::where('status', 1)->get();
+        $additional_documnets = Additional_document::where('status', 1)->get();
+        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
+        $item = Items::where('id', $offer->item_id)->first();
+        $fin_years = FinancialYear::all();
+        $suppliers = Supplier::all();
+        $tender_reference_numbers = Tender::all();
+        $indent_reference_numbers = Indent::all();
+        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years','tender_reference_numbers','indent_reference_numbers','suppliers'));
+    }
+
+    public function update(Request $request)
+    {
+
+        // $insp_id = Auth::user()->inspectorate_id;
+        // $sec_id = $request->admin_section;
+
+        $data = Offer::findOrFail($request->editId);
+        // $data->insp_id = $insp_id;
+        // $data->sec_id = $sec_id;
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->offer_reference_date = $request->offer_reference_date;
@@ -231,23 +301,30 @@ class OfferController extends Controller
 
         
             $details->additional_documents = json_decode($details->additional_documents, true);
-            $additional_documents_names = [];
-    
+                $additional_documents_names = [];
+                
+        if($details->additional_documents){
             foreach ($details->additional_documents as $document_id) {
                 $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-    
+
                 array_push($additional_documents_names, $additional_names);
             }
+            
+        }
+            
         
         $details->suppliers = json_decode($details->supplier_id, true);
      
         $supplier_names_names = [];
-     
-        foreach ($details->suppliers as $Supplier_id) {
-            $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-//    dd($supplier_names);
-            array_push($supplier_names_names, $supplier_names);
+        if($details->suppliers ){
+            foreach ($details->suppliers as $Supplier_id) {
+                $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+
+                array_push($supplier_names_names, $supplier_names);
+            }
+            
         }
+        
         
 
 

@@ -166,7 +166,7 @@
                                 <th>Model</td>
                                 <td>{{ $details->model }}</td>
                             </tr>
-                            <tr>Pdf Document
+                            <tr>
                                 
                                 <th>Country of Origin</td>
                                 <td>{{ $details->country_of_origin }}</td>

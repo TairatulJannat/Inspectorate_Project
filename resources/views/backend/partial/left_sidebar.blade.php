@@ -63,11 +63,11 @@ $currentControllerName = Request::segment(2);
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>Tender</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Tender/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('tender/view') !== null)
+                                {{-- @if (sub_menu_check('tender/view') !== null)
                                     <li><a class="text-light" href="{{ route('admin.tender/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Tender</a>
                                     </li>
-                                @endif
+                                @endif --}}
                                 @if (sub_menu_check('tender/create') !== null)
                                     <li><a class="text-light" href="{{ route('admin.tender/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create

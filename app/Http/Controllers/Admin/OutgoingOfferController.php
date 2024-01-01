@@ -262,11 +262,12 @@ class OutgoingOfferController extends Controller
 
         // ----delay_cause start here
         if ($desig_position->position == 3) {
-            $indent_data = Offer::find($doc_ref_id);
-            $indent_data->delay_cause = $request->delay_cause;
-            $indent_data->delivery_date = $request->delivery_date;
-            $indent_data->delivery_by = Auth::user()->id;
-            $indent_data->save();
+            $offer_data = Offer::find($doc_ref_id);
+            $offer_data->delay_cause = $request->delay_cause;
+            $offer_data->terms_conditions = $request->terms_conditions;
+            $offer_data->delivery_date = $request->delivery_date;
+            $offer_data->delivery_by = Auth::user()->id;
+            $offer_data->save();
         }
         // ----delay_cause end here
 
