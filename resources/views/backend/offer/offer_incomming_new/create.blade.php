@@ -49,11 +49,11 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             <div class="form-group">
                                 <a href="{{url('admin/import-supplier-spec-data-index')}}" class="btn btn-success">Supplier Import Excel</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
 
@@ -99,7 +99,6 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference Number</label>
-                                {{-- <input type="text" class="form-control" id="indent_reference_no" name="indent_reference_no"> --}}
 
                                 <select class="form-control " id="indent_reference_no" name="indent_reference_no">
 
@@ -121,7 +120,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="additional_documents">Additional Documents</label>
@@ -136,9 +135,9 @@
                                 </select>
                                 <span id="error_additional_documents" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="supplier_id">Suppiler</label>
@@ -153,27 +152,27 @@
                                 </select>
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
-                        </div>
-                        <div class="col-md-4">
+                        </div> --}}
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_rcv_ltr_no">Offer Receive Letter No</label>
                                 <input type="text" class="form-control" id="offer_rcv_ltr_no"
                                     name="offer_rcv_ltr_no">
                                 <span id="error_offer_rcv_ltr_no" class="text-danger error_field"></span>
                             </div>
-                        </div>
-                        <div class="col-md-4">
+                        </div> --}}
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_rcv_ltr_dt">Offer Receive Letter Date</label>
                                 <input type="date" class="form-control" id="offer_rcv_ltr_dt"
                                     name="offer_rcv_ltr_dt">
                                 <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
 
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
                                 <select class="form-control " id="item_type_id" name="item_type_id">
@@ -187,9 +186,9 @@
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
@@ -200,17 +199,17 @@
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="qty">Item Qty</label>
                                 <input type="text" class="form-control" id="qty" name="qty">
 
                                 <span id="error_qty" class="text-danger error_field"></span>
                             </div>
-                        </div>
-                        <div class="col-md-4">
+                        </div> --}}
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="attribute">Attribute</label>
 
@@ -223,9 +222,9 @@
 
                                 <span id="error_attribute" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fin_year_id">Financial Year </label>
 
@@ -240,7 +239,7 @@
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
                         {{-- <div class="col-md-4">
                             <label for="receive_status">Is Offer Vetted</label>
@@ -267,23 +266,23 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
                                 <textarea name="remark" id="remark" class="form-control"></textarea>
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
 
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="pdf_file" style="color: yellow"><button type="button" class="btn btn-warning">Upload PDF</b></button></label><br>
                                 <input type="file" class="form-control-file" id="pdf_file" name="pdf_file">
                                 <span id="error_pdf_file" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>

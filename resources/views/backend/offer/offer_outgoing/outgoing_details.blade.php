@@ -708,6 +708,7 @@
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
+                var terms_conditions = $('#terms_conditions_text').val();
 
 
                 swal({
@@ -735,7 +736,8 @@
                                 'delay_cause': delay_cause,
                                 'delivery_date': delivery_date,
                                 'doc_reference_number': doc_reference_number,
-                                'remarks': remarks
+                                'remarks': remarks,
+                                'terms_conditions': terms_conditions
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -752,7 +754,7 @@
                                             response.success);
 
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent/outgoing') }}",
+                                            "{{ route('admin.offer/outgoing') }}",
                                             40000);
                                     }
                                 }
