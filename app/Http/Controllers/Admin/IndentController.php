@@ -238,14 +238,17 @@ class IndentController extends Controller
         $indent = Indent::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
-        // $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         // $sections = Section::whereIn('id', $section_ids)->get();
 
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
 
         // $selected_document =$indent->additional_documents;
-        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
+        $item_types = Item_type::where('status', 1)
+        ->where('inspectorate_id', $inspectorate_id)
+        ->whereIn('section_id', $section_ids)
+        ->get();
         $item = Items::where('id', $indent->item_id)->first();
         $fin_years = FinancialYear::all();
         return view('backend.indent.indent_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
