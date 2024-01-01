@@ -58,7 +58,6 @@ class IndentController extends Controller
                     ->where('indents.status', 0)
                     ->get();
             } else {
-
                 $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('indents.insp_id', $insp_id)
