@@ -9,6 +9,16 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label for="itemName" class="form-label">Section</label>
+                        <select class="form-control" id="itemSection" name="itemSection">
+                            @foreach ($sections as $section)
+                                <option value="{{$section->id}}">{{$section->name}}</option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger error-text name_error"></span>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="itemName" class="form-label">Item Name</label>
                         <input type="text" class="form-control" id="itemName" name="name">
                         <span class="text-danger error-text name_error"></span>

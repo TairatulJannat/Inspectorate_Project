@@ -16,7 +16,7 @@
 
         toastr.options.preventDuplicates = true;
 
-        // Get All Data 
+        // Get All Data
         $(function() {
             var table = $('.yajra-datatable').DataTable({
                 searching: true,
@@ -162,6 +162,8 @@
                     $("#editItemInspectorateId").val(response.inspectorate_id);
                     $("#editItemTypeId").val(response.item_type_id).trigger('change');
                     $("#editItemAttribute").val(response.attribute).trigger('change');
+                    $("#editItemSection option[value='" + response.section_id + "']")
+                        .prop('selected', true);
 
                     $('#editItemModal').modal('show');
                 }

@@ -11,6 +11,17 @@
                     <input type="hidden" name="edit_item_type_id" id="edit_item_type_id">
 
                     <div class="mb-3">
+                        <label for="editItemTypeSection" class="form-label">Section</label>
+                        <select class="form-control" id="editItemTypeSection" name="edit_editItemTypeSection">
+                            @foreach ($sections as $section)
+                                <option value="{{ $section->id }}"> {{ $section->name }}</option>
+                            @endforeach
+                        </select>
+                        {{-- <input type="text" class="form-control" id="editItemTypeSection"
+                            name="edit_editItemTypeSection"> --}}
+                        <span class="text-danger error-text edit_editItemTypeSection_error"></span>
+                    </div>
+                    <div class="mb-3">
                         <label for="editItemTypeName" class="form-label">Item Type Name</label>
                         <input type="text" class="form-control" id="editItemTypeName" name="edit_name">
                         <span class="text-danger error-text edit_name_error"></span>
