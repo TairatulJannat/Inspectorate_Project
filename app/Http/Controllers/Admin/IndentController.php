@@ -235,19 +235,20 @@ class IndentController extends Controller
     }
     public function edit($id)
     {
-
         $indent = Indent::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
-        // $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         // $sections = Section::whereIn('id', $section_ids)->get();
 
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
 
         // $selected_document =$indent->additional_documents;
-        // dd( $selected_document);
-        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
+        $item_types = Item_type::where('status', 1)
+        ->where('inspectorate_id', $inspectorate_id)
+        ->whereIn('section_id', $section_ids)
+        ->get();
         $item = Items::where('id', $indent->item_id)->first();
         $fin_years = FinancialYear::all();
         return view('backend.indent.indent_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
@@ -261,7 +262,6 @@ class IndentController extends Controller
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->indent_number = $request->indent_number;
-
         $data->additional_documents = json_encode($request->additional_documents);
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
@@ -389,16 +389,18 @@ class IndentController extends Controller
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        // $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
+
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
+        // $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
+        $section_id=Indent::where('reference_no',$doc_reference_number)->pluck('sec_id')->first();
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
@@ -414,9 +416,7 @@ class IndentController extends Controller
         $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
-
         if ($desig_position->position == 7) {
-
             $data = Indent::find($doc_ref_id);
 
             if ($data) {

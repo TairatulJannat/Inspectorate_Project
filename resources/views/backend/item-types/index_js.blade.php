@@ -4,7 +4,7 @@
 
         toastr.options.preventDuplicates = true;
 
-        // Get All Data 
+        // Get All Data
         $(function() {
             var table = $('.yajra-datatable').DataTable({
                 searching: true,
@@ -151,6 +151,8 @@
                 success: function(response) {
                     $("#edit_item_type_id").val(id);
                     $("#editItemTypeName").val(response.name);
+                    $("#editItemTypeSection option[value='" + response.section_id + "']")
+                        .prop('selected', true);
                     $("#editItemTypeStatus").prop('checked', response.status == 1);
 
                     $('#editItemTypeModal').modal('show');

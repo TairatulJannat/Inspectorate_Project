@@ -181,6 +181,7 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                         href="{{url('admin/csr/index') }}">CSR</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
                     </div>
                 </div>
 
@@ -390,7 +391,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent_approved/view') }}",
+                                            "{{ route('admin.offer_approved/view') }}",
                                             40000);
                                     }
                                 }

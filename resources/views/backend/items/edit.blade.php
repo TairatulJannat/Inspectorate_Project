@@ -10,6 +10,16 @@
                 <div class="modal-body">
                     <input type="hidden" name="edit_item_id" id="editItemId">
                     <input type="hidden" name="edit_item_inspectorate_id" id="editItemInspectorateId">
+                    <div class="mb-3">
+                        <label for="editItemSection" class="form-label">Section</label>
+                        <select class="form-control" id="editItemSection" name="editItemSection">
+                            @foreach ($sections as $section)
+                                <option value="{{ $section->id }}"> {{ $section->name }}</option>
+                            @endforeach
+                        </select>
+
+                        <span class="text-danger error-text editItemSection_error"></span>
+                    </div>
 
                     <div class="mb-3">
                         <label for="editItemName" class="form-label">Name</label>

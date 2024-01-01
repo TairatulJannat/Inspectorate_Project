@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer (Dispatch)')
+@section('title', 'Indent (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,14 +90,14 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer (Dispatch) ')
+@section('main_menu', 'Indent (Dispatch) ')
 @section('active_menu', 'Details')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Offer</h2>
+                <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-4">
@@ -108,8 +108,8 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
-                                <th>Tender Reference No</td>
-                                <td>{{ $details->tender_reference_no }}</td>
+                                <th>Indent Number</td>
+                                <td>{{ $details->indent_number }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
@@ -117,7 +117,7 @@
                             </tr>
                             <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->offer_rcv_ltr_dt }}</td>
+                                <td>{{ $details->indent_received_date }}</td>
                             </tr>
 
                             <tr>
@@ -129,7 +129,6 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-
                                 <th>Additional Documents</th>
                                 <td>
                                     @if (!empty($additional_documents_names))
@@ -143,43 +142,44 @@
                                         No additional documents available.
                                     @endif
                                 </td>
-
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
                             <tr>
-                                <th>Supplier Name</th>
-                                <td>
-                                    @if (!empty($supplier_names_names))
-                                        <ul>
-                                            @foreach ($supplier_names_names as $supplierName)
-                                                <li>{{ $supplierName }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No supplier names available.
-                                    @endif
-                                </td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->nomenclature }}</td>
                             </tr>
                             <tr>
-                                <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no }}</td>
+                                <th>Make</td>
+                                <td>{{ $details->make }}</td>
                             </tr>
                             <tr>
-                                <th>Quantity</td>
-                                <td>{{ $details->qty }}</td>
+                                <th>Model</td>
+                                <td>{{ $details->model }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Origin</td>
+                                <td>{{ $details->country_of_origin }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Assembly</td>
+                                <td>{{ $details->country_of_assembly }}</td>
                             </tr>
 
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{url('admin/csr/index') }}">CSR</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                            <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                                target="_blank">Pdf Document</a>
+                            <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                                Letter</a>
                     </div>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body col-8">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
@@ -254,7 +254,7 @@
                         @endif
 
 
-                        <div class="forward_status col-md-12">
+                        <div class="forward_status col-md-12 ">
                             <div>
                                 <h4 class="text-success">Dispatch Status</h4>
                                 <hr>
@@ -272,7 +272,7 @@
                                         <tbody>
                                             @if ($document_tracks !== null)
                                                 @foreach ($document_tracks as $document_track)
-                                                @if ($document_track->track_status == 2)
+                                                    @if ($document_track->track_status == 2)
                                                         <tr style="background-color: #c8fff528">
                                                             <td>{{ $document_track->sender_designation_name }}</td>
                                                             <td><i class="fa fa-arrow-right text-success"></i></td>
@@ -289,7 +289,6 @@
                                                             <td>{{ $document_track->remarks }}</td>
                                                         </tr>
                                                     @endif
-
                                                 @endforeach
                                             @else
                                                 <tr>
@@ -314,6 +313,17 @@
                                 </div>
                             </div>
                         @endif
+                        @if ($details->terms_conditions !== null)
+                        <div class="forward_status col-md-12 mt-3">
+                            <div>
+                                <h4 class="text-success">Terms Conditions</h4>
+                                <hr>
+                                <div class="table-responsive">
+                                    {{$details->terms_conditions}}
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     </div>
 
 
@@ -338,6 +348,8 @@
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();
+                reciever_desig_text =
+                    `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
 
 
             });
@@ -351,8 +363,8 @@
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
                 swal({
-                    title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">
-                        ${reciever_desig_text}</span>?`,
+                    title: `Are you sure to delivered
+                        ${reciever_desig_text}?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -369,7 +381,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/offer_dispatch/offer_tracking') }}',
+                            url: '{{ url('admin/indent_dispatch/indent_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -391,7 +403,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.offer_dispatch/view') }}",
+                                            "{{ route('admin.indent_dispatch/view') }}",
                                             40000);
                                     }
                                 }
