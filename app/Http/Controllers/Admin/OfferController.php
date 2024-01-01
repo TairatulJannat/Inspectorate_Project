@@ -202,7 +202,7 @@ class OfferController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
-        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
+        $data->offer_rcv_ltr_no = $request->offer_vetting_ltr_dt;
         $data->fin_year_id = $request->fin_year_id;
         // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
         // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
