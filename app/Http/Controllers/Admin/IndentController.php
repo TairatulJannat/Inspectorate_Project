@@ -245,7 +245,6 @@ class IndentController extends Controller
         $additional_documnets = Additional_document::where('status', 1)->get();
 
         // $selected_document =$indent->additional_documents;
-        // dd( $selected_document);
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         $item = Items::where('id', $indent->item_id)->first();
         $fin_years = FinancialYear::all();
@@ -260,7 +259,6 @@ class IndentController extends Controller
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->indent_number = $request->indent_number;
-
         $data->additional_documents = json_encode($request->additional_documents);
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;

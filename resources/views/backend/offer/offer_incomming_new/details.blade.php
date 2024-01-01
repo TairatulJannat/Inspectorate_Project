@@ -176,7 +176,10 @@
                         </table>
                         <a  id="csrBtn" class="btn btn-success mt-3 btn-parameter"
                             href="{{url('admin/csr/index') }}">CSR</a>
-                           <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>             
+                           @if ($desig_id != 1)
+                           <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                           @endif 
+                                     
 
                     </div>
                 </div>
