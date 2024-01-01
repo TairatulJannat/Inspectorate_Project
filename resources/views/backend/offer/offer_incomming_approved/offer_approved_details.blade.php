@@ -391,7 +391,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent_approved/view') }}",
+                                            "{{ route('admin.offer_approved/view') }}",
                                             40000);
                                     }
                                 }

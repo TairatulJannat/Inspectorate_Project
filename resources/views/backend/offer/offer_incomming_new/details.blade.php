@@ -370,9 +370,7 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
-                                        setTimeout(window.location.href =
-                                            "{{ route('admin.offer/view') }}",
-                                            40000);
+                                        setTimeout(window.location.href ="{{ route('admin.offer/view') }}", 40000);
                                     }
                                 }
                             },

@@ -416,7 +416,7 @@
                         toastr.success('Information Updated', 'Saved');
                         $('#edit_model').modal('hide');
                     }
-                    setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
+                    setTimeout(window.location.href = "{{ route('admin.offer/view') }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
