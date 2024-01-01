@@ -176,8 +176,8 @@
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                         {{-- <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
-                            <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
-                                target="_blank">Pdf Document</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -454,7 +454,8 @@
                                 </div>
                             </div>
                             <div>
-                                <input type="text" id="subject" class="form-control my-2" placeholder="Subject">
+                                <textarea  class="form-control my-2" name="subject" id="subject" placeholder="Subject"></textarea>
+                                {{-- <input type="text" id="subject" class="form-control my-2" placeholder="Subject"> --}}
                             </div>
                             <div class="my-2">
                                 <label for="body_1">Refs: </label>
@@ -469,10 +470,10 @@
                                 <div class="col-4"></div>
                                 <div class="col-4 mt-5">
 
-                                    <input type="text" class="form-control" id="name" placeholder="Name">
-
-                                    <input type="text" class="form-control" id="designation"
-                                        placeholder="Designation">
+                                    <div class="mt-2">
+                                        <label for="signature">Signature Details </label>
+                                        <textarea class="form-control " name="signature" id="signature"></textarea>
+                                    </div>
 
                                 </div>
                             </div>
@@ -490,6 +491,22 @@
                                     <input type="text" class="form-control" id="extl" placeholder="Extl">
                                     <input type="text" class="form-control" id="act" placeholder="Act">
                                     <input type="text" class="form-control" id="info" placeholder="info">
+
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div>
+                                    <label for="anxs">Internal: </label>
+                                    <textarea class="form-control" name="internal" id="internal">
+                                </textarea>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mt-2">
+
+                                    <input type="text" class="form-control" id="internal_act" placeholder="Act">
+                                    <input type="text" class="form-control" id="internal_info" placeholder="Info">
 
                                 </div>
                             </div>
@@ -584,11 +601,10 @@
                                     <div class="col-4"></div>
                                     <div class="col-4 mt-5">
 
-                                        <input type="text" class="form-control" id="name" placeholder="Name"
-                                            value="{{ $cover_letter->name }}">
-
-                                        <input type="text" class="form-control" id="designation"
-                                            placeholder="Designation" value="{{ $cover_letter->designation }}">
+                                        <div class="mt-2">
+                                            <label for="signatureEdit">Signature Details </label>
+                                            <textarea class="form-control " name="signatureEdit" id="signatureEdit"> {!! $cover_letter->signature !!}</textarea>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -596,8 +612,7 @@
                                     <div>
                                         <label for="anxs">Anxs: </label>
                                         <textarea class="form-control" name="anxs" id="anxsEdit">
-                                    {!! $cover_letter->anxs !!}
-                                </textarea>
+                                    {!! $cover_letter->anxs !!}</textarea>
                                     </div>
 
                                 </div>
@@ -615,6 +630,25 @@
 
                                     </div>
                                 </div>
+                                <div class="row mt-2">
+                                    <div>
+                                        <label for="anxs">Internal: </label>
+                                        <textarea class="form-control" name="internal" id="internal">
+                                    {!! $cover_letter->internal !!}</textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 mt-2">
+
+                                        <input type="text" class="form-control" id="internal_act" placeholder="Act"
+                                            value="{{ $cover_letter->internal_act }}">
+                                        <input type="text" class="form-control" id="internal_info" placeholder="Info"
+                                            value="{{ $cover_letter->internal_info }}">
+
+                                    </div>
+                                </div>
+
                                 <div class="col-12 text-center">RESTRICTED</div>
 
                                 <div>
@@ -649,38 +683,46 @@
         //     .catch(error => {
         //         console.error(error);
         //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#body_1'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#body_2'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#anxs'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#bodyEdit_1'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
-        //     .create(document.querySelector('#bodyEdit_2'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        // ClassicEditor
+        ClassicEditor
+            .create(document.querySelector('#body_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxs'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signature'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
             .create(document.querySelector('#anxsEdit'))
             .catch(error => {
                 console.error(error);
             });
-
-
+        ClassicEditor
+            .create(document.querySelector('#signatureEdit'))
+            .catch(error => {
+                console.error(error);
+            });
     </script>
 
     <script>

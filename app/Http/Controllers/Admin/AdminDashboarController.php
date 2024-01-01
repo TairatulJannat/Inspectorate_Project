@@ -60,7 +60,7 @@ class AdminDashboarController extends Controller
             ->where('track_status', 2)
             ->where('indents.status', 1)
             ->whereIn('document_tracks.section_id', $section_ids)
-            ->count();
+            ->get();
 
             $indentDispatch = DocumentTrack::where('doc_type_id', 3)
             ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')

@@ -27,13 +27,15 @@ class CoverLetterController extends Controller
         $data->subject = $request->subject;
         $data->body_1 = $request->body_1;
         $data->body_2 = $request->body_2;
-        $data->name = $request->name;
-        $data->designation = $request->designation;
+        $data->signature = $request->signature;
         $data->anxs = $request->anxs;
         $data->distr = $request->distr;
         $data->extl = $request->extl;
         $data->act = $request->act;
         $data->info = $request->info;
+        $data->internal = $request->internal;
+        $data->internal_act = $request->internal_act;
+        $data->internal_info = $request->internal_info;
 
         $data->save();
 
@@ -63,13 +65,16 @@ class CoverLetterController extends Controller
         $data->subject = $request->subject;
         $data->body_1 = $request->bodyEdit_1;
         $data->body_2 = $request->bodyEdit_2;
-        $data->name = $request->name;
-        $data->designation = $request->designation;
+        $data->signature = $request->signatureEdit;
         $data->anxs = $request->anxsEdit;
         $data->distr = $request->distr;
         $data->extl = $request->extl;
         $data->act = $request->act;
         $data->info = $request->info;
+        $data->internal = $request->internal;
+        $data->internal_act = $request->internal_act;
+        $data->internal_info = $request->internal_info;
+
 
         $data->save();
 
