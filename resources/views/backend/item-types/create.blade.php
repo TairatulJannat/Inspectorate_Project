@@ -10,6 +10,15 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label for="itemTypeSection" class="form-label">Section</label>
+                        <select id="itemTypeSection" name="itemTypeSection" class="form-control">
+                            @foreach ($sections as $section)
+                            <option value="{{$section->id}}">{{$section->name}}</option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger error-text itemTypeSection_error"></span>
+                    </div>
+                    <div class="mb-3">
                         <label for="itemTypeName" class="form-label">Item Type Name</label>
                         <input type="text" class="form-control" id="itemTypeName" name="name">
                         <span class="text-danger error-text name_error"></span>

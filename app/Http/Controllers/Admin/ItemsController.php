@@ -7,6 +7,7 @@ use App\Models\AdminSection;
 use Illuminate\Http\Request;
 use App\Models\Items;
 use App\Models\Item_type;
+use App\Models\Section;
 use DataTables;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -18,23 +19,30 @@ class ItemsController extends Controller
      */
     public function index()
     {
+        $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
+        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
         try {
             $item_types = Item_type::where('inspectorate_id', $inspectorate_id)->get();
+            $sections = Section::whereIn('id', $section_ids)->get();
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve Item Type.');
         }
 
-        return view('backend.items.index', compact('item_types'));
+        return view('backend.items.index', compact('item_types','sections'));
     }
 
     public function getAllData()
     {
         $admin_id = Auth::user()->id;
+        $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
         $items = Items::select('id', 'name', 'item_type_id', 'attribute')
             ->with('item_type')
+            ->whereIn('section_id', $section_ids)
+            ->where('inspectorate_id', $inspectorate_id )
             ->get();
 
         return DataTables::of($items)
@@ -60,6 +68,7 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'item_type_id' => ['required', 'exists:item_types,id'],
@@ -71,6 +80,7 @@ class ItemsController extends Controller
             $item = new Items();
             $item->name = $request->name;
             $item->item_type_id = $request->item_type_id;
+            $item->section_id = $request->itemSection;
             $item->inspectorate_id = Auth::user()->inspectorate_id;
             $item->attribute = $request->attribute;
 
@@ -136,10 +146,12 @@ class ItemsController extends Controller
      */
     public function update(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'edit_name' => ['required', 'string', 'max:255'],
             'edit_item_type_id' => ['required', 'exists:item_types,id'],
             'edit_attribute' => ['required', 'string', 'max:255'],
+            'editItemSection' => ['required','max:255'],
         ]);
 
         if ($validator->passes()) {
@@ -151,6 +163,7 @@ class ItemsController extends Controller
                 $item->item_type_id = $request->edit_item_type_id;
                 $item->inspectorate_id = $request->edit_item_inspectorate_id;
                 $item->attribute = $request->edit_attribute;
+                $item->section_id = $request->editItemSection;
 
                 if ($item->save()) {
                     return response()->json([

@@ -16,8 +16,14 @@ class RoleController extends Controller
     public function all_role()
     {
         $auth_inspectorate_id =  Auth::user()->inspectorate_id;
-
+       
+        if ($auth_inspectorate_id == 0) {
             $role = role::all();
+        } else {
+            $role = role::where('inspectorate_id', $auth_inspectorate_id)->get();
+
+        }
+
 
         $page_data = [
             'add_menu' => 'yes',
@@ -32,18 +38,16 @@ class RoleController extends Controller
         // $auth_inspectorate_id =  Auth::user()->inspectorate_id;
         $auth_admin_type =  Auth::user()->admin_type;
         // $inspectorateIds = [0,  $auth_inspectorate_id];
-        if($auth_admin_type=='inspe_admin'){
+        if ($auth_admin_type == 'inspe_admin') {
             $route = dynamic_route::where('route_status', 1)->get()->groupBy('model_name');
 
             return view('backend.role.add_role', compact('route'));
-        }elseif (Auth::user()->id==92) {
+        } elseif (Auth::user()->id == 92) {
             $route = dynamic_route::where('route_status', 1)->get()->groupBy('model_name');
             return view('backend.role.add_role', compact('route'));
-        }
-        else {
+        } else {
             $route = dynamic_route::where('route_status', 1)->get()->groupBy('model_name');
             return view('backend.role.add_role', compact('route'));
-
         }
 
 
@@ -54,7 +58,7 @@ class RoleController extends Controller
 
     public function save_role(Request $request)
     {
-
+        $inspectorate_id =  Auth::user()->inspectorate_id;
         $request->validate([
             'route_name' => 'required',
             'name' => ['required', 'unique:roles'],
@@ -62,6 +66,7 @@ class RoleController extends Controller
         $role = new role();
 
         $role->name = $request->name;
+        $role->inspectorate_id = $inspectorate_id;
         $role->slag = Str::slug($request->name, '_');
         $role->save();
 
@@ -88,26 +93,21 @@ class RoleController extends Controller
 
         $role = role::find($id);
 
-        if($auth_admin_type=='inspe_admin'){
+        if ($auth_admin_type == 'inspe_admin') {
 
             $route = dynamic_route::where('route_status', 1)->get()->groupBy('model_name');
             $permission_route = permission_role::where('role_id', $id)->get();
             return view('backend.role.edit_role', compact('role', 'route', 'permission_route'));
-
-        }elseif (Auth::user()->id==92) {
+        } elseif (Auth::user()->id == 92) {
 
             $route = dynamic_route::where('route_status', 1)->get()->groupBy('model_name');
             $permission_route = permission_role::where('role_id', $id)->get();
             return view('backend.role.edit_role', compact('role', 'route', 'permission_route'));
-        }
-        else {
+        } else {
             $route = dynamic_route::where('route_status', 1)->get()->groupBy('model_name');
             $permission_route = permission_role::where('role_id', $id)->get();
-        return view('backend.role.edit_role', compact('role', 'route', 'permission_route'));
-
+            return view('backend.role.edit_role', compact('role', 'route', 'permission_route'));
         }
-
-
     }
 
     public function update_role(Request $request, $id)
