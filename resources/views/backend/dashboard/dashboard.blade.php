@@ -174,8 +174,8 @@
             width: 380,
             type: 'donut',
         },
-        series: [44, 55, 41, 17],
-        labels: ['New Arrival', 'Decision', 'Outgoing', 'Dispatch'],
+        series: [{{$offerNewChart}}, {{$offerOnProcessChart}}, {{$offerCompletedChart}}, {{$offerDispatchChart}}],
+        labels: ['New Arrival', 'On Process', 'Completed', 'Dispatch'],
         responsive: [{
             breakpoint: 480,
             options: {
