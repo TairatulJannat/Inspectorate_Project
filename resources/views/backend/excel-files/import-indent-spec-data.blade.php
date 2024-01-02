@@ -35,6 +35,7 @@
             @csrf
             <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
                 <div class="row">
+                    <input type="hidden" id="indentNo" name="indentNo" value="">
                     <div class="col-md-2 mt-2">
                         <h6>Item Type: </h6>
                     </div>

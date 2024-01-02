@@ -4,6 +4,7 @@
 
     $(document).ready(function() {
         var indentNo = new URLSearchParams(window.location.search).get('indentNo');
+        $('#indentNo').val(indentNo);
 
         var itemsData = {!! $items !!};
         populateItemsDropdown(itemsData);
@@ -450,19 +451,33 @@
                 if (response.isSuccess === false) {
                     toastr.error(response.message);
                 } else if (response.isSuccess === true) {
-                    toastr.success(response.message);
-                    var itemTypeId = response.indentData['item_type_id'];
-                    var itemId = response.indentData['item_id'];
-                    $("#itemTypeId").val(itemTypeId);
-                    $("#itemId").val(itemId);
-                    $("#itemTypeId").trigger("change");
-                    $("#itemId").trigger("change");
+                    if (!response.indentData['item_type_id'] || !response.indentData['item_id']) {
+                        const errorMessage = encodeURIComponent(
+                            "First update this Indent with Item & Item Type.");
+                        const previousUrl = document.referrer.split('?')[0];
+                        window.location.href = previousUrl + '?error=' + errorMessage;
+                    } else {
+                        var itemTypeId = response.indentData['item_type_id'];
+                        var itemId = response.indentData['item_id'];
+                        $("#itemTypeId").val(itemTypeId);
+                        $("#itemId").val(itemId);
+                        $("#itemTypeId").trigger("change");
+                        $("#itemId").trigger("change");
+                        toastr.success(response.message);
+                    }
                 }
             },
             error: function(error) {
                 console.log('Error:', error);
                 toastr.error('An error occurred while processing the request.');
             },
+        });
+
+        $("#import-indent-spec-data-form").submit(function(event) {
+            $("#itemTypeId").prop("disabled", false);
+            $("#itemId").prop("disabled", false);
+
+            return true;
         });
     });
 </script>

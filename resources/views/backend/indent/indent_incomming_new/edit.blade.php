@@ -308,6 +308,13 @@
         $(document).ready(function() {
             $('.select2').select2();
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get('error');
+
+            if (errorMessage) {
+                toastr.error(decodeURIComponent(errorMessage));
+            }
+
             $('#importExcelBtn').on('click', function(event) {
                 event.preventDefault();
 
