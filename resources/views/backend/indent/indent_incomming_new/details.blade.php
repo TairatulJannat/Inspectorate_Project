@@ -131,15 +131,16 @@
 
                             <tr>
                                 <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name ? $details->item_type_name:'No item type is selected' }}</td>
+                                <td>{{ $details->item_type_name ? $details->item_type_name : 'No item type is selected' }}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name ? $details->item_name:'No item is selected' }}</td>
+                                <td>{{ $details->item_name ? $details->item_name : 'No item is selected' }}</td>
                             </tr>
                             <tr>
                                 <th>Attribute</td>
-                                <td>{{ $details->attribute?$details->attribute:'No attribute is selected' }}</td>
+                                <td>{{ $details->attribute ? $details->attribute : 'No attribute is selected' }}</td>
                             </tr>
                             <tr>
 
@@ -149,9 +150,6 @@
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
                                                 <li>{{ $documents_name }} </li>
-
-
-
                                             @endforeach
                                         </ul>
                                     @else
@@ -162,11 +160,13 @@
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  ? $details->fin_year_name : 'No financial year is selected'}}</td>
+                                <td>{{ $details->fin_year_name ? $details->fin_year_name : 'No financial year is selected' }}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature ? $details->nomenclature  : 'No nomenclature is selected'}}</td>
+                                <td>{{ $details->nomenclature ? $details->nomenclature : 'No nomenclature is selected' }}
+                                </td>
                             </tr>
                             {{-- <tr>
                                 <th>Make</td>
@@ -174,27 +174,27 @@
                             </tr> --}}
                             <tr>
                                 <th>Model</td>
-                                <td>{{ $details->model  ?  $details->model  : 'No model is selected'}}</td>
+                                <td>{{ $details->model ? $details->model : 'No model is selected' }}</td>
                             </tr>
                             <tr>
                                 <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin ? $details->country_of_origin  :'No country of origin is selected' }}</td>
+                                <td>{{ $details->country_of_origin ? $details->country_of_origin : 'No country of origin is selected' }}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly ? $details->country_of_assembly  :'No country of assembly is selected'}}</td>
+                                <td>{{ $details->country_of_assembly ? $details->country_of_assembly : 'No country of assembly is selected' }}
+                                </td>
                             </tr>
 
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
-                         @if ($desig_id != 1)
-                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
-                         @endif
+                        @if ($desig_id != 1)
+                            <a class="btn btn-success mt-3 btn-parameter"
+                                href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
 
-
-
-
+                            <a class="btn btn-info mt-3 btn-parameter text-light"
+                                href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                        @endif
 
                     </div>
                 </div>

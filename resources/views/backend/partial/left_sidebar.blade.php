@@ -150,14 +150,17 @@ $currentControllerName = Request::segment(2);
                             <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('offer/view') !== null)
                                     <li><a class="text-light" href="{{ route('admin.offer/view') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
-                                            PSI/QAC</a>
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View PSI</a>
+                                    </li>
+                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View QAC</a>
                                     </li>
                                 @endif
                                 @if (sub_menu_check('offer/create') !== null)
                                     <li><a class="text-light" href="{{ route('admin.offer/create') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
-                                            PSI/QAC</a></li>
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create PSI</a></li>
+                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create QAC</a></li>
                                 @endif
                             </ul>
                         </li>

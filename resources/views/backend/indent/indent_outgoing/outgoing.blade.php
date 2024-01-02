@@ -31,20 +31,24 @@
             color: #ffff
         }
 
-        .dt-buttons{
-            margin-left:8px;
+        .dt-buttons {
+            margin-left: 8px;
         }
-        .badge-secondary{
+
+        .badge-secondary {
             background-color: #31D2F2 !important;
         }
-        .dataTables_wrapper button{
+
+        .dataTables_wrapper button {
             background-color: #31D2F2;
         }
-        .dt-buttons .buttons-html5{
+
+        .dt-buttons .buttons-html5 {
             background-color: #A1B53A !important;
-            border:none;
+            border: none;
         }
-        .btn-danger{
+
+        .btn-danger {
             background-color: #b53f4b !important;
         }
     </style>
@@ -61,14 +65,14 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.indent/view') }}" type="button"
-                                class="btn btn-success btn-sm">New Arrival</a>
+                            <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival ({{ $indentNew }})</a>
                             <a href="{{ route('admin.indent_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process </a>
+                                class="btn btn-secondary btn-sm">On Process ({{ $indentOnProcess }})</a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed</a>
+                                class="btn btn-info text-white btn-sm">Completed ({{ $indentCompleted }})</a>
                             <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch</a>
+                                class="btn btn-danger btn-sm">Dispatch ({{ $indentDispatch }})</a>
 
                         </div>
                         <div>
