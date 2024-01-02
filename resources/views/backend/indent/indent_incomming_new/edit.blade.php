@@ -20,7 +20,6 @@
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
-
                                 </select>
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>

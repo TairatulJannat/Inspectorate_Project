@@ -3,6 +3,8 @@
     var xhr;
 
     $(document).ready(function() {
+        var indentNo = new URLSearchParams(window.location.search).get('indentNo');
+
         var itemsData = {!! $items !!};
         populateItemsDropdown(itemsData);
 
@@ -15,16 +17,16 @@
             performSearch(form);
         });
 
-        $('#itemTypeId').on('change', function() {
-            var itemTypeId = $(this).val();
-            var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
+        // $('#itemTypeId').on('change', function() {
+        //     var itemTypeId = $(this).val();
+        //     var filteredItems = itemsData.filter(item => item.item_type_id == itemTypeId);
 
-            populateItemsDropdown(filteredItems);
-        });
+        //     populateItemsDropdown(filteredItems);
+        // });
 
         function populateItemsDropdown(items) {
             $('#itemId').empty();
-            $('#itemId').append('<option value="" selected disabled>Select an item</option>');
+            $('#itemId').append('<option value="" selected disabled>Item</option>');
 
             $.each(items, function(key, value) {
                 $('#itemId').append('<option value="' + value.id + '">' + value.name + '</option>');
@@ -407,7 +409,6 @@
                 });
             }
 
-
             function saveNewRowToDatabase(groupId, parameterName, parameterValue) {
                 $.ajax({
                     url: '{{ url('admin/assign-parameter-value/store') }}',
@@ -433,5 +434,35 @@
                 });
             }
         }
+
+        if (xhr) {
+            xhr.abort();
+        }
+
+        var xhr = $.ajax({
+            url: "indent/getindentno",
+            method: "GET",
+            data: {
+                indentNo: indentNo
+            },
+            dataType: "JSON",
+            success: function(response) {
+                if (response.isSuccess === false) {
+                    toastr.error(response.message);
+                } else if (response.isSuccess === true) {
+                    toastr.success(response.message);
+                    var itemTypeId = response.indentData['item_type_id'];
+                    var itemId = response.indentData['item_id'];
+                    $("#itemTypeId").val(itemTypeId);
+                    $("#itemId").val(itemId);
+                    $("#itemTypeId").trigger("change");
+                    $("#itemId").trigger("change");
+                }
+            },
+            error: function(error) {
+                console.log('Error:', error);
+                toastr.error('An error occurred while processing the request.');
+            },
+        });
     });
 </script>

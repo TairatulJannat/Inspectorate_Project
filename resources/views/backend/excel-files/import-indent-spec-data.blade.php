@@ -41,8 +41,8 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <select class="form-control select2 item-type-id" id="itemTypeId" name="item-type-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select Item Type</option>
+                                style="width: 100% !important;" disabled>
+                                <option value="" selected disabled>Item Type</option>
                                 @foreach ($itemTypes as $itemType)
                                     <option value="{{ $itemType->id }}">{{ $itemType->name }}</option>
                                 @endforeach
@@ -59,8 +59,8 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <select class="form-control select2 item-id" id="itemId" name="item-id"
-                                style="width: 100% !important;">
-                                <option value="" selected disabled>Select an Item</option>
+                                style="width: 100% !important;" disabled>
+                                <option value="" selected disabled>Item</option>
                                 @foreach ($items as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach

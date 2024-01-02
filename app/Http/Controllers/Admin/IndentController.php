@@ -459,4 +459,24 @@ class IndentController extends Controller
         //     return $pdf->stream('cover_letter.pdf');
         // }
     }
+
+    public function getIndentData(Request $request)
+    {
+        $indentNo = $request->input('indentNo');
+
+        $indentData = Indent::where('indent_number', $indentNo)->first();
+
+        if (!$indentData) {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Indent data not found for the provided indentNo.',
+            ]);
+        }
+
+        return response()->json([
+            'isSuccess' => true,
+            'message' => 'Indent data retrieved successfully.',
+            'indentData' => $indentData,
+        ]);
+    }
 }

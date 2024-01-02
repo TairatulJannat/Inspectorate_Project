@@ -405,7 +405,6 @@
 
                 window.location.href = redirectUrl;
             });
-
         });
     </script>
 @endpush
