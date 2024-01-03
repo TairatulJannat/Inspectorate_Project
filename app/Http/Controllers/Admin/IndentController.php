@@ -17,6 +17,7 @@ use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
 
@@ -439,6 +440,18 @@ class IndentController extends Controller
     public function indentTracking(Request $request)
     {
 
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         // $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -491,9 +504,6 @@ class IndentController extends Controller
                 $value->save();
             }
         }
-
-
-
 
         return response()->json(['success' => 'Done']);
     }

@@ -47,11 +47,7 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        {{-- <div class="col-md-2">
-                            <div class="form-group">
-                                <a href="{{url('admin/import-indent-spec-data-index')}}" class="btn btn-success">Import Excel</a>
-                            </div>
-                        </div> --}}
+                       
                     </div>
                     <div class="row mt-4">
 
