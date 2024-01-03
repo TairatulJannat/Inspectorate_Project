@@ -17,6 +17,7 @@ use App\Models\Inspectorate;
 use App\Models\Indent;
 use App\Models\Supplier;
 use App\Models\Tender;
+use App\Models\Offer;
 use App\Models\SupplierSpecData;
 use App\Models\SupplierOffer;
 use Illuminate\Support\Facades\Auth;
@@ -57,8 +58,11 @@ class ExcelController extends Controller
 
         if ($validator->passes()) {
             $tenderData = Tender::findOrFail($request->input('tender-id'));
-            $itemId = $tenderData->item_id;
-            $itemTypeId = $tenderData->item_type_id;
+            $offerData=Offer::where('tender_reference_no',$tenderData->id)->first();
+            
+            $itemId = $offerData->item_id;
+        
+            $itemTypeId = $offerData->item_type_id;
 
             $item = Items::findOrFail($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';
@@ -74,7 +78,8 @@ class ExcelController extends Controller
                 $indentRefNo = 'Indent Reference Number not found';
             }
 
-            $tenderData = Tender::where('item_id', $itemId)->get();
+            $tenderData = Tender::where('id', $offerData->tender_reference_no)->get();
+           
 
             if ($tenderData->isNotEmpty()) {
                 $tenderRefNo = $tenderData[0]['reference_no'];
