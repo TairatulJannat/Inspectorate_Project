@@ -315,7 +315,7 @@
             <h5>Offer report for last 4 month</h5>
           </div>
           <div class="card-body">
-            <div id="basic-bar-offer"></div>
+            <div id="basic-bar_offer"></div>
           </div>
         </div>
       </div>

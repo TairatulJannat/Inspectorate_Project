@@ -314,7 +314,7 @@
             <h5>Indent report for last 4 month</h5>
           </div>
           <div class="card-body">
-            <div id="basic-bar"></div>
+            <div id="basic-bar-indent"></div>
           </div>
         </div>
       </div>
