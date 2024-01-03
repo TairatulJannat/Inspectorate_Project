@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Exceptions\UnreadableFileException;
-use Maatwebsite\Excel\Exceptions\SheetNotFoundException;
-use App\Imports\IndentSpecImport;
-use App\Imports\SupplierSpecImport;
-use App\Models\Items;
-use App\Models\Item_type;
-use App\Models\ParameterGroup;
-use App\Models\AssignParameterValue;
-use App\Models\Inspectorate;
-use App\Models\Indent;
-use App\Models\Supplier;
-use App\Models\Tender;
-use App\Models\SupplierSpecData;
-use App\Models\SupplierOffer;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Validator;
+use App\Models\Items;
+use App\Models\Offer;
+use App\Models\Indent;
+use App\Models\Tender;
+use App\Models\Supplier;
+use App\Models\Item_type;
+use App\Models\Inspectorate;
+use Illuminate\Http\Request;
+use App\Models\SupplierOffer;
+use App\Models\ParameterGroup;
+use App\Models\SupplierSpecData;
+use App\Imports\IndentSpecImport;
+use Illuminate\Support\Facades\DB;
+use App\Imports\SupplierSpecImport;
+use App\Http\Controllers\Controller;
+use App\Models\AssignParameterValue;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Maatwebsite\Excel\Exceptions\SheetNotFoundException;
+use Maatwebsite\Excel\Exceptions\UnreadableFileException;
 
 class ExcelController extends Controller
 {
@@ -57,8 +58,10 @@ class ExcelController extends Controller
 
         if ($validator->passes()) {
             $tenderData = Tender::findOrFail($request->input('tender-id'));
-            $itemId = $tenderData->item_id;
-            $itemTypeId = $tenderData->item_type_id;
+            $offerData = Offer::where('tender_reference_no', $tenderData->id)->first();
+
+            $itemId = $offerData->item_id;
+            $itemTypeId = $offerData->item_type_id;
 
             $item = Items::findOrFail($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';
@@ -74,7 +77,7 @@ class ExcelController extends Controller
                 $indentRefNo = 'Indent Reference Number not found';
             }
 
-            $tenderData = Tender::where('item_id', $itemId)->get();
+            $tenderData = Tender::where('id', $offerData->tender_reference_no)->get();
 
             if ($tenderData->isNotEmpty()) {
                 $tenderRefNo = $tenderData[0]['reference_no'];

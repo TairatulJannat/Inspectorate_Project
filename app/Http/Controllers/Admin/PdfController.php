@@ -8,6 +8,7 @@ use App\Models\Items;
 use App\Models\Item_type;
 use App\Models\Supplier;
 use App\Models\Tender;
+use App\Models\Offer;
 use App\Models\SupplierSpecData;
 use PDF;
 
@@ -17,11 +18,12 @@ class PdfController extends Controller
     {
         $tenderRefNo = $request->input('tenderRefNo');
         $tenderData = Tender::where('reference_no', $tenderRefNo)->first();
+        $offerData = Offer::where('tender_reference_no', $tenderData->id)->first();
 
-        $item = Items::findOrFail($tenderData->item_id);
+        $item = Items::findOrFail($offerData->item_id);
         $itemName = $item ? $item->name : 'Unknown Item';
 
-        $itemType = Item_Type::findOrFail($tenderData->item_type_id);
+        $itemType = Item_Type::findOrFail($offerData->item_type_id);
         $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
         $supplierIds = SupplierSpecData::where('tender_id', $tenderData->id)
@@ -65,6 +67,4 @@ class PdfController extends Controller
 
         return $pdf->stream('csr-pdf.pdf');
     }
-
-   
 }
