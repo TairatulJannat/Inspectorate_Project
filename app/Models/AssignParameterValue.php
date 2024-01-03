@@ -13,6 +13,8 @@ class AssignParameterValue extends Model
         'parameter_group_id',
         'parameter_name',
         'parameter_value',
+        'created_at',
+        'updated_at',
     ];
 
     public function parameterGroup()

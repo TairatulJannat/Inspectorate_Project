@@ -466,7 +466,7 @@ class IndentController extends Controller
 
         $indentData = Indent::where('indent_number', $indentNo)->first();
 
-        if (!$indentData) {
+        if ($indentData === null) {
             return response()->json([
                 'isSuccess' => false,
                 'message' => 'Indent data not found for the provided indentNo.',
