@@ -210,7 +210,7 @@ class TenderController extends Controller
             ->first();
 
         $details->additional_documents = json_decode($details->additional_documents, true);
-
+        $details->additional_documents =  $details->additional_documents ?  $details->additional_documents : [];
         $additional_documents_names = [];
 
         foreach ($details->additional_documents as $document_id) {
