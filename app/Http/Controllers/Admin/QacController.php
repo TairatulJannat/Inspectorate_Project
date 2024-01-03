@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
@@ -15,70 +16,16 @@ use App\Models\Items;
 use App\Models\ParameterGroup;
 use App\Models\Section;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
 use PDF;
+use Yajra\DataTables\Facades\DataTables;
 
-class IndentController extends Controller
+class QacController extends Controller
 {
-    //
     public function index()
     {
-        $insp_id = Auth::user()->inspectorate_id;
-        $admin_id = Auth::user()->id;
-        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-        $desig_position = Designation::where('id', $designation_id)->first();
 
-        if ($designation_id == 1 || $designation_id == 0) {
-            $indentNew = Indent::where('status', 0)->count();
-            $indentOnProcess = '0';
-            $indentCompleted = '0';
-            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
-                ->where('reciever_desig_id', $designation_id)
-                ->where('track_status', 4)
-                ->where('indents.status', 4)
-                ->whereIn('document_tracks.section_id', $section_ids)
-                ->count();
-        } else {
-
-            $indentNew = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
-                ->where('reciever_desig_id', $designation_id)
-                ->where('track_status', 1)
-                ->where('indents.status', 0)
-                ->whereIn('document_tracks.section_id', $section_ids)
-                ->count();
-
-            $indentOnProcess = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
-                ->where('reciever_desig_id', $designation_id)
-                ->where('track_status', 3)
-                ->where('indents.status', 3)
-                ->whereIn('document_tracks.section_id', $section_ids)
-                ->count();
-
-            $indentCompleted = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
-                ->where('reciever_desig_id', $designation_id)
-                ->where('track_status', 2)
-                ->where('indents.status', 1)
-                ->whereIn('document_tracks.section_id', $section_ids)
-                ->count();
-
-            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
-                ->where('reciever_desig_id', $designation_id)
-                ->where('track_status', 4)
-                ->where('indents.status', 4)
-                ->whereIn('document_tracks.section_id', $section_ids)
-                ->count();
-        }
-
-
-        return view('backend.indent.indent_incomming_new.index', compact('indentNew','indentOnProcess','indentCompleted','indentDispatch'));
+        return view('backend.qac.qac_incomming_new.index');
     }
 
     public function all_data(Request $request)
@@ -126,7 +73,6 @@ class IndentController extends Controller
                     ->whereIn('indents.id', $indentIds)
                     ->where('indents.status', 0)
                     ->get();
-
 
                 $indentId = [];
                 if ($query) {
@@ -227,7 +173,7 @@ class IndentController extends Controller
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         $item = Items::all();
         $fin_years = FinancialYear::all();
-        return view('backend.indent.indent_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.qac.qac_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
     }
 
     public function store(Request $request)
@@ -303,7 +249,7 @@ class IndentController extends Controller
             ->get();
         $item = Items::where('id', $indent->item_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.indent.indent_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.qac.qac_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
     }
 
     public function update(Request $request)
@@ -379,7 +325,6 @@ class IndentController extends Controller
             array_push($additional_documents_names, $additional_names);
         }
 
-
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -413,7 +358,6 @@ class IndentController extends Controller
 
         //End close forward Status...
 
-
         //Start blade notes section....
         $notes = '';
 
@@ -433,7 +377,7 @@ class IndentController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.qac.qac_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
@@ -492,48 +436,11 @@ class IndentController extends Controller
             }
         }
 
-
-
-
         return response()->json(['success' => 'Done']);
     }
     public function item_name($id)
     {
         $items = Items::where('item_type_id', $id)->get();
         return response()->json($items);
-    }
-
-    public function progress()
-    {
-        return view('backend.indent.progress');
-    }
-    public function parameter(Request $request)
-    {
-        $indent = Indent::find($request->indent_id);
-        $item_id = $indent->item_id;
-        $item_type_id = $indent->item_type_id;
-        return view('backend.indent.parameter', compact('item_id', 'item_type_id'));
-    }
-    public function parameterPdf(Request $request)
-    {
-        $indent = Indent::find($request->indent_id);
-        $item_id = $indent->item_id;
-        $item_type_id = $indent->item_type_id;
-
-        $item = Items::find($item_id);
-        $itemName = $item ? $item->name : 'Unknown Item';
-
-        $itemType = Item_Type::find($item_type_id);
-        $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
-        $parameterGroups = ParameterGroup::with('assignParameterValues')
-            ->where('item_id', $item_id)
-            ->get();
-        dd($parameterGroups);
-
-        // if ( $item_id ) {
-        //     $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
-        //     return $pdf->stream('cover_letter.pdf');
-        // }
-
     }
 }

@@ -247,7 +247,7 @@
                 <div class="card-body approved-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$offerForward}} <sub>Offer</sub></h1>
+                        <h1>{{$offerOnProcess}} <sub>Offer</sub></h1>
 
                     </div>
                 </div>
@@ -269,7 +269,7 @@
                 <div class="card-body outgoing-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$offerDownward}} <sub>Offer</sub></h1>
+                        <h1>{{$offerCompleted}} <sub>Offer</sub></h1>
 
                     </div>
                 </div>
@@ -297,7 +297,7 @@
                 </div>
                 <div class="footer dispatch-footer">
                     <div class="code-box-copy">
-                        <a href="">View Details</a>
+                        <a href="{{ route('admin.offer_dispatch/view') }}">View Details</a>
                     </div>
                 </div>
             </div>

@@ -22,8 +22,58 @@ class IndentApprovedController extends Controller
 {
     public function index()
     {
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
 
-        return view('backend.indent.indent_incomming_approved.indent_approved_index');
+        if ($designation_id == 1 || $designation_id == 0) {
+            $indentNew = Indent::where('status', 0)->count();
+            $indentOnProcess = '0';
+            $indentCompleted = '0';
+            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('indents.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $indentNew = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('indents.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $indentOnProcess = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('indents.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $indentCompleted = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('indents.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('indents.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+        return view('backend.indent.indent_incomming_approved.indent_approved_index', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch'));
     }
 
     public function all_data(Request $request)
@@ -96,10 +146,9 @@ class IndentApprovedController extends Controller
 
                     if ($data->status == '3') {
                         return '<button class="btn btn-secondary btn-sm">Approved</button>';
-                    }else{
+                    } else {
                         return '<button class="btn btn-secondary btn-sm">None</button>';
                     }
-
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
@@ -178,7 +227,7 @@ class IndentApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->whereIn('track_status', [1,3])
+            ->whereIn('track_status', [1, 3])
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 5)
