@@ -392,9 +392,7 @@
                             error: function(xhr, status, error) {
 
                                 console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+                                toastr.error(error);
                             }
                         });
 

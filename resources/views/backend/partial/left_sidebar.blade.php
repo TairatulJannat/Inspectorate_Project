@@ -10,6 +10,27 @@ $currentControllerName = Request::segment(2);
     li a {
         color: #e2e2e2;
     }
+
+    #mainnav {
+        height: 100vh;
+        overflow-y: scroll;
+        scrollbar-width: thin;
+        scrollbar-color: #333 #e2e2e2;
+    }
+
+
+    #mainnav::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #mainnav::-webkit-scrollbar-thumb {
+        background-color: #333;
+        border-radius: 4px;
+    }
+
+    #mainnav::-webkit-scrollbar-track {
+        background-color: #e2e2e2;
+    }
 </style>
 <header class="main-nav">
 
@@ -142,25 +163,27 @@ $currentControllerName = Request::segment(2);
                     @endif
 
                     {{-- Dummy PSI/QAC Links --}}
-                    @if (count(menu_check('Offer')) !== 0)
+                    @if (count(menu_check('Qac')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Qac' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>PSI/QAC</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('offer/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Qac/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('qac/view') !== null)
+                                    {{-- <li><a class="text-light" href="{{ route('admin.qac/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View PSI</a>
-                                    </li>
-                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                                    </li> --}}
+                                    <li><a class="text-light" href="{{ route('admin.qac/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View QAC</a>
                                     </li>
                                 @endif
                                 @if (sub_menu_check('offer/create') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create PSI</a></li>
-                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create QAC</a></li>
+                                    {{-- <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create PSI</a>
+                                    </li> --}}
+                                    <li><a class="text-light" href="{{ route('admin.qac/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create QAC</a>
+                                    </li>
                                 @endif
                             </ul>
                         </li>
@@ -378,69 +401,7 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
-                    {{-- <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
-                                data-feather="list"></i><span>Tender</span></a>
-                        <ul class="nav-submenu menu-content">
-                            <li><a href="" class="{{ Request::is('*/*/all_role') ? 'active' : '' }}">Option</a>
-                            </li>
-                            <li><a href="" class="{{ Request::is('*/*/add_role') ? 'active' : '' }}">Option</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
-                                data-feather="list"></i><span>Specification</span></a>
-                        <ul class="nav-submenu menu-content">
-                            <li><a href="" class="">Option</a>
-                            </li>
-                            <li><a href="" class="">Option</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
-                                data-feather="list"></i><span>Contact</span></a>
-                        <ul class="nav-submenu menu-content">
-                            <li><a href="" class="">Option</a>
-                            </li>
-                            <li><a href="" class="">Option</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
-                                data-feather="list"></i><span>I-Note</span></a>
-                        <ul class="nav-submenu menu-content">
-                            <li><a href="" class="">Option</a>
-                            </li>
-                            <li><a href="" class="">Option</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a class="nav-link menu-title " href="javascript:void(0)"><i
-                                data-feather="list"></i><span>Settings</span></a>
-                        <ul class="nav-submenu menu-content">
 
-                            <li><a href=""
-                                class=""> <span>Document Type</span></a>
-                            </li>
-                            <li><a href=""
-                                class=""> <span>Department Management</span></a>
-                            </li>
-                            <li><a href=""
-                                class=""> <span>Section Management</span></a>
-                            </li>
-                            <li><a href=""
-                                class=""> <span>Army Division</span></a>
-                            </li>
-                            <li><a href=""
-                                class=""> <span>Army Battalion</span></a>
-                            </li>
-                            <li><a href=""
-                                class=""> <span>Army Unit</span></a>
-                            </li>
-                            <li><a href=""
-                                class=""> <span>Additional Documents</span></a>
-                            </li>
-                        </ul>
-                    </li> --}}
                     @if (count(menu_check('Route')) !== 0 || count(menu_check('Role')) !== 0 || count(menu_check('User')) !== 0)
                         <li class="sidebar-main-title">
                             <div>

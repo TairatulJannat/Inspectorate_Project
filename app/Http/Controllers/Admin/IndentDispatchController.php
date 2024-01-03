@@ -203,12 +203,15 @@ class IndentDispatchController extends Controller
             ->first();
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
+        if ($details->additional_documents) {
+            foreach ($details->additional_documents as $document_id) {
+                $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-        foreach ($details->additional_documents as $document_id) {
-            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-            array_push($additional_documents_names, $additional_names);
+                array_push($additional_documents_names, $additional_names);
+            }
         }
+
+
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
