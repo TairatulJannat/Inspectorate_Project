@@ -48,7 +48,8 @@
         padding: 0px;
         margin: 0px;
     }
-    .signature p{
+
+    .signature p {
         padding: 0px;
         margin: 0px;
     }
@@ -74,7 +75,7 @@
             <h4 style="padding:0px; margin-top:5px">{{ $cover_letter->subject }}</h4>
         </div>
         <div style="padding:0px; margin:0px">
-            <p style="padding:0px; margin:0px">Fefs:</p>
+            <p style="padding:0px; margin:0px">Refs:</p>
             <div class='refs_body_1'>{!! $cover_letter->body_1 !!}</div>
             <div>
                 {!! $cover_letter->body_2 !!}

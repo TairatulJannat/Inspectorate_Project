@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('assign_parameter_values', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('parameter_name');
-            $table->longText('parameter_value');
+            $table->string('parameter_name')->nullable();
+            $table->longText('parameter_value')->nullable();
             $table->unsignedBigInteger('parameter_group_id');
 
             // $table->foreign('parameter_group_id')

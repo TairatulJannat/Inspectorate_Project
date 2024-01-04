@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('contracted_value', 10, 2);
             $table->text('delivery_schedule');
             $table->string('currency_unit');
+            $table->integer('status');
             $table->timestamps();
         });
     }
