@@ -7,12 +7,26 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Inspectorate Automation System </title>
     <style>
-
-
+        *{
+        box-sizing: border-box;
+        }
         body {
-            background-color: #e8eceb;
+            /* background-color: #e8eceb; */
+            padding: 0;
+            margin: 0;
+            background-image: url('{{ asset('assets/backend/images/backgroundimage.jpeg') }}');
+            background-size: cover;
             font-family: "Arial", sans-serif;
             height: 100vh;
+        }
+
+        .background {
+            background-color: #1b6dbf95;
+            height: 100vh;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            padding: 100px;
         }
 
 
@@ -21,6 +35,7 @@
             padding: 0 !important;
             margin-right: auto;
             margin-left: auto;
+
 
             @media screen and (min-width: 992px) and (max-width: 1439px) {
                 max-width: 1279px !important;
@@ -183,149 +198,152 @@
 </head>
 
 <body>
-    <div class="container">
-        <p class="container-title">Welcome to Inspectorate Automation System</p>
+    <div class="background">
+        <div class="container">
+            <p class="container-title">Welcome to Inspectorate Automation System</p>
 
-        <div class="gradient-cards">
-            <div class="card">
-                <div class="container-card bg-green-box">
-                    <svg width="80" height="80" viewBox="0 0 120 120" fill="none">
-                        <rect x="1" y="1" width="118" height="118" rx="24"
-                            fill="url(#paint0_linear_1366_4547)" fill-opacity="0.2" stroke="#ffff" stroke-width="2">
-                        </rect>
+            <div class="gradient-cards">
+                <div class="card">
+                    <div class="container-card bg-green-box">
+                        <svg width="80" height="80" viewBox="0 0 120 120" fill="none">
+                            <rect x="1" y="1" width="118" height="118" rx="24"
+                                fill="url(#paint0_linear_1366_4547)" fill-opacity="0.2" stroke="#ffff" stroke-width="2">
+                            </rect>
 
-                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
-                            font-size="24" fill="#ffff">IE&amp;I</text>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
+                                font-size="24" fill="#ffff">IE&amp;I</text>
 
-                        <defs>
-                            <linearGradient id="paint0_linear_1366_4547" x1="0.0063367" y1="0.168432" x2="120.853"
-                                y2="119.009" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#2FCB89" stop-opacity="0.7"></stop>
-                                <stop offset="0.489583" stop-color="#2FCB89" stop-opacity="0"></stop>
-                                <stop offset="1" stop-color="#2FCB89" stop-opacity="0.7"></stop>
-                            </linearGradient>
-                            <radialGradient id="paint1_radial_1366_4547" cx="0" cy="0" r="1"
-                                gradientUnits="userSpaceOnUse"
-                                gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
-                                <stop stop-color="#54E8A9"></stop>
-                                <stop offset="1" stop-color="#1A3E31" stop-opacity="0.2"></stop>
-                            </radialGradient>
-                        </defs>
-                    </svg>
+                            <defs>
+                                <linearGradient id="paint0_linear_1366_4547" x1="0.0063367" y1="0.168432"
+                                    x2="120.853" y2="119.009" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#2FCB89" stop-opacity="0.7"></stop>
+                                    <stop offset="0.489583" stop-color="#2FCB89" stop-opacity="0"></stop>
+                                    <stop offset="1" stop-color="#2FCB89" stop-opacity="0.7"></stop>
+                                </linearGradient>
+                                <radialGradient id="paint1_radial_1366_4547" cx="0" cy="0" r="1"
+                                    gradientUnits="userSpaceOnUse"
+                                    gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
+                                    <stop stop-color="#54E8A9"></stop>
+                                    <stop offset="1" stop-color="#1A3E31" stop-opacity="0.2"></stop>
+                                </radialGradient>
+                            </defs>
+                        </svg>
 
-                    <p class="card-title">Inspectorate of Electronics & <br> Instruments </p>
-                    <div class="login_btn">
-                        <button class="custom-button btn_1"
-                            onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
+                        <p class="card-title">Inspectorate of Electronics & <br> Instruments </p>
+                        <div class="login_btn">
+                            <button class="custom-button btn_1"
+                                onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
+
+                        </div>
+
 
                     </div>
 
-
                 </div>
 
-            </div>
+                <div class="card">
+                    <div class="container-card bg-white-box">
+                        <svg width="80" height="80" viewBox="0 0 120 120" fill="none">
+                            <rect x="1" y="1" width="118" height="118" rx="24"
+                                fill="url(#paint0_linear_1366_4565)" fill-opacity="0.2" stroke="#ffff" stroke-width="2">
+                            </rect>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
+                                font-size="24" fill="#ffff">IGS&amp;C</text>
 
-            <div class="card">
-                <div class="container-card bg-white-box">
-                    <svg width="80" height="80" viewBox="0 0 120 120" fill="none">
-                        <rect x="1" y="1" width="118" height="118" rx="24"
-                            fill="url(#paint0_linear_1366_4565)" fill-opacity="0.2" stroke="#ffff" stroke-width="2">
-                        </rect>
-                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
-                            font-size="24" fill="#ffff">IGS&amp;C</text>
+                            <defs>
+                                <linearGradient id="paint0_linear_1366_4565" x1="0" y1="0"
+                                    x2="120" y2="120" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="white" stop-opacity="0.7"></stop>
+                                    <stop offset="0.505208" stop-color="white" stop-opacity="0"></stop>
+                                    <stop offset="1" stop-color="white" stop-opacity="0.7"></stop>
+                                </linearGradient>
+                                <radialGradient id="paint1_radial_1366_4565" cx="0" cy="0" r="1"
+                                    gradientUnits="userSpaceOnUse"
+                                    gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
+                                    <stop stop-color="white"></stop>
+                                    <stop offset="1" stop-color="#363437" stop-opacity="0.2"></stop>
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                        <p class="card-title">Inspectorate of General Stores & <br> Clothing</p>
+                        <div class="login_btn">
+                            <button class="custom-button btn_2"
+                                onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
+                        </div>
 
-                        <defs>
-                            <linearGradient id="paint0_linear_1366_4565" x1="0" y1="0" x2="120"
-                                y2="120" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="white" stop-opacity="0.7"></stop>
-                                <stop offset="0.505208" stop-color="white" stop-opacity="0"></stop>
-                                <stop offset="1" stop-color="white" stop-opacity="0.7"></stop>
-                            </linearGradient>
-                            <radialGradient id="paint1_radial_1366_4565" cx="0" cy="0" r="1"
-                                gradientUnits="userSpaceOnUse"
-                                gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
-                                <stop stop-color="white"></stop>
-                                <stop offset="1" stop-color="#363437" stop-opacity="0.2"></stop>
-                            </radialGradient>
-                        </defs>
-                    </svg>
-                    <p class="card-title">Inspectorate of General Stores & <br> Clothing</p>
-                    <div class="login_btn">
-                        <button class="custom-button btn_2"
-                            onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
                     </div>
-
                 </div>
-            </div>
 
-            <div class="card">
-                <div class="container-card bg-yellow-box">
-                    <svg width="80" height="80" viewBox="0 0 120 120" fill="none">
-                        <rect x="1" y="1" width="118" height="118" rx="24"
-                            fill="url(#paint0_linear_1366_4557)" fill-opacity="0.2" stroke="#ffff" stroke-width="2">
-                        </rect>
-                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
-                            font-size="24" fill="#ffff">IV&amp;EE</text>
-                        <defs>
-                            <linearGradient id="paint0_linear_1366_4557" x1="-0.0208152" y1="-0.102528"
-                                x2="119.899" y2="119.817" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#FFE34B" stop-opacity="0.7"></stop>
-                                <stop offset="0.510417" stop-color="#FFE34B" stop-opacity="0"></stop>
-                                <stop offset="1" stop-color="#FFE34B" stop-opacity="0.7"></stop>
-                            </linearGradient>
-                            <radialGradient id="paint1_radial_1366_4557" cx="0" cy="0" r="1"
-                                gradientUnits="userSpaceOnUse"
-                                gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
-                                <stop stop-color="#FFEE24"></stop>
-                                <stop offset="1" stop-color="#302A1A" stop-opacity="0.2"></stop>
-                            </radialGradient>
-                        </defs>
-                    </svg>
-                    <p class="card-title">Inspectorate of Vehicle & <br> Engineering Equipment </p>
-                    <div class="login_btn">
-                        <button class="custom-button btn_3"
-                            onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
+                <div class="card">
+                    <div class="container-card bg-yellow-box">
+                        <svg width="80" height="80" viewBox="0 0 120 120" fill="none">
+                            <rect x="1" y="1" width="118" height="118" rx="24"
+                                fill="url(#paint0_linear_1366_4557)" fill-opacity="0.2" stroke="#ffff"
+                                stroke-width="2">
+                            </rect>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
+                                font-size="24" fill="#ffff">IV&amp;EE</text>
+                            <defs>
+                                <linearGradient id="paint0_linear_1366_4557" x1="-0.0208152" y1="-0.102528"
+                                    x2="119.899" y2="119.817" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#FFE34B" stop-opacity="0.7"></stop>
+                                    <stop offset="0.510417" stop-color="#FFE34B" stop-opacity="0"></stop>
+                                    <stop offset="1" stop-color="#FFE34B" stop-opacity="0.7"></stop>
+                                </linearGradient>
+                                <radialGradient id="paint1_radial_1366_4557" cx="0" cy="0" r="1"
+                                    gradientUnits="userSpaceOnUse"
+                                    gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
+                                    <stop stop-color="#FFEE24"></stop>
+                                    <stop offset="1" stop-color="#302A1A" stop-opacity="0.2"></stop>
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                        <p class="card-title">Inspectorate of Vehicle & <br> Engineering Equipment </p>
+                        <div class="login_btn">
+                            <button class="custom-button btn_3"
+                                onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
+                        </div>
+
+
                     </div>
-
-
                 </div>
-            </div>
 
-            <div class="card">
-                <div class="container-card bg-blue-box">
-                    <svg width="80" height="80" viewBox="0 0 120 120" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1" y="1" width="118" height="118" rx="24"
-                            fill="url(#paint0_linear_1366_4582)" fill-opacity="0.2" stroke="#ffff" stroke-width="2">
-                        </rect>
-                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
-                            font-size="24" fill="#ffff">IA&amp;E</text>
+                <div class="card">
+                    <div class="container-card bg-blue-box">
+                        <svg width="80" height="80" viewBox="0 0 120 120" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="1" y="1" width="118" height="118" rx="24"
+                                fill="url(#paint0_linear_1366_4582)" fill-opacity="0.2" stroke="#ffff"
+                                stroke-width="2">
+                            </rect>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial"
+                                font-size="24" fill="#ffff">IA&amp;E</text>
 
-                        <defs>
-                            <linearGradient id="paint0_linear_1366_4582" x1="120.194" y1="119.827"
-                                x2="-13.1225" y2="17.1841" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#61A0FF" stop-opacity="0.7"></stop>
-                                <stop offset="0.489583" stop-color="#61A0FF" stop-opacity="0"></stop>
-                                <stop offset="1" stop-color="#61A0FF" stop-opacity="0.7"></stop>
-                            </linearGradient>
-                            <radialGradient id="paint1_radial_1366_4582" cx="0" cy="0" r="1"
-                                gradientUnits="userSpaceOnUse"
-                                gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
-                                <stop stop-color="#87A1FF"></stop>
-                                <stop offset="1" stop-color="#16161D" stop-opacity="0.2"></stop>
-                            </radialGradient>
-                        </defs>
-                    </svg>
-                    <p class="card-title">Inspectorate of Armaments & <br> Explosives</p>
-                    <div class="login_btn">
-                        <button class="custom-button btn_4"
-                            onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
+                            <defs>
+                                <linearGradient id="paint0_linear_1366_4582" x1="120.194" y1="119.827"
+                                    x2="-13.1225" y2="17.1841" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#61A0FF" stop-opacity="0.7"></stop>
+                                    <stop offset="0.489583" stop-color="#61A0FF" stop-opacity="0"></stop>
+                                    <stop offset="1" stop-color="#61A0FF" stop-opacity="0.7"></stop>
+                                </linearGradient>
+                                <radialGradient id="paint1_radial_1366_4582" cx="0" cy="0" r="1"
+                                    gradientUnits="userSpaceOnUse"
+                                    gradientTransform="translate(60 60) rotate(96.8574) scale(122.674 149.921)">
+                                    <stop stop-color="#87A1FF"></stop>
+                                    <stop offset="1" stop-color="#16161D" stop-opacity="0.2"></stop>
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                        <p class="card-title">Inspectorate of Armaments & <br> Explosives</p>
+                        <div class="login_btn">
+                            <button class="custom-button btn_4"
+                                onclick="window.location.href = '{{ url('/admin/login') }}'">Login</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
