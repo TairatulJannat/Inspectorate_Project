@@ -354,7 +354,7 @@
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">
                         ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
