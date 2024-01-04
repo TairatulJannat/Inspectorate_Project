@@ -131,16 +131,16 @@
 
                             <tr>
                                 <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name ? $details->item_type_name : 'No item type is selected' }}
+                                <td>{{ $details->item_type_name }}
                                 </td>
                             </tr>
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name ? $details->item_name : 'No item is selected' }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
                             <tr>
                                 <th>Attribute</td>
-                                <td>{{ $details->attribute ? $details->attribute : 'No attribute is selected' }}</td>
+                                <td>{{ $details->attribute}}</td>
                             </tr>
                             <tr>
 
@@ -160,12 +160,12 @@
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name ? $details->fin_year_name : 'No financial year is selected' }}
+                                <td>{{ $details->fin_year_name }}
                                 </td>
                             </tr>
                             <tr>
                                 <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature ? $details->nomenclature : 'No nomenclature is selected' }}
+                                <td>{{ $details->nomenclature }}
                                 </td>
                             </tr>
                             {{-- <tr>
@@ -174,16 +174,16 @@
                             </tr> --}}
                             <tr>
                                 <th>Model</td>
-                                <td>{{ $details->model ? $details->model : 'No model is selected' }}</td>
+                                <td>{{ $details->model }}</td>
                             </tr>
                             <tr>
                                 <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin ? $details->country_of_origin : 'No country of origin is selected' }}
+                                <td>{{ $details->country_of_origin}}
                                 </td>
                             </tr>
                             <tr>
                                 <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly ? $details->country_of_assembly : 'No country of assembly is selected' }}
+                                <td>{{ $details->country_of_assembly  }}
                                 </td>
                             </tr>
 
