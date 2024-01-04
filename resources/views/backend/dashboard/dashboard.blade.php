@@ -54,9 +54,9 @@
 
 
 
-    var offeroptions2 = {
+    var options2 = {
         chart: {
-            height: 230,
+            height: 210,
             width: 450,
             type: 'bar',
             toolbar: {
@@ -72,20 +72,30 @@
             enabled: false
         },
         series: [{
-            data: [100, 200, 300, 400]
+            data: [
+                {{ $indentcurrentMonthData }},
+                {{ $indentoneMonthAgoData }},
+                {{ $indenttwoMonthAgoData }},
+                {{ $indentthreeMonthAgoData }}
+            ]
         }],
         xaxis: {
-            categories: ['Sep', 'Oct', 'Nov', 'Dec'],
+            categories: [
+                '{{ $currentMonthStart->format("M") }}',
+                '{{ $oneMonthAgoStart->format("M") }}',
+                '{{ $twoMonthAgoStart->format("M") }}',
+                '{{ $threeMonthAgoStart->format("M") }}'
+            ],
         },
         colors: ['#B263C5']
     }
 
-    var offer2 = new ApexCharts(
-        document.querySelector("#basic-bar-offer"),
-        offeroptions2
+    var chart2 = new ApexCharts(
+        document.querySelector("#basic-bar-indent"),
+        options2
     );
 
-    offer2.render();
+    chart2.render();
 
     var options2 = {
         chart: {
@@ -105,16 +115,26 @@
             enabled: false
         },
         series: [{
-            data: [100, 200, 300, 400]
+            data: [
+                {{ $currentMonthData }},
+                {{ $oneMonthAgoData }},
+                {{ $twoMonthAgoData }},
+                {{ $threeMonthAgoData }}
+            ]
         }],
         xaxis: {
-            categories: ['Sep', 'Oct', 'Nov', 'Dec'],
+            categories: [
+                '{{ $currentMonthStart->format("M") }}',
+                '{{ $oneMonthAgoStart->format("M") }}',
+                '{{ $twoMonthAgoStart->format("M") }}',
+                '{{ $threeMonthAgoStart->format("M") }}'
+            ],
         },
         colors: ['#B263C5']
     }
 
     var chart2 = new ApexCharts(
-        document.querySelector("#basic-bar"),
+        document.querySelector("#basic-bar_offer"),
         options2
     );
 
@@ -174,8 +194,8 @@
             width: 380,
             type: 'donut',
         },
-        series: [44, 55, 41, 17],
-        labels: ['New Arrival', 'Decision', 'Outgoing', 'Dispatch'],
+        series: [{{$offerNewChart}}, {{$offerOnProcessChart}}, {{$offerCompletedChart}}, {{$offerDispatchChart}}],
+        labels: ['New Arrival', 'On Process', 'Completed', 'Dispatch'],
         responsive: [{
             breakpoint: 480,
             options: {

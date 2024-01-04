@@ -23,8 +23,58 @@ class IndentDispatchController extends Controller
     //
     public function index()
     {
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
 
-        return view('backend.indent.indent_dispatch.indent_dispatch_index');
+        if ($designation_id == 1 || $designation_id == 0) {
+            $indentNew = Indent::where('status', 0)->count();
+            $indentOnProcess = '0';
+            $indentCompleted = '0';
+            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('indents.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $indentNew = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('indents.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $indentOnProcess = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('indents.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $indentCompleted = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('indents.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('indents.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+        return view('backend.indent.indent_dispatch.indent_dispatch_index', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch'));
     }
 
     public function all_data(Request $request)
@@ -89,7 +139,7 @@ class IndentDispatchController extends Controller
 
                     if ($data->status == '4') {
                         return '<button class="btn btn-danger btn-sm">Dispatched</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-danger btn-sm">None</button>';
                     }
                 })
@@ -153,12 +203,15 @@ class IndentDispatchController extends Controller
             ->first();
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
+        if ($details->additional_documents) {
+            foreach ($details->additional_documents as $document_id) {
+                $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-        foreach ($details->additional_documents as $document_id) {
-            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-            array_push($additional_documents_names, $additional_names);
+                array_push($additional_documents_names, $additional_names);
+            }
         }
+
+
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -171,7 +224,7 @@ class IndentDispatchController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->whereIn('track_status',[2,4])
+            ->whereIn('track_status', [2, 4])
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 3)
@@ -216,7 +269,7 @@ class IndentDispatchController extends Controller
         $notes = '';
 
         $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->whereIn('track_status',[2,4])
+            ->whereIn('track_status', [2, 4])
             ->where('reciever_desig_id', $desig_id)->get();
 
         if ($document_tracks_notes->isNotEmpty()) {

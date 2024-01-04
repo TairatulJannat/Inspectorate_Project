@@ -18,9 +18,11 @@ class PdfController extends Controller
     {
         $tenderRefNo = $request->input('tenderRefNo');
         $tenderData = Tender::where('reference_no', $tenderRefNo)->first();
+
         $offerData = Offer::where('tender_reference_no', $tenderData->id)->first();
 
         $item = Items::findOrFail($offerData->item_id);
+
         $itemName = $item ? $item->name : 'Unknown Item';
 
         $itemType = Item_Type::findOrFail($offerData->item_type_id);

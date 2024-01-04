@@ -7,10 +7,15 @@ use App\Models\Items;
 use App\Models\Offer;
 use App\Models\Indent;
 use App\Models\Tender;
+
+use App\Models\Offer;
+use App\Models\SupplierSpecData;
+
 use App\Models\Supplier;
 use App\Models\Item_type;
 use App\Models\Inspectorate;
 use Illuminate\Http\Request;
+
 use App\Models\SupplierOffer;
 use App\Models\ParameterGroup;
 use App\Models\SupplierSpecData;
@@ -46,7 +51,8 @@ class ExcelController extends Controller
         return view('backend.csr.csr-index', compact('items', 'itemTypes', 'tenders'));
     }
 
-    public function getCSRData(Request $request)
+    public function getCSRData(
+      $request)
     {
         $customMessages = [
             'tender-id.required' => 'Please select an Tender.',
@@ -58,9 +64,11 @@ class ExcelController extends Controller
 
         if ($validator->passes()) {
             $tenderData = Tender::findOrFail($request->input('tender-id'));
+
             $offerData = Offer::where('tender_reference_no', $tenderData->id)->first();
 
             $itemId = $offerData->item_id;
+
             $itemTypeId = $offerData->item_type_id;
 
             $item = Items::findOrFail($itemId);
@@ -78,6 +86,7 @@ class ExcelController extends Controller
             }
 
             $tenderData = Tender::where('id', $offerData->tender_reference_no)->get();
+
 
             if ($tenderData->isNotEmpty()) {
                 $tenderRefNo = $tenderData[0]['reference_no'];

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 
 class AdminDashboarController extends Controller
 {
@@ -71,6 +72,52 @@ class AdminDashboarController extends Controller
             ->count();
 
         }
+        if ($designation_id==1 || $designation_id==0) {
+            $offerNew = Offer::where('status' ,0)->count();
+            $offerOnProcess = '0';
+            $offerCompleted = '0';
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
+            ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 4)
+            ->where('offers.status', 4)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+        }else {
+
+            $offerNew = DocumentTrack::where('doc_type_id', 5)
+            ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 1)
+            ->where('offers.status', 0)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+
+            $offerOnProcess = DocumentTrack::where('doc_type_id', 5)
+            ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 3)
+            ->where('offers.status', 3)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+
+            $offerCompleted = DocumentTrack::where('doc_type_id', 5)
+            ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 2)
+            ->where('offers.status', 1)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
+            ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 4)
+            ->where('offers.status', 4)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+
+        }
 
 
 
@@ -83,11 +130,51 @@ class AdminDashboarController extends Controller
         $indentCompletedChart = Indent::where('status', 1)->count();
         $indentDispatchChart = Indent::where('status', 4)->count();
 
-        $offerNew = Offer::where('status', 0)->count();
-        $offerForward = Offer::where('status', 3)->count();
-        $offerDownward = Offer::where('status', 1)->count();
-        $offerDispatch = Offer::where('status', 4)->count();
-        return view('backend.dashboard.dashboard', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch', 'offerNew', 'offerForward', 'offerDownward', 'offerDispatch',  'indentNewChart','indentOnProcessChart','indentCompletedChart','indentDispatchChart'));
+        $offerNewChart = Offer::where('status', 0)->count();
+        $offerOnProcessChart = Offer::where('status', 3)->count();
+        $offerCompletedChart = Offer::where('status', 1)->count();
+        $offerDispatchChart = Offer::where('status', 4)->count();
+        
+  
+
+
+        $currentDate = Carbon::now();
+
+        // Calculate the first day and last day of the current month
+        $currentMonthStart = $currentDate->copy()->startOfMonth();
+        $currentMonthEnd = $currentDate->copy()->endOfMonth();
+
+        // Calculate the first day and last day of the month one month ago
+        $oneMonthAgoStart = $currentDate->copy()->subMonth()->startOfMonth();
+        $oneMonthAgoEnd = $currentDate->copy()->subMonth()->endOfMonth();
+
+        // Calculate the first day and last day of the month two months ago
+        $twoMonthAgoStart = $currentDate->copy()->subMonth(2)->startOfMonth();
+        $twoMonthAgoEnd = $currentDate->copy()->subMonth(2)->endOfMonth();
+
+        // Calculate the first day and last day of the month three months ago
+        $threeMonthAgoStart = $currentDate->copy()->subMonth(3)->startOfMonth();
+        $threeMonthAgoEnd = $currentDate->copy()->subMonth(3)->endOfMonth();
+//start offer bar chart
+        // Retrieve data for each month
+        $currentMonthData = Offer::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->where('status', 2)->count();
+        $oneMonthAgoData = Offer::whereBetween('created_at', [$oneMonthAgoStart, $oneMonthAgoEnd])->where('status', 2)->count();
+        $twoMonthAgoData = Offer::whereBetween('created_at', [$twoMonthAgoStart, $twoMonthAgoEnd])->where('status', 2)->count();
+        $threeMonthAgoData = Offer::whereBetween('created_at', [$threeMonthAgoStart, $threeMonthAgoEnd])->where('status', 2)->count();
+//end offer bar chart
+
+//start indent bar chart
+        // Retrieve data for each month
+        $indentcurrentMonthData = Indent::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->where('status', 2)->count();
+        $indentoneMonthAgoData = Indent::whereBetween('created_at', [$oneMonthAgoStart, $oneMonthAgoEnd])->where('status', 2)->count();
+        $indenttwoMonthAgoData = Indent::whereBetween('created_at', [$twoMonthAgoStart, $twoMonthAgoEnd])->where('status', 2)->count();
+        $indentthreeMonthAgoData = Indent::whereBetween('created_at', [$threeMonthAgoStart, $threeMonthAgoEnd])->where('status', 2)->count();
+ //end indent bar chart       
+       
+        
+
+
+        return view('backend.dashboard.dashboard', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch', 'indentNewChart','indentOnProcessChart','indentCompletedChart','indentDispatchChart', 'offerNewChart','offerOnProcessChart','offerCompletedChart','offerDispatchChart','offerNew','offerOnProcess','offerCompleted','offerDispatch','currentMonthData','oneMonthAgoData','twoMonthAgoData','threeMonthAgoData','currentMonthStart','oneMonthAgoStart','twoMonthAgoStart','threeMonthAgoStart', 'indentcurrentMonthData','indentoneMonthAgoData','indenttwoMonthAgoData','indentthreeMonthAgoData'));
     }
 
 

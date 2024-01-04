@@ -183,7 +183,7 @@
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                                 class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                                 Letter</a>
-                            <button class="btn btn-warning text-light ml-2 mt-2" type="button" data-bs-toggle="modal"
+                            <button class="btn btn-warning text-light ml-2 mt-3" type="button" data-bs-toggle="modal"
                                 data-bs-target=".edit-modal-lg">Edit Cover
                                 Letter</button>
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover

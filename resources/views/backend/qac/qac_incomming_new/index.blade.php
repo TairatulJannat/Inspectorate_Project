@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Qac')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -43,7 +43,7 @@
 
     </style>
 @endpush
-@section('main_menu', 'Indent (New Arrival)')
+@section('main_menu', 'Qac (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -113,5 +113,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.indent.indent_incomming_new.index_js')
+    @include('backend.qac.qac_incomming_new.index_js')
 @endpush
