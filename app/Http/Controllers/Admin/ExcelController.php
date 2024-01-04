@@ -7,15 +7,10 @@ use App\Models\Items;
 use App\Models\Offer;
 use App\Models\Indent;
 use App\Models\Tender;
-
-use App\Models\Offer;
-use App\Models\SupplierSpecData;
-
 use App\Models\Supplier;
 use App\Models\Item_type;
 use App\Models\Inspectorate;
 use Illuminate\Http\Request;
-
 use App\Models\SupplierOffer;
 use App\Models\ParameterGroup;
 use App\Models\SupplierSpecData;
