@@ -135,7 +135,7 @@ class OutgoingIndentController extends Controller
                 ->addColumn('status', function ($data) {
 
                     if ($data->status == '1') {
-                        return '<button class="btn  btn-info text-white btn-sm">Vetted</button>';
+                        return '<button class="btn  btn-info text-white btn-sm">Completed</button>';
                     } else {
                         return '<button class="btn btn-info text-white  btn-sm">None</button>';
                     }
@@ -150,25 +150,25 @@ class OutgoingIndentController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                     <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
-                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit">Vetted</a>
+                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit">Forward</a>
                     </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
                             <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="update">Vetted</a>
+                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                             <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="update">Vetted</a>
+                            <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
                     <a href="' . url('admin/outgoing_indent/progress/' . $data->id) . '" class="doc">Doc Status</a>
-                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit">Vetted</a>
+                    <a href="' . url('admin/outgoing_indent/details/' . $data->id) . '" class="edit">forward</a>
                     </div>';
                     }
 
