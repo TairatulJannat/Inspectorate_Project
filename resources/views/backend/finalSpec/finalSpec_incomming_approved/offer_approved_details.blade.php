@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer')
+@section('title', 'Offer (Approved)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -38,6 +38,7 @@
         .col-5 {
             padding: 10px 15px !important;
         }
+
 
         .forward_status,
         .forward {
@@ -79,6 +80,10 @@
             min-height: 250px
         }
 
+        .remarks_status {
+            min-height: 250px
+        }
+
         .documents {
             display: flex;
             justify-content: center;
@@ -87,9 +92,10 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer')
+@section('main_menu', 'Offer (Approved) ')
 @section('active_menu', 'Details')
 @section('content')
+
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
@@ -108,30 +114,24 @@
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
-                                <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
+                                <td>{{ $details->tender_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
-                                <th>Offer Receive Letter Date</td>
-
+                                <th>Receive Date</td>
                                 <td>{{ $details->offer_rcv_ltr_dt }}</td>
-
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
-
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
                             <tr>
                                 <th>Attribute</td>
-                                
                                 <td>{{ $details->attribute }}</td>
-                            </tr>
-
                             </tr>
                             <tr>
 
@@ -141,6 +141,7 @@
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
                                                 <li>{{ $documents_name }} </li>
+                                                <!-- Adjust the key according to your array structure -->
                                             @endforeach
                                         </ul>
                                     @else
@@ -151,9 +152,7 @@
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
-
-                                <td>{{$details->fin_year_name }}</td>
-
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -175,22 +174,17 @@
                             </tr>
                             <tr>
                                 <th>Quantity</td>
-                                <td>{{  $details->qty}}</td>
+                                <td>{{ $details->qty }}</td>
                             </tr>
 
 
                         </table>
-                        @if ($desig_id !=  1)
-                            <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
-                                href="{{ url('admin/csr/index') }}">CSR</a>
-                            @if ($desig_id != 1)
-                                <a class="btn btn-info mt-3 btn-parameter text-light"
-                                    href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
-                            @endif
-                        @endif
-
+                        <a class="btn btn-success mt-3 btn-parameter"
+                        href="{{url('admin/csr/index') }}">CSR</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
                     </div>
                 </div>
+
 
                 {{-- @if (!$sender_designation_id) --}}
 
@@ -258,7 +252,13 @@
                                     </form>
                                 </div>
                             </div>
+
                         @endif
+
+
+
+
+
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -278,20 +278,29 @@
                                         <tbody>
                                             @if ($document_tracks !== null)
                                                 @foreach ($document_tracks as $document_track)
+                                                    @if ($document_track->track_status == 1)
+                                                        <tr style="background-color: #045a4a28">
+                                                            <td>{{ $document_track->sender_designation_name }}</td>
+                                                            <td><i class="fa fa-arrow-right text-success"></i></td>
+                                                            <td>{{ $document_track->receiver_designation_name }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                            <td>{{ $document_track->remarks }}</td>
+                                                        </tr>
+                                                    @else
+                                                        <tr style="background-color: #ba885d6f">
+                                                            <td>{{ $document_track->sender_designation_name }}</td>
+                                                            <td><i class="fa fa-arrow-right text-success"></i></td>
+                                                            <td>{{ $document_track->receiver_designation_name }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                            <td>{{ $document_track->remarks }}</td>
+                                                        </tr @endif
+                                                    @endforeach
+                                                @else
                                                     <tr>
-                                                        <td>{{ $document_track->sender_designation_name }}</td>
-                                                        <td><i class="fa fa-arrow-right text-success"></i></td>
-                                                        <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
-                                                        <td>{{ $document_track->remarks }}</td>
+                                                        <td colspan="5"> <i class="fa fa-times text-danger"
+                                                                aria-hidden="true"></i> No forward status found </td>
                                                     </tr>
-                                                @endforeach
-                                            @else
-                                                <tr>
-                                                    <td colspan="5"> <i class="fa fa-times text-danger"
-                                                            aria-hidden="true"></i> No forward status found </td>
-                                                </tr>
-                                            @endif
+                                                @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -300,18 +309,20 @@
                     </div>
 
                     <!-- Notes Sectio
-                                                                                                    n - Uncomment if needed -->
+                            n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
                         @endif
                     </div> --}}
                 </div>
+
                 {{-- @endif --}}
             </div>
 
         </div>
     </div>
+
 
 @endsection
 @push('js')
@@ -320,7 +331,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
+    @include('backend.offer.offer_incomming_approved.offer_approved_index_js')
 
     <script>
         $(document).ready(function() {
@@ -330,6 +341,7 @@
                 reciever_desig_text = $(this).find('option:selected').text();
 
             });
+
 
             $('#submitBtn').off('click').on('click', function(event) {
 
@@ -342,7 +354,7 @@
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'success',
+                    type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -357,7 +369,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/offer/offer_tracking') }}',
+                            url: '{{ url('admin/offer_approved/offer_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -379,7 +391,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.offer/view') }}",
+                                            "{{ route('admin.offer_approved/view') }}",
                                             40000);
                                     }
                                 }
@@ -396,6 +408,7 @@
                     } else if (
                         result.dismiss === swal.DismissReason.cancel
                     ) {
+
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -403,18 +416,10 @@
                         )
                     }
                 })
+
             });
 
-            $('#csrBtn').on('click', function(event) {
-                event.preventDefault();
 
-                var url = $(this).attr('href');
-                var tenderRefNo = $('#tenderRefNo').text();
-
-                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
-
-                window.location.href = redirectUrl;
-            });
         });
     </script>
 @endpush

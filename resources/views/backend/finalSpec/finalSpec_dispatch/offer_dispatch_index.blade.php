@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer')
+@section('title', 'Offer (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -14,7 +14,7 @@
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
         .table thead{
-            background: #1B4C43;
+            background: #D22D3D;
             color: #ffff
         }
         .table thead tr th{
@@ -25,7 +25,7 @@
             margin-left:8px;
         }
         .badge-secondary{
-            background-color: #1B4C43 !important;
+            background-color: #D22D3D !important;
         }
         .dt-buttons .buttons-html5{
             background-color: #A1B53A !important;
@@ -33,10 +33,10 @@
         }
         .btn-danger{
             background-color: #b53f4b !important;
-        }
+
     </style>
 @endpush
-@section('main_menu', 'Offer (New Arrival)')
+@section('main_menu', 'Offer (Dispatch)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -56,14 +56,14 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.FinalSpec/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival({{$offerNew}})</a>
-                            <a href="" type="button"
-                                class="btn btn-secondary btn-sm">On Process({{$offerOnProcess}}) </a>
-                            <a href="" type="button"
-                                class="btn btn-info text-white btn-sm">Completed({{$offerCompleted}})</a>
-                            <a href="" type="button"
-                                class="btn btn-danger btn-sm">Dispatch({{$offerDispatch}})</a>
+                            <a href="{{ route('admin.offer/view') }}" type="button"
+                            class="btn btn-success btn-sm">New Arrival</a>
+                            <a href="{{ route('admin.offer_approved/view') }}" type="button"
+                                class="btn btn-secondary btn-sm">On Process </a>
+                            <a href="{{ route('admin.offer/outgoing') }}" type="button"
+                                class="btn btn-info text-white btn-sm">Completed</a>
+                            <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
+                                class="btn btn-danger btn-sm">Dispatch</a>
 
                         </div>
                         <div>
@@ -90,6 +90,7 @@
                                 <th>Present state of spec</th>
                                 <th>Action</th>
                             </tr>
+                            </tr>
                         </thead>
                         <tbody>
                         </tbody>
@@ -106,5 +107,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.offer.offer_incomming_new.index_js')
+    @include('backend.offer.offer_dispatch.offer_dispatch_index_js')
 @endpush

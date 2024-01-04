@@ -714,7 +714,7 @@
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
-                    type: 'success',
+                    type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',

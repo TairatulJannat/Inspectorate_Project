@@ -118,6 +118,30 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
+
+                {{--start final sepecification --}}
+                @if (count(menu_check('FinalSpec')) !== 0)
+                <li class="dropdown"><a
+                        class="nav-link menu-title {{ $currentControllerName == 'FinalSpec' ? 'active' : '' }}"
+                        href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                        <span>Final Spec</span></a>
+                    <ul class="nav-submenu menu-content {{ Request::is('*/FinalSpec/*') ? 'open_menu' : '' }}">
+                        @if (sub_menu_check('FinalSpec/view') !== null)
+                            <li><a class="text-light" href="{{ route('admin.FinalSpec/view') }}"
+                                    class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                    Final Spec</a>
+                            </li>
+                        @endif
+                        @if (sub_menu_check('FinalSpec/create') !== null)
+                            <li><a class="text-light" href="{{ route('admin.FinalSpec/create') }}"
+                                    class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                    Final Spec</a></li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
+
+
                     {{-- Side Menu Button Links for Contract --}}
                     @if (count(menu_check('Contract')) !== 0)
                         <li class="dropdown">
@@ -138,6 +162,7 @@ $currentControllerName = Request::segment(2);
                                         Create Contract
                                     </a>
                                 </li>
+
                             </ul>
                         </li>
                     @endif

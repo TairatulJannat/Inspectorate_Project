@@ -116,22 +116,16 @@
                             </tr>
                             <tr>
                                 <th>Offer Receive Letter Date</td>
-
-                                <td>{{ $details->offer_rcv_ltr_dt }}</td>
-
+                                <td>{{ $details->offer_rcv_ltr_dt ? $details->offer_rcv_ltr_dt:'No receive date is selected' }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
-
-                                <td>{{ $details->item_type_name }}</td>
+                                <td>{{ $details->item_type_name ? $details->item_type_name:'No item type is selected' }}</td>
                             </tr>
                             <tr>
                                 <th>Attribute</td>
-                                
-                                <td>{{ $details->attribute }}</td>
-                            </tr>
-
+                                <td>{{ $details->attribute ? $details->attribute:'No attribute is selected' }}</td>
                             </tr>
                             <tr>
 
@@ -140,7 +134,10 @@
                                     @if (!empty($additional_documents_names))
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name }} </li>
+
+                                                <li>{{ $documents_name }} </li>    
+
+
                                             @endforeach
                                         </ul>
                                     @else
@@ -151,9 +148,7 @@
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
-
-                                <td>{{$details->fin_year_name }}</td>
-
+                                <td>{{$details->fin_year_name ? $details->fin_year_name:'No Financial Year is selected' }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -171,23 +166,20 @@
                             </tr>
                             <tr>
                                 <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no }}</td>
+                                <td>{{ $details->offer_rcv_ltr_no ?  $details->offer_rcv_ltr_no:'No Offer Receiver Letter is selected' }}</td>
                             </tr>
                             <tr>
                                 <th>Quantity</td>
-                                <td>{{  $details->qty}}</td>
+                                <td>{{  $details->qty ?  $details->qty:'No Quantity is selected' }}</td>
                             </tr>
 
-
                         </table>
-                        @if ($desig_id !=  1)
-                            <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
-                                href="{{ url('admin/csr/index') }}">CSR</a>
-                            @if ($desig_id != 1)
-                                <a class="btn btn-info mt-3 btn-parameter text-light"
-                                    href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
-                            @endif
-                        @endif
+                        <a  id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{url('admin/csr/index') }}">CSR</a>
+                           @if ($desig_id != 1)
+                           <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                           @endif 
+                                     
 
                     </div>
                 </div>
@@ -300,7 +292,7 @@
                     </div>
 
                     <!-- Notes Sectio
-                                                                                                    n - Uncomment if needed -->
+                                                                                                n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
@@ -342,7 +334,7 @@
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'success',
+                    type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -378,9 +370,7 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
-                                        setTimeout(window.location.href =
-                                            "{{ route('admin.offer/view') }}",
-                                            40000);
+                                        setTimeout(window.location.href ="{{ route('admin.offer/view') }}", 40000);
                                     }
                                 }
                             },
@@ -415,6 +405,7 @@
 
                 window.location.href = redirectUrl;
             });
+
         });
     </script>
 @endpush

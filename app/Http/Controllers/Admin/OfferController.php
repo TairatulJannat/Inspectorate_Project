@@ -37,7 +37,7 @@ class OfferController extends Controller
             $offerNew = Offer::where('status', 0)->count();
             $offerOnProcess = '0';
             $offerCompleted = '0';
-            $offerDispatch = DocumentTrack::where('doc_type_id', 4)
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
                 ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
@@ -46,7 +46,7 @@ class OfferController extends Controller
                 ->count();
         } else {
 
-            $offerNew = DocumentTrack::where('doc_type_id', 4)
+            $offerNew = DocumentTrack::where('doc_type_id', 5)
                 ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
@@ -54,7 +54,7 @@ class OfferController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $offerOnProcess = DocumentTrack::where('doc_type_id', 4)
+            $offerOnProcess = DocumentTrack::where('doc_type_id', 5)
                 ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
@@ -62,7 +62,7 @@ class OfferController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $offerCompleted = DocumentTrack::where('doc_type_id', 4)
+            $offerCompleted = DocumentTrack::where('doc_type_id', 5)
                 ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
@@ -70,7 +70,7 @@ class OfferController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $offerDispatch = DocumentTrack::where('doc_type_id', 4)
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
                 ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
