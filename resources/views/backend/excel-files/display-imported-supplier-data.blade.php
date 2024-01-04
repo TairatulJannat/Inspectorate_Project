@@ -74,14 +74,12 @@
                                                     value="{{ $parameter['parameter_name'] }}">
                                             </td>
                                             <td class="col-md-3 py-1" style="background-color: #bdf5fb">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]"
-                                                    value="{{ $parameter['indent_parameter_value'] }}">
+                                                <textarea class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]">{{ $parameter['indent_parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]"
-                                                    value="{{ $parameter['parameter_value'] }}">
+                                                <textarea class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
                                                 <select class="form-control select2"
@@ -141,9 +139,7 @@
 @endsection
 
 @push('custom-scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
-        integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('assets/backend/js/ckeditor5/ckeditor.min.js') }}"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#offer_summary'))

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('parameter_group_id');
             $table->unsignedBigInteger('parameter_id');
-            $table->string('parameter_name');
-            $table->longText('parameter_value');
+            $table->string('parameter_name')->nullable();
+            $table->longText('parameter_value')->nullable();
             $table->string('compliance_status');
             $table->longText('remarks');
 

@@ -118,24 +118,26 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
-                    {{-- Dummy Contract Links --}}
-                    @if (count(menu_check('Offer')) !== 0)
-                        <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
-                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
-                                <span>Contract</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('offer/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
-                                            Contracts</a>
-                                    </li>
-                                @endif
-                                @if (sub_menu_check('offer/create') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
-                                            Contract</a></li>
-                                @endif
+                    {{-- Side Menu Button Links for Contract --}}
+                    @if (count(menu_check('Contract')) !== 0)
+                        <li class="dropdown">
+                            <a class="nav-link menu-title text-white" href="javascript:void(0)">
+                                <i data-feather="file-text"></i> <!-- Add the icon for "Contract" -->
+                                <span>Contract</span>
+                            </a>
+                            <ul class="nav-submenu menu-content">
+                                <li>
+                                    <a href="{{ url('admin/contract/index') }}"
+                                        class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">
+                                        View Contracts
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('admin/contract/create') }}"
+                                        class="{{ Request::is('*/admin/contract/create') ? 'active' : '' }} text-white">
+                                        Create Contract
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @endif
@@ -325,7 +327,7 @@ $currentControllerName = Request::segment(2);
                     @endif
 
                     {{-- Side Menu Button Links for Parameters --}}
-                    @if (count(menu_check('Parameter')) !== 0)
+                    {{-- @if (count(menu_check('Parameter')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Parameters</span></a>
                             <ul class="nav-submenu menu-content">
@@ -339,11 +341,10 @@ $currentControllerName = Request::segment(2);
                                 </li>
                             </ul>
                         </li>
-                    @endif
-
+                    @endif --}}
 
                     {{-- Side Menu Button Links for Excel Files --}}
-                    @if (count(menu_check('Excel')) !== 0)
+                    {{-- @if (count(menu_check('Excel')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Import Export Files</span></a>
                             <ul class="nav-submenu menu-content">
@@ -357,11 +358,11 @@ $currentControllerName = Request::segment(2);
                                 </li>
                             </ul>
                         </li>
-                    @endif
+                    @endif --}}
 
 
                     {{-- Side Menu Button Links for Comparative Statement Report (CSR) --}}
-                    @if (count(menu_check('Excel')) !== 0)
+                    {{-- @if (count(menu_check('Excel')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Comparative Statement</span></a>
                             <ul class="nav-submenu menu-content">
@@ -371,7 +372,7 @@ $currentControllerName = Request::segment(2);
                                 </li>
                             </ul>
                         </li>
-                    @endif
+                    @endif --}}
 
                     {{-- Side Menu Button Links for Doc Types --}}
                     {{-- @if (count(menu_check('DocType')) !== 0)

@@ -20,14 +20,14 @@
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
-
                                 </select>
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div> --}}
                         <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import
+                                <a id="importExcelBtn" href="{{ url('admin/import-indent-spec-data-index') }}"
+                                    class="btn btn-success">Import
                                     Excel</a>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="hidden" value=" {{$indent->id}}" id="editId" name="editId">
+                                <input type="hidden" value=" {{ $indent->id }}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -61,8 +61,6 @@
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-
-
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -103,7 +101,7 @@
                                     @foreach ($additional_documnets as $additional_document)
                                         @php
                                             $documentIds = json_decode($indent->additional_documents);
-                                            $isSelected = in_array($additional_document->id, $documentIds? $documentIds:[]) ? 'selected' : '';
+                                            $isSelected = in_array($additional_document->id, $documentIds ? $documentIds : []) ? 'selected' : '';
                                         @endphp
                                         <option value="{{ $additional_document->id }}" {{ $isSelected }}>
                                             {{ $additional_document->name }}
@@ -114,7 +112,6 @@
                                 <span id="error_additional_documents" class="text-danger error_field"></span>
                             </div>
                         </div>
-
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -172,7 +169,6 @@
                                         {{ $indent->attribute == 'Uncontrolled' ? 'selected' : '' }}>Uncontrolled</option>
                                 </select>
 
-
                                 <span id="error_attribute" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -206,24 +202,18 @@
                                         Standard</option>
                                 </select>
                                 {{-- <div class="form-check form-switch">
-
-
                                     <input class="form-check-input" type="checkbox" id="checked_standard"
                                         name="checked_standard">
-
                                 </div> --}}
 
                                 <span id="error_checked_standard" class="text-danger error_field"></span>
                             </div>
-
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fin_year_id">Financial Year </label>
-
                                 <select class="form-control" id="fin_year_id" name="fin_year_id">
-
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
                                         <option value={{ $fin_year->id }}
@@ -231,9 +221,7 @@
                                             {{ $fin_year->year }}
                                         </option>
                                     @endforeach
-
                                 </select>
-
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -250,7 +238,6 @@
                             <div class="form-group">
                                 <label for="make">Make</label>
                                 <input type="text" class="form-control" id="make" name="make">
-
                                 <span id="error_make" class="text-danger error_field"></span>
                             </div>
                         </div> --}}
@@ -259,7 +246,6 @@
                                 <label for="model">Model</label>
                                 <input type="text" class="form-control" id="model" name="model"
                                     value="{{ $indent->model ? $indent->model : '' }}">
-
                                 <span id="error_model" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -270,24 +256,18 @@
                                 <input type="text" class="form-control" id="country_of_origin"
                                     name="country_of_origin"
                                     value="{{ $indent->country_of_origin ? $indent->country_of_origin : '' }}">
-
-
                                 <span id="error_country_of_origin" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="country_of_assembly">Country of Assembly</label>
-
                                 <input type="text" class="form-control" id="country_of_assembly"
                                     name="country_of_assembly"
                                     value="{{ $indent->country_of_assembly ? $indent->country_of_assembly : '' }}">
-
                                 <span id="error_country_of_assembly" class="text-danger error_field"></span>
                             </div>
                         </div>
-
-
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="received_by">Received By</label>
@@ -296,7 +276,6 @@
                                 <span id="error_received_by" class="text-danger error_field"></span>
                             </div>
                         </div>
-
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
@@ -311,7 +290,6 @@
                                 <span id="doc_file" class="text-danger error_field"></span>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -329,7 +307,25 @@
     <script>
         $(document).ready(function() {
             $('.select2').select2();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get('error');
+
+            if (errorMessage) {
+                toastr.error(decodeURIComponent(errorMessage));
+            }
+
+            $('#importExcelBtn').on('click', function(event) {
+                event.preventDefault();
+
+                var url = $(this).attr('href');
+                var indentNo = $('#indent_number').val();
+                var redirectUrl = url + '?indentNo=' + encodeURIComponent(indentNo);
+
+                window.location.href = redirectUrl;
+            });
         });
+
         // Start:: Get Floor & User category & shift
         $('#hall_id').off('change').on('change', function() {
             var hall_id = $('#hall_id').val();
