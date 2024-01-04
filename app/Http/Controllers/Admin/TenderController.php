@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Additional_document;
-use App\Models\AdminSection;
+use Carbon\Carbon;
+use App\Models\Items;
+use App\Models\Offer;
+use App\Models\Indent;
+use App\Models\Tender;
 use App\Models\DocType;
+use App\Models\Section;
+use App\Models\Supplier;
+use App\Models\Item_type;
 use App\Models\Designation;
+use App\Models\AdminSection;
+use Illuminate\Http\Request;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-use App\Models\Item_type;
-use App\Models\Items;
 use App\Models\PrelimGeneral;
-use App\Models\Section;
-use App\Models\Tender;
 use App\Models\ParameterGroup;
-use App\Models\Indent;
-use App\Models\Supplier;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\Additional_document;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -311,7 +312,7 @@ class TenderController extends Controller
 
     public function info(Request $request)
     {
-        $tenderData = Tender::where('reference_no', $request->tenderRefNo)->get();
+        $tenderData = Tender::where('id', $request->tenderRefNo)->get();
 
         return response()->json([
             'isSuccess' => true,
@@ -325,8 +326,10 @@ class TenderController extends Controller
         $tenderData = $request->tenderId;
 
         $tenderData = Tender::findOrFail($request->tenderId);
-        $itemId = $tenderData->item_id;
-        $itemTypeId = $tenderData->item_type_id;
+        $offerData = Offer::where('tender_reference_no', $tenderData->id)->first();
+
+        $itemId = $offerData->item_id;
+        $itemTypeId = $offerData->item_type_id;
 
         $item = Items::findOrFail($itemId);
         $itemName = $item ? $item->name : 'Unknown Item';
@@ -342,7 +345,7 @@ class TenderController extends Controller
             $indentRefNo = 'Indent Reference Number not found';
         }
 
-        $tenderData = Tender::where('item_id', $itemId)->get();
+        $tenderData = Tender::where('id', $offerData->tender_reference_no)->get();
 
         if ($tenderData->isNotEmpty()) {
             $tenderRefNo = $tenderData[0]['reference_no'];

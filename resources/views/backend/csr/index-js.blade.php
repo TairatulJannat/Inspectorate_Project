@@ -231,7 +231,7 @@
                         },
                         error: function(xhr, status, error) {
                             // console.error(xhr.responseText);
-                            console.error("I am here");
+                            console.error("I am getting error here");
                         }
                     });
                 },

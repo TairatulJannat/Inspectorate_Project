@@ -301,7 +301,7 @@ $currentControllerName = Request::segment(2);
                     @endif
 
                     {{-- Side Menu Button Links for Parameters --}}
-                    @if (count(menu_check('Parameter')) !== 0)
+                    {{-- @if (count(menu_check('Parameter')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Parameters</span></a>
                             <ul class="nav-submenu menu-content">
@@ -315,11 +315,10 @@ $currentControllerName = Request::segment(2);
                                 </li>
                             </ul>
                         </li>
-                    @endif
-
+                    @endif --}}
 
                     {{-- Side Menu Button Links for Excel Files --}}
-                    @if (count(menu_check('Excel')) !== 0)
+                    {{-- @if (count(menu_check('Excel')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Import Export Files</span></a>
                             <ul class="nav-submenu menu-content">
@@ -333,11 +332,11 @@ $currentControllerName = Request::segment(2);
                                 </li>
                             </ul>
                         </li>
-                    @endif
+                    @endif --}}
 
 
                     {{-- Side Menu Button Links for Comparative Statement Report (CSR) --}}
-                    @if (count(menu_check('Excel')) !== 0)
+                    {{-- @if (count(menu_check('Excel')) !== 0)
                         <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Comparative Statement</span></a>
                             <ul class="nav-submenu menu-content">
@@ -347,7 +346,7 @@ $currentControllerName = Request::segment(2);
                                 </li>
                             </ul>
                         </li>
-                    @endif
+                    @endif --}}
 
                     {{-- Side Menu Button Links for Doc Types --}}
                     {{-- @if (count(menu_check('DocType')) !== 0)
