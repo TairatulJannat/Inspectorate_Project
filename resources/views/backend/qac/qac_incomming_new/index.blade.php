@@ -88,13 +88,11 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference Number</th>
-                                <th>Indent Number</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Item QTY</th>
-                                <th>Present state of spec</th>
+                                <th>Present state of Qac</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

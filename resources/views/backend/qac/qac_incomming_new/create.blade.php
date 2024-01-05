@@ -76,31 +76,20 @@
                         </div>
 
 
-
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="indent_number">Indent Number</label>
-
-                                <input type="text" class="form-control" id="indent_number" name="indent_number">
-
-                                <span id="error_indent_number" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_reference_date">Indent Reference Date</label>
-                                <input type="date" class="form-control" id="indent_reference_date"
-                                    name="indent_reference_date">
-                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
+                                <label for="qac_reference_date">Qac Reference Date</label>
+                                <input type="date" class="form-control" id="qac_reference_date"
+                                    name="qac_reference_date">
+                                <span id="error_qac_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="indent_received_date">Indent Received Date</label>
-                                <input type="date" class="form-control" id="indent_received_date"
-                                    name="indent_received_date">
-                                <span id="error_indent_received_date" class="text-danger error_field"></span>
+                                <label for="qac_received_date">Qac Received Date</label>
+                                <input type="date" class="form-control" id="qac_received_date"
+                                    name="qac_received_date">
+                                <span id="error_qac_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -135,36 +124,5 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.qac.qac_incomming_new.index_js')
-    <script>
-        $(document).ready(function() {
-
-            $('.select2').select2();
-
-
-            $("#item_type_id").off('change').on('change', function() {
-
-                //  alert('123');
-                var itemtype_id = $('#item_type_id').val();
-
-                if (itemtype_id > 0) {
-                    $.ajax({
-                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
-                            '/' + itemtype_id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(res) {
-                            console.log(res);
-
-                            var _html = '<option value="">Select an item</option>';
-                            $.each(res, function(index, item) {
-                                _html += '<option value="' + item.id + '">' + item
-                                    .name + '</option>';
-                            });
-                            $('#item_id').html(_html);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
+    
 @endpush

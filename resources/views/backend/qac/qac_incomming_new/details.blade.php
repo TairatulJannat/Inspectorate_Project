@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent')
+@section('title', 'Qac')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent')
+@section('main_menu', 'Qac')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Indent</h2>
+                <h2>Details of Qac</h2>
             </div>
             <div style="display: flex">
 
@@ -112,84 +112,41 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                            <tr>
-                                <th>Indent Number</td>
-                                <td>{{ $details->indent_number }}</td>
-                            </tr>
+                            
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->indent_received_date }}</td>
+                                <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
                                 <th>Reference Date</td>
-                                <td>{{ $details->indent_reference_date }}</td>
+                                <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
                                 <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name ? $details->item_type_name:'No item type is selected' }}</td>
+                                <td>{{ $details->item_type_name  }}</td>
                             </tr>
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name ? $details->item_name:'No item is selected' }}</td>
+                                <td>{{ $details->item_name  }}</td>
                             </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>{{ $details->attribute?$details->attribute:'No attribute is selected' }}</td>
-                            </tr>
-                            <tr>
-
-                                <th>Additional Documents</th>
-                                <td>
-                                    @if (!empty($additional_documents_names))
-                                        <ul>
-                                            @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name }} </li>
-
-
-
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No additional documents available.
-                                    @endif
-                                </td>
-
-                            </tr>
+                            
+                          
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  ? $details->fin_year_name : 'No financial year is selected'}}</td>
+                                <td>{{ $details->fin_year_name  }}</td>
                             </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature ? $details->nomenclature  : 'No nomenclature is selected'}}</td>
-                            </tr>
-                            {{-- <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}?</td>
-                            </tr> --}}
-                            <tr>
-                                <th>Model</td>
-                                <td>{{ $details->model  ?  $details->model  : 'No model is selected'}}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin ? $details->country_of_origin  :'No country of origin is selected' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly ? $details->country_of_assembly  :'No country of assembly is selected'}}</td>
-                            </tr>
+                           
+        
 
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                    
                          @if ($desig_id != 1)
-                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Check Documents</a>
                          @endif
 
 
@@ -222,6 +179,7 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span class="error_receiver_designation text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -254,6 +212,7 @@
                                                         <option value="{{ $d->id }}">{{ $d->name }}</option>
                                                     @endforeach
                                                 </select>
+                                                <span class="error_receiver_designation text-danger"></span>
                                             </div>
                                             <div class="col-md-6 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -362,7 +321,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/indent/indent_tracking') }}',
+                            url: '{{ url('admin/qac/qac_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -384,17 +343,16 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent/view') }}",
+                                            "{{ route('admin.qac/view') }}",
                                             40000);
                                     }
                                 }
                             },
                             error: function(xhr, status, error) {
 
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+                               
+                                $('.error_receiver_designation').text(xhr.responseJSON.error);
+                                toastr.error(xhr.responseJSON.error);
                             }
                         });
 
