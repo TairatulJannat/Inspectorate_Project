@@ -1,10 +1,10 @@
 @extends('backend.app')
-@section('title', 'Qac (Edit)')
+@section('title', 'Psi (Edit)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
 @endpush
-@section('main_menu', 'Qac')
+@section('main_menu', 'Psi')
 @section('active_menu', 'Edit')
 @section('content')
     <div class="col-sm-12 col-xl-12">
@@ -25,7 +25,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="hidden" value=" {{$qac->id}}" id="editId" name="editId">
+                                <input type="hidden" value=" {{$psi->id}}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -33,7 +33,7 @@
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
-                                            {{ $dte->id == $qac->sender_id ? 'selected' : '' }}>{{ $dte->name }}
+                                            {{ $dte->id == $psi->sender_id ? 'selected' : '' }}>{{ $dte->name }}
                                         </option>
                                     @endforeach
 
@@ -46,7 +46,7 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $qac->reference_no ? $qac->reference_no : '' }} ">
+                                    value="{{ $psi->reference_no ? $psi->reference_no : '' }} ">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -55,27 +55,27 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="qac_received_date">Qac Received Date</label>
-                                <input type="date" class="form-control" id="qac_received_date"
-                                    name="qac_received_date"
-                                    value="{{ $qac->received_date ? $qac->received_date : '' }}">
-                                <span id="error_qac_received_date" class="text-danger error_field"></span>
+                                <label for="psi_received_date">Psi Received Date</label>
+                                <input type="date" class="form-control" id="psi_received_date"
+                                    name="psi_received_date"
+                                    value="{{ $psi->received_date ? $psi->received_date : '' }}">
+                                <span id="error_psi_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="qac_reference_date">Qac Reference Date</label>
-                                <input type="date" class="form-control" id="qac_reference_date"
-                                    name="qac_reference_date"
-                                    value="{{ $qac->reference_date ? $qac->reference_date : '' }}">
-                                <span id="error_qac_reference_date" class="text-danger error_field"></span>
+                                <label for="psi_reference_date">Psi Reference Date</label>
+                                <input type="date" class="form-control" id="psi_reference_date"
+                                    name="psi_reference_date"
+                                    value="{{ $psi->reference_date ? $psi->reference_date : '' }}">
+                                <span id="error_psi_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
                                 <input type="text" class="form-control" id="contract_reference_no" name="contract_reference_no"
-                                    value="{{ $qac->contract_reference_no ? $qac->contract_reference_no : '' }} ">
+                                    value="{{ $psi->contract_reference_no ? $psi->contract_reference_no : '' }} ">
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
 
                                     @foreach ($item_types as $item_type)
                                         <option value="{{ $item_type->id }}"
-                                            {{ $item_type->id == $qac->item_type_id ? 'selected' : '' }}>
+                                            {{ $item_type->id == $psi->item_type_id ? 'selected' : '' }}>
                                             {{ $item_type->name }}
                                         </option>
                                     @endforeach
@@ -105,7 +105,7 @@
 
                                 <select class="form-control select2" id="item_id" name="item_id" required>
                                     <option value="">Please Select</option>
-                                    @if ($qac->item_id)
+                                    @if ($psi->item_id)
                                         <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
                                     @endif
                                 </select>
@@ -125,7 +125,7 @@
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
                                         <option value={{ $fin_year->id }}
-                                            {{ $fin_year->id == $qac->fin_year_id ? 'selected' : '' }}>
+                                            {{ $fin_year->id == $psi->fin_year_id ? 'selected' : '' }}>
                                             {{ $fin_year->year }}
                                         </option>
                                     @endforeach
@@ -150,7 +150,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
-                                <textarea name="remark" id="remark" class="form-control"> {{ $qac->remarks ? $qac->remarks : '' }}</textarea>
+                                <textarea name="remark" id="remark" class="form-control"> {{ $psi->remarks ? $psi->remarks : '' }}</textarea>
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -167,7 +167,7 @@
 
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
-                        <a href="{{ route('admin.qac/view') }}" type="button" class="btn btn-secondary">Cancel</a>
+                        <a href="{{ route('admin.psi/view') }}" type="button" class="btn btn-secondary">Cancel</a>
                         <button class="btn btn-primary" type="submit" id="form_submission_button">Update</button>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
             var formData = new FormData($('#update_form')[0]);
             disableButton()
             $.ajax({
-                url: "{{ url('admin/qac/update') }}",
+                url: "{{ url('admin/psi/update') }}",
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -212,7 +212,7 @@
                         toastr.success('Information Updated', 'Saved');
                         $('#edit_model').modal('hide');
                     }
-                    setTimeout(window.location.href = "{{ route('admin.qac/view') }}", 40000);
+                    setTimeout(window.location.href = "{{ route('admin.psi/view') }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
