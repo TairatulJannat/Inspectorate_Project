@@ -56,13 +56,13 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.offer/view') }}" type="button"
+                            <a href="{{ route('admin.FinalSpec/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
-                            <a href="{{ route('admin.offer_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process </a>
-                            <a href="{{ route('admin.offer/outgoing') }}" type="button"
+                            <a href="" type="button"
+                                class="btn btn-secondary btn-sm">On Process</a>
+                            <a href="" type="button"
                                 class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
+                            <a href="" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 
                         </div>
