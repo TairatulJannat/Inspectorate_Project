@@ -175,7 +175,7 @@
                             </tr>
 
                         </table>
-                        @if ($desig_id !=  1)
+                        @if ($desig_id != 1)
                             <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
                                 href="{{ url('admin/csr/index') }}">CSR</a>
                             @if ($desig_id != 1)
@@ -183,7 +183,6 @@
                                     href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
                             @endif
                         @endif
-
                     </div>
                 </div>
 
@@ -295,7 +294,7 @@
                     </div>
 
                     <!-- Notes Sectio
-                                                                                                    n - Uncomment if needed -->
+                                                                                                            n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
