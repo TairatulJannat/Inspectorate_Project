@@ -41,7 +41,7 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <select class="form-control select2 tender-id" id="tenderId" name="tender-id"
-                                style="width: 100% !important;">
+                                style="width: 100% !important;" disabled>
                                 <option value="" selected disabled>Select Tender Reference No.</option>
                                 @foreach ($tenders as $tender)
                                     <option value="{{ $tender->id }}">{{ $tender->reference_no }}</option>

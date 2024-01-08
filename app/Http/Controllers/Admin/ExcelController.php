@@ -656,8 +656,13 @@ class ExcelController extends Controller
 
         $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
 
+        $offerData = Offer::where('tender_reference_no', $tenderId)->first();
+        $supplierIds = json_decode($offerData->supplier_id);
+        $suppliers = Supplier::whereIn('id', $supplierIds)->get();
+
         return response()->json([
             'isSuccess' => true,
+            'suppliers' => $suppliers,
             'suppliersData' => $suppliersData,
             'tendersData' => $tendersData->indent_reference_no,
             'indentId' => $indentsData->id,
