@@ -33,7 +33,7 @@
         }
         .btn-danger{
             background-color: #b53f4b !important;
-
+        
     </style>
 @endpush
 @section('main_menu', 'Offer (Dispatch)')
