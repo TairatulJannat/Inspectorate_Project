@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Qac (On Process)')
+@section('title', 'Indent (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -14,19 +14,21 @@
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
         .table thead{
-            background: #BA895D;
+            background: #b53f4b;
             color: #ffff
         }
         .table thead tr th{
 
             color: #ffff
         }
+
         .dt-buttons{
             margin-left:8px;
         }
         .badge-secondary{
-            background-color: #BA895D !important;
+            background-color: #b53f4b !important;
         }
+
         .dt-buttons .buttons-html5{
             background-color: #A1B53A !important;
             border:none;
@@ -36,7 +38,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Qac (On Process)')
+@section('main_menu', 'Indent (Dispatch)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -56,10 +58,10 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.qac/view') }}" type="button"
+                            <a href="{{ route('admin.indent/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
                             <a href="{{ route('admin.indent_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process </a>
+                                class="btn btn-secondary btn-sm">On Process</a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
                                 class="btn btn-info text-white btn-sm">Completed</a>
                             <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
@@ -77,7 +79,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered yajra-datatable">
-                        <thead >
+                        <thead>
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference Number</th>
@@ -106,5 +108,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.indent.indent_incomming_approved.indent_approved_index_js')
+    @include('backend.indent.indent_dispatch.indent_dispatch_index_js')
 @endpush

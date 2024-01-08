@@ -28,7 +28,7 @@
             },
             ajax: {
 
-                url: "{{ url('admin/qac/all_data') }}",
+                url: "{{ url('admin/psi/all_data') }}",
                 type: 'GET',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
@@ -98,7 +98,7 @@
 
         disableButton()
         $.ajax({
-            url: "{{ url('admin/qac/store') }}",
+            url: "{{ url('admin/psi/store') }}",
             type: "POST",
             data: formData,
             processData: false,
@@ -117,7 +117,7 @@
                     $('.yajra-datatable').DataTable().ajax.reload(null, false);
                     toastr.success('Information Saved', 'Saved');
                 }
-                setTimeout(window.location.href = "{{ route('admin.qac/view') }}", 40000);
+                setTimeout(window.location.href = "{{ route('admin.psi/view') }}", 40000);
             },
             error: function(response) {
                 enableeButton()
@@ -125,10 +125,10 @@
                 error_notification('Please fill up the form correctly and try again')
                 $('#error_sender').text(response.responseJSON.errors.sender);
                 $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                $('#error_qac_received_date').text(response.responseJSON.errors
-                    .qac_received_date);
-                $('#error_qac_reference_date').text(response.responseJSON.errors
-                    .qac_reference_date);
+                $('#error_psi_received_date').text(response.responseJSON.errors
+                    .psi_received_date);
+                $('#error_psi_reference_date').text(response.responseJSON.errors
+                    .psi_reference_date);
 
             }
         });
@@ -191,8 +191,8 @@
     function clear_error_field() {
         $('#error_sender').text("");
         $('#error_reference_no').text("");
-        $('#error_qac_received_date').text("");
-        $('#error_qac_reference_date').text("");
+        $('#error_psi_received_date').text("");
+        $('#error_psi_reference_date').text("");
        
     }
 

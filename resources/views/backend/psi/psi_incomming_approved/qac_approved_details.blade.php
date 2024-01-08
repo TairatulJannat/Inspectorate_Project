@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Qac')
+@section('title', 'Indent (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -80,9 +80,9 @@
             min-height: 250px
         }
 
-
-
-
+        .remarks_status {
+            min-height: 250px
+        }
 
         .documents {
             display: flex;
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Qac')
+@section('main_menu', 'Indent (On Process) ')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Qac</h2>
+                <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
 
@@ -112,47 +112,75 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                            
+                            <tr>
+                                <th>Indent Number</td>
+                                <td>{{ $details->indent_number }}</td>
+                            </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->received_date }}</td>
-                            </tr>
-                            <tr>
-                                <th>Reference Date</td>
-                                <td>{{ $details->reference_date }}</td>
+                                <td>{{ $details->indent_received_date }}</td>
                             </tr>
 
-                            <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
-                            </tr>
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <td>{{ $details->item_type_name }}</td>
                             </tr>
-                            
-                          
+                            <tr>
+                                <th>Attribute</td>
+                                <td>{{ $details->attribute }}</td>
+                            </tr>
+                            <tr>
+
+                                <th>Additional Documents</th>
+                                <td>
+                                    @if (!empty($additional_documents_names))
+                                        <ul>
+                                            @foreach ($additional_documents_names as $documents_name)
+                                                <li>{{ $documents_name }} </li>
+                                                <!-- Adjust the key according to your array structure -->
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        No additional documents available.
+                                    @endif
+                                </td>
+
+                            </tr>
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                           
-        
+                            <tr>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->nomenclature }}</td>
+                            </tr>
+                            <tr>
+                                <th>Make</td>
+                                <td>{{ $details->make }}</td>
+                            </tr>
+                            <tr>
+                                <th>Model</td>
+                                <td>{{ $details->model }}</td>
+                            </tr>
+                            <tr>
+                                
+                                <th>Country of Origin</td>
+                                <td>{{ $details->country_of_origin }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country of Assembly</td>
+                                <td>{{ $details->country_of_assembly }}</td>
+                            </tr>
 
                         </table>
-                    
-                         @if ($desig_id != 1)
-                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
-                         @endif
-
-
-
-
-
+                        <a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                            target="_blank">Pdf Document</a>
                     </div>
                 </div>
 
@@ -179,7 +207,6 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <span class="error_receiver_designation text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -193,9 +220,11 @@
                                     </div>
                                 </div>
                             @else
+                                {{-- blank --}}
                             @endif
 
                             @if ($desig_id == $DocumentTrack_hidden->sender_designation_id)
+                                {{-- blank --}}
                             @endif
                         @else
                             <div class="forward col-md-12 mb-3">
@@ -204,7 +233,7 @@
                                     <hr>
                                     <form action="">
                                         <div class="row">
-                                            <div class="col-md-6 mb-2">
+                                            <div class="col-md-4 mb-2">
                                                 <select name="designation" id="designations" class="form-control"
                                                     style="height: 40px;">
                                                     <option value="">Select To Receiver</option>
@@ -212,9 +241,8 @@
                                                         <option value="{{ $d->id }}">{{ $d->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <span class="error_receiver_designation text-danger"></span>
                                             </div>
-                                            <div class="col-md-6 mb-2">
+                                            <div class="col-md-4 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
@@ -247,13 +275,23 @@
                                         <tbody>
                                             @if ($document_tracks !== null)
                                                 @foreach ($document_tracks as $document_track)
-                                                    <tr>
-                                                        <td>{{ $document_track->sender_designation_name }}</td>
-                                                        <td><i class="fa fa-arrow-right text-success"></i></td>
-                                                        <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i ') }}</td>
-                                                        <td>{{ $document_track->remarks }}</td>
-                                                    </tr>
+                                                    @if ($document_track->track_status == 1)
+                                                        <tr style="background-color: #045a4a28">
+                                                            <td>{{ $document_track->sender_designation_name }}</td>
+                                                            <td><i class="fa fa-arrow-right text-success"></i></td>
+                                                            <td>{{ $document_track->receiver_designation_name }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                            <td>{{ $document_track->remarks }}</td>
+                                                        </tr>
+                                                    @else
+                                                        <tr style="background-color: #ba885d6f">
+                                                            <td>{{ $document_track->sender_designation_name }}</td>
+                                                            <td><i class="fa fa-arrow-right text-success"></i></td>
+                                                            <td>{{ $document_track->receiver_designation_name }}</td>
+                                                            <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                            <td>{{ $document_track->remarks }}</td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
                                             @else
                                                 <tr>
@@ -268,8 +306,11 @@
                         </div>
                     </div>
 
+
+
                 </div>
 
+                {{-- @endif --}}
             </div>
 
         </div>
@@ -283,7 +324,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
+    {{-- @include('backend.indent.indent_incomming_approved.indent_approved_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -321,7 +362,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/qac/qac_tracking') }}',
+                            url: '{{ url('admin/indent_approved/indent_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -343,16 +384,17 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.qac/view') }}",
+                                            "{{ route('admin.indent_approved/view') }}",
                                             40000);
                                     }
                                 }
                             },
                             error: function(xhr, status, error) {
 
-                               
-                                $('.error_receiver_designation').text(xhr.responseJSON.error);
-                                toastr.error(xhr.responseJSON.error);
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 

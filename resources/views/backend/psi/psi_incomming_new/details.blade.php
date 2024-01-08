@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Qac')
+@section('title', 'Psi')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Qac')
+@section('main_menu', 'Psi')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Qac</h2>
+                <h2>Details of Psi</h2>
             </div>
             <div style="display: flex">
 
@@ -321,7 +321,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/qac/qac_tracking') }}',
+                            url: '{{ url('admin/psi/psi_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -343,7 +343,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.qac/view') }}",
+                                            "{{ route('admin.psi/view') }}",
                                             40000);
                                     }
                                 }

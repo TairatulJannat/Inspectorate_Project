@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'QAC')
+@section('title', 'Psi')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -24,8 +24,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'QAC')
-@section('active_menu', 'Add QAC')
+@section('main_menu', 'Psi')
+@section('active_menu', 'Add Psi')
 @section('content')
     <div class="col-sm-12 col-xl-12">
 
@@ -78,18 +78,18 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="qac_reference_date">Qac Reference Date</label>
-                                <input type="date" class="form-control" id="qac_reference_date"
-                                    name="qac_reference_date">
-                                <span id="error_qac_reference_date" class="text-danger error_field"></span>
+                                <label for="psi_reference_date">Psi Reference Date</label>
+                                <input type="date" class="form-control" id="psi_reference_date"
+                                    name="psi_reference_date">
+                                <span id="error_psi_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="qac_received_date">Qac Received Date</label>
-                                <input type="date" class="form-control" id="qac_received_date"
-                                    name="qac_received_date">
-                                <span id="error_qac_received_date" class="text-danger error_field"></span>
+                                <label for="psi_received_date">Psi Received Date</label>
+                                <input type="date" class="form-control" id="psi_received_date"
+                                    name="psi_received_date">
+                                <span id="error_psi_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -123,6 +123,6 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.qac.qac_incomming_new.index_js')
+    @include('backend.psi.psi_incomming_new.index_js')
     
 @endpush

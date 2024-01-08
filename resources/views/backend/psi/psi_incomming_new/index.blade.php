@@ -1,31 +1,37 @@
 @extends('backend.app')
-@section('title', 'Qac (On Process)')
+@section('title', 'Psi')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
-   <style>
+    <style>
         .card .card-header {
             padding: 0px;
-            border-bottom: 1px solid rgba(182, 182, 182 , .6);
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
 
         }
-        .table{
-            border-radius:10px !important;
+
+        .table {
+            border-radius: 10px !important;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
-        .table thead{
-            background: #BA895D;
+
+        .table thead {
+            background: #1B4C43;
             color: #ffff
         }
-        .table thead tr th{
+
+        .table thead tr th {
 
             color: #ffff
         }
-        .dt-buttons{
-            margin-left:8px;
+
+
+        .dt-buttons {
+            margin-left: 8px;
         }
-        .badge-secondary{
-            background-color: #BA895D !important;
+
+        .badge-secondary {
+            background-color: #1B4C43 !important;
         }
         .dt-buttons .buttons-html5{
             background-color: #A1B53A !important;
@@ -34,9 +40,10 @@
         .btn-danger{
             background-color: #b53f4b !important;
         }
+
     </style>
 @endpush
-@section('main_menu', 'Qac (On Process)')
+@section('main_menu', 'Psi (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -56,8 +63,8 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.qac/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival</a>
+                            <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival</a>
                             <a href="{{ route('admin.indent_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">On Process </a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
@@ -77,17 +84,15 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered yajra-datatable">
-                        <thead >
+                        <thead>
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference Number</th>
-                                <th>Indent Number</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Item QTY</th>
-                                <th>Present state of spec</th>
+                                <th>Present state of Psi</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -106,5 +111,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.indent.indent_incomming_approved.indent_approved_index_js')
+    @include('backend.psi.psi_incomming_new.index_js')
 @endpush
