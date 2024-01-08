@@ -95,6 +95,19 @@
                         </thead>
                         <tbody>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="10">
+
+                                    <span class="icon p-3 m-2" style="color: #1B4C43;">&#11044; New Arrival</span>
+                                    <span class="icon p-3 m-2" style="color: #BA895D;">&#11044; On Process</span>
+                                    <span class="icon p-3 m-2" style="color: #0DCAF0;">&#11044; Completed</span>
+                                    <span class="icon p-3 m-2" style="color: #B53F4B;">&#11044; Dispatch</span>
+                                    <span class="icon p-3 m-2" style="color: #FF8E36;">&#11044; Forward</span>
+                                    <span class="icon p-3 m-2" style="color: #0D6DA8;">&#11044; Forwarded</span>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

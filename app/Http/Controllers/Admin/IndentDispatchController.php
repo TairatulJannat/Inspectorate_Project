@@ -153,25 +153,25 @@ class IndentDispatchController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                             <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Dispatch</a>
+                            <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Dispatched</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
                         </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Dispatched</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
                         </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
                         <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Dispatch</a>
+                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
