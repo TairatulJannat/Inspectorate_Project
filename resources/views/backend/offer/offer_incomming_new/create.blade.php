@@ -81,7 +81,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="tender_reference_no">Tender Reference Number</label>
                                 <select class="form-control " id="tender_reference_no" name="tender_reference_no">
@@ -89,7 +89,7 @@
                                     <option value="">Please Select</option>
 
                                     @foreach ($tender_reference_numbers as $tender_reference_no)
-                                        <option value="{{ $tender_reference_no->id }}">{{$tender_reference_no->reference_no }}</option>
+                                        <option value="{{ $tender_reference_no->reference_no }}">{{$tender_reference_no->reference_no }}</option>
                                     @endforeach
 
                                 </select>
@@ -105,13 +105,13 @@
                                     <option value="">Please Select</option>
 
                                     @foreach ($indent_reference_numbers as $indent_reference_no)
-                                        <option value="{{ $indent_reference_no->id }}">{{$indent_reference_no->reference_no }}</option>
+                                        <option value="{{ $indent_reference_no->reference_no }}">{{$indent_reference_no->reference_no }}</option>
                                     @endforeach
 
                                 </select>
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_reference_date">Offer Reference Date</label>

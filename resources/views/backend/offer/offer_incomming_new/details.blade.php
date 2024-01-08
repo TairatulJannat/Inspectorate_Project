@@ -111,6 +111,10 @@
                                 <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
                             </tr>
                             <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>

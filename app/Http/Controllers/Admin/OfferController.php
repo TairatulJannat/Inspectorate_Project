@@ -254,7 +254,8 @@ class OfferController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
-        $data->offer_rcv_ltr_no = $request->offer_vetting_ltr_dt;
+        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
+        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
         // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
         // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
@@ -303,12 +304,14 @@ class OfferController extends Controller
         $data->reference_no = $request->reference_no;
         $data->offer_reference_date = $request->offer_reference_date;
         $data->tender_reference_no = $request->tender_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
         $data->attribute = $request->attribute;
         $data->additional_documents = json_encode($request->additional_documents);
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
+        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
         $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
