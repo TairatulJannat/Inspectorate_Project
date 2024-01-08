@@ -3,6 +3,7 @@
     var xhr;
 
     $(document).ready(function() {
+        var tenderRefNo = new URLSearchParams(window.location.search).get('tenderRefNo');
 
         $('#import-supplier-spec-data-form').submit(function() {
             $('#itemTypeId, #indentId, #itemId').prop('disabled', false);
@@ -45,7 +46,7 @@
                         populateSupplierDropdown(response.suppliersData);
                         toastr.success("Data found for this Tender!");
                     } else if (response.isSuccess === false) {
-                        toastr.error(response.message);
+                        toastr.success(response.message);
                         if (response.indentId) {
                             $("#indentId").val(response.indentId).prop('selected', true)
                                 .change();
@@ -56,7 +57,7 @@
                         }
                         if (response.itemId) {
                             $("#itemId").val(response.itemId).prop('selected', true)
-                            .change();
+                                .change();
                             populateSupplierDropdown(response.suppliersData);
                         }
                         var supplierDataContainer = $(".supplier-data");
@@ -68,6 +69,9 @@
                 }
             });
         });
+
+        $("#tenderId").val(tenderRefNo);
+        $("#tenderId").trigger("change");
 
         var supplierDataContainer = $(".supplier-data");
         supplierDataContainer.hide();

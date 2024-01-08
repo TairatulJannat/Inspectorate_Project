@@ -646,7 +646,7 @@ class ExcelController extends Controller
         if ($supplierIds->isEmpty()) {
             return response()->json([
                 'isSuccess' => false,
-                'message' => 'No suppliers found for this Tender!',
+                'message' => 'No supplier spec has been imported yet!',
                 'tendersData' => $tendersData->indent_reference_no,
                 'indentId' => $indentsData->id,
                 'itemTypeId' => $indentsData->item_type_id,
