@@ -453,7 +453,7 @@
                 } else if (response.isSuccess === true) {
                     if (!response.indentData['item_type_id'] || !response.indentData['item_id']) {
                         const errorMessage = encodeURIComponent(
-                            "First update this Indent with Item & Item Type.");
+                            "Please update this Indent & then try again.");
                         const previousUrl = document.referrer.split('?')[0];
                         window.location.href = previousUrl + '?error=' + errorMessage;
                     } else {
