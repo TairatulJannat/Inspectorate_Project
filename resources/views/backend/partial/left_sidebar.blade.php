@@ -212,6 +212,22 @@ $currentControllerName = Request::segment(2);
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create QAC</a>
                                     </li>
                                 @endif
+                                @if (sub_menu_check('qac/view') !== null)
+                                    {{-- <li><a class="text-light" href="{{ route('admin.qac/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View PSI</a>
+                                    </li> --}}
+                                    <li><a class="text-light" href="{{ route('admin.psi/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View PSI</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('offer/create') !== null)
+                                    {{-- <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create PSI</a>
+                                    </li> --}}
+                                    <li><a class="text-light" href="{{ route('admin.psi/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create PSI</a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                     @endif
