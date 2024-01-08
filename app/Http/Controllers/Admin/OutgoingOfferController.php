@@ -87,7 +87,7 @@ class OutgoingOfferController extends Controller
 
                 ->addColumn('status', function ($data) {
                     if ($data->status == '1') {
-                        return '<button class="btn btn-info btn-sm">Approved</button>';
+                        return '<button class="btn btn-info btn-sm">Completed</button>';
                     }else {
                         return '<button class="btn btn-info btn-sm">None</button>';
                     }
@@ -101,26 +101,26 @@ class OutgoingOfferController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                   
-                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Vetted</a>
+
+                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Forward</a>
                     </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                            
-                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Vetted</a>
+
+                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            
-                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Vetted</a>
+
+                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-               
-                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Vetted</a>
+
+                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Forward</a>
                     </div>';
                     }
 
@@ -160,9 +160,9 @@ class OutgoingOfferController extends Controller
             array_push($additional_documents_names, $additional_names);
         }
         $details->suppliers = json_decode($details->supplier_id, true);
-     
+
         $supplier_names_names = [];
-     
+
         foreach ($details->suppliers as $Supplier_id) {
             $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
 //    dd($supplier_names);
