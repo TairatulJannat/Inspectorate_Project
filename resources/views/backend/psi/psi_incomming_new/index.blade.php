@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Psi')
+@section('title', 'PSI')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -43,7 +43,7 @@
 
     </style>
 @endpush
-@section('main_menu', 'Psi (New Arrival)')
+@section('main_menu', 'PSI (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -63,14 +63,14 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival</a>
-                            <a href="{{ route('admin.indent_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process </a>
-                            <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch</a>
+                            <a href="{{ route('admin.psi/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival ({{$psiNew}})</a>
+                            <a href="{{ route('admin.psi_approved/view') }}" type="button"
+                                class="btn btn-secondary btn-sm">On Process ({{$psiOnProcess}})</a>
+                            <a href="{{ route('admin.psi/outgoing') }}" type="button"
+                                class="btn btn-info text-white btn-sm">Completed ({{$psiCompleted}})</a>
+                            <a href="{{ route('admin.psi_dispatch/view') }}" type="button"
+                                class="btn btn-danger btn-sm">Dispatch ({{$psiDispatch}})</a>
 
                         </div>
                         <div>
@@ -92,7 +92,7 @@
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Present state of Psi</th>
+                                <th>Present state of PSI</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

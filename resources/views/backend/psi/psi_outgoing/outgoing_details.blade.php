@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'QAC (Completed)')
+@section('title', 'PSI (Completed)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,13 +90,13 @@
         }
     </style>
 @endpush
-@section('main_menu', 'QAC')
+@section('main_menu', 'PSI')
 @section('active_menu', 'Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of QAC</h2>
+                <h2>Details of PSI</h2>
             </div>
             <div style="display: flex">
 
@@ -619,7 +619,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.qac.qac_outgoing.outgoing_index_js') --}}
+    {{-- @include('backend.psi.psi_outgoing.outgoing_index_js') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -714,7 +714,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/outgoing_qac/tracking') }}',
+                            url: '{{ url('admin/outgoing_psi/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -739,7 +739,7 @@
                                             response.success);
 
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.qac/outgoing') }}",
+                                            "{{ route('admin.psi/outgoing') }}",
                                             40000);
                                     }
                                 }

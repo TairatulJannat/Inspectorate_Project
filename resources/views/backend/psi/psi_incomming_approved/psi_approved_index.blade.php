@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Qac (On Process)')
+@section('title', 'PSI (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -36,7 +36,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Qac (On Process)')
+@section('main_menu', 'PSI (On Process)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -56,14 +56,14 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.qac/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival ({{$qacNew}})</a>
-                            <a href="{{ route('admin.qac_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process ({{$qacOnProcess}})</a>
-                            <a href="{{ route('admin.qac/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed ({{$qacCompleted}})</a>
-                            <a href="{{ route('admin.qac_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch ({{$qacDispatch}})</a>
+                            <a href="{{ route('admin.psi/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival ({{$psiNew}})</a>
+                            <a href="{{ route('admin.psi_approved/view') }}" type="button"
+                                class="btn btn-secondary btn-sm">On Process ({{$psiOnProcess}})</a>
+                            <a href="{{ route('admin.psi/outgoing') }}" type="button"
+                                class="btn btn-info text-white btn-sm">Completed ({{$psiCompleted}})</a>
+                            <a href="{{ route('admin.psi_dispatch/view') }}" type="button"
+                                class="btn btn-danger btn-sm">Dispatch ({{$psiDispatch}})</a>
 
                         </div>
                         <div>
@@ -85,7 +85,7 @@
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Present state of Qac</th>
+                                <th>Present state of PSI</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -117,5 +117,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.qac.qac_incomming_approved.qac_approved_index_js')
+    @include('backend.psi.psi_incomming_approved.psi_approved_index_js')
 @endpush

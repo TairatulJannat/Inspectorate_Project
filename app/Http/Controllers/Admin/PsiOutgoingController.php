@@ -8,14 +8,14 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\Qac;
+use App\Models\Psi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 
-class QacOutgoingController extends Controller
+class PsiOutgoingController extends Controller
 {
     public function index()
     {
@@ -26,51 +26,51 @@ class QacOutgoingController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $qacNew = Qac::where('status', 0)->count();
-            $qacOnProcess = '0';
-            $qacCompleted = '0';
-            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $psiNew = Psi::where('status', 0)->count();
+            $psiOnProcess = '0';
+            $psiCompleted = '0';
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('qacs.status', 4)
+                ->where('psies.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         } else {
 
-            $qacNew = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $psiNew = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
-                ->where('qacs.status', 0)
+                ->where('psies.status', 0)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $qacOnProcess = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $psiOnProcess = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
-                ->where('qacs.status', 3)
+                ->where('psies.status', 3)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $qacCompleted = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $psiCompleted = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
-                ->where('qacs.status', 1)
+                ->where('psies.status', 1)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('qacs.status', 4)
+                ->where('psies.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.qac.qac_outgoing.outgoing', compact('qacNew','qacOnProcess','qacCompleted','qacDispatch'));
+        return view('backend.psi.psi_outgoing.outgoing', compact('psiNew','psiOnProcess','psiCompleted','psiDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -85,44 +85,44 @@ class QacOutgoingController extends Controller
 
 
             if (Auth::user()->id == 92) {
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
-                    ->select('qacs.*', 'item_types.name as item_type_name', 'qacs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('qacs.status', '=', 1)
+                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
+                    ->select('psies.*', 'item_types.name as item_type_name', 'psies.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('psies.status', '=', 1)
                     ->get();
             } else {
-                $qacIds = Qac::leftJoin('document_tracks', 'qacs.id', '=', 'document_tracks.doc_ref_id')
+                $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('qacs.inspectorate_id', $insp_id)
-                    ->where('qacs.status', 1)
-                    ->whereIn('qacs.section_id', $section_ids)->pluck('qacs.id', 'qacs.id')->toArray();
+                    ->where('psies.inspectorate_id', $insp_id)
+                    ->where('psies.status', 1)
+                    ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
 
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
-                    ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('qacs.id', $qacIds)
-                    ->where('qacs.status', '=', 1)
+                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
+                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('psies.id', $psiIds)
+                    ->where('psies.status', '=', 1)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $qacId = [];
+                $psiId = [];
                 if ($query) {
-                    foreach ($query as $qac) {
-                        array_push($qacId, $qac->id);
+                    foreach ($query as $psi) {
+                        array_push($psiId, $psi->id);
                     }
                 }
 
                 //......Start for showing data for receiver designation
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $qacId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $psiId)
                     ->where('reciever_desig_id', $designation_id)
                     ->where('track_status', 2)
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = Qac::where('id', 'no data')->get();
+                    $query = Psi::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -151,25 +151,25 @@ class QacOutgoingController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_qac/details/' . $data->id) . '" class="edit">Forward</a>
+                    <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="edit">Forward</a>
                     </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_qac/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_qac/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_qac/details/' . $data->id) . '" class="edit">forward</a>
+                    <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="edit">forward</a>
                     </div>';
                     }
 
@@ -184,11 +184,11 @@ class QacOutgoingController extends Controller
     public function details($id)
     {
 
-        $details = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-            ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name')
-            ->where('qacs.id', $id)
-            ->where('qacs.status', 1)
+        $details = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
+            ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name')
+            ->where('psies.id', $id)
+            ->where('psies.status', 1)
             ->first();
 
 
@@ -238,15 +238,15 @@ class QacOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.qac.qac_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.psi.psi_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
     }
 
-    public function OutgoingqacTracking(Request $request)
+    public function OutgoingpsiTracking(Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 7; // 7 for doc type qac from doctype table column doc_serial
+        $doc_type_id = 8; // 8 for doc type qac from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
@@ -273,19 +273,19 @@ class QacOutgoingController extends Controller
 
         // ----delay_cause and terms and conditions start here
         if ($desig_position->position == 3) {
-            $qac_data = Qac::find($doc_ref_id);
-            $qac_data->delay_cause = $request->delay_cause;
-            $qac_data->delivery_date = $request->delivery_date;
+            $psi_data = Psi::find($doc_ref_id);
+            $psi_data->delay_cause = $request->delay_cause;
+            $psi_data->delivery_date = $request->delivery_date;
 
 
-            $qac_data->delivery_by = Auth::user()->id;
-            $qac_data->save();
+            $psi_data->delivery_by = Auth::user()->id;
+            $psi_data->save();
         }
         // ----delay_cause and terms and conditions end here
 
         if ($desig_position->position == 7) {
 
-            $data = Qac::find($doc_ref_id);
+            $data = Psi::find($doc_ref_id);
 
             if ($data) {
 

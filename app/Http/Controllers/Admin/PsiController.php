@@ -28,7 +28,61 @@ class PsiController extends Controller
     public function index()
     {
 
-        return view('backend.psi.psi_incomming_new.index');
+
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
+
+        if ($designation_id == 1 || $designation_id == 0) {
+            $psiNew = Psi::where('status', 0)->count();
+            $psiOnProcess = '0';
+            $psiCompleted = '0';
+            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('psies.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $psiNew = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('psies.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $psiOnProcess = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('psies.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $psiCompleted = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('psies.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('psies.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+
+
+        return view('backend.psi.psi_incomming_new.index', compact('psiNew','psiOnProcess','psiCompleted','psiDispatch'));
     }
 
     public function all_data(Request $request)
@@ -352,7 +406,7 @@ class PsiController extends Controller
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        $doc_type_id = 7; //...... 3 for indent from indents table doc_serial.
+        $doc_type_id = 8; //...... 3 for psi from  table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
