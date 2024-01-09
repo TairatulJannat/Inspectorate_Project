@@ -222,6 +222,10 @@ class ExcelController extends Controller
             $currentGroupName = null;
 
             foreach ($importedData->toArray() as $row) {
+                if (empty(array_filter($row))) {
+                    continue;
+                }
+
                 $groupName = $row[0];
 
                 if ($groupName !== null) {
@@ -232,19 +236,19 @@ class ExcelController extends Controller
                     $groupName = $currentGroupName;
                 }
 
-                $parameterName = trim($row[1]);
-                if (empty($parameterName)) {
-                    return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                }
+                // $parameterName = trim($row[1]);
+                // if (empty($parameterName)) {
+                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
+                // }
 
-                $parameterValue = trim($row[2]);
-                if (empty($parameterValue)) {
-                    return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                }
+                // $parameterValue = trim($row[2]);
+                // if (empty($parameterValue)) {
+                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
+                // }
 
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => $parameterName,
-                    'parameter_value' => $parameterValue,
+                    'parameter_name' => trim($row[1]),
+                    'parameter_value' => trim($row[2]),
                 ];
             }
 
@@ -445,9 +449,9 @@ class ExcelController extends Controller
                 }
 
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => $row[1],
-                    'indent_parameter_value' => $row[2],
-                    'parameter_value' => $row[3],
+                    'parameter_name' => trim($row[1]),
+                    'indent_parameter_value' => trim($row[2]),
+                    'parameter_value' => trim($row[3]),
                 ];
             }
 
