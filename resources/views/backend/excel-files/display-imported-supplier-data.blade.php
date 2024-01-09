@@ -34,7 +34,7 @@
                                 <div class="tender-id f-20">Tender Ref. No: <span class="fw-bold">{{ $tenderRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="tender-id" value="{{ $tenderId }}">
-                                <div class="supplier-id f-20">Supplier Firm name: <span
+                                <div class="supplier-id f-20">Supplier Name: <span
                                         class="fw-bold">{{ $supplierFirmName }}</span></div>
                                 <input type="hidden" name="supplier-id" value="{{ $supplierId }}">
                             </div>
