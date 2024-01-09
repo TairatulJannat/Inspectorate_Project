@@ -226,9 +226,9 @@ class ExcelController extends Controller
                     continue;
                 }
 
-                $groupName = $row[0];
+                $groupName = trim($row[1]);
 
-                if ($groupName !== null) {
+                if ($groupName != null) {
                     $currentGroupName = $groupName;
                     $parameterGroups[$currentGroupName] = [];
                     continue;
@@ -247,8 +247,8 @@ class ExcelController extends Controller
                 // }
 
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => trim($row[1]),
-                    'parameter_value' => trim($row[2]),
+                    'parameter_name' => trim($row[2]),
+                    'parameter_value' => trim($row[3]),
                 ];
             }
 
@@ -261,12 +261,17 @@ class ExcelController extends Controller
             $itemType = Item_Type::find($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
+            $indentNo = $request->indentNo;
+            $indentData = Indent::where('indent_number', $indentNo)->first();
+
             return view('backend.excel-files.display-imported-indent-data', [
                 'parameterGroups' => $parameterGroups,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
                 'itemId' => $itemId,
                 'itemName' => $itemName,
+                'indentNo' => $indentNo,
+                'indentRefNo' => $indentData->reference_no,
             ]);
         } catch (UnreadableFileException $e) {
             return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'The uploaded file is unreadable.');
