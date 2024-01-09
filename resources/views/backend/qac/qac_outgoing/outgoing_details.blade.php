@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Completed)')
+@section('title', 'QAC (Completed)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,13 +90,13 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Completed)')
-@section('active_menu', 'Outgoing Details')
+@section('main_menu', 'QAC')
+@section('active_menu', 'Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Indent</h2>
+                <h2>Details of QAC</h2>
             </div>
             <div style="display: flex">
 
@@ -108,76 +108,38 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                            <tr>
-                                <th>Indent Number</td>
-                                <td>{{ $details->indent_number }}</td>
-                            </tr>
+
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->indent_received_date }}</td>
+                                <td>{{ $details->received_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Referance Date</td>
+                                <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>{{ $details->attribute }}</td>
-                            </tr>
-                            <tr>
 
-                                <th>Additional Documents</th>
-                                <td>
-                                    @if (!empty($additional_documents_names))
-                                        <ul>
-                                            @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name }} </li>
-                                                <!-- Adjust the key according to your array structure -->
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No additional documents available.
-                                    @endif
-                                </td>
-
-                            </tr>
                             <tr>
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature }}</td>
-                            </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}</td>
-                            </tr>
-                            <tr>
-                                <th>Model</td>
-                                <td>{{ $details->model }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly }}</td>
-                            </tr>
+
 
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                        {{-- <a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a> --}}
                         {{-- <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
                         <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                            href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Pdf Document</a>
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -233,13 +195,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="d-flex">
-                                                    @if (!$details->terms_conditions)
-                                                        <div class="col-md-6 mt-2 ">
-                                                            <label for=""></label>
-                                                            <textarea name="terms" class="form-control terms_conditions_text" cols="20" rows="5"
-                                                                id="terms_conditions_text" placeholder="Please write terms and conditions"></textarea>
-                                                        </div>
-                                                    @endif
+
 
 
                                                     @if (!$cover_letter)
@@ -381,17 +337,7 @@
                                 </div>
                             </div>
                         @endif
-                        @if ($details->terms_conditions)
-                            <div class="forward_status col-md-12 mb-3">
-                                <div>
-                                    <h4 class="text-success">Terms Conditions</h4>
-                                    <hr>
-                                    <div class="table-responsive">
-                                        {{ $details->terms_conditions }}
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+
                     </div>
 
                 </div>
@@ -673,7 +619,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
+    {{-- @include('backend.qac.qac_outgoing.outgoing_index_js') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -748,7 +694,7 @@
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
-                var terms_conditions = $('#terms_conditions_text').val();
+
 
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
@@ -768,7 +714,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/outgoing_indent/tracking') }}',
+                            url: '{{ url('admin/outgoing_qac/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -776,7 +722,7 @@
                                 'delivery_date': delivery_date,
                                 'doc_reference_number': doc_reference_number,
                                 'remarks': remarks,
-                                'terms_conditions': terms_conditions
+
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -793,7 +739,7 @@
                                             response.success);
 
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent/outgoing') }}",
+                                            "{{ route('admin.qac/outgoing') }}",
                                             40000);
                                     }
                                 }

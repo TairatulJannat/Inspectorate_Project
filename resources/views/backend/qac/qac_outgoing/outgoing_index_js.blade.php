@@ -27,8 +27,8 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-                url: "{{ url('admin/outgoing_indent/all_data') }}",
-                type: 'GET',
+                url: "{{ url('admin/outgoing_qac/all_data') }}",
+                type: 'post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
                 }
@@ -36,53 +36,43 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    searchable: false
+                    searchable: true
                 },
                 {
-
                     data: 'reference_no',
                     name: 'reference_no',
 
-                    orderable: false
                 },
+
                 {
                     data: 'item_type_name',
                     name: 'item_type_id',
-                    orderable: false
+
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                    orderable: false
                 },
 
 
                 {
-                    data: 'indent_received_date',
-                    name: 'indent_received_date',
-                    orderable: false
+                    data: 'received_date',
+                    name: 'received_date',
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                    orderable: false
                 },
-                {
-                    data: 'qty',
-                    name: 'qty',
-                    orderable: false
-                },
+
 
                 {
                     data: 'status',
                     name: 'status',
-                    orderable: false
                 },
 
                 {
                     data: 'action',
                     name: 'action',
-                    orderable: true
                 },
 
             ],

@@ -10,7 +10,7 @@ use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-use App\Models\Indent;
+
 use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\ParameterGroup;
@@ -28,7 +28,60 @@ class QacController extends Controller
     public function index()
     {
 
-        return view('backend.qac.qac_incomming_new.index');
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
+
+        if ($designation_id == 1 || $designation_id == 0) {
+            $qacNew = Qac::where('status', 0)->count();
+            $qacOnProcess = '0';
+            $qacCompleted = '0';
+            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('qacs.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $qacNew = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('qacs.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $qacOnProcess = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('qacs.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $qacCompleted = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('qacs.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('qacs.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+
+
+        return view('backend.qac.qac_incomming_new.index', compact('qacNew','qacOnProcess','qacCompleted','qacDispatch'));
     }
 
     public function all_data(Request $request)
@@ -77,8 +130,8 @@ class QacController extends Controller
 
                 $qacId = [];
                 if ($query) {
-                    foreach ($query as $indent) {
-                        array_push($qacId, $indent->id);
+                    foreach ($query as $qac) {
+                        array_push($qacId, $qac->id);
                     }
                 }
 
@@ -224,7 +277,7 @@ class QacController extends Controller
         $dte_managments = Dte_managment::where('status', 1)->get();
 
 
-        // $selected_document =$indent->additional_documents;
+        // $selected_document =$qac->additional_documents;
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
@@ -236,14 +289,14 @@ class QacController extends Controller
 
     public function update(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'editId' => 'required',
             'reference_no' => 'required',
             'contract_reference_no' => 'required',
             'item_type_id' => 'required',
             'item_id' => 'required',
-           
+
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 422);
@@ -262,11 +315,11 @@ class QacController extends Controller
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
-        
+
         $path='';
         if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public'); 
+            $path = $request->file('doc_file')->store('uploads', 'public');
         }
         $data->attached_file = $path;
 
@@ -336,6 +389,7 @@ class QacController extends Controller
 
     public function qacTracking(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
@@ -352,7 +406,7 @@ class QacController extends Controller
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        $doc_type_id = 7; //...... 3 for indent from indents table doc_serial.
+        $doc_type_id = 7; //...... 7 for qac / table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;

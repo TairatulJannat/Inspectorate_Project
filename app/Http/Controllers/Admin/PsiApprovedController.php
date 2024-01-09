@@ -7,16 +7,14 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\Indent;
-
+use App\Models\Qac;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\Request;
 
-class IndentDispatchController extends Controller
+class QacApprovedController extends Controller
 {
-    //
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -26,51 +24,51 @@ class IndentDispatchController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $indentNew = Indent::where('status', 0)->count();
-            $indentOnProcess = '0';
-            $indentCompleted = '0';
-            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $qacNew = Qac::where('status', 0)->count();
+            $qacOnProcess = '0';
+            $qacCompleted = '0';
+            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('indents.status', 4)
+                ->where('qacs.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         } else {
 
-            $indentNew = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $qacNew = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
-                ->where('indents.status', 0)
+                ->where('qacs.status', 0)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $indentOnProcess = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $qacOnProcess = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
-                ->where('indents.status', 3)
+                ->where('qacs.status', 3)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $indentCompleted = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $qacCompleted = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
-                ->where('indents.status', 1)
+                ->where('qacs.status', 1)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
+                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('indents.status', 4)
+                ->where('qacs.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.indent.indent_dispatch.indent_dispatch_index', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch'));
+        return view('backend.qac.qac_incomming_approved.qac_approved_index', compact('qacNew', 'qacOnProcess', 'qacCompleted', 'qacDispatch'));
     }
 
     public function all_data(Request $request)
@@ -84,43 +82,51 @@ class IndentDispatchController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->where('indents.status', 4)
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
+                    ->where('qacs.status', 3)
+                    ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->get();
+            } elseif ($desig_position->id == 1) {
+
+                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
+                    ->select('qacs.*', 'item_types.name as item_type_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('qacs.status', 3)
                     ->get();
             } else {
 
-                $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
+                $qacIds = Qac::leftJoin('document_tracks', 'qacs.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('indents.insp_id', $insp_id)
-                    ->where('indents.status', 4)
-                    ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
+                    ->where('qacs.inspectorate_id', $insp_id)
+                    ->where('qacs.status', 3)
+                    ->whereIn('qacs.section_id', $section_ids)->pluck('qacs.id', 'qacs.id')->toArray();
 
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('indents.id', $indentIds)
-                    ->where('indents.status', 4)
+                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'qacs.section_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
+                    ->select('qacs.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('qacs.id', $qacIds)
+                    ->where('qacs.status', 3)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $indentId = [];
+                $qacId = [];
                 if ($query) {
-                    foreach ($query as $indent) {
-                        array_push($indentId, $indent->id);
+                    foreach ($query as $qac) {
+                        array_push($qacId, $qac->id);
                     }
                 }
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $qacId)
                     ->where('reciever_desig_id', $designation_id)
-                    ->where('track_status', 4)
+                    ->where('track_status', '3')
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = Indent::where('id', 'no data')->get();
+                    $query = Qac::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -133,41 +139,40 @@ class IndentDispatchController extends Controller
 
                 ->addColumn('status', function ($data) {
 
-                    if ($data->status == '4') {
-                        return '<button class="btn btn-danger btn-sm">Dispatched</button>';
+                    if ($data->status == '3') {
+                        return '<button class="btn btn-secondary btn-sm">Approved</button>';
                     } else {
-                        return '<button class="btn btn-danger btn-sm">None</button>';
+                        return '<button class="btn btn-secondary btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
-
                     // start Forward Btn Change for index
                     $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
+
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
+                            <a href="' . url('admin/qac_approved/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
-                        </div>';
+
+                            <a href="' . url('admin/qac_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
-                        </div>';
+
+                            <a href="' . url('admin/qac_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
+
+                        <a href="' . url('admin/qac_approved/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
@@ -179,33 +184,22 @@ class IndentDispatchController extends Controller
     }
 
 
-
     public function details($id)
     {
 
-        $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-            ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
-            ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
+        $details = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('fin_years', 'qacs.fin_year_id', '=', 'fin_years.id')
             ->select(
-                'indents.*',
+                'qacs.*',
                 'item_types.name as item_type_name',
-                'indents.*',
                 'dte_managments.name as dte_managment_name',
-                'additional_documents.name as additional_documents_name',
                 'fin_years.year as fin_year_name'
             )
-            ->where('indents.id', $id)
+            ->where('qacs.id', $id)
             ->first();
-        $details->additional_documents = json_decode($details->additional_documents, true);
-        $additional_documents_names = [];
-        if ($details->additional_documents) {
-            foreach ($details->additional_documents as $document_id) {
-                $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-                array_push($additional_documents_names, $additional_names);
-            }
-        }
+
 
 
 
@@ -213,21 +207,15 @@ class IndentDispatchController extends Controller
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
-
-
-        // dd($skipId);
-
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->whereIn('track_status', [2, 4])
+            ->whereIn('track_status', [1, 3])
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
-                    ->where('receiver_designation.id', 3)
-                    ->where('document_tracks.track_status', 2);
+                    ->where('receiver_designation.id', 5)
+                    ->where('document_tracks.track_status', 1);
             })
-            ->skip(1) // Skip the first row
-            ->take(PHP_INT_MAX)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -240,13 +228,6 @@ class IndentDispatchController extends Controller
         if ($auth_designation_id) {
             $desig_id = $auth_designation_id->desig_id;
         }
-        // delay cause for sec IC start
-
-        $admin_id = Auth::user()->id;
-        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-        $desig_position = Designation::where('id', $sender_designation_id)->first();
-
-        // delay cause for sec IC start
 
         //Start close forward Status...
 
@@ -260,12 +241,11 @@ class IndentDispatchController extends Controller
 
         //End close forward Status...
 
-
         //Start blade notes section....
         $notes = '';
 
         $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->whereIn('track_status', [2, 4])
+            ->where('track_status', 1)
             ->where('reciever_desig_id', $desig_id)->get();
 
         if ($document_tracks_notes->isNotEmpty()) {
@@ -273,24 +253,26 @@ class IndentDispatchController extends Controller
         }
 
         //End blade notes section....
+
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_dispatch.indent_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.qac.qac_incomming_approved.qac_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
-    public function indentTracking(Request $request)
+    public function qacTracking(Request $request)
     {
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
+        $doc_type_id = 7; //...... 3 for qac from qac table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
-        $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
+        $doc_reference_number = $request->doc_reference_number;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
@@ -303,22 +285,22 @@ class IndentDispatchController extends Controller
         $data->doc_type_id = $doc_type_id;
         $data->doc_ref_id = $doc_ref_id;
         $data->doc_reference_number = $doc_reference_number;
-        $data->track_status = 4;
+        $data->track_status = 3;
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
         $data->created_at = Carbon::now('Asia/Dhaka');
-        $data->updated_at = Carbon::now('Asia/Dhaka');
+        $data->updated_at = Carbon::now('Asia/Dhaka');;
         $data->save();
 
 
-        if ($desig_position->position == 1) {
+        if ($desig_position->position == 5) {
 
-            $data = Indent::find($doc_ref_id);
+            $data = Qac::find($doc_ref_id);
 
             if ($data) {
 
-                $data->status = 2;
+                $data->status = 1;
                 $data->save();
 
                 $value = new DocumentTrack();
@@ -326,8 +308,8 @@ class IndentDispatchController extends Controller
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                // $value->doc_reference_number = $doc_reference_number;
-                $value->track_status = 4;
+                $value->doc_reference_number = $doc_reference_number;
+                $value->track_status = 2;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
                 $value->remarks = $remarks;
@@ -338,14 +320,5 @@ class IndentDispatchController extends Controller
         }
 
         return response()->json(['success' => 'Done']);
-    }
-
-
-    public function parameter(Request $request)
-    {
-        $indent = Indent::find($request->indent_id);
-        $item_id = $indent->item_id;
-        $item_type_id = $indent->item_type_id;
-        return view('backend.indent.parameter', compact('item_id', 'item_type_id'));
     }
 }

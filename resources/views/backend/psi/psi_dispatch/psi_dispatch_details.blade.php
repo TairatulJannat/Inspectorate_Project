@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (Dispatch)')
+@section('title', 'QAC (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,14 +90,14 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (Dispatch) ')
+@section('main_menu', 'QAC (Dispatch) ')
 @section('active_menu', 'Details')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Indent</h2>
+                <h2>Details of QAC</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-4">
@@ -107,75 +107,38 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                            <tr>
-                                <th>Indent Number</td>
-                                <td>{{ $details->indent_number }}</td>
-                            </tr>
+
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->indent_received_date }}</td>
+                                <td>{{ $details->received_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Referance Date</td>
+                                <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>{{ $details->attribute }}</td>
-                            </tr>
-                            <tr>
-                                <th>Additional Documents</th>
-                                <td>
-                                    @if (!empty($additional_documents_names))
-                                        <ul>
-                                            @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name }} </li>
-                                                <!-- Adjust the key according to your array structure -->
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No additional documents available.
-                                    @endif
-                                </td>
-                            </tr>
+
                             <tr>
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature }}</td>
-                            </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}</td>
-                            </tr>
-                            <tr>
-                                <th>Model</td>
-                                <td>{{ $details->model }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly }}</td>
-                            </tr>
+
 
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
-                            <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
-                                target="_blank">Pdf Document</a>
-                            <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
-                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
-                                Letter</a>
+
+                        <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                        <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                            class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                            Letter</a>
                     </div>
                 </div>
 
@@ -313,17 +276,7 @@
                                 </div>
                             </div>
                         @endif
-                        @if ($details->terms_conditions !== null)
-                        <div class="forward_status col-md-12 mt-3">
-                            <div>
-                                <h4 class="text-success">Terms Conditions</h4>
-                                <hr>
-                                <div class="table-responsive">
-                                    {{$details->terms_conditions}}
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+
                     </div>
 
 
@@ -340,7 +293,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_dispatch.indent_dispatch_index_js') --}}
+    {{-- @include('backend.qac.qac_dispatch.qac_dispatch_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -381,7 +334,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/indent_dispatch/indent_tracking') }}',
+                            url: '{{ url('admin/qac_dispatch/qac_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -403,7 +356,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent_dispatch/view') }}",
+                                            "{{ route('admin.qac_dispatch/view') }}",
                                             40000);
                                     }
                                 }

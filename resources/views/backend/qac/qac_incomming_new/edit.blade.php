@@ -12,15 +12,7 @@
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    {{-- <div class=" header">
-                       
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import
-                                    Excel</a>
-                            </div>
-                        </div>
-                    </div> --}}
+                    
                     <div class="row mt-4">
 
                         <div class="col-md-4">
@@ -115,7 +107,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fin_year_id">Financial Year </label>
@@ -135,7 +127,7 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        
+
 
 
                         <div class="col-md-4">
@@ -176,7 +168,7 @@
     </div>
 @endsection
 @push('js')
-   
+
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
@@ -224,7 +216,7 @@
         })
         //End:: Update information
 
-     
+
 
         function form_reset() {
             document.getElementById("search_form").reset();
@@ -262,7 +254,7 @@
     <script>
         $(document).ready(function() {
 
-           
+
             $("#item_type_id").off('change').on('change', function() {
 
                 //  alert('123');

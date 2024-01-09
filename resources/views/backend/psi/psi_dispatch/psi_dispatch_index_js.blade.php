@@ -28,65 +28,52 @@
             },
             ajax: {
 
-                url: "{{ url('admin/indent_approved/all_data') }}",
+                url: "{{ url('admin/qac_dispatch/all_data') }}",
                 type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
                 }
             },
-            columns: [{
+             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    searchable: false
+                    searchable: true
                 },
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-                    orderable: false
+
                 },
-                {
-                    data: 'indent_number',
-                    name: 'indent_number',
-                    orderable: false
-                },
+
                 {
                     data: 'item_type_name',
                     name: 'item_type_id',
-                    orderable: false
+
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                    orderable: false
                 },
 
 
                 {
-                    data: 'indent_received_date',
-                    name: 'indent_received_date',
-                    orderable: false
+                    data: 'received_date',
+                    name: 'received_date',
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                    orderable: false
                 },
-                {
-                    data: 'qty',
-                    name: 'qty',
-                    orderable: false
-                },
+
 
                 {
                     data: 'status',
                     name: 'status',
-                    orderable: false
                 },
 
                 {
                     data: 'action',
                     name: 'action',
-                    orderable: true
                 },
 
             ],
@@ -103,51 +90,7 @@
     // End:: All Data
 
     // Start:: save information
-    $('#save_info').off().on('submit', function(event) {
-        event.preventDefault();
 
-        var formData = new FormData($('#save_info')[0]);
-
-
-        disableButton()
-        $.ajax({
-            url: "{{ url('admin/indent/store') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            success: function(response) {
-                if (response.error) {
-                    error_notification(response.error)
-                    enableeButton()
-                }
-                if (response.success) {
-                    enableeButton()
-                    $('.modal-backdrop').remove();
-                    $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                    toastr.success('Information Saved', 'Saved');
-                }
-                setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
-            },
-            error: function(response) {
-                enableeButton()
-                clear_error_field();
-                // error_notification('Please fill up the form correctly and try again')
-                // $('#error_sender').text(response.responseJSON.errors.sender);
-                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                // $('#error_spec_type').text(response.responseJSON.errors.spec_type);
-                // $('#error_additional_documents').text(response.responseJSON.errors
-                //     .additional_documents);
-                // $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
-                // $('#error_spec_received_date').text(response.responseJSON.errors
-                //     .spec_received_date);
-
-            }
-        });
-    })
     // End:: save information
 
     //Start:: Update information
