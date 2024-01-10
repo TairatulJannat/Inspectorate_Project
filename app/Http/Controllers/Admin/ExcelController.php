@@ -310,7 +310,7 @@ class ExcelController extends Controller
 
             DB::commit();
 
-            return redirect()->to('admin/import-indent-spec-data-index')->with('success', 'Changes saved successfully.');
+            return redirect()->to('admin/indent/view')->with('success', 'Indent data saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Error saving data: ' . $e->getMessage());
