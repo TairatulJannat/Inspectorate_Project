@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('parameter_groups', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->longText('name');
             $table->unsignedBigInteger('item_type_id')->nullable();
             $table->unsignedBigInteger('item_id')->nullable();
             $table->unsignedBigInteger('inspectorate_id')->nullable();
