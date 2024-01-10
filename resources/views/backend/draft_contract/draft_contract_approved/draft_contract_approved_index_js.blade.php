@@ -28,13 +28,13 @@
             },
             ajax: {
 
-                url: "{{ url('admin/psi_dispatch/all_data') }}",
+                url: "{{ url('admin/psi_approved/all_data') }}",
                 type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
                 }
             },
-             columns: [{
+            columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
                     searchable: true
@@ -90,17 +90,15 @@
     // End:: All Data
 
     // Start:: save information
-
-    // End:: save information
-
-    //Start:: Update information
-    // $('#update_form').off().on('submit', function(event) {
+    // $('#save_info').off().on('submit', function(event) {
     //     event.preventDefault();
-    //     var formData = new FormData($('#update_form')[0]);
+
+    //     var formData = new FormData($('#save_info')[0]);
+
 
     //     disableButton()
     //     $.ajax({
-    //         url: "{{ url('admin/hall_price/update') }}",
+    //         url: "{{ url('admin/qac/store') }}",
     //         type: "POST",
     //         data: formData,
     //         processData: false,
@@ -115,79 +113,30 @@
     //             }
     //             if (response.success) {
     //                 enableeButton()
+    //                 $('.modal-backdrop').remove();
     //                 $('.yajra-datatable').DataTable().ajax.reload(null, false);
-    //                 toastr.success('Information Updated', 'Saved');
-    //                 $('#edit_model').modal('hide');
+    //                 toastr.success('Information Saved', 'Saved');
     //             }
-    //             setTimeout(window.location.href = "{{ route('admin.prelimgeneral/view') }}", 40000);
+    //             setTimeout(window.location.href = "{{ route('admin.qac/view') }}", 40000);
     //         },
     //         error: function(response) {
     //             enableeButton()
     //             clear_error_field();
-    //             error_notification('Please fill up the form correctly and try again')
-    //             // $('#error_hall_id').text(response.responseJSON.errors.hall_id);
-    //             // $('#error_floor_id').text(response.responseJSON.errors.floor_id);
-    //             // $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
-    //             // $('#error_specify_event').text(response.responseJSON.errors.specify_event);
-    //             // $('#error_event_name').text(response.responseJSON.errors.event_name);
-    //             // $('#error_specify_month').text(response.responseJSON.errors.specify_month);
-    //             // $('#error_months').text(response.responseJSON.errors.months);
-    //             // $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
-    //             // $('#error_specify_shift_charge').text(response.responseJSON.errors
-    //             //     .specify_shift_charge);
-    //             // $('#error_shift_id').text(response.responseJSON.errors.shift_id);
-    //             // $('#error_price').text(response.responseJSON.errors.price);
-    //             // $('#error_status').text(response.responseJSON.errors.status);
+    //             // error_notification('Please fill up the form correctly and try again')
+    //             // $('#error_sender').text(response.responseJSON.errors.sender);
+    //             // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+    //             // $('#error_spec_type').text(response.responseJSON.errors.spec_type);
+    //             // $('#error_additional_documents').text(response.responseJSON.errors
+    //             //     .additional_documents);
+    //             // $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
+    //             // $('#error_spec_received_date').text(response.responseJSON.errors
+    //             //     .spec_received_date);
+
     //         }
     //     });
     // })
-    //End:: Update information
+    // End:: save information
 
-    // Start:: delete user
-    function delete_data(id) {
-        swal({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-            buttonsStyling: false,
-            reverseButtons: true
-        }).then((result) => {
-            if (result.value) {
-                event.preventDefault();
-                $.ajax({
-                    type: 'get',
-                    url: '{{ url('admin/hall_price/delete') }}/' + id,
-                    success: function(response) {
-                        if (response) {
-                            if (response.permission == false) {
-                                toastr.warning('you dont have that Permission',
-                                    'Permission Denied');
-                            } else {
-                                toastr.success('Deleted Successful', 'Deleted');
-                                $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                            }
-                        }
-                    }
-                });
-            } else if (
-                result.dismiss === swal.DismissReason.cancel
-            ) {
-                swal(
-                    'Cancelled',
-                    'Your data is safe :)',
-                    'error'
-                )
-            }
-        })
-    }
-    // End:: delete user
 
     function form_reset() {
         document.getElementById("search_form").reset();

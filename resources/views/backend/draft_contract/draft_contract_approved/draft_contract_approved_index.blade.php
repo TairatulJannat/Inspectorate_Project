@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI (Dispatch)')
+@section('title', 'PSI (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -14,21 +14,19 @@
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
         .table thead{
-            background: #b53f4b;
+            background: #BA895D;
             color: #ffff
         }
         .table thead tr th{
 
             color: #ffff
         }
-
         .dt-buttons{
             margin-left:8px;
         }
         .badge-secondary{
-            background-color: #b53f4b !important;
+            background-color: #BA895D !important;
         }
-
         .dt-buttons .buttons-html5{
             background-color: #A1B53A !important;
             border:none;
@@ -38,7 +36,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI (Dispatch)')
+@section('main_menu', 'PSI (On Process)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -79,7 +77,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered yajra-datatable">
-                        <thead>
+                        <thead >
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference Number</th>
@@ -87,7 +85,7 @@
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Present state of psi</th>
+                                <th>Present state of PSI</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -119,5 +117,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.psi.psi_dispatch.psi_dispatch_index_js')
+    @include('backend.psi.psi_incomming_approved.psi_approved_index_js')
 @endpush

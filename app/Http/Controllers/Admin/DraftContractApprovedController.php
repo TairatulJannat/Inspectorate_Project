@@ -7,18 +7,13 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\Dte_managment;
-use App\Models\FinancialYear;
-use App\Models\Indent;
-use App\Models\Item_type;
-use App\Models\Items;
-use App\Models\Section;
+use App\Models\Psi;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\Request;
 
-class IndentApprovedController extends Controller
+class DraftContractApprovedController extends Controller
 {
     public function index()
     {
@@ -29,51 +24,51 @@ class IndentApprovedController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $indentNew = Indent::where('status', 0)->count();
-            $indentOnProcess = '0';
-            $indentCompleted = '0';
-            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $psiNew = Psi::where('status', 0)->count();
+            $psiOnProcess = '0';
+            $psiCompleted = '0';
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('indents.status', 4)
+                ->where('psies.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         } else {
 
-            $indentNew = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $psiNew = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
-                ->where('indents.status', 0)
+                ->where('psies.status', 0)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $indentOnProcess = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $psiOnProcess = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
-                ->where('indents.status', 3)
+                ->where('psies.status', 3)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $indentCompleted = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $psiCompleted = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
-                ->where('indents.status', 1)
+                ->where('psies.status', 1)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $indentDispatch = DocumentTrack::where('doc_type_id', 3)
-                ->leftJoin('indents', 'document_tracks.doc_ref_id', '=', 'indents.id')
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
+                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('indents.status', 4)
+                ->where('psies.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.indent.indent_incomming_approved.indent_approved_index', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch'));
+        return view('backend.psi.psi_incomming_approved.psi_approved_index', compact('psiNew', 'psiOnProcess', 'psiCompleted', 'psiDispatch'));
     }
 
     public function all_data(Request $request)
@@ -87,51 +82,51 @@ class IndentApprovedController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->where('indents.status', 3)
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
+                    ->where('psies.status', 3)
+                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('indents.status', 3)
+                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
+                    ->select('psies.*', 'item_types.name as item_type_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('psies.status', 3)
                     ->get();
             } else {
 
-                $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
+                $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('indents.insp_id', $insp_id)
-                    ->where('indents.status', 3)
-                    ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
+                    ->where('psies.inspectorate_id', $insp_id)
+                    ->where('psies.status', 3)
+                    ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
 
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('indents.id', $indentIds)
-                    ->where('indents.status', 3)
+                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'psies.section_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
+                    ->select('psies.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('psies.id', $psiIds)
+                    ->where('psies.status', 3)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $indentId = [];
+                $psiId = [];
                 if ($query) {
-                    foreach ($query as $indent) {
-                        array_push($indentId, $indent->id);
+                    foreach ($query as $psi) {
+                        array_push($psiId, $psi->id);
                     }
                 }
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $psiId)
                     ->where('reciever_desig_id', $designation_id)
                     ->where('track_status', '3')
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = Indent::where('id', 'no data')->get();
+                    $query = Psi::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -159,26 +154,25 @@ class IndentApprovedController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit">Forward</a>
+                            <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+
+                            <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+
+                            <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent_approved/details/' . $data->id) . '" class="edit">Forward</a>
+
+                        <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
@@ -193,30 +187,19 @@ class IndentApprovedController extends Controller
     public function details($id)
     {
 
-        $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-            ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
-            ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
+        $details = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('fin_years', 'psies.fin_year_id', '=', 'fin_years.id')
             ->select(
-                'indents.*',
+                'psies.*',
                 'item_types.name as item_type_name',
-                'indents.*',
                 'dte_managments.name as dte_managment_name',
-                'additional_documents.name as additional_documents_name',
                 'fin_years.year as fin_year_name'
             )
-            ->where('indents.id', $id)
+            ->where('psies.id', $id)
             ->first();
 
-        $details->additional_documents = json_decode($details->additional_documents, true);
-        $additional_documents_names = [];
 
-        if ($details->additional_documents) {
-            foreach ($details->additional_documents as $document_id) {
-                $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-                array_push($additional_documents_names, $additional_names);
-            }
-        }
 
 
 
@@ -227,8 +210,8 @@ class IndentApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+            ->where('doc_type_id',  8)
             ->whereIn('track_status', [1, 3])
-            ->where('doc_type_id',  3)
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 5)
@@ -259,36 +242,25 @@ class IndentApprovedController extends Controller
 
         //End close forward Status...
 
-        //Start blade notes section....
-        $notes = '';
 
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-
-        //End blade notes section....
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  3)->latest()->first();
+        ->where('doc_type_id',  8)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.psi.psi_incomming_approved.psi_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
-    public function indentTracking(Request $request)
+    public function psiTracking(Request $request)
     {
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
+        $doc_type_id = 8; //...... 8 for psi from psi table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $doc_reference_number = $request->doc_reference_number;
@@ -315,7 +287,7 @@ class IndentApprovedController extends Controller
 
         if ($desig_position->position == 5) {
 
-            $data = Indent::find($doc_ref_id);
+            $data = Psi::find($doc_ref_id);
 
             if ($data) {
 
@@ -339,14 +311,5 @@ class IndentApprovedController extends Controller
         }
 
         return response()->json(['success' => 'Done']);
-    }
-
-
-    public function parameter(Request $request)
-    {
-        $indent = Indent::find($request->indent_id);
-        $item_id = $indent->item_id;
-        $item_type_id = $indent->item_type_id;
-        return view('backend.indent.parameter', compact('item_id', 'item_type_id'));
     }
 }

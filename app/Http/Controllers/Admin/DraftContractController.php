@@ -8,13 +8,11 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\DraftContract;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-
 use App\Models\Item_type;
 use App\Models\Items;
-use App\Models\ParameterGroup;
-use App\Models\Qac;
 use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,10 +21,11 @@ use Illuminate\Validation\ValidationException;
 use PDF;
 use Yajra\DataTables\Facades\DataTables;
 
-class QacController extends Controller
+class DraftContractController extends Controller
 {
     public function index()
     {
+
 
         $insp_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
@@ -35,53 +34,53 @@ class QacController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $qacNew = Qac::where('status', 0)->count();
-            $qacOnProcess = '0';
-            $qacCompleted = '0';
-            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $draft_contractNew = DraftContract::where('status', 0)->count();
+            $draft_contractOnProcess = '0';
+            $draft_contractCompleted = '0';
+            $draft_contractDispatch = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('qacs.status', 4)
+                ->where('draft_contracts.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         } else {
 
-            $qacNew = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $draft_contractNew = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
-                ->where('qacs.status', 0)
+                ->where('draft_contracts.status', 0)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $qacOnProcess = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $draft_contractOnProcess = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
-                ->where('qacs.status', 3)
+                ->where('draft_contracts.status', 3)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $qacCompleted = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $draft_contractCompleted = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
-                ->where('qacs.status', 1)
+                ->where('draft_contracts.status', 1)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $qacDispatch = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('qacs', 'document_tracks.doc_ref_id', '=', 'qacs.id')
+            $draft_contractDispatch = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('qacs.status', 4)
+                ->where('draft_contracts.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
 
 
-        return view('backend.qac.qac_incomming_new.index', compact('qacNew','qacOnProcess','qacCompleted','qacDispatch'));
+        return view('backend.draft_contract.draft_contract_incomming_new.index', compact('draft_contractNew', 'draft_contractOnProcess', 'draft_contractCompleted', 'draft_contractDispatch'));
     }
 
     public function all_data(Request $request)
@@ -95,54 +94,54 @@ class QacController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
-                    ->where('qacs.status', 0)
-                    ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
+                    ->where('draft_contracts.status', 0)
+                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
-                    ->where('qacs.inspectorate_id', $insp_id)
-                    ->where('qacs.status', 0)
-                    ->whereIn('qacs.section_id', $section_ids)
-                    ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
+                    ->where('draft_contracts.inspectorate_id', $insp_id)
+                    ->where('draft_contracts.status', 0)
+                    ->whereIn('draft_contracts.section_id', $section_ids)
+                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
-                // QAC ids from document tracks table
-                $qacIds = Qac::leftJoin('document_tracks', 'qacs.id', '=', 'document_tracks.doc_ref_id')
+                // draft_contract ids from document tracks table
+                $draft_contractIds = DraftContract::leftJoin('document_tracks', 'draft_contracts.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('qacs.inspectorate_id', $insp_id)
-                    ->where('qacs.status', 0)
-                    ->whereIn('qacs.section_id', $section_ids)->pluck('qacs.id')->toArray();
+                    ->where('draft_contracts.inspectorate_id', $insp_id)
+                    ->where('draft_contracts.status', 0)
+                    ->whereIn('draft_contracts.section_id', $section_ids)->pluck('draft_contracts.id')->toArray();
 
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
-                    ->select('qacs.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('qacs.id', $qacIds)
-                    ->where('qacs.status', 0)
+                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
+                    ->select('draft_contracts.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('draft_contracts.id', $draft_contractIds)
+                    ->where('draft_contracts.status', 0)
                     ->get();
 
-                $qacId = [];
+                $draft_contractId = [];
                 if ($query) {
-                    foreach ($query as $qac) {
-                        array_push($qacId, $qac->id);
+                    foreach ($query as $indent) {
+                        array_push($draft_contractId, $indent->id);
                     }
                 }
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $qacId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $draft_contractId)
                     ->where('reciever_desig_id', $designation_id)
                     ->first();
 
 
                 //......start for showing data for receiver designation
                 if (!$document_tracks_receiver_id) {
-                    $query = Qac::where('id', 'no data')->get();
+                    $query = DraftContract::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -171,33 +170,33 @@ class QacController extends Controller
                             $actionBtn = '<div class="btn-group" role="group">';
 
                             if ($DesignationId == 3) {
-                                $actionBtn .= '<a href="' . url('admin/qac/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                                $actionBtn .= '<a href="' . url('admin/draft_contract/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            $actionBtn .= '<a href="' . url('admin/qac/details/' . $data->id) . '" class="edit ">Forward</a>
+                            $actionBtn .= '<a href="' . url('admin/draft_contract/details/' . $data->id) . '" class="edit ">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">';
                             if ($DesignationId == 3) {
-                                $actionBtn .= '<a href="' . url('admin/qac/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                                $actionBtn .= '<a href="' . url('admin/draft_contract/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            $actionBtn .= '<a href="' . url('admin/qac/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn .= '<a href="' . url('admin/draft_contract/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($DesignationId  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
                             if ($DesignationId == 3) {
-                                $actionBtn .= '<a href="' . url('admin/qac/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                                $actionBtn .= '<a href="' . url('admin/draft_contract/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            $actionBtn .= '<a href="' . url('admin/qac/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn .= '<a href="' . url('admin/draft_contract/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">';
                         if ($DesignationId == 3) {
-                            $actionBtn .= '<a href="' . url('admin/qac/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            $actionBtn .= '<a href="' . url('admin/draft_contract/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                         }
-                        $actionBtn .= '<a href="' . url('admin/qac/details/' . $data->id) . '" class="edit ">Forward</a>
+                        $actionBtn .= '<a href="' . url('admin/draft_contract/details/' . $data->id) . '" class="edit ">Forward</a>
                         </div>';
                     }
 
@@ -220,7 +219,7 @@ class QacController extends Controller
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         $item = Items::all();
         $fin_years = FinancialYear::all();
-        return view('backend.qac.qac_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.draft_contract.draft_contract_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
     }
 
     public function store(Request $request)
@@ -229,22 +228,22 @@ class QacController extends Controller
             'sender' => 'required',
             'admin_section' => 'required',
             'reference_no' => 'required',
-            'qac_received_date' => 'required',
-            'qac_reference_date' => 'required',
+            'draft_contract_received_date' => 'required',
+            'draft_contract_reference_date' => 'required',
         ]);
 
         try {
             $insp_id = Auth::user()->inspectorate_id;
 
-            $data = new Qac();
+            $data = new DraftContract();
             $data->inspectorate_id = $insp_id;
             $data->section_id = $request->admin_section;
             $data->sender_id = $request->sender;
             $data->reference_no = $request->reference_no;
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
-            $data->received_date = $request->qac_received_date;
-            $data->reference_date = $request->qac_reference_date;
+            $data->received_date = $request->draft_contract_received_date;
+            $data->reference_date = $request->draft_contract_reference_date;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -261,14 +260,14 @@ class QacController extends Controller
 
             $data->save();
 
-            return response()->json(['success' => 'QAC entry created successfully']);
+            return response()->json(['success' => 'draft_contract entry created successfully']);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         }
     }
     public function edit($id)
     {
-        $qac = Qac::find($id);
+        $draft_contract = DraftContract::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -277,14 +276,14 @@ class QacController extends Controller
         $dte_managments = Dte_managment::where('status', 1)->get();
 
 
-        // $selected_document =$qac->additional_documents;
+        // $selected_document =$indent->additional_documents;
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->get();
-        $item = Items::where('id', $qac->item_id)->first();
+        $item = Items::where('id', $draft_contract->item_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.qac.qac_incomming_new.edit', compact('qac', 'item', 'dte_managments', 'item_types', 'fin_years'));
+        return view('backend.draft_contract.draft_contract_incomming_new.edit', compact('draft_contract', 'item', 'dte_managments', 'item_types', 'fin_years'));
     }
 
     public function update(Request $request)
@@ -298,30 +297,31 @@ class QacController extends Controller
             'item_id' => 'required',
 
         ]);
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
 
-        $data = Qac::findOrFail($request->editId);
+        $data = DraftContract::findOrFail($request->editId);
 
         $data->sender_id = $request->sender;
         $data->reference_no = $request->reference_no;
-        $data->reference_no = $request->contract_reference_no;
+        $data->contract_reference_no = $request->contract_reference_no;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
-        $data->received_date = $request->qac_received_date;
-        $data->reference_date = $request->qac_reference_date;
+        $data->received_date = $request->draft_contract_received_date;
+        $data->reference_date = $request->draft_contract_reference_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path='';
+        $path = '';
         if ($request->hasFile('doc_file')) {
 
             $path = $request->file('doc_file')->store('uploads', 'public');
         }
-        $data->attached_file = $path;
+        $data->attached_file = $path ? $path : $data->attached_file;
 
         $data->save();
 
@@ -334,25 +334,25 @@ class QacController extends Controller
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
-        $details = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-            ->leftJoin('items', 'qacs.item_id', '=', 'items.id')
-            ->leftJoin('fin_years', 'qacs.fin_year_id', '=', 'fin_years.id')
+        $details = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
+            ->leftJoin('fin_years', 'draft_contracts.fin_year_id', '=', 'fin_years.id')
             ->select(
-                'qacs.*',
+                'draft_contracts.*',
                 'item_types.name as item_type_name',
                 'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name'
             )
-            ->where('qacs.id', $id)
+            ->where('draft_contracts.id', $id)
             ->first();
 
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 1)
-            ->where('doc_type_id',  7)
+            ->where('doc_type_id', 9)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -381,17 +381,17 @@ class QacController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  7)->latest()->first();
+            ->where('doc_type_id', 9)
+            ->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.qac.qac_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.draft_contract.draft_contract_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
-    public function qacTracking(Request $request)
+    public function draft_contractTracking(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
@@ -408,12 +408,12 @@ class QacController extends Controller
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        $doc_type_id = 7; //...... 7 for qac / table doc_serial.
+        $doc_type_id = 9; //...... 9 for Draft Contract from  table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = Qac::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
+        $section_id = DraftContract::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
@@ -430,7 +430,7 @@ class QacController extends Controller
         $data->save();
 
         if ($desig_position->position == 7) {
-            $data = Qac::find($doc_ref_id);
+            $data = DraftContract::find($doc_ref_id);
 
             if ($data) {
 

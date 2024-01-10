@@ -13,7 +13,6 @@ use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
 use App\Models\Items;
-use App\Models\ParameterGroup;
 use App\Models\Psi;
 use App\Models\Section;
 use Carbon\Carbon;
@@ -39,7 +38,7 @@ class PsiController extends Controller
             $psiNew = Psi::where('status', 0)->count();
             $psiOnProcess = '0';
             $psiCompleted = '0';
-            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
@@ -48,7 +47,7 @@ class PsiController extends Controller
                 ->count();
         } else {
 
-            $psiNew = DocumentTrack::where('doc_type_id', 7)
+            $psiNew = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
@@ -56,7 +55,7 @@ class PsiController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiOnProcess = DocumentTrack::where('doc_type_id', 7)
+            $psiOnProcess = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
@@ -64,7 +63,7 @@ class PsiController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiCompleted = DocumentTrack::where('doc_type_id', 7)
+            $psiCompleted = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
@@ -72,7 +71,7 @@ class PsiController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
@@ -82,7 +81,7 @@ class PsiController extends Controller
         }
 
 
-        return view('backend.psi.psi_incomming_new.index', compact('psiNew','psiOnProcess','psiCompleted','psiDispatch'));
+        return view('backend.psi.psi_incomming_new.index', compact('psiNew', 'psiOnProcess', 'psiCompleted', 'psiDispatch'));
     }
 
     public function all_data(Request $request)
@@ -299,6 +298,7 @@ class PsiController extends Controller
             'item_id' => 'required',
 
         ]);
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
@@ -307,7 +307,7 @@ class PsiController extends Controller
 
         $data->sender_id = $request->sender;
         $data->reference_no = $request->reference_no;
-        $data->reference_no = $request->contract_reference_no;
+        $data->contract_reference_no = $request->contract_reference_no;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->psi_received_date;
@@ -317,12 +317,12 @@ class PsiController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path='';
+        $path = '';
         if ($request->hasFile('doc_file')) {
 
             $path = $request->file('doc_file')->store('uploads', 'public');
         }
-        $data->attached_file = $path;
+        $data->attached_file = $path ? $path : $data->attached_file;
 
         $data->save();
 
@@ -353,6 +353,7 @@ class PsiController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 1)
+            ->where('doc_type_id', 8)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -380,7 +381,9 @@ class PsiController extends Controller
 
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
+            ->where('doc_type_id',  8)
+            ->latest()->first();
 
         //End blade forward on off section....
 
@@ -406,7 +409,7 @@ class PsiController extends Controller
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        $doc_type_id = 8; //...... 3 for psi from  table doc_serial.
+        $doc_type_id = 8; //...... 8 for psi from  table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;

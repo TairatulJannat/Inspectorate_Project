@@ -199,10 +199,6 @@ class QacApprovedController extends Controller
             ->where('qacs.id', $id)
             ->first();
 
-
-
-
-
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -210,6 +206,7 @@ class QacApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+            ->where('doc_type_id',  7)
             ->whereIn('track_status', [1, 3])
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
@@ -241,26 +238,15 @@ class QacApprovedController extends Controller
 
         //End close forward Status...
 
-        //Start blade notes section....
-        $notes = '';
-
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-
-        //End blade notes section....
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
+        ->where('doc_type_id',  7)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.qac.qac_incomming_approved.qac_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.qac.qac_incomming_approved.qac_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
     public function qacTracking(Request $request)
@@ -269,7 +255,7 @@ class QacApprovedController extends Controller
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 7; //...... 3 for qac from qac table doc_serial.
+        $doc_type_id = 7; //...... 7 for qac from qac table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $doc_reference_number = $request->doc_reference_number;

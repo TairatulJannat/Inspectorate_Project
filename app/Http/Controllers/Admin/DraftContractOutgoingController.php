@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Psi;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Http\Request;
 
-class PsiApprovedController extends Controller
+
+class DraftContractOutgoingController extends Controller
 {
     public function index()
     {
@@ -68,11 +70,11 @@ class PsiApprovedController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.psi.psi_incomming_approved.psi_approved_index', compact('psiNew', 'psiOnProcess', 'psiCompleted', 'psiDispatch'));
+        return view('backend.psi.psi_outgoing.outgoing', compact('psiNew','psiOnProcess','psiCompleted','psiDispatch'));
     }
-
     public function all_data(Request $request)
     {
+
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
@@ -81,35 +83,27 @@ class PsiApprovedController extends Controller
             $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
             $desig_position = Designation::where('id', $designation_id)->first();
 
+
             if (Auth::user()->id == 92) {
                 $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->where('psies.status', 3)
-                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*', 'item_types.name as item_type_name', 'psies.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('psies.status', '=', 1)
                     ->get();
-            } elseif ($desig_position->id == 1) {
+            } else {
+                $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
+                    ->where('document_tracks.reciever_desig_id', $designation_id)
+                    ->where('psies.inspectorate_id', $insp_id)
+                    ->where('psies.status', 1)
+                    ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
 
                 $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('psies.status', 3)
-                    ->get();
-            } else {
-
-                $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
-                    ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('psies.inspectorate_id', $insp_id)
-                    ->where('psies.status', 3)
-                    ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
-
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'psies.section_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('psies.id', $psiIds)
-                    ->where('psies.status', 3)
+                    ->where('psies.status', '=', 1)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
@@ -120,9 +114,11 @@ class PsiApprovedController extends Controller
                     }
                 }
 
+                //......Start for showing data for receiver designation
+
                 $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $psiId)
                     ->where('reciever_desig_id', $designation_id)
-                    ->where('track_status', '3')
+                    ->where('track_status', 2)
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
@@ -139,10 +135,10 @@ class PsiApprovedController extends Controller
 
                 ->addColumn('status', function ($data) {
 
-                    if ($data->status == '3') {
-                        return '<button class="btn btn-secondary btn-sm">Approved</button>';
+                    if ($data->status == '1') {
+                        return '<button class="btn  btn-info text-white btn-sm">Completed</button>';
                     } else {
-                        return '<button class="btn btn-secondary btn-sm">None</button>';
+                        return '<button class="btn btn-info text-white  btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
@@ -154,52 +150,46 @@ class PsiApprovedController extends Controller
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
-                            <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="edit">Forward</a>
-                            </div>';
+
+                    <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="edit">Forward</a>
+                    </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/psi_approved/details/' . $data->id) . '" class="edit">Forward</a>
-                        </div>';
+                    <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="edit">forward</a>
+                    </div>';
                     }
 
                     return $actionBtn;
                 })
+
                 ->rawColumns(['action', 'status'])
                 ->make(true);
         }
     }
-
 
     public function details($id)
     {
 
         $details = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-            ->leftJoin('fin_years', 'psies.fin_year_id', '=', 'fin_years.id')
-            ->select(
-                'psies.*',
-                'item_types.name as item_type_name',
-                'dte_managments.name as dte_managment_name',
-                'fin_years.year as fin_year_name'
-            )
+            ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name')
             ->where('psies.id', $id)
+            ->where('psies.status', 1)
             ->first();
-
-
 
 
 
@@ -210,13 +200,10 @@ class PsiApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
+            ->where('track_status', 2)
             ->where('doc_type_id',  8)
-            ->whereIn('track_status', [1, 3])
-            ->whereNot(function ($query) {
-                $query->where('sender_designation.id', 7)
-                    ->where('receiver_designation.id', 5)
-                    ->where('document_tracks.track_status', 1);
-            })
+            ->skip(1) // Skip the first row
+            ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -224,24 +211,20 @@ class PsiApprovedController extends Controller
             )
             ->get();
 
-        $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
 
+        $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
         if ($auth_designation_id) {
+
             $desig_id = $auth_designation_id->desig_id;
         }
 
-        //Start close forward Status...
+        // delay cause for sec IC start
 
-        $sender_designation_id = '';
-        foreach ($document_tracks as $track) {
-            if ($track->sender_designation_id === $desig_id) {
-                $sender_designation_id = $track->sender_designation_id;
-                break;
-            }
-        }
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        //End close forward Status...
-
+        // delay cause for sec IC start
 
 
         //Start blade forward on off section....
@@ -250,60 +233,76 @@ class PsiApprovedController extends Controller
 
         //End blade forward on off section....
 
+        // start cover letter start
 
-        return view('backend.psi.psi_incomming_approved.psi_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
+
+        // end cover letter start
+
+
+        return view('backend.psi.psi_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
     }
 
-    public function psiTracking(Request $request)
+    public function OutgoingpsiTracking(Request $request)
     {
-
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 8; //...... 8 for psi from psi table doc_serial.
+        $doc_type_id = 8; // 8 for doc type qac from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
-        $remarks = $request->remarks;
         $doc_reference_number = $request->doc_reference_number;
+        $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-
+        // dd( $desig_position);
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
         $data->doc_type_id = $doc_type_id;
         $data->doc_ref_id = $doc_ref_id;
         $data->doc_reference_number = $doc_reference_number;
-        $data->track_status = 3;
+        $data->track_status = 2;
+        $data->remarks = $remarks;
+
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
-        $data->remarks = $remarks;
         $data->created_at = Carbon::now('Asia/Dhaka');
-        $data->updated_at = Carbon::now('Asia/Dhaka');;
+        $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
+        // ----delay_cause and terms and conditions start here
+        if ($desig_position->position == 3) {
+            $psi_data = Psi::find($doc_ref_id);
+            $psi_data->delay_cause = $request->delay_cause;
+            $psi_data->delivery_date = $request->delivery_date;
 
-        if ($desig_position->position == 5) {
+
+            $psi_data->delivery_by = Auth::user()->id;
+            $psi_data->save();
+        }
+        // ----delay_cause and terms and conditions end here
+
+        if ($desig_position->position == 7) {
 
             $data = Psi::find($doc_ref_id);
 
             if ($data) {
 
-                $data->status = 1;
+                $data->status = 4;
                 $data->save();
-
                 $value = new DocumentTrack();
                 $value->ins_id = $ins_id;
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
                 $value->doc_reference_number = $doc_reference_number;
-                $value->track_status = 2;
+                $value->track_status = 4;
+                $value->remarks = $remarks;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
-                $value->remarks = $remarks;
                 $value->created_at = Carbon::now('Asia/Dhaka');
                 $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();

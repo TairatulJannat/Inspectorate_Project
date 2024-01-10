@@ -201,6 +201,7 @@ class QacOutgoingController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
+            ->where('doc_type_id',  7)
             ->skip(1) // Skip the first row
             ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
@@ -227,7 +228,8 @@ class QacOutgoingController extends Controller
 
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
+        ->where('doc_type_id',  7)->latest()->first();
 
         //End blade forward on off section....
 

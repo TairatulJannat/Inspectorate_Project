@@ -206,6 +206,7 @@ class QacDispatchController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->whereIn('track_status', [2, 4])
+            ->where('doc_type_id',  7)
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 3)
@@ -247,25 +248,15 @@ class QacDispatchController extends Controller
         //End close forward Status...
 
 
-        //Start blade notes section....
-        $notes = '';
 
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->whereIn('track_status', [2, 4])
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-
-        //End blade notes section....
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
+        ->where('doc_type_id',  7)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.qac.qac_dispatch.qac_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
+        return view('backend.qac.qac_dispatch.qac_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
     }
 
     public function QacDispatchTracking (Request $request)

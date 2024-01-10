@@ -218,6 +218,7 @@ class OutgoingIndentController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
+            ->where('doc_type_id',  3)
             ->skip(1) // Skip the first row
             ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
@@ -242,21 +243,10 @@ class OutgoingIndentController extends Controller
 
         // delay cause for sec IC start
 
-        //Start blade notes section....
-        // $notes = '';
-
-        // $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-        //     ->where('track_status', 1)
-        //     ->where('reciever_desig_id', $desig_id)->get();
-
-        // if ($document_tracks_notes->isNotEmpty()) {
-        //     $notes = $document_tracks_notes;
-        // }
-
-        //End blade notes section....
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
+        ->where('doc_type_id',  3)->latest()->first();
 
         //End blade forward on off section....
 
