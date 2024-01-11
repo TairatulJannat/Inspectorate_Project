@@ -15,7 +15,6 @@
                 "className": "dt-center",
                 "targets": "_all"
             }],
-            "bDestroy": true,
             processing: true,
             serverSide: true,
             "language": {
@@ -35,55 +34,68 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    searchable: false,
+                    orderable: true,
+                    searchable: false
                 },
                 {
                     data: 'ltr_no_of_contract',
-                    name: 'ltr_no_of_contract'
+                    name: 'ltr_no_of_contract',
+                    orderable: false
                 },
                 {
                     data: 'ltr_date_contract',
-                    name: 'ltr_date_contract'
+                    name: 'ltr_date_contract',
+                    orderable: false
                 },
                 {
                     data: 'contract_no',
-                    name: 'contract_no'
+                    name: 'contract_no',
+                    orderable: false
                 },
                 {
                     data: 'contract_date',
-                    name: 'contract_date'
+                    name: 'contract_date',
+                    orderable: false
                 },
                 {
                     data: 'contract_state',
-                    name: 'contract_state'
+                    name: 'contract_state',
+                    orderable: false
                 },
                 {
                     data: 'con_fin_year',
-                    name: 'con_fin_year'
+                    name: 'con_fin_year',
+                    orderable: false
                 },
                 {
                     data: 'supplier_id',
-                    name: 'supplier_id'
+                    name: 'supplier_id',
+                    orderable: false
                 },
                 {
                     data: 'contracted_value',
-                    name: 'contracted_value'
+                    name: 'contracted_value',
+                    orderable: false
                 },
                 {
                     data: 'delivery_schedule',
-                    name: 'delivery_schedule'
+                    name: 'delivery_schedule',
+                    orderable: false
                 },
                 {
                     data: 'currency_unit',
-                    name: 'currency_unit'
+                    name: 'currency_unit',
+                    orderable: false
                 },
                 {
                     data: 'status',
                     name: 'status',
+                    orderable: false
                 },
                 {
                     data: 'action',
                     name: 'action',
+                    orderable: false
                 },
             ],
             dom: 'lBfrtip',
