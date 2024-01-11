@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('insp_id');
+            $table->integer('sec_id');
+            $table->integer('sender');
+            $table->string('reference_no');
+            $table->string('additional_documents')->nullable();
+            $table->integer('item_id')->nullable();
+            $table->integer('item_type_id')->nullable();
             $table->string('ltr_no_of_contract');
             $table->date('ltr_date_contract');
             $table->string('contract_no');

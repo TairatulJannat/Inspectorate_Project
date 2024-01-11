@@ -218,15 +218,13 @@ class ContractController extends Controller
     {
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
-        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $sections = Section::whereIn('id', $section_ids)->get();
-
         $dte_managments = Dte_managment::where('status', 1)->get();
-        $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         $item = Items::all();
         $fin_years = FinancialYear::all();
-        return view('backend.indent.indent_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.contracts.contract_incomming_new.create', compact('sections', 'item', 'dte_managments', 'item_types', 'fin_years'));
     }
 
     public function store(Request $request)
