@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI (Dispatch)')
+@section('title', 'Draft Contract (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,14 +90,14 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI (Dispatch) ')
+@section('main_menu', 'Draft Contract (Dispatch) ')
 @section('active_menu', 'Details')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of PSI</h2>
+                <h2>Details of Draft Contract</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-4">
@@ -293,7 +293,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.psi.psi_dispatch.psi_dispatch_index_js') --}}
+    {{-- @include('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -334,13 +334,12 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/psi_dispatch/psi_tracking') }}',
+                            url: '{{ url('admin/draft_contract_dispatch/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
                                 'doc_reference_number': doc_reference_number,
                                 'remarks': remarks,
-
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -356,7 +355,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.psi_dispatch/view') }}",
+                                            "{{ route('admin.draft_contract_dispatch/view') }}",
                                             40000);
                                     }
                                 }

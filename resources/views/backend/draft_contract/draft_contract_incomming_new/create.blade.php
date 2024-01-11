@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI')
+@section('title', 'Draft Contract')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -24,8 +24,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI')
-@section('active_menu', 'Add PSI')
+@section('main_menu', 'Draft Contract')
+@section('active_menu', 'Add Draft Contract')
 @section('content')
     <div class="col-sm-12 col-xl-12">
 
@@ -78,18 +78,18 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_reference_date">PSI Reference Date</label>
-                                <input type="date" class="form-control" id="psi_reference_date"
-                                    name="psi_reference_date">
-                                <span id="error_psi_reference_date" class="text-danger error_field"></span>
+                                <label for="draft_contract_reference_date">Draft Contract Reference Date</label>
+                                <input type="date" class="form-control" id="draft_contract_reference_date"
+                                    name="draft_contract_reference_date">
+                                <span id="error_draft_contract_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_received_date">PSI Received Date</label>
-                                <input type="date" class="form-control" id="psi_received_date"
-                                    name="psi_received_date">
-                                <span id="error_psi_received_date" class="text-danger error_field"></span>
+                                <label for="draft_contract_received_date">Draft Contract Received Date</label>
+                                <input type="date" class="form-control" id="draft_contract_received_date"
+                                    name="draft_contract_received_date" value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
+                                <span id="error_draft_contract_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -123,6 +123,6 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.psi.psi_incomming_new.index_js')
+    @include('backend.draft_contract.draft_contract_incomming_new.index_js')
 
 @endpush

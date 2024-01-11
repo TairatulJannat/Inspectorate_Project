@@ -10,10 +10,12 @@ use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\DraftContract;
 use App\Models\Dte_managment;
+use App\Models\FinalSpec;
 use App\Models\FinancialYear;
 use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\Section;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -25,8 +27,6 @@ class DraftContractController extends Controller
 {
     public function index()
     {
-
-
         $insp_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -148,6 +148,7 @@ class DraftContractController extends Controller
 
             // $query->orderBy('id', 'asc');
 
+
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -215,15 +216,15 @@ class DraftContractController extends Controller
         $sections = Section::whereIn('id', $section_ids)->get();
 
         $dte_managments = Dte_managment::where('status', 1)->get();
-        $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         $item = Items::all();
         $fin_years = FinancialYear::all();
-        return view('backend.draft_contract.draft_contract_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.draft_contract.draft_contract_incomming_new.create', compact('sections', 'item', 'dte_managments', 'item_types', 'fin_years'));
     }
 
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'sender' => 'required',
             'admin_section' => 'required',
@@ -272,6 +273,7 @@ class DraftContractController extends Controller
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         // $sections = Section::whereIn('id', $section_ids)->get();
+        $finalSpecs = FinalSpec::all();
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
@@ -283,7 +285,7 @@ class DraftContractController extends Controller
             ->get();
         $item = Items::where('id', $draft_contract->item_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.draft_contract.draft_contract_incomming_new.edit', compact('draft_contract', 'item', 'dte_managments', 'item_types', 'fin_years'));
+        return view('backend.draft_contract.draft_contract_incomming_new.edit', compact('draft_contract', 'item', 'dte_managments', 'item_types', 'fin_years', 'finalSpecs'));
     }
 
     public function update(Request $request)
@@ -292,9 +294,10 @@ class DraftContractController extends Controller
         $validator = Validator::make($request->all(), [
             'editId' => 'required',
             'reference_no' => 'required',
-            'contract_reference_no' => 'required',
+            'final_spec_reference_no' => 'required',
             'item_type_id' => 'required',
             'item_id' => 'required',
+            'supplier_id' => 'required',
 
         ]);
 
@@ -303,15 +306,17 @@ class DraftContractController extends Controller
         }
 
         $data = DraftContract::findOrFail($request->editId);
-
         $data->sender_id = $request->sender;
         $data->reference_no = $request->reference_no;
-        $data->contract_reference_no = $request->contract_reference_no;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->draft_contract_received_date;
         $data->reference_date = $request->draft_contract_reference_date;
         $data->fin_year_id = $request->fin_year_id;
+        $data->supplier_id = $request->supplier_id;
+        $data->final_spec_reference_no = $request->final_spec_reference_no;
+        $data->offer_reference_no = $request->offer_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
@@ -390,7 +395,7 @@ class DraftContractController extends Controller
         return view('backend.draft_contract.draft_contract_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
-    public function draft_contractTracking(Request $request)
+    public function Tracking(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',
@@ -401,7 +406,6 @@ class DraftContractController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
-
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
@@ -455,9 +459,14 @@ class DraftContractController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function item_name($id)
+    public function finalSpecData($referenceNo)
     {
-        $items = Items::where('item_type_id', $id)->get();
-        return response()->json($items);
+
+        $finalSpec=FinalSpec::where('reference_no', $referenceNo)->first();
+        $item=Items::where('id',$finalSpec->item_id)->first();
+        $itemType=Item_type::where('id',$finalSpec->item_type_id)->first();
+        $supplier=Supplier::where('id',$finalSpec->supplier_id)->first();
+
+        return response()->json(['item' => $item,'itemType' => $itemType, 'supplier' => $supplier, 'finalSpec'=>$finalSpec]);
     }
 }

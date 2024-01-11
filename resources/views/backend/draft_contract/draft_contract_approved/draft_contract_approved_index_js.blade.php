@@ -28,7 +28,7 @@
             },
             ajax: {
 
-                url: "{{ url('admin/psi_approved/all_data') }}",
+                url: "{{ url('admin/draft_contract_approved/all_data') }}",
                 type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'

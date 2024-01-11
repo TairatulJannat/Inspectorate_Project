@@ -95,7 +95,6 @@
 
         var formData = new FormData($('#save_info')[0]);
 
-
         disableButton()
         $.ajax({
             url: "{{ url('admin/draft_contract/store') }}",
@@ -125,10 +124,10 @@
                 error_notification('Please fill up the form correctly and try again')
                 $('#error_sender').text(response.responseJSON.errors.sender);
                 $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                $('#error_psi_received_date').text(response.responseJSON.errors
-                    .psi_received_date);
-                $('#error_psi_reference_date').text(response.responseJSON.errors
-                    .psi_reference_date);
+                $('#error_draft_contract_received_date').text(response.responseJSON.errors
+                    .draft_contract_received_date);
+                $('#error_draft_contract_reference_date').text(response.responseJSON.errors
+                    .draft_contract_reference_date);
 
             }
         });

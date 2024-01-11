@@ -413,7 +413,6 @@ class IndentController extends Controller
     public function indentTracking(Request $request)
     {
 
-
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
@@ -424,7 +423,6 @@ class IndentController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-
 
 
         $ins_id = Auth::user()->inspectorate_id;

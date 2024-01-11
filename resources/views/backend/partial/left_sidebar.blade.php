@@ -156,8 +156,8 @@ $currentControllerName = Request::segment(2);
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('admin/draft_contract/view') }}"
-                                        class="{{ Request::is('*/admin/draft_contract/view') ? 'active' : '' }} text-white">
+                                    <a href="{{ url('admin/draft_contract/create') }}"
+                                        class="{{ Request::is('*/admin/draft_contract/create') ? 'active' : '' }} text-white">
                                         Create Draft Contract
                                     </a>
                                 </li>

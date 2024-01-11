@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI (On Process)')
+@section('title', 'Draft Contract (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI (On Process) ')
+@section('main_menu', 'Draft Contract (On Process) ')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of PSI</h2>
+                <h2>Details of Draft Contract</h2>
             </div>
             <div style="display: flex">
 
@@ -284,7 +284,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.psi.psi_incomming_approved.psi_approved_index_js') --}}
+    {{-- @include('backend.draft_contract.draft_contract_approved.draft_contract_approved_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -322,7 +322,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/psi_approved/psi_tracking') }}',
+                            url: '{{ url('admin/draft_contract_approved/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -344,7 +344,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.psi_approved/view') }}",
+                                            "{{ route('admin.draft_contract_approved/view') }}",
                                             40000);
                                     }
                                 }

@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI')
+@section('title', 'Draft Contract')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI')
+@section('main_menu', 'Draft Contract')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of PSI</h2>
+                <h2>Details of Draft Contract</h2>
             </div>
             <div style="display: flex">
 
@@ -113,6 +113,18 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
 
+                            <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Final Spec Reference No</td>
+                                <td>{{ $details->final_spec_reference_no }}</td>
+                            </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
@@ -321,7 +333,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/psi/psi_tracking') }}',
+                            url: '{{ url('admin/draft_contract/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -343,7 +355,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.psi/view') }}",
+                                            "{{ route('admin.draft_contract/view') }}",
                                             40000);
                                     }
                                 }

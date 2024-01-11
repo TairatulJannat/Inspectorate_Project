@@ -7,7 +7,7 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\Psi;
+use App\Models\DraftContract;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;;
@@ -26,51 +26,51 @@ class DraftContractDispatchController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $psiNew = Psi::where('status', 0)->count();
-            $psiOnProcess = '0';
-            $psiCompleted = '0';
-            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $draft_contractNew = DraftContract::where('status', 0)->count();
+            $draft_contractOnProcess = '0';
+            $draft_contractCompleted = '0';
+            $draft_contractDispatch = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('psies.status', 4)
+                ->where('draft_contracts.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         } else {
 
-            $psiNew = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $draft_contractNew = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
-                ->where('psies.status', 0)
+                ->where('draft_contracts.status', 0)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiOnProcess = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $draft_contractOnProcess = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
-                ->where('psies.status', 3)
+                ->where('draft_contracts.status', 3)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiCompleted = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $draft_contractCompleted = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
-                ->where('psies.status', 1)
+                ->where('draft_contracts.status', 1)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $draft_contractDispatch = DocumentTrack::where('doc_type_id', 9)
+                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('psies.status', 4)
+                ->where('draft_contracts.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.psi.psi_dispatch.psi_dispatch_index', compact('psiNew', 'psiOnProcess', 'psiCompleted', 'psiDispatch'));
+        return view('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_index', compact('draft_contractNew', 'draft_contractOnProcess', 'draft_contractCompleted', 'draft_contractDispatch'));
     }
 
     public function all_data(Request $request)
@@ -84,43 +84,43 @@ class DraftContractDispatchController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->where('psies.status', 4)
-                    ->select('psies.*', 'item_types.name as item_type_name', 'psies.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
+                    ->where('draft_contracts.status', 4)
+                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'draft_contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
-                $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
+                $draft_contractIds = DraftContract::leftJoin('document_tracks', 'draft_contracts.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('psies.inspectorate_id', $insp_id)
-                    ->where('psies.status', 4)
-                    ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
+                    ->where('draft_contracts.inspectorate_id', $insp_id)
+                    ->where('draft_contracts.status', 4)
+                    ->whereIn('draft_contracts.section_id', $section_ids)->pluck('draft_contracts.id', 'draft_contracts.id')->toArray();
 
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name', 'psies.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('psies.id', $psiIds)
-                    ->where('psies.status', 4)
+                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
+                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'draft_contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('draft_contracts.id', $draft_contractIds)
+                    ->where('draft_contracts.status', 4)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $psiId = [];
+                $draft_contractId = [];
                 if ($query) {
-                    foreach ($query as $psi) {
-                        array_push($psiId, $psi->id);
+                    foreach ($query as $draft_contract) {
+                        array_push($draft_contractId, $draft_contract->id);
                     }
                 }
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $psiId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $draft_contractId)
                     ->where('reciever_desig_id', $designation_id)
                     ->where('track_status', 4)
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = Psi::where('id', 'no data')->get();
+                    $query = DraftContract::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -149,25 +149,25 @@ class DraftContractDispatchController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/psi_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
+                            <a href="' . url('admin/draft_contract_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/psi_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
+                        <a href="' . url('admin/draft_contract_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
                         </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/psi_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
+                        <a href="' . url('admin/draft_contract_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
                         </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/psi_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
+                        <a href="' . url('admin/draft_contract_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
@@ -183,17 +183,17 @@ class DraftContractDispatchController extends Controller
     public function details($id)
     {
 
-        $details = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-            ->leftJoin('fin_years', 'psies.fin_year_id', '=', 'fin_years.id')
+        $details = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('fin_years', 'draft_contracts.fin_year_id', '=', 'fin_years.id')
             ->select(
-                'psies.*',
+                'draft_contracts.*',
                 'item_types.name as item_type_name',
-                'psies.*',
+                'draft_contracts.*',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name'
             )
-            ->where('psies.id', $id)
+            ->where('draft_contracts.id', $id)
             ->first();
 
         $designations = Designation::all();
@@ -206,7 +206,7 @@ class DraftContractDispatchController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('doc_type_id',  8)
+            ->where('doc_type_id', 9)
             ->whereIn('track_status', [2, 4])
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
@@ -251,25 +251,25 @@ class DraftContractDispatchController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-            ->where('doc_type_id',  8)->latest()->first();
+            ->where('doc_type_id', 9)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.psi.psi_dispatch.psi_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
+        return view('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
     }
 
-    public function psiDispatchTracking(Request $request)
+    public function DispatchTracking(Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 7; //...... 7 for psi from psies table doc_serial.
+        $doc_type_id = 9; //...... 9 for draft_contract from draft_contracts table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
+        $section_id = DraftContract::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
@@ -291,7 +291,7 @@ class DraftContractDispatchController extends Controller
 
         if ($desig_position->position == 1) {
 
-            $data = Psi::find($doc_ref_id);
+            $data = DraftContract::find($doc_ref_id);
 
             if ($data) {
 
@@ -320,9 +320,9 @@ class DraftContractDispatchController extends Controller
 
     public function parameter(Request $request)
     {
-        $psi = Psi::find($request->psi_id);
-        $item_id = $psi->item_id;
-        $item_type_id = $psi->item_type_id;
-        return view('backend.psi.parameter', compact('item_id', 'item_type_id'));
+        $draft_contract = DraftContract::find($request->draft_contract_id);
+        $item_id = $draft_contract->item_id;
+        $item_type_id = $draft_contract->item_type_id;
+        return view('backend.draft_contract.parameter', compact('item_id', 'item_type_id'));
     }
 }
