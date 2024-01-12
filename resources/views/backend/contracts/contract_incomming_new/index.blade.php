@@ -48,9 +48,11 @@
 
     <div class="col-sm-12 col-xl-12">
         <div class="card">
-            <div>
-                <a href="create" type="button" class="btn btn-success m-3 fa fa-plus float-md-end"> Create Contract</a>
-            </div>
+            @if (Auth::user()->id == 128)
+                <div>
+                    <a href="create" type="button" class="btn btn-success m-3 fa fa-plus float-md-end"> Create Contract</a>
+                </div>
+            @endif
             <div class="card-header">
                 <div class="row justify-content-between align-items-center">
                     <div class="d-flex justify-content-between px-4 py-2">
