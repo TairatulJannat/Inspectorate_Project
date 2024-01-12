@@ -14,6 +14,7 @@ class Contract extends Model
         'sec_id',
         'sender',
         'reference_no',
+        'received_by',
         'additional_documents',
         'item_id',
         'item_type_id',

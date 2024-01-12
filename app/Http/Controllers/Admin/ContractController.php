@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Additional_document;
-use App\Models\AdminSection;
+use PDF;
+use Carbon\Carbon;
+use App\Models\Items;
+use App\Models\Indent;
+use App\Models\Section;
 use App\Models\Contract;
+use App\Models\Item_type;
 use App\Models\Designation;
+use App\Models\AdminSection;
+use Illuminate\Http\Request;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-use App\Models\Indent;
-use App\Models\Item_type;
-use App\Models\Items;
 use App\Models\ParameterGroup;
-use App\Models\Section;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Additional_document;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
-use PDF;
 
 class ContractController extends Controller
 {
@@ -231,60 +232,66 @@ class ContractController extends Controller
     {
         $this->validate($request, [
             'sender' => 'required',
-            'admin_section' => 'required',
-            'reference_no' => 'required',
-            'indent_received_date' => 'required',
-            'indent_reference_date' => 'required',
+            'admin-section' => 'required',
+            'ltr-no-contract' => 'required',
+            'ltr-date-contract' => 'required',
+            'contract-reference-no' => 'required',
+            'contract-number' => 'required',
+            'contract-date' => 'required',
+            'received-by' => 'required',
+        ], [
+            'sender.required' => 'Please select Sender',
+            'admin-section.required' => 'Please select Admin Section',
+            'ltr-no-contract.required' => 'Please enter letter Number of Contract',
+            'ltr-date-contract.required' => 'Please select letter Date of Contract',
+            'contract-reference-no.required' => 'Please enter Contract Reference Number',
+            'contract-number.required' => 'Please select Contract Number',
+            'contract-date.required' => 'Please select Contract Date',
+            'received-by.required' => 'Please select Received By',
         ]);
-        $insp_id = Auth::user()->inspectorate_id;
-        $sec_id = $request->admin_section;
 
-        $data = new Indent();
-        $data->insp_id = $insp_id;
-        $data->sec_id = $sec_id;
-        $data->sender = $request->sender;
-        $data->reference_no = $request->reference_no;
-        $data->indent_number = $request->indent_number;
+        DB::beginTransaction();
 
-        $data->additional_documents = json_encode($request->additional_documents);
-        $data->item_id = $request->item_id;
-        $data->item_type_id = $request->item_type_id;
-        $data->qty = $request->qty;
-        $data->estimated_value = $request->estimated_value;
-        $data->indent_received_date = $request->indent_received_date;
-        $data->indent_reference_date = $request->indent_reference_date;
-        $data->fin_year_id = $request->fin_year_id;
-        $data->attribute = $request->attribute;
-        $data->spare = $request->spare;
-        $data->checked_standard = $request->checked_standard;
-        $data->nomenclature = $request->nomenclature;
-        $data->make = $request->make;
-        $data->model = $request->model;
-        $data->country_of_origin = $request->country_of_origin;
-        $data->country_of_assembly = $request->country_of_assembly;
+        try {
+            $formData = $request->all();
 
-        $data->received_by = Auth::user()->id;
-        $data->remark = $request->remark;
-        $data->status = 0;
-        $data->created_at = Carbon::now()->format('Y-m-d');
-        $data->updated_at = Carbon::now()->format('Y-m-d');
+            $inspId = Auth::user()->inspectorate_id;
+            $secId = $formData['admin-section'];
 
-        if ($request->hasFile('doc_file')) {
+            $contractData = new Contract();
+            $contractData->insp_id = $inspId;
+            $contractData->sec_id = $secId;
+            $contractData->sender = $formData['sender'];
+            $contractData->ltr_no_of_contract = $formData['ltr-no-contract'];
+            $contractData->ltr_date_contract = $formData['ltr-date-contract'];
+            $contractData->reference_no = $formData['contract-reference-no'];
+            $contractData->contract_no = $formData['contract-number'];
+            $contractData->contract_date = $formData['contract-date'];
+            $contractData->received_by = Auth::user()->id;
+            $contractData->status = 0;
+            $contractData->created_at = Carbon::now()->format('Y-m-d');
+            $contractData->updated_at = Carbon::now()->format('Y-m-d');
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-            $data->doc_file = $path;
+            $contractData->save();
+
+            DB::commit();
+
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => "Contract saved successfully!"
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => "Something went wrong!",
+                'error' => $e->getMessage()
+            ], 200);
         }
-
-        // $data->created_by = auth()->id();
-        // $data->updated_by = auth()->id();
-
-        $data->save();
-
-        return response()->json(['success' => 'Done']);
     }
+
     public function edit($id)
     {
-
         $indent = Indent::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('sec_id');
             $table->integer('sender');
             $table->string('reference_no');
+            $table->integer('received_by');
             $table->string('additional_documents')->nullable();
             $table->integer('item_id')->nullable();
             $table->integer('item_type_id')->nullable();
@@ -24,12 +25,12 @@ return new class extends Migration
             $table->date('ltr_date_contract');
             $table->string('contract_no');
             $table->date('contract_date');
-            $table->string('contract_state');
-            $table->string('con_fin_year');
-            $table->integer('supplier_id');
-            $table->decimal('contracted_value', 10, 2);
-            $table->text('delivery_schedule');
-            $table->string('currency_unit');
+            $table->string('contract_state')->nullable();
+            $table->string('con_fin_year')->nullable();
+            $table->integer('supplier_id')->nullable();
+            $table->decimal('contracted_value', 10, 2)->nullable();
+            $table->text('delivery_schedule')->nullable();
+            $table->string('currency_unit')->nullable();
             $table->integer('status');
             $table->timestamps();
         });
