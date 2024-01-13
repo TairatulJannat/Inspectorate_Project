@@ -16,7 +16,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <a href="" class="btn btn-success">Import
+                                <a href="{{url('admin/excel/import_documet_data')}}/{{ $draft_contract->reference_no }}" class="btn btn-success">Import
                                     Excel</a>
                             </div>
                         </div>

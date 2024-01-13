@@ -47,11 +47,7 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        {{-- <div class="col-md-2">
-                            <div class="form-group">
-                                <a href="{{url('admin/import-indent-spec-data-index')}}" class="btn btn-success">Import Excel</a>
-                            </div>
-                        </div> --}}
+                      
                     </div>
                     <div class="row mt-4">
 
@@ -103,7 +99,7 @@
                             <div class="form-group">
                                 <label for="indent_received_date">Indent Received Date</label>
                                 <input type="date" class="form-control" id="indent_received_date"
-                                    name="indent_received_date">
+                                    name="indent_received_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                                 <span id="error_indent_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>

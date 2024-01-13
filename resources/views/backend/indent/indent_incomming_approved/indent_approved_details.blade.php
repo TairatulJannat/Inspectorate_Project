@@ -158,10 +158,7 @@
                                 <th>Nomenclature</td>
                                 <td>{{ $details->nomenclature }}</td>
                             </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}</td>
-                            </tr>
+                           
                             <tr>
                                 <th>Model</td>
                                 <td>{{ $details->model }}</td>
