@@ -219,7 +219,7 @@ class FinalSpecDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'DocumentTrack_hidden'));
+        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'DocumentTrack_hidden'));
     }
 
     public function FinalSpecDispatchTracking(Request $request)

@@ -230,7 +230,7 @@ class OfferApprovedController extends Controller
 
 
 
-        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
+        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
     }
 
     public function offerTracking(Request $request)

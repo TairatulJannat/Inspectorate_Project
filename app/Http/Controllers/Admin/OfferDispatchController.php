@@ -228,7 +228,7 @@ class OfferDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.offer.offer_dispatch.offer_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden','supplier_names_names'));
+        return view('backend.offer.offer_dispatch.offer_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id','auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden','supplier_names_names'));
     }
 
 

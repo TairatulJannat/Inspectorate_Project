@@ -417,19 +417,6 @@ class OfferController extends Controller
 
         //End close forward Status...
 
-
-        //Start blade notes section....
-        $notes = '';
-
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-
-        //End blade notes section....
          
           //Start blade forward on off section....
           $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
@@ -437,7 +424,7 @@ class OfferController extends Controller
           //End blade forward on off section....
 
 
-        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden','additional_documents_names', 'supplier_names_names'));
+        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden','additional_documents_names', 'supplier_names_names'));
     }
 
     public function offerTracking(Request $request)
