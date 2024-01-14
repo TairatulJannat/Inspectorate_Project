@@ -69,19 +69,18 @@
                                             <td class="col-md-1 py-1 text-center" style="background-color: #bdf5fb">
                                                 {{ $slNo + 1 }}</td>
                                             <td class="col-md-2 py-1" style="background-color: #bdf5fb">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]"
-                                                    value="{{ $parameter['parameter_name'] }}">
+                                                <textarea class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
                                             </td>
                                             <td class="col-md-3 py-1" style="background-color: #bdf5fb">
                                                 <textarea class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]">{{ $parameter['indent_parameter_value'] }}</textarea>
                                             </td>
-                                            <td class="col-md-2 py-1" style="background-color: #b0e0bc">
+                                            <td class="col-md-3 py-1" style="background-color: #b0e0bc">
                                                 <textarea class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
                                             </td>
-                                            <td class="col-md-2 py-1" style="background-color: #b0e0bc">
+                                            <td class="col-md-1 py-1" style="background-color: #b0e0bc">
                                                 <select class="form-control select2"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][compliance_status]">
                                                     <option value="Comply" selected>Comply</option>
@@ -90,9 +89,7 @@
                                                 </select>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][remarks]"
-                                                    value="">
+                                                <textarea class="form-control" name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][remarks]"></textarea>
                                             </td>
                                         </tr>
                                         @php $slNo++; @endphp

@@ -446,7 +446,7 @@ class ExcelController extends Controller
                     continue;
                 }
 
-                $groupName = $row[0];
+                $groupName = $row[1];
 
                 if ($groupName !== null) {
                     $currentGroupName = $groupName;
@@ -457,9 +457,9 @@ class ExcelController extends Controller
                 }
 
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => trim($row[1]),
-                    'indent_parameter_value' => trim($row[2]),
-                    'parameter_value' => trim($row[3]),
+                    'parameter_name' => trim($row[2]),
+                    'indent_parameter_value' => trim($row[3]),
+                    'parameter_value' => trim($row[4]),
                 ];
             }
 
@@ -655,22 +655,23 @@ class ExcelController extends Controller
             ->groupBy('supplier_id')
             ->pluck('supplier_id');
 
+        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
+
+        $offerData = Offer::where('tender_reference_no', $tenderId)->first();
+        $selectedSupplierIds = json_decode($offerData->supplier_id);
+        $suppliers = Supplier::whereIn('id', $selectedSupplierIds)->get();
+
         if ($supplierIds->isEmpty()) {
             return response()->json([
                 'isSuccess' => false,
                 'message' => 'No supplier spec has been imported yet!',
+                'suppliers' => $suppliers,
                 'tendersData' => $tendersData->indent_reference_no,
                 'indentId' => $indentsData->id,
                 'itemTypeId' => $indentsData->item_type_id,
                 'itemId' => $indentsData->item_id,
             ]);
         }
-
-        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
-
-        $offerData = Offer::where('tender_reference_no', $tenderId)->first();
-        $supplierIds = json_decode($offerData->supplier_id);
-        $suppliers = Supplier::whereIn('id', $supplierIds)->get();
 
         return response()->json([
             'isSuccess' => true,
@@ -684,9 +685,9 @@ class ExcelController extends Controller
     }
     public function getDocData($referenceNo)
     {
-        $draftContract=DraftContract::where('reference_no',$referenceNo)->first();
-        $itemType=Item_type::where('id',$draftContract->item_type_id)->first();
-        $item=Items::where('id',$draftContract->item_id)->first();
-        return view('backend.excel-files.documet_data_import.view_page', compact('draftContract','itemType','item'));
+        $draftContract = DraftContract::where('reference_no', $referenceNo)->first();
+        $itemType = Item_type::where('id', $draftContract->item_type_id)->first();
+        $item = Items::where('id', $draftContract->item_id)->first();
+        return view('backend.excel-files.documet_data_import.view_page', compact('draftContract', 'itemType', 'item'));
     }
 }
