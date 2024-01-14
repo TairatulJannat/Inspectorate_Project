@@ -612,7 +612,7 @@ class ExcelController extends Controller
                 }
 
                 DB::commit();
-                return redirect()->to('admin/import-supplier-spec-data-index')->with('success', 'Supplier\'s Spec saved successfully.');
+                return redirect()->to('admin/offer/view')->with('success', 'Supplier\'s Spec saved successfully.');
             } else {
                 DB::rollBack();
                 return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Parameter group Name mismatch. Please check the Excel File.');
