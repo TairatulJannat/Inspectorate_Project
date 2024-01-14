@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Indent (On Process)')
+@section('title', 'QAC (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Indent (On Process) ')
+@section('main_menu', 'QAC (On Process) ')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Indent</h2>
+                <h2>Details of QAC</h2>
             </div>
             <div style="display: flex">
 
@@ -112,74 +112,34 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                            <tr>
-                                <th>Indent Number</td>
-                                <td>{{ $details->indent_number }}</td>
-                            </tr>
+
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
                                 <th>Receive Date</td>
-                                <td>{{ $details->indent_received_date }}</td>
+                                <td>{{ $details->received_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Referance Date</td>
+                                <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>{{ $details->attribute }}</td>
-                            </tr>
-                            <tr>
 
-                                <th>Additional Documents</th>
-                                <td>
-                                    @if (!empty($additional_documents_names))
-                                        <ul>
-                                            @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name }} </li>
-                                                <!-- Adjust the key according to your array structure -->
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No additional documents available.
-                                    @endif
-                                </td>
-
-                            </tr>
                             <tr>
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>{{ $details->nomenclature }}</td>
-                            </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}</td>
-                            </tr>
-                            <tr>
-                                <th>Model</td>
-                                <td>{{ $details->model }}</td>
-                            </tr>
-                            <tr>
-                                
-                                <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin }}</td>
-                            </tr>
-                            <tr>
-                                <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly }}</td>
-                            </tr>
+
 
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}"
                             target="_blank">Pdf Document</a>
                     </div>
                 </div>
@@ -324,7 +284,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_incomming_approved.indent_approved_index_js') --}}
+    {{-- @include('backend.qac.qac_incomming_approved.qac_approved_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -362,7 +322,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/indent_approved/indent_tracking') }}',
+                            url: '{{ url('admin/qac_approved/qac_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -384,7 +344,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.indent_approved/view') }}",
+                                            "{{ route('admin.qac_approved/view') }}",
                                             40000);
                                     }
                                 }

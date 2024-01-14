@@ -63,16 +63,17 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival</a>
-                            <a href="{{ route('admin.indent_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process </a>
-                            <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch</a>
+                            <a href="{{ route('admin.qac/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival ({{$qacNew}})</a>
+                            <a href="{{ route('admin.qac_approved/view') }}" type="button"
+                                class="btn btn-secondary btn-sm">On Process ({{$qacOnProcess}})</a>
+                            <a href="{{ route('admin.qac/outgoing') }}" type="button"
+                                class="btn btn-info text-white btn-sm">Completed ({{$qacCompleted}})</a>
+                            <a href="{{ route('admin.qac_dispatch/view') }}" type="button"
+                                class="btn btn-danger btn-sm">Dispatch ({{$qacDispatch}})</a>
 
                         </div>
+
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
                         </div>
@@ -88,18 +89,29 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference Number</th>
-                                <th>Indent Number</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Item QTY</th>
-                                <th>Present state of spec</th>
+                                <th>Present state of Qac</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="8">
+
+                                    <span class="icon p-3 m-2" style="color: #1B4C43;">&#11044; New Arrival</span>
+                                    <span class="icon p-3 m-2" style="color: #BA895D;">&#11044; On Process</span>
+                                    <span class="icon p-3 m-2" style="color: #0DCAF0;">&#11044; Completed</span>
+                                    <span class="icon p-3 m-2" style="color: #B53F4B;">&#11044; Dispatch</span>
+                                    <span class="icon p-3 m-2" style="color: #FF8E36;">&#11044; Forward</span>
+                                    <span class="icon p-3 m-2" style="color: #0D6DA8;">&#11044; Forwarded</span>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

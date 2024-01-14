@@ -43,40 +43,40 @@
                     data: 'reference_no',
                     name: 'reference_no',
 
-                    orderable: false
+                   
                 },
                 {
-                    data: 'item_type_name',
-                    name: 'item_type_id',
-                    orderable: false
+                    data: 'item_name',
+                    name: 'item_name',
+                   
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                    orderable: false
+                   
                 },
 
 
                 {
                     data: 'indent_received_date',
                     name: 'indent_received_date',
-                    orderable: false
+                   
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                    orderable: false
+                   
                 },
                 {
                     data: 'qty',
                     name: 'qty',
-                    orderable: false
+                   
                 },
 
                 {
                     data: 'status',
                     name: 'status',
-                    orderable: false
+                   
                 },
 
                 {

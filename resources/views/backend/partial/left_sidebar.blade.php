@@ -118,6 +118,53 @@ $currentControllerName = Request::segment(2);
                         </li>
                     @endif
 
+
+                    {{-- start final sepecification --}}
+                    @if (count(menu_check('FinalSpec')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'FinalSpec' ? 'active' : '' }}"
+                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                <span>Final Spec</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/FinalSpec/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('FinalSpec/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.FinalSpec/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
+                                            Final Spec</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('FinalSpec/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.FinalSpec/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
+                                            Final Spec</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Side Menu Button Links for draft Contract --}}
+                    @if (count(menu_check('DraftContract')) !== 0)
+                        <li class="dropdown">
+                            <a class="nav-link menu-title text-white" href="javascript:void(0)">
+                                <i data-feather="file-text"></i> <!-- Add the icon for "Contract" -->
+                                <span>Draft Contract</span>
+                            </a>
+                            <ul class="nav-submenu menu-content">
+                                <li>
+                                    <a href="{{ url('admin/draft_contract/view') }}"
+                                        class="{{ Request::is('*/admin/draft_contract/view') ? 'active' : '' }} text-white">
+                                        View Draft Contracts
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('admin/draft_contract/create') }}"
+                                        class="{{ Request::is('*/admin/draft_contract/create') ? 'active' : '' }} text-white">
+                                        Create Draft Contract
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    @endif
                     {{-- Side Menu Button Links for Contract --}}
                     @if (count(menu_check('Contract')) !== 0)
                         <li class="dropdown">
@@ -126,6 +173,8 @@ $currentControllerName = Request::segment(2);
                                 <i data-feather="file-text"></i>
                                 <span>Contracts</span>
                             </a>
+
+
                         </li>
                     @endif
 
@@ -172,6 +221,22 @@ $currentControllerName = Request::segment(2);
                                     </li> --}}
                                     <li><a class="text-light" href="{{ route('admin.qac/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create QAC</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('qac/view') !== null)
+                                    {{-- <li><a class="text-light" href="{{ route('admin.qac/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View PSI</a>
+                                    </li> --}}
+                                    <li><a class="text-light" href="{{ route('admin.psi/view') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View PSI</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('offer/create') !== null)
+                                    {{-- <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create PSI</a>
+                                    </li> --}}
+                                    <li><a class="text-light" href="{{ route('admin.psi/create') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create PSI</a>
                                     </li>
                                 @endif
                             </ul>

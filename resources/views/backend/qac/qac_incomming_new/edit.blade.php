@@ -1,10 +1,10 @@
 @extends('backend.app')
-@section('title', 'Indent (Edit)')
+@section('title', 'Qac (Edit)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
 @endpush
-@section('main_menu', 'Indent')
+@section('main_menu', 'Qac')
 @section('active_menu', 'Edit')
 @section('content')
     <div class="col-sm-12 col-xl-12">
@@ -12,6 +12,7 @@
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
+
                     <div class=" header">
                         {{-- <div class="col-md-3">
                             <div class="form-group d-flex">
@@ -31,11 +32,12 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row mt-4">
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="hidden" value=" {{$indent->id}}" id="editId" name="editId">
+                                <input type="hidden" value=" {{$qac->id}}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -43,7 +45,7 @@
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
-                                            {{ $dte->id == $indent->sender ? 'selected' : '' }}>{{ $dte->name }}
+                                            {{ $dte->id == $qac->sender_id ? 'selected' : '' }}>{{ $dte->name }}
                                         </option>
                                     @endforeach
 
@@ -56,7 +58,7 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $indent->reference_no ? $indent->reference_no : '' }} ">
+                                    value="{{ $qac->reference_no ? $qac->reference_no : '' }} ">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -65,66 +67,41 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="indent_number">Indent Number</label>
-
-                                <input type="text" class="form-control" id="indent_number" name="indent_number"
-                                    value="{{ $indent->indent_number ? $indent->indent_number : '' }}">
-
-                                <span id="error_indent_number" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_received_date">Indent Received Date</label>
-                                <input type="date" class="form-control" id="indent_received_date"
-                                    name="indent_received_date"
-                                    value="{{ $indent->indent_received_date ? $indent->indent_received_date : '' }}">
-                                <span id="error_indent_received_date" class="text-danger error_field"></span>
+                                <label for="qac_received_date">Qac Received Date</label>
+                                <input type="date" class="form-control" id="qac_received_date"
+                                    name="qac_received_date"
+                                    value="{{ $qac->received_date ? $qac->received_date : '' }}">
+                                <span id="error_qac_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="indent_reference_date">Indent Reference Date</label>
-                                <input type="date" class="form-control" id="indent_reference_date"
-                                    name="indent_reference_date"
-                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date : '' }}">
-                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
+                                <label for="qac_reference_date">Qac Reference Date</label>
+                                <input type="date" class="form-control" id="qac_reference_date"
+                                    name="qac_reference_date"
+                                    value="{{ $qac->reference_date ? $qac->reference_date : '' }}">
+                                <span id="error_qac_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="additional_documents">Additional Documents</label>
-                                <select class="form-control select2" id="additional_documents" name="additional_documents[]"
-                                    multiple>
-                                    <option value="">Please Select</option>
-                                    @foreach ($additional_documnets as $additional_document)
-                                        @php
-                                            $documentIds = json_decode($indent->additional_documents);
-                                            $isSelected = in_array($additional_document->id, $documentIds? $documentIds:[]) ? 'selected' : '';
-                                        @endphp
-                                        <option value="{{ $additional_document->id }}" {{ $isSelected }}>
-                                            {{ $additional_document->name }}
-                                        </option>
-                                    @endforeach
-
-                                </select>
-                                <span id="error_additional_documents" class="text-danger error_field"></span>
+                                <label for="contract_reference_no">Contract Reference No.</label>
+                                <input type="text" class="form-control" id="contract_reference_no" name="contract_reference_no"
+                                    value="{{ $qac->contract_reference_no ? $qac->contract_reference_no : '' }} ">
+                                <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
-                                <select class="form-control" id="item_type_id" name="item_type_id">
+                                <select class="form-control" id="item_type_id" name="item_type_id" required>
 
                                     <option selected disabled value="">Please Select</option>
 
                                     @foreach ($item_types as $item_type)
                                         <option value="{{ $item_type->id }}"
-                                            {{ $item_type->id == $indent->item_type_id ? 'selected' : '' }}>
+                                            {{ $item_type->id == $qac->item_type_id ? 'selected' : '' }}>
                                             {{ $item_type->name }}
                                         </option>
                                     @endforeach
@@ -138,9 +115,9 @@
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
-                                <select class="form-control select2" id="item_id" name="item_id">
+                                <select class="form-control select2" id="item_id" name="item_id" required>
                                     <option value="">Please Select</option>
-                                    @if ($item)
+                                    @if ($qac->item_id)
                                         <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
                                     @endif
                                 </select>
@@ -150,83 +127,17 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="qty">Item QTY</label>
-                                <input type="text" class="form-control" id="qty" name="qty"
-                                    value="{{ $indent->qty ? $indent->qty : '' }}">
-
-                                <span id="error_qty" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="attribute">Attribute</label>
-
-                                <select class="form-control" name="attribute" id="attribute">
-                                    <option value="">Please Select</option>
-                                    <option value="Controlled" {{ $indent->attribute == 'Controlled' ? 'selected' : '' }}>
-                                        Controlled</option>
-                                    <option value="Uncontrolled"
-                                        {{ $indent->attribute == 'Uncontrolled' ? 'selected' : '' }}>Uncontrolled</option>
-                                </select>
-
-
-                                <span id="error_attribute" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="estimated_value">Estimated Value</label>
-                                <input type="text" class="form-control" id="estimated_value" name="estimated_value"
-                                    value="{{ $indent->estimated_value ? $indent->estimated_value : '' }}">
-
-                                <span id="error_estimated_value" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="spare">Spare</label>
-                                <input type="text" class="form-control" id="spare" name="spare"
-                                    value="{{ $indent->spare ? $indent->spare : '' }}">
-
-                                <span id="error_spare" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="checked_standard">Standard / Non Standard </label>
-                                <select class="form-control" name="checked_standard" id="checked_standard">
-                                    <option value="">Please Select</option>
-                                    <option value="0" {{ $indent->checked_standard == '0' ? 'selected' : '' }}>
-                                        Standard
-                                    </option>
-                                    <option value="1" {{ $indent->checked_standard == '1' ? 'selected' : '' }}>Non
-                                        Standard</option>
-                                </select>
-                                {{-- <div class="form-check form-switch">
-
-
-                                    <input class="form-check-input" type="checkbox" id="checked_standard"
-                                        name="checked_standard">
-
-                                </div> --}}
-
-                                <span id="error_checked_standard" class="text-danger error_field"></span>
-                            </div>
-
-                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fin_year_id">Financial Year </label>
 
-                                <select class="form-control" id="fin_year_id" name="fin_year_id">
+                                <select class="form-control" id="fin_year_id" name="fin_year_id" required>
 
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
                                         <option value={{ $fin_year->id }}
-                                            {{ $fin_year->id == $indent->fin_year_id ? 'selected' : '' }}>
+                                            {{ $fin_year->id == $qac->fin_year_id ? 'selected' : '' }}>
                                             {{ $fin_year->year }}
                                         </option>
                                     @endforeach
@@ -236,55 +147,7 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="nomenclature">Nomenclature</label>
-                                <input type="text" class="form-control" id="nomenclature" name="nomenclature"
-                                    value="{{ $indent->nomenclature ? $indent->nomenclature : '' }}">
 
-                                <span id="error_nomenclature" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="make">Make</label>
-                                <input type="text" class="form-control" id="make" name="make">
-
-                                <span id="error_make" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="model">Model</label>
-                                <input type="text" class="form-control" id="model" name="model"
-                                    value="{{ $indent->model ? $indent->model : '' }}">
-
-                                <span id="error_model" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="country_of_origin">Country of Origin</label>
-
-                                <input type="text" class="form-control" id="country_of_origin"
-                                    name="country_of_origin"
-                                    value="{{ $indent->country_of_origin ? $indent->country_of_origin : '' }}">
-
-
-                                <span id="error_country_of_origin" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="country_of_assembly">Country of Assembly</label>
-
-                                <input type="text" class="form-control" id="country_of_assembly"
-                                    name="country_of_assembly"
-                                    value="{{ $indent->country_of_assembly ? $indent->country_of_assembly : '' }}">
-
-                                <span id="error_country_of_assembly" class="text-danger error_field"></span>
-                            </div>
-                        </div>
 
 
                         <div class="col-md-4">
@@ -299,7 +162,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
-                                <textarea name="remark" id="remark" class="form-control"> {{ $indent->remark ? $indent->remark : '' }}</textarea>
+                                <textarea name="remark" id="remark" class="form-control"> {{ $qac->remarks ? $qac->remarks : '' }}</textarea>
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -316,7 +179,7 @@
 
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
-                        <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-secondary">Cancel</a>
+                        <a href="{{ route('admin.qac/view') }}" type="button" class="btn btn-secondary">Cancel</a>
                         <button class="btn btn-primary" type="submit" id="form_submission_button">Update</button>
                     </div>
                 </div>
@@ -325,104 +188,7 @@
     </div>
 @endsection
 @push('js')
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
-        // Start:: Get Floor & User category & shift
-        $('#hall_id').off('change').on('change', function() {
-            var hall_id = $('#hall_id').val();
-            $('#floor_id').html('');
-            $('#user_category_id').html('');
-            $('#shift_id').html(`
-            <option value="">Please Select Shift</option>
-        `);
-            $.ajax({
-                url: "{{ url('admin/hall/get_floor') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#floor_id').append(`
-                        <option value="${item.id ? item.id : ''}">
-                            ${item.name ? item.name : ''}
-                        </option>
-                    `);
-                    });
-                }
-            });
 
-            $.ajax({
-                url: "{{ url('admin/hall/get_user_category') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#user_category_id').append(`
-                    <option value="${item.id ? item.id : ''}">
-                        ${item.name ? item.name : ''}
-                    </option>
-                `);
-                    });
-                }
-            });
-
-            $.ajax({
-                url: "{{ url('admin/hall/get_shift') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#shift_id').append(`
-                    <option value="${item.id ? item.id : ''}">
-                        ${item.name ? item.name : ''}
-                    </option>
-                `);
-                    });
-                }
-            });
-        })
-        // End:: Get Floor & User category & shift
-
-        $('#specify_event').off('change').on('change', function() {
-            if ($(this).prop('checked')) {
-                $('.event-name-container').show();
-            } else {
-                $('.event-name-container').hide();
-            }
-        })
-
-        $('#specify_month').off('change').on('change', function() {
-            if ($(this).prop('checked')) {
-                $('.months-container').show();
-            } else {
-                $('.months-container').hide();
-            }
-        })
-
-        // $('#specify_shift_charge').off('change').on('change', function() {
-        //     if ($(this).prop('checked')) {
-        //         $('.shift-container').show();
-        //     } else {
-        //         $('.shift-container').hide();
-        //     }
-        // })
-    </script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
@@ -439,7 +205,7 @@
             var formData = new FormData($('#update_form')[0]);
             disableButton()
             $.ajax({
-                url: "{{ url('admin/indent/update') }}",
+                url: "{{ url('admin/qac/update') }}",
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -458,75 +224,19 @@
                         toastr.success('Information Updated', 'Saved');
                         $('#edit_model').modal('hide');
                     }
-                    setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
+                    setTimeout(window.location.href = "{{ route('admin.qac/view') }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
                     clear_error_field();
                     error_notification('Please fill up the form correctly and try again')
-                    // $('#error_hall_id').text(response.responseJSON.errors.hall_id);
-                    // $('#error_floor_id').text(response.responseJSON.errors.floor_id);
-                    // $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
-                    // $('#error_specify_event').text(response.responseJSON.errors.specify_event);
-                    // $('#error_event_name').text(response.responseJSON.errors.event_name);
-                    // $('#error_specify_month').text(response.responseJSON.errors.specify_month);
-                    // $('#error_months').text(response.responseJSON.errors.months);
-                    // $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
-                    // $('#error_specify_shift_charge').text(response.responseJSON.errors
-                    //     .specify_shift_charge);
-                    // $('#error_shift_id').text(response.responseJSON.errors.shift_id);
-                    // $('#error_price').text(response.responseJSON.errors.price);
-                    // $('#error_status').text(response.responseJSON.errors.status);
+                    $('#error_contract_reference_no').text(response.responseJSON.error);
                 }
             });
         })
         //End:: Update information
 
-        // Start:: delete user
-        // function delete_data(id) {
-        //     swal({
-        //         title: 'Are you sure?',
-        //         text: "You won't be able to revert this!",
-        //         type: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Yes, delete it!',
-        //         cancelButtonText: 'No, cancel!',
-        //         confirmButtonClass: 'btn btn-success',
-        //         cancelButtonClass: 'btn btn-danger',
-        //         buttonsStyling: false,
-        //         reverseButtons: true
-        //     }).then((result) => {
-        //         if (result.value) {
-        //             event.preventDefault();
-        //             $.ajax({
-        //                 type: 'get',
-        //                 url: '{{ url('admin/hall_price/delete') }}/' + id,
-        //                 success: function(response) {
-        //                     if (response) {
-        //                         if (response.permission == false) {
-        //                             toastr.warning('you dont have that Permission',
-        //                                 'Permission Denied');
-        //                         } else {
-        //                             toastr.success('Deleted Successful', 'Deleted');
-        //                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
-        //                         }
-        //                     }
-        //                 }
-        //             });
-        //         } else if (
-        //             result.dismiss === swal.DismissReason.cancel
-        //         ) {
-        //             swal(
-        //                 'Cancelled',
-        //                 'Your data is safe :)',
-        //                 'error'
-        //             )
-        //         }
-        //     })
-        // }
-        // End:: delete user
+
 
         function form_reset() {
             document.getElementById("search_form").reset();
@@ -563,8 +273,6 @@
     </script>
     <script>
         $(document).ready(function() {
-
-            $('.select2').select2();
 
 
             $("#item_type_id").off('change').on('change', function() {

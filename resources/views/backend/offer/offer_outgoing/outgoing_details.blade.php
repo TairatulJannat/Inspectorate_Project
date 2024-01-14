@@ -88,6 +88,11 @@
             column-gap: 10px;
             margin-bottom: 25px
         }
+        .cover_letter {
+            margin-top: 20px;
+            height: 90px;
+            font-size: 20px;
+        }
     </style>
 @endpush
 @section('main_menu', 'Offer (Outgoing)')
@@ -242,9 +247,9 @@
 
                                                     @if (!$cover_letter)
                                                         <div
-                                                            class="col-md-6 m-2 d-flex justify-content-center align-items-center">
-                                                            <button class="btn btn-warning text-light ml-2"
-                                                                style='height: 60px' type="button" data-bs-toggle="modal"
+                                                            class="col-md-6 m-2 d-flex justify-content-center align-items-center ">
+                                                            <button class="btn btn-warning text-light ml-2 cover_letter"
+                                                                type="button" data-bs-toggle="modal"
                                                                 data-bs-target=".bd-example-modal-lg">Create Cover
                                                                 Letter</button>
                                                         </div>
@@ -264,7 +269,7 @@
                                                 id="disabledSubmitBtn"
                                                 title="To Enable Button Create Cover Letter"
                                                 style="height: 40px;" disabled>Deliver</button>
-                                        
+
                                                 @endif
                                                 </div>
                                             </div>
@@ -714,7 +719,7 @@
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',

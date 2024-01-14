@@ -154,8 +154,9 @@ class TenderController extends Controller
         $additional_documents = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->get();
         $fin_years = FinancialYear::all();
+        $indent_reference_numbers = Indent::all();
         // dd( $fin_years);
-        return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections', 'fin_years'));
+        return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections', 'fin_years','indent_reference_numbers'));
     }
 
     public function store(Request $request)
@@ -180,6 +181,7 @@ class TenderController extends Controller
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->tender_number = $request->tender_number;
+        $data->indent_reference_no = $request->indent_reference_no;
         $data->receive_date = $request->receive_date;
         $data->additional_documents = json_encode($request->additional_documents);
         $data->item_id = $request->item_id;

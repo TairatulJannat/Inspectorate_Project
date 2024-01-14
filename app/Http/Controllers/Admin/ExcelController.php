@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use App\Imports\SupplierSpecImport;
 use App\Http\Controllers\Controller;
 use App\Models\AssignParameterValue;
+use App\Models\DraftContract;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -46,8 +47,10 @@ class ExcelController extends Controller
         return view('backend.csr.csr-index', compact('items', 'itemTypes', 'tenders'));
     }
 
+
     public function getCSRData($request)
     {
+
         $customMessages = [
             'tender-id.required' => 'Please select an Tender.',
         ];
@@ -678,5 +681,12 @@ class ExcelController extends Controller
             'itemTypeId' => $indentsData->item_type_id,
             'itemId' => $indentsData->item_id,
         ]);
+    }
+    public function getDocData($referenceNo)
+    {
+        $draftContract=DraftContract::where('reference_no',$referenceNo)->first();
+        $itemType=Item_type::where('id',$draftContract->item_type_id)->first();
+        $item=Items::where('id',$draftContract->item_id)->first();
+        return view('backend.excel-files.documet_data_import.view_page', compact('draftContract','itemType','item'));
     }
 }

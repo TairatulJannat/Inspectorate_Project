@@ -93,11 +93,11 @@ class IndentController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+                $query = Indent::leftJoin('items', 'indents.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
                     ->where('indents.status', 0)
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('indents.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
                 $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
@@ -106,10 +106,10 @@ class IndentController extends Controller
                     ->where('indents.status', 0)
                     ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
 
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+                $query = Indent::leftJoin('items', 'indents.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('indents.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('indents.status', 0)
                     ->get();
             } else {
@@ -119,10 +119,10 @@ class IndentController extends Controller
                     ->where('indents.status', 0)
                     ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
 
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+                $query = Indent::leftJoin('items', 'indents.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('indents.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('indents.id', $indentIds)
                     ->where('indents.status', 0)
                     ->get();
@@ -374,6 +374,7 @@ class IndentController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 1)
+            ->where('doc_type_id',  3)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -397,28 +398,18 @@ class IndentController extends Controller
         }
         //End close forward Status...
 
-        //Start blade notes section....
-        $notes = '';
 
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-        //End blade notes section....
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
+        ->where('doc_type_id',  3)->latest()->first();
         //End blade forward on off section....
 
-        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
     {
-
 
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',
@@ -430,7 +421,6 @@ class IndentController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-
 
 
         $ins_id = Auth::user()->inspectorate_id;

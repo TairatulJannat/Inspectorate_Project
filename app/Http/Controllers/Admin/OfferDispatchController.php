@@ -106,25 +106,25 @@ class OfferDispatchController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
+                            <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
+                        <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
                         </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Dispatched</a>
+                        <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-success btn-sm">Forwarded</a>
                         </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Dispatch</a>
+                        <a href="' . url('admin/offer_dispatch/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
                     }
 
@@ -164,9 +164,9 @@ class OfferDispatchController extends Controller
         }
 
         $details->suppliers = json_decode($details->supplier_id, true);
-     
+
         $supplier_names_names = [];
-     
+
         foreach ($details->suppliers as $Supplier_id) {
             $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
 //    dd($supplier_names);
