@@ -683,6 +683,7 @@ class ExcelController extends Controller
             'itemId' => $indentsData->item_id,
         ]);
     }
+
     public function getDocData($referenceNo)
     {
         $draftContract = DraftContract::where('reference_no', $referenceNo)->first();
