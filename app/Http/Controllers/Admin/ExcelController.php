@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use App\Imports\SupplierSpecImport;
 use App\Http\Controllers\Controller;
 use App\Models\AssignParameterValue;
+use App\Models\DraftContract;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -46,9 +47,10 @@ class ExcelController extends Controller
         return view('backend.csr.csr-index', compact('items', 'itemTypes', 'tenders'));
     }
 
-    public function getCSRData(
-      $request)
+
+    public function getCSRData($request)
     {
+
         $customMessages = [
             'tender-id.required' => 'Please select an Tender.',
         ];
@@ -223,9 +225,13 @@ class ExcelController extends Controller
             $currentGroupName = null;
 
             foreach ($importedData->toArray() as $row) {
-                $groupName = $row[0];
+                if (empty(array_filter($row))) {
+                    continue;
+                }
 
-                if ($groupName !== null) {
+                $groupName = trim($row[1]);
+
+                if ($groupName != null) {
                     $currentGroupName = $groupName;
                     $parameterGroups[$currentGroupName] = [];
                     continue;
@@ -233,19 +239,19 @@ class ExcelController extends Controller
                     $groupName = $currentGroupName;
                 }
 
-                $parameterName = trim($row[1]);
-                if (empty($parameterName)) {
-                    return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                }
+                // $parameterName = trim($row[1]);
+                // if (empty($parameterName)) {
+                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
+                // }
 
-                $parameterValue = trim($row[2]);
-                if (empty($parameterValue)) {
-                    return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                }
+                // $parameterValue = trim($row[2]);
+                // if (empty($parameterValue)) {
+                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
+                // }
 
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => $parameterName,
-                    'parameter_value' => $parameterValue,
+                    'parameter_name' => trim($row[2]),
+                    'parameter_value' => trim($row[3]),
                 ];
             }
 
@@ -258,12 +264,17 @@ class ExcelController extends Controller
             $itemType = Item_Type::find($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
+            $indentNo = $request->indentNo;
+            $indentData = Indent::where('indent_number', $indentNo)->first();
+
             return view('backend.excel-files.display-imported-indent-data', [
                 'parameterGroups' => $parameterGroups,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
                 'itemId' => $itemId,
                 'itemName' => $itemName,
+                'indentNo' => $indentNo,
+                'indentRefNo' => $indentData->reference_no,
             ]);
         } catch (UnreadableFileException $e) {
             return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'The uploaded file is unreadable.');
@@ -302,7 +313,7 @@ class ExcelController extends Controller
 
             DB::commit();
 
-            return redirect()->to('admin/import-indent-spec-data-index')->with('success', 'Changes saved successfully.');
+            return redirect()->to('admin/indent/view')->with('success', 'Indent data saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Error saving data: ' . $e->getMessage());
@@ -446,9 +457,9 @@ class ExcelController extends Controller
                 }
 
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => $row[1],
-                    'indent_parameter_value' => $row[2],
-                    'parameter_value' => $row[3],
+                    'parameter_name' => trim($row[1]),
+                    'indent_parameter_value' => trim($row[2]),
+                    'parameter_value' => trim($row[3]),
                 ];
             }
 
@@ -647,7 +658,7 @@ class ExcelController extends Controller
         if ($supplierIds->isEmpty()) {
             return response()->json([
                 'isSuccess' => false,
-                'message' => 'No suppliers found for this Tender!',
+                'message' => 'No supplier spec has been imported yet!',
                 'tendersData' => $tendersData->indent_reference_no,
                 'indentId' => $indentsData->id,
                 'itemTypeId' => $indentsData->item_type_id,
@@ -657,13 +668,25 @@ class ExcelController extends Controller
 
         $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
 
+        $offerData = Offer::where('tender_reference_no', $tenderId)->first();
+        $supplierIds = json_decode($offerData->supplier_id);
+        $suppliers = Supplier::whereIn('id', $supplierIds)->get();
+
         return response()->json([
             'isSuccess' => true,
+            'suppliers' => $suppliers,
             'suppliersData' => $suppliersData,
             'tendersData' => $tendersData->indent_reference_no,
             'indentId' => $indentsData->id,
             'itemTypeId' => $indentsData->item_type_id,
             'itemId' => $indentsData->item_id,
         ]);
+    }
+    public function getDocData($referenceNo)
+    {
+        $draftContract=DraftContract::where('reference_no',$referenceNo)->first();
+        $itemType=Item_type::where('id',$draftContract->item_type_id)->first();
+        $item=Items::where('id',$draftContract->item_id)->first();
+        return view('backend.excel-files.documet_data_import.view_page', compact('draftContract','itemType','item'));
     }
 }

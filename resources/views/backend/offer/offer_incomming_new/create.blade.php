@@ -51,7 +51,7 @@
                         </div>
                         {{-- <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{url('admin/import-supplier-spec-data-index')}}" class="btn btn-success">Supplier Import Excel</a>
+                                <a href="{{url('admin/import-supplier-spec-data-index')}}" class="btn btn-success">Import Supplier Spec</a>
                             </div>
                         </div> --}}
                     </div>

@@ -23,6 +23,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/responsive.css') }}">
     <link id="color" rel="stylesheet" href="{{ asset('assets/backend/css/color-1.css') }}" media="screen">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/flatpickr.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap-toggle.min.css') }}">
     <style>
         .active_menu {
             background-color: #24695c;

@@ -88,6 +88,12 @@
             column-gap: 10px;
             margin-bottom: 25px
         }
+
+        .cover_letter {
+            margin-top: 20px;
+            height: 90px;
+            font-size: 20px;
+        }
     </style>
 @endpush
 @section('main_menu', 'Indent (Completed)')
@@ -154,10 +160,7 @@
                                 <th>Nomenclature</td>
                                 <td>{{ $details->nomenclature }}</td>
                             </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>{{ $details->make }}</td>
-                            </tr>
+                          
                             <tr>
                                 <th>Model</td>
                                 <td>{{ $details->model }}</td>
@@ -245,8 +248,8 @@
                                                     @if (!$cover_letter)
                                                         <div
                                                             class="col-md-6 m-2 d-flex justify-content-center align-items-center">
-                                                            <button class="btn btn-warning text-light ml-2"
-                                                                style='height: 60px' type="button" data-bs-toggle="modal"
+                                                            <button class="btn btn-warning text-light ml-2 cover_letter"
+                                                                type="button" data-bs-toggle="modal"
                                                                 data-bs-target=".bd-example-modal-lg">Create Cover
                                                                 Letter</button>
                                                         </div>
@@ -454,7 +457,7 @@
                                 </div>
                             </div>
                             <div>
-                                <textarea  class="form-control my-2" name="subject" id="subject" placeholder="Subject"></textarea>
+                                <textarea class="form-control my-2" name="subject" id="subject" placeholder="Subject"></textarea>
                                 {{-- <input type="text" id="subject" class="form-control my-2" placeholder="Subject"> --}}
                             </div>
                             <div class="my-2">

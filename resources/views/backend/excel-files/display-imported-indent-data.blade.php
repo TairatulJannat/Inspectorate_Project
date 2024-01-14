@@ -17,8 +17,14 @@
                             <div class="text-center">
                                 <div class="item-id f-30">{{ $itemName }}</div>
                                 <input type="hidden" name="item-id" value="{{ $itemId }}">
-                                <div class="item-type-id f-20">{{ $itemTypeName }}</div>
+                                <div class="item-type-id f-28">{{ $itemTypeName }}</div>
                                 <input type="hidden" name="item-type-id" value="{{ $itemTypeId }}">
+                                <div class="indent-id f-20">Indent No: <span class="fw-bold">{{ $indentNo }}</span>
+                                </div>
+                                <input type="hidden" name="indent-id" value="{{ $indentNo }}">
+                                <div class="indent-id f-20">Indent Ref. No: <span class="fw-bold">{{ $indentRefNo }}</span>
+                                </div>
+                                <input type="hidden" name="indent-id" value="{{ $indentRefNo }}">
                             </div>
                         </div>
                     </div>
@@ -46,14 +52,12 @@
                                         <tr>
                                             <td class="col-md-1 py-1 text-center">{{ $slNo + 1 }}</td>
                                             <td class="col-md-5 py-1">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]"
-                                                    value="{{ $parameter['parameter_name'] }}">
+                                                <textarea class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
                                             </td>
                                             <td class="col-md-6 py-1">
-                                                <input type="text" class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]"
-                                                    value="{{ $parameter['parameter_value'] }}">
+                                                <textarea class="form-control"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
                                             </td>
                                         </tr>
                                         @php $slNo++; @endphp

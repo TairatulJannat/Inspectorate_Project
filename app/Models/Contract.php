@@ -10,6 +10,14 @@ class Contract extends Model
     use HasFactory;
 
     protected $fillable = [
+        'insp_id',
+        'sec_id',
+        'sender',
+        'reference_no',
+        'received_by',
+        'additional_documents',
+        'item_id',
+        'item_type_id',
         'ltr_no_of_contract',
         'ltr_date_contract',
         'contract_no',
@@ -20,5 +28,6 @@ class Contract extends Model
         'contracted_value',
         'delivery_schedule',
         'currency_unit',
+        'status',
     ];
 }

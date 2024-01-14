@@ -29,8 +29,8 @@
                     </div> --}}
                         <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{ url('admin/import-supplier-spec-data-index') }}"
-                                    class="btn btn-success">Supplier Import Excel</a>
+                                <a id="importExcelBtn" href="{{ url('admin/import-supplier-spec-data-index') }}"
+                                    class="btn btn-success">Import Supplier Spec</a>
                             </div>
                         </div>
                     </div>
@@ -62,6 +62,7 @@
                                     value="{{ $offer->reference_no ? $offer->reference_no : '' }} ">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
+
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -91,12 +92,14 @@
 
                                 </select>
 
+
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference Number</label>
+
 
                                 <select class="form-control " id="indent_reference_no" name="indent_reference_no">
 
@@ -168,6 +171,7 @@
                                 <input type="text" class="form-control" id="offer_rcv_ltr_no" name="offer_rcv_ltr_no"
                                     value="{{ $offer->offer_rcv_ltr_no ? $offer->offer_rcv_ltr_no : '' }}">
                                 <span id="error_offer_rcv_ltr_no" class="text-danger error_field"></span>
+
                             </div>
                         </div>
 
@@ -196,6 +200,7 @@
                                         </option>
                                     @endforeach
 
+
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
@@ -205,12 +210,14 @@
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
+
                                 <select class="form-control select2" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
                                     @if ($item)
                                         <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
                                     @endif
                                 </select>
+
 
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
@@ -220,8 +227,10 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="qty">Item Qty</label>
+
                                 <input type="text" class="form-control" id="qty" name="qty"
                                     value="{{ $offer->qty ? $offer->qty : '' }}">
+
 
                                 <span id="error_qty" class="text-danger error_field"></span>
                             </div>
@@ -232,10 +241,12 @@
 
                                 <select class="form-control" name="attribute" id="attribute">
                                     <option value="">Please Select</option>
+
                                     <option value="Controlled" {{ $offer->attribute == 'Controlled' ? 'selected' : '' }}>
                                         Controlled</option>
                                     <option value="Uncontrolled"
                                         {{ $offer->attribute == 'Uncontrolled' ? 'selected' : '' }}>Uncontrolled</option>
+
                                 </select>
 
 
@@ -256,6 +267,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
@@ -289,13 +301,16 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
+
                                 <textarea name="remark" id="remark" class="form-control">{{ $offer->remark ? $offer->remark : '' }}</textarea>
+
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
 
 
-                        <div class="col-md-4">
+
+           <div class="col-md-4">
                             <div class="form-group">
                                 <label for="pdf_file" style="color: yellow"><button type="button"
                                         class="btn btn-warning">Upload PDF</b></button></label><br>
@@ -318,6 +333,7 @@
     </div>
 @endsection
 @push('js')
+
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>

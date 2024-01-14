@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Psi')
+@section('title', 'PSI')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -24,8 +24,8 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Psi')
-@section('active_menu', 'Add Psi')
+@section('main_menu', 'PSI')
+@section('active_menu', 'Add PSI')
 @section('content')
     <div class="col-sm-12 col-xl-12">
 
@@ -47,7 +47,7 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div>
-                       
+
                     </div>
                     <div class="row mt-4">
 
@@ -78,7 +78,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_reference_date">Psi Reference Date</label>
+                                <label for="psi_reference_date">PSI Reference Date</label>
                                 <input type="date" class="form-control" id="psi_reference_date"
                                     name="psi_reference_date">
                                 <span id="error_psi_reference_date" class="text-danger error_field"></span>
@@ -86,7 +86,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_received_date">Psi Received Date</label>
+                                <label for="psi_received_date">PSI Received Date</label>
                                 <input type="date" class="form-control" id="psi_received_date"
                                     name="psi_received_date">
                                 <span id="error_psi_received_date" class="text-danger error_field"></span>
@@ -124,5 +124,5 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.psi.psi_incomming_new.index_js')
-    
+
 @endpush

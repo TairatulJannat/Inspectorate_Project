@@ -157,7 +157,7 @@
 
                     $.each(node, function(i, parameterValue) {
                         html += '<tr>' +
-                            '<td class="col-md-1" style="background-color: #bdf5fb">' +
+                            '<td class="col-md-1 text-center" style="background-color: #bdf5fb">' +
                             globalSerialNumber++ + '</td>' +
                             '<td class="col-md-2 parameter-name" style="background-color: #bdf5fb">' +
                             parameterValue.parameter_name + '</td>' +

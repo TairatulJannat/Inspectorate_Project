@@ -178,7 +178,6 @@
                     data: {
                         'docTypeId': docTypeId,
                         'docReferenceNumber': docReferenceNumber,
-
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -221,7 +220,6 @@
                         }
                     },
                     error: function(xhr, status, error) {
-
 
                         toastr.error(error);
                     }
