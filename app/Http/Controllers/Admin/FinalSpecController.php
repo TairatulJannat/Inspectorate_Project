@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Additional_document;
-use App\Models\AdminSection;
+use Carbon\Carbon;
+use App\Models\Items;
+use App\Models\Offer;
+use App\Models\Indent;
+use App\Models\Tender;
+use App\Models\Section;
+use App\Models\Supplier;
+use App\Models\FinalSpec;
+use App\Models\Item_type;
 use App\Models\Designation;
+use App\Models\AdminSection;
+use Illuminate\Http\Request;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-
-use App\Models\Item_type;
-use App\Models\Items;
-use App\Models\Section;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
-use App\Models\FinalSpec;
-use App\Models\Indent;
-use App\Models\Offer;
-use App\Models\Supplier;
-use App\Models\Tender;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class FinalSpecController extends Controller
@@ -29,7 +28,7 @@ class FinalSpecController extends Controller
 
     public function index()
     {
-        
+
 
 
         return view('backend.finalSpec.finalSpec_incomming_new.index');
@@ -49,6 +48,6 @@ class FinalSpecController extends Controller
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
-        return view('backend.offer.offer_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'suppliers','tender_reference_numbers','indent_reference_numbers'));
+        return view('backend.offer.offer_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'suppliers', 'tender_reference_numbers', 'indent_reference_numbers'));
     }
 }
