@@ -27,7 +27,60 @@ class FinalSpecDispatchController extends Controller
     public function index()
     {
 
-        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_index');
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
+
+        if ($designation_id == 1 || $designation_id == 0) {
+            $finalSpecNew = FinalSpec::where('status', 0)->count();
+            $finalSpecOnProcess = '0';
+            $finalSpecCompleted = '0';
+            $finalSpecDispatch = DocumentTrack::where('doc_type_id', 6)
+                ->leftJoin('final_specs', 'document_tracks.doc_ref_id', '=', 'final_specs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('final_specs.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $finalSpecNew = DocumentTrack::where('doc_type_id', 6)
+                ->leftJoin('final_specs', 'document_tracks.doc_ref_id', '=', 'final_specs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('final_specs.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $finalSpecOnProcess = DocumentTrack::where('doc_type_id', 6)
+                ->leftJoin('final_specs', 'document_tracks.doc_ref_id', '=', 'final_specs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('final_specs.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $finalSpecCompleted = DocumentTrack::where('doc_type_id', 6)
+                ->leftJoin('final_specs', 'document_tracks.doc_ref_id', '=', 'final_specs.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('final_specs.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $finalSpecDispatch = DocumentTrack::where('doc_type_id', 6)
+                ->leftJoin('final_specs', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('final_specs.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+
+
+        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_index', compact('finalSpecNew','finalSpecOnProcess','finalSpecCompleted','finalSpecDispatch'));
     }
 
     

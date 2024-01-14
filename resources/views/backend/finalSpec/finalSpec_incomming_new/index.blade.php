@@ -57,13 +57,13 @@
 
                         <div class="col-9">
                             <a href="{{ route('admin.FinalSpec/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival</a>
+                            class="btn btn-success btn-sm">New Arrival({{$finalSpecNew}})</a>
                             <a href="{{ route('admin.FinalSpec_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process</a>
+                                class="btn btn-secondary btn-sm">On Process({{$finalSpecOnProcess}})</a>
                             <a href="{{ route('admin.FinalSpec/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed</a>
+                                class="btn btn-info text-white btn-sm">Completed({{$finalSpecCompleted}})</a>
                             <a href="{{ route('admin.FinalSpec_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch</a>
+                                class="btn btn-danger btn-sm">Dispatch({{$finalSpecDispatch}})</a>
 
                         </div>
                         <div>
