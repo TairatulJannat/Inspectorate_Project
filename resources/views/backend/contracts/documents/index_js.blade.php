@@ -274,37 +274,36 @@
 
     });
 
-    function delete_data(id) {
+    function deleteData(id) {
         swal({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            type: 'warning',
+            text: "You want to delete this record!",
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!',
             cancelButtonText: 'No, cancel!',
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-            buttonsStyling: false,
-            reverseButtons: true
+            confirmButtonClass: 'btn btn-danger',
+            cancelButtonClass: 'btn btn-success',
         }).then((result) => {
             if (result.value) {
                 event.preventDefault();
                 $.ajax({
-                    type: 'get',
+                    type: 'post',
                     url: '{{ url('admin/contract/destroy-doc') }}/' + id,
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
                     success: function(response) {
-                        if (response) {
-                            if (response.permission == false) {
-                                toastr.warning('you dont have that Permission',
-                                    'Permission Denied');
-                            } else {
-                                toastr.success('Deleted Successful', 'Deleted');
-                                $('.yajra-datatable').DataTable().ajax.reload(null,
-                                    false);
-                            }
+                        if (response.isSuccess) {
+                            toastr.success(response.Message, 'Deleted');
+                            $('.contract-doc-datatable').DataTable().ajax.reload(null, false);
+                        } else {
+                            toastr.error('Something went wrong!', 'Error');
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        toastr.error('An error occurred while processing your request', 'Error');
                     }
                 });
             } else if (
@@ -312,7 +311,7 @@
             ) {
                 swal(
                     'Cancelled',
-                    'Your data is safe :)',
+                    'Your record is safe!',
                     'error'
                 )
             }

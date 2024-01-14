@@ -554,7 +554,7 @@ class ContractController extends Controller
                 $actionBtn = '<div class="" role="group">
                         <a href="javascript:void(0)" class="edit_doc btn btn-secondary-gradien btn-sm fa fa-edit" data-id="' . $data->id . '"  data-bs-toggle="modal"
                         data-bs-target="#editContractModal"> Edit</a>
-                        <a href="javascript:void(0)" class="delete btn btn-danger-gradien btn-sm fa fa-trash-o" onclick="delete_data(' . $data->id . ')"> Delete</a>
+                        <a href="javascript:void(0)" class="delete btn btn-danger-gradien btn-sm fa fa-trash-o" onclick="deleteData(' . $data->id . ')"> Delete</a>
                         </div>';
                 return $actionBtn;
             })
@@ -600,6 +600,36 @@ class ContractController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => "Something went wrong!",
+                'error' => $e->getMessage()
+            ], 200);
+        }
+    }
+
+    public function destroyDoc($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = ContractProgress::find($id);
+
+            if (!$data) {
+                throw new \Exception("Document not found");
+            }
+
+            $data->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => "Additional Document deleted successfully!"
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
             return response()->json([
                 'isSuccess' => false,
                 'Message' => "Something went wrong!",
