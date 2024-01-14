@@ -90,13 +90,13 @@ class OutgoingFinalSpecController extends Controller
                 ->addColumn('status', function ($data) {
                     if ($data->status == '1') {
                         return '<button class="btn btn-info btn-sm">Completed</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-info btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 6)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 
@@ -151,23 +151,23 @@ class OutgoingFinalSpecController extends Controller
             ->where('final_specs.id', $id)
             ->first();
 
-//         $details->additional_documents = json_decode($details->additional_documents, true);
-//         $additional_documents_names = [];
+        //         $details->additional_documents = json_decode($details->additional_documents, true);
+        //         $additional_documents_names = [];
 
-//         foreach ($details->additional_documents as $document_id) {
-//             $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+        //         foreach ($details->additional_documents as $document_id) {
+        //             $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-//             array_push($additional_documents_names, $additional_names);
-//         }
-//         $details->suppliers = json_decode($details->supplier_id, true);
+        //             array_push($additional_documents_names, $additional_names);
+        //         }
+        //         $details->suppliers = json_decode($details->supplier_id, true);
 
-//         $supplier_names_names = [];
+        //         $supplier_names_names = [];
 
-//         foreach ($details->suppliers as $Supplier_id) {
-//             $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-// //    dd($supplier_names);
-//             array_push($supplier_names_names, $supplier_names);
-//         }
+        //         foreach ($details->suppliers as $Supplier_id) {
+        //             $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+        // //    dd($supplier_names);
+        //             array_push($supplier_names_names, $supplier_names);
+        //         }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -177,7 +177,7 @@ class OutgoingFinalSpecController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
-            ->where('doc_type_id',6)
+            ->where('doc_type_id', 6)
             ->skip(1) // Skip the first row
             ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
@@ -205,18 +205,18 @@ class OutgoingFinalSpecController extends Controller
 
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',6)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 6)->latest()->first();
 
         //End blade forward on off section....
 
         // start cover letter start
 
-        $cover_letter=CoverLetter::where('doc_reference_id', $details->reference_no)->first();
+        $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
 
         // end cover letter start
 
 
-        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'auth_designation_id', 'sender_designation_id','DocumentTrack_hidden','cover_letter'));
+        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
     }
 
     public function OutgoingFinalSpecTracking(Request $request)
@@ -230,7 +230,7 @@ class OutgoingFinalSpecController extends Controller
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
+        $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
@@ -287,5 +287,4 @@ class OutgoingFinalSpecController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-
 }

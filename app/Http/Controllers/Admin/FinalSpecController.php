@@ -110,7 +110,7 @@ class FinalSpecController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',6)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -197,7 +197,7 @@ class FinalSpecController extends Controller
         $data->reference_date = $request->reference_date;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
-        // $data->supplier_id = json_encode($request->supplier_id);
+        $data->supplier_id = $request->supplier_id;
         $data->final_spec_receive_Ltr_dt = $request->final_spec_receive_Ltr_dt;
         $data->fin_year_id = $request->fin_year_id;
 
@@ -233,7 +233,6 @@ class FinalSpecController extends Controller
 
     public function update(Request $request)
     {
-
         // $insp_id = Auth::user()->inspectorate_id;
         // $sec_id = $request->admin_section;
 
@@ -247,8 +246,7 @@ class FinalSpecController extends Controller
         $data->indent_reference_no = $request->indent_reference_no;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
-        // $data->supplier_id = json_encode($request->supplier_id);
-        $data->final_spec_receive_Ltr_dt = $request->final_spec_receive_Ltr_dt;
+        $data->supplier_id = $request->supplier_id;
         $data->fin_year_id = $request->fin_year_id;
         $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
 
@@ -370,7 +368,7 @@ class FinalSpecController extends Controller
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
+        $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
@@ -430,18 +428,11 @@ class FinalSpecController extends Controller
         
         $indent_reference_no = Indent::where('reference_no',$offer->indent_reference_no)->first();
         
-        $suppliers = json_decode($offer->supplier_id, true);
+        $offer->suppliers = json_decode($offer->supplier_id, true);
      
-        // $supplier_names_names = [];
-        // if($offer->suppliers ){
-        //     foreach ($offer->suppliers as $Supplier_id) {
-        //         $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-
-        //         array_push($supplier_names_names, $supplier_names);
-        //     }
-            
-        // }
-        // dd($supplier_names_names);
-        return response()->json(['item' =>$item, 'itemType' =>$item_type,'tenderReferenceNo'=>$tender_reference_no,'indentReferenceNo'=> $indent_reference_no]);
+    
+        $suppliers = Supplier::whereIn('id',  $offer->suppliers)->get();
+        
+        return response()->json(['item' =>$item, 'itemType' =>$item_type,'tenderReferenceNo'=>$tender_reference_no,'indentReferenceNo'=> $indent_reference_no,'suppliernames'=> $suppliers]);
     }
 }

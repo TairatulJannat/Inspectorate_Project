@@ -28,7 +28,7 @@
             },
             ajax: {
 
-                url: "{{ url('admin/offer_dispatch/all_data') }}",
+                url: "{{ url('admin/FinalSpec_dispatch/all_data') }}",
                 type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
@@ -37,56 +37,51 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    searchable: false
+                   
                 },
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-                    orderable: false
+                   
                 },
                 {
-                    data: 'tender_reference_no',
-                    name: 'tender_reference_no',
-                    orderable: false
+                    data: 'offer_reference_no',
+                    name: 'offer_reference_no',
+                   
                 },
                 {
                     data: 'item_type_name',
                     name: 'item_type_id',
-                    orderable: false
+                   
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                    orderable: false
+                    
                 },
 
 
                 {
-                    data: 'offer_rcv_ltr_dt',
-                    name: 'offer_rcv_ltr_dt',
-                    orderable: false
+                    data: 'final_spec_receive_Ltr_dt',
+                    name: 'final_spec_receive_Ltr_dt',
+                    
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                    orderable: false
-                },
-                {
-                    data: 'qty',
-                    name: 'qty',
-                    orderable: false
+                    
                 },
 
                 {
                     data: 'status',
                     name: 'status',
-                    orderable: false
+                   
                 },
 
                 {
                     data: 'action',
                     name: 'action',
-                    orderable: true
+                   
                 },
 
             ],
@@ -154,53 +149,7 @@
     //         }
     //     });
     // })
-    //End:: Update information
-
-    // Start:: delete user
-    // function delete_data(id) {
-    //     swal({
-    //         title: 'Are you sure?',
-    //         text: "You won't be able to revert this!",
-    //         type: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#3085d6',
-    //         cancelButtonColor: '#d33',
-    //         confirmButtonText: 'Yes, delete it!',
-    //         cancelButtonText: 'No, cancel!',
-    //         confirmButtonClass: 'btn btn-success',
-    //         cancelButtonClass: 'btn btn-danger',
-    //         buttonsStyling: false,
-    //         reverseButtons: true
-    //     }).then((result) => {
-    //         if (result.value) {
-    //             event.preventDefault();
-    //             $.ajax({
-    //                 type: 'get',
-    //                 url: '{{ url('admin/hall_price/delete') }}/' + id,
-    //                 success: function(response) {
-    //                     if (response) {
-    //                         if (response.permission == false) {
-    //                             toastr.warning('you dont have that Permission',
-    //                                 'Permission Denied');
-    //                         } else {
-    //                             toastr.success('Deleted Successful', 'Deleted');
-    //                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
-    //                         }
-    //                     }
-    //                 }
-    //             });
-    //         } else if (
-    //             result.dismiss === swal.DismissReason.cancel
-    //         ) {
-    //             swal(
-    //                 'Cancelled',
-    //                 'Your data is safe :)',
-    //                 'error'
-    //             )
-    //         }
-    //     })
-    // }
-    // End:: delete user
+    
 
     function form_reset() {
         document.getElementById("search_form").reset();

@@ -88,6 +88,14 @@
                                 <span id="reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="final_spec_receive_Ltr_dt">Final Spec Receive Letter Date</label>
+                                <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
+                                    name="final_spec_receive_Ltr_dt">
+                                <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
+                            </div>
+                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">

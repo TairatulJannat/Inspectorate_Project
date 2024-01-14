@@ -63,7 +63,7 @@
                                 class="btn btn-secondary btn-sm">On Process </a>
                             <a href="{{ route('admin.FinalSpec/outgoing') }}" type="button"
                                 class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="" type="button"
+                            <a href="{{ route('admin.FinalSpec_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 
                         </div>

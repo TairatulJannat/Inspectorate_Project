@@ -131,8 +131,8 @@
 
                                 <label for="supplier_id">Suppiler</label>
 
-                                <select class="form-control select2" id="supplier_id" name="supplier_id[]" multiple>
-                                    <option value="">Please Select</option>
+                                <select class="form-control" id="supplier_id" name="supplier_id">
+                                    <option value="">Please Select </option>
                                     {{-- @foreach ($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
                                 @endforeach --}}
@@ -141,17 +141,7 @@
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="final_spec_receive_Ltr_dt">Final Spec Receive Letter Date</label>
-                                <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
-                                    name="final_spec_receive_Ltr_dt">
-                                <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-
-
+                       
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
@@ -335,33 +325,8 @@
     <script>
         $(document).ready(function() {
 
-            $('.select2').select2();
+            // $('.select2').select2();
 
-
-            // $("#item_type_id").off('change').on('change', function() {
-
-            //     //  alert('123');
-            //     var itemtype_id = $('#item_type_id').val();
-
-            //     if (itemtype_id > 0) {
-            //         $.ajax({
-            //             url: "{{ url('admin/prelimgeneral/item_name') }}" +
-            //                 '/' + itemtype_id,
-            //             type: 'GET',
-            //             dataType: 'json',
-            //             success: function(res) {
-            //                 console.log(res);
-
-            //                 var _html = '<option value="">Select an item</option>';
-            //                 $.each(res, function(index, item) {
-            //                     _html += '<option value="' + item.id + '">' + item
-            //                         .name + '</option>';
-            //                 });
-            //                 $('#item_id').html(_html);
-            //             }
-            //         });
-            //     }
-            // });
 
             $('#offer_reference_no').off('change').on('change', function() {
                 var offerReferenceNo = $(this).val();
@@ -380,14 +345,21 @@
                                 .reference_no + '</option>';
                             var indentReferenceNo_html = '<option value="' + response
                                 .indentReferenceNo.reference_no + '">' + response.indentReferenceNo
-                                .reference_no + '</option>';
-                            // var suppliers_html = '<option value="'+response.suppliers.id+'">'+response.suppliers.firm_name+'</option>';
+                                .reference_no + '</option>';                       
+
+                            var suppliers_html = "";
+
+                                $.each(response.suppliernames, function (index, supplierName) {
+                                    suppliers_html += '<option value="' + supplierName.id + '">' + supplierName.firm_name + '</option>';
+                                });
+
+                                
 
                             $('#item_id').html(item_html);
                             $('#item_type_id').html(itemType_html);
                             $('#tender_reference_no').html(tenderReferenceNo_html);
                             $('#indent_reference_no').html(indentReferenceNo_html);
-                            // $('#supplier_id').html(suppliers_html);
+                            $('#supplier_id').html(suppliers_html);
 
 
                         },
