@@ -8,7 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\DraftContract;
+use App\Models\Contract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,51 +26,51 @@ class ContractOutgoingController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $draft_contractNew = DraftContract::where('status', 0)->count();
-            $draft_contractOnProcess = '0';
-            $draft_contractCompleted = '0';
-            $draft_contractDispatch = DocumentTrack::where('doc_type_id', 9)
-                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
+            $contractNew = Contract::where('status', 0)->count();
+            $contractOnProcess = '0';
+            $contractCompleted = '0';
+            $contractDispatch = DocumentTrack::where('doc_type_id', 10)
+                ->leftJoin('contract', 'document_tracks.doc_ref_id', '=', 'contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('draft_contracts.status', 4)
+                ->where('contracts.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         } else {
 
-            $draft_contractNew = DocumentTrack::where('doc_type_id', 9)
-                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
+            $contractNew = DocumentTrack::where('doc_type_id', 10)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
-                ->where('draft_contracts.status', 0)
+                ->where('contracts.status', 0)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $draft_contractOnProcess = DocumentTrack::where('doc_type_id', 9)
-                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
+            $contractOnProcess = DocumentTrack::where('doc_type_id', 10)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
-                ->where('draft_contracts.status', 3)
+                ->where('contracts.status', 3)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $draft_contractCompleted = DocumentTrack::where('doc_type_id', 9)
-                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
+            $contractCompleted = DocumentTrack::where('doc_type_id', 10)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
-                ->where('draft_contracts.status', 1)
+                ->where('contracts.status', 1)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $draft_contractDispatch = DocumentTrack::where('doc_type_id', 9)
-                ->leftJoin('draft_contracts', 'document_tracks.doc_ref_id', '=', 'draft_contracts.id')
+            $contractDispatch = DocumentTrack::where('doc_type_id', 10)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('draft_contracts.status', 4)
+                ->where('contracts.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.draft_contract.draft_contract_outgoing.outgoing', compact('draft_contractNew','draft_contractOnProcess','draft_contractCompleted','draft_contractDispatch'));
+        return view('backend.contract.contract_outgoing.outgoing', compact('contractNew','contractOnProcess','contractCompleted','contractDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -85,44 +85,45 @@ class ContractOutgoingController extends Controller
 
 
             if (Auth::user()->id == 92) {
-                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
-                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'draft_contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('draft_contracts.status', '=', 1)
+                $query = Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
+                    ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'contracts.section_id', '=', 'sections.id')
+                    ->select('contracts.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('contracts.status', '=', 1)
                     ->get();
             } else {
-                $draft_contractIds = DraftContract::leftJoin('document_tracks', 'draft_contracts.id', '=', 'document_tracks.doc_ref_id')
+                $contractIds = Contract::leftJoin('document_tracks', 'contracts.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('draft_contracts.inspectorate_id', $insp_id)
-                    ->where('draft_contracts.status', 1)
-                    ->whereIn('draft_contracts.section_id', $section_ids)->pluck('draft_contracts.id', 'draft_contracts.id')->toArray();
+                    ->where('contracts.inspectorate_id', $insp_id)
+                    ->where('contracts.status', 1)
+                    ->where('document_tracks.doc_type_id', 10)
+                    ->whereIn('contracts.section_id', $section_ids)->pluck('contracts.id', 'contracts.id')->toArray();
 
-                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
-                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('draft_contracts.id', $draft_contractIds)
-                    ->where('draft_contracts.status', '=', 1)
+                $query = Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
+                    ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'contracts.section_id', '=', 'sections.id')
+                    ->select('contracts.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('contracts.id', $contractIds)
+                    ->where('contracts.status', '=', 1)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $draft_contractId = [];
+                $contractId = [];
                 if ($query) {
-                    foreach ($query as $draft_contract) {
-                        array_push($draft_contractId, $draft_contract->id);
+                    foreach ($query as $contract) {
+                        array_push($contractId, $contract->id);
                     }
                 }
 
                 //......Start for showing data for receiver designation
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $draft_contractId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $contractId)
                     ->where('reciever_desig_id', $designation_id)
                     ->where('track_status', 2)
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = DraftContract::where('id', 'no data')->get();
+                    $query = Contract::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -143,7 +144,7 @@ class ContractOutgoingController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 10)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 
@@ -151,25 +152,25 @@ class ContractOutgoingController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_draft_contract/details/' . $data->id) . '" class="edit">Forward</a>
+                    <a href="' . url('admin/outgoing_contract/details/' . $data->id) . '" class="edit">Forward</a>
                     </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_draft_contract/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_contract/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_draft_contract/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_contract/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_draft_contract/details/' . $data->id) . '" class="edit">forward</a>
+                    <a href="' . url('admin/outgoing_contract/details/' . $data->id) . '" class="edit">forward</a>
                     </div>';
                     }
 
@@ -184,11 +185,12 @@ class ContractOutgoingController extends Controller
     public function details($id)
     {
 
-        $details = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
-            ->select('draft_contracts.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name')
-            ->where('draft_contracts.id', $id)
-            ->where('draft_contracts.status', 1)
+        $details = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('items', 'contracts.item_id', '=', 'items.id')
+            ->select('contracts.*', 'item_types.name as item_type_name','items.name as item_name', 'dte_managments.name as dte_managment_name')
+            ->where('contracts.id', $id)
+            ->where('contracts.status', 1)
             ->first();
 
 
@@ -201,7 +203,7 @@ class ContractOutgoingController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
-            ->where('doc_type_id', 9)
+            ->where('doc_type_id', 10)
             ->skip(1) // Skip the first row
             ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
@@ -229,7 +231,7 @@ class ContractOutgoingController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 9)->latest()->first();
+        ->where('doc_type_id', 10)->latest()->first();
 
         //End blade forward on off section....
 
@@ -240,20 +242,20 @@ class ContractOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.draft_contract.draft_contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.contract.contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
     }
 
-    public function OutgoingTracking(Request $request)
+    public function ContractTracking (Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         // $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 9; // 9 for doc type qac from doctype table column doc_serial
+        $doc_type_id = 10; // 10 for contract from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = DraftContract::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
+        $section_id = Contract::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
@@ -275,19 +277,19 @@ class ContractOutgoingController extends Controller
 
         // ----delay_cause and terms and conditions start here
         if ($desig_position->position == 3) {
-            $draft_contract_data = DraftContract::find($doc_ref_id);
-            $draft_contract_data->delay_cause = $request->delay_cause;
-            $draft_contract_data->delivery_date = $request->delivery_date;
+            $contract_data = Contract::find($doc_ref_id);
+            $contract_data->delay_cause = $request->delay_cause;
+            $contract_data->delivery_date = $request->delivery_date;
 
 
-            $draft_contract_data->delivery_by = Auth::user()->id;
-            $draft_contract_data->save();
+            $contract_data->delivery_by = Auth::user()->id;
+            $contract_data->save();
         }
         // ----delay_cause and terms and conditions end here
 
         if ($desig_position->position == 7) {
 
-            $data = DraftContract::find($doc_ref_id);
+            $data = Contract::find($doc_ref_id);
 
             if ($data) {
 

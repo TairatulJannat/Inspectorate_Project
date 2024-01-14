@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Draft Contract (Dispatch)')
+@section('title', 'Contract (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -39,15 +39,14 @@
             padding: 10px 15px !important;
         }
 
+
         .forward_status,
-        .forward,
-        .delay_cause {
+        .forward {
             background-color: #F5F7FB !important;
             /* Light gray */
             border-radius: 6px;
             padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
-
 
         }
 
@@ -67,15 +66,18 @@
             padding: 12px;
             border: none;
             border-radius: 5px;
+            background-color: #ffffff !important;
+            color: #006a4e8c;
             cursor: pointer;
         }
 
-        .forward_status {
-            min-height: 200px
+        .delivery-btn:hover {
+            background-color: rgb(7, 66, 20), 59, 5) !important;
+            /* Lighter orange on hover */
         }
 
-        .delay_cause {
-            min-height: 100px
+        .forward_status {
+            min-height: 250px
         }
 
         .remarks_status {
@@ -90,17 +92,20 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Draft Contract (Dispatch) ')
+@section('main_menu', 'Contract (On Process) ')
 @section('active_menu', 'Details')
 @section('content')
+
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Draft Contract</h2>
+                <h2>Details of Contract</h2>
             </div>
             <div style="display: flex">
+
                 <div class="card-body col-4">
+
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -108,6 +113,22 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
 
+                            <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Final Spec Reference No</td>
+                                <td>{{ $details->final_spec_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Draft Contract Reference No</td>
+                                <td>{{ $details->contract_reference_no }}</td>
+                            </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
@@ -117,32 +138,42 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Eqpt Type</td>
+                                <td>{{ $details->item_type_name  }}</td>
                             </tr>
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>{{ $details->item_name  }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contracted Value</td>
+                                <td>{{ $details->contracted_value  }}</td>
+                            </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{ $details->fin_year_name  }}</td>
                             </tr>
+
 
 
                         </table>
 
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
-                        <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
-                            class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
-                            Letter</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}"
+                            target="_blank">Pdf Document</a>
                     </div>
                 </div>
 
-                <div class="card-body col-8">
+
+                {{-- @if (!$sender_designation_id) --}}
+
+                <div class="card-body">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
@@ -153,24 +184,22 @@
                                         <hr>
                                         <form action="">
                                             <div class="row">
-                                                @if ($desig_position->position != 1)
-                                                    <div class="col-md-6 mb-2">
-                                                        <select name="designation" id="designations" class="form-control"
-                                                            style="height: 40px;">
-                                                            <option value="">Select To Receiver</option>
-                                                            @foreach ($designations as $d)
-                                                                <option value="{{ $d->id }}">{{ $d->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                @endif
+                                                <div class="col-md-6 mb-2">
+                                                    <select name="designation" id="designations" class="form-control"
+                                                        style="height: 40px;">
+                                                        <option value="">Select To Receiver</option>
+                                                        @foreach ($designations as $d)
+                                                            <option value="{{ $d->id }}">{{ $d->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <button class="btn btn-success" id="submitBtn"
-                                                        style="height: 40px;">Deliver</button>
+                                                        style="height: 40px;">Forward</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -190,24 +219,21 @@
                                     <hr>
                                     <form action="">
                                         <div class="row">
-                                            @if ($desig_position->position != 1)
-                                                <div class="col-md-6 mb-2">
-                                                    <select name="designation" id="designations" class="form-control"
-                                                        style="height: 40px;">
-                                                        <option value="">Select To Receiver</option>
-                                                        @foreach ($designations as $d)
-                                                            <option value="{{ $d->id }}">{{ $d->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            @endif
-                                            <div class="col-md-6 mb-2">
+                                            <div class="col-md-4 mb-2">
+                                                <select name="designation" id="designations" class="form-control"
+                                                    style="height: 40px;">
+                                                    <option value="">Select To Receiver</option>
+                                                    @foreach ($designations as $d)
+                                                        <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
                                                 <button class="btn btn-success" id="submitBtn"
-                                                    style="height: 40px;">Deliver</button>
+                                                    style="height: 40px;">Forward</button>
                                             </div>
                                         </div>
                                     </form>
@@ -217,9 +243,9 @@
                         @endif
 
 
-                        <div class="forward_status col-md-12 ">
+                        <div class="forward_status col-md-12">
                             <div>
-                                <h4 class="text-success">Dispatch Status</h4>
+                                <h4 class="text-success">Forward Status</h4>
                                 <hr>
                                 <div class="table-responsive">
                                     <table class="table">
@@ -235,8 +261,8 @@
                                         <tbody>
                                             @if ($document_tracks !== null)
                                                 @foreach ($document_tracks as $document_track)
-                                                    @if ($document_track->track_status == 2)
-                                                        <tr style="background-color: #c8fff528">
+                                                    @if ($document_track->track_status == 1)
+                                                        <tr style="background-color: #045a4a28">
                                                             <td>{{ $document_track->sender_designation_name }}</td>
                                                             <td><i class="fa fa-arrow-right text-success"></i></td>
                                                             <td>{{ $document_track->receiver_designation_name }}</td>
@@ -244,7 +270,7 @@
                                                             <td>{{ $document_track->remarks }}</td>
                                                         </tr>
                                                     @else
-                                                        <tr style="background-color: #ff715e32">
+                                                        <tr style="background-color: #ba885d6f">
                                                             <td>{{ $document_track->sender_designation_name }}</td>
                                                             <td><i class="fa fa-arrow-right text-success"></i></td>
                                                             <td>{{ $document_track->receiver_designation_name }}</td>
@@ -264,27 +290,18 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($details->delay_cause !== null)
-                            <div class="delay_cause col-md-12 mt-3">
-                                <div>
-                                    <h4 class="text-success">Delay Cause</h4>
-                                    <hr>
-                                    <div class="table-responsive">
-                                        {{ $details->delay_cause }}
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
                     </div>
+
 
 
                 </div>
 
+                {{-- @endif --}}
             </div>
+
         </div>
     </div>
+
 
 @endsection
 @push('js')
@@ -293,7 +310,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_index_js') --}}
+    {{-- @include('backend.contract.contract_approved.contract_approved_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -301,11 +318,9 @@
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();
-                reciever_desig_text =
-                    `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
-
 
             });
+
 
             $('#submitBtn').off('click').on('click', function(event) {
 
@@ -316,8 +331,7 @@
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
                 swal({
-                    title: `Are you sure to delivered
-                        ${reciever_desig_text}?`,
+                    title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -334,12 +348,13 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/draft_contract_dispatch/tracking') }}',
+                            url: '{{ url('admin/contract_approved/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
                                 'doc_reference_number': doc_reference_number,
                                 'remarks': remarks,
+
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -355,7 +370,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.draft_contract_dispatch/view') }}",
+                                            "{{ route('admin.contract_approved/view') }}",
                                             40000);
                                     }
                                 }

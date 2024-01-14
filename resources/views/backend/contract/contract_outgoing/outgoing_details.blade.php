@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Draft Contract (Completed)')
+@section('title', 'Contract (Completed)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,13 +90,13 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Draft Contract')
+@section('main_menu', 'Contract')
 @section('active_menu', 'Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Draft Contract</h2>
+                <h2>Details of Contract</h2>
             </div>
             <div style="display: flex">
 
@@ -110,6 +110,22 @@
                             </tr>
 
                             <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Final Spec Reference No</td>
+                                <td>{{ $details->final_spec_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Draft Contract Reference No</td>
+                                <td>{{ $details->draft_contract_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
@@ -118,19 +134,29 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Eqpt Type</td>
+                                <td>{{ $details->item_type_name  }}</td>
                             </tr>
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>{{ $details->item_name  }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contracted Value</td>
+                                <td>{{ $details->contracted_value  }}</td>
+                            </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{ $details->fin_year_name  }}</td>
                             </tr>
+
 
 
                         </table>
@@ -619,7 +645,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.draft_contract.draft_contract_outgoing.outgoing_index_js') --}}
+    {{-- @include('backend.contract.contract_outgoing.outgoing_index_js') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -714,7 +740,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/outgoing_draft_contract/tracking') }}',
+                            url: '{{ url('admin/outgoing_contract/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -739,7 +765,7 @@
                                             response.success);
 
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.draft_contract/outgoing') }}",
+                                            "{{ route('admin.contract/outgoing') }}",
                                             40000);
                                     }
                                 }

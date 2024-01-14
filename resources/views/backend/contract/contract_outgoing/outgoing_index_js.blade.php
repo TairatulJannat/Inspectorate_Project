@@ -27,7 +27,7 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-                url: "{{ url('admin/outgoing_draft_contract/all_data') }}",
+                url: "{{ url('admin/outgoing_contract/all_data') }}",
                 type: 'post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
@@ -45,8 +45,8 @@
                 },
 
                 {
-                    data: 'item_type_name',
-                    name: 'item_type_id',
+                    data: 'item_name',
+                    name: 'item_name',
 
                 },
                 {
