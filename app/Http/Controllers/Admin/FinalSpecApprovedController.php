@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\FinalSpec;
 use App\Models\FinancialYear;
 
 use App\Models\Item_type;
@@ -20,16 +21,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class OfferApprovedController extends Controller
+class FinalSpecApprovedController extends Controller
 {
     //
 
     public function index()
     {
 
-        return view('backend.offer.offer_incomming_approved.offer_approved_index');
+        return view('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_index');
     }
-
     public function all_data(Request $request)
     {
         if ($request->ajax()) {
@@ -41,51 +41,51 @@ class OfferApprovedController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->where('offers.status', 3)
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
+                    ->where('final_specs.status', 3)
+                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('offers.status', 3)
+                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
+                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('final_specs.status', 3)
                     ->get();
             } else {
 
-                $offerIds = Offer::leftJoin('document_tracks', 'offers.id', '=', 'document_tracks.doc_ref_id')
+                $FinalspecIds = FinalSpec::leftJoin('document_tracks', 'final_specs.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('offers.insp_id', $insp_id)
-                    ->where('offers.status', 3)
-                    ->whereIn('offers.sec_id', $section_ids)->pluck('offers.id', 'offers.id')->toArray();
+                    ->where('final_specs.insp_id', $insp_id)
+                    ->where('final_specs.status', 3)
+                    ->whereIn('final_specs.sec_id', $section_ids)->pluck('final_specs.id', 'final_specs.id')->toArray();
 
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('offers.id', $offerIds)
-                    ->where('offers.status', 3)
+                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
+                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('final_specs.id', $FinalspecIds)
+                    ->where('final_specs.status', 3)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $offerId = [];
+                $FinalSpecId = [];
                 if ($query) {
-                    foreach ($query as $offer) {
-                        array_push($offerId, $offer->id);
+                    foreach ($query as $FinalSpec) {
+                        array_push($FinalSpecId, $FinalSpec->id);
                     }
                 }
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $offerId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $FinalSpecId)
                     ->where('reciever_desig_id', $designation_id)
                     ->where('track_status', '3')
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = Offer::where('id', 'no data')->get();
+                    $query = FinalSpec::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -105,32 +105,32 @@ class OfferApprovedController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',6)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit">Forward</a>
+                            <a href="' . url('admin/FinalSpec_approved/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/FinalSpec_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/FinalSpec_approved/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                        <a href="' . url('admin/offer_approved/details/' . $data->id) . '" class="edit">Forward</a>
+                        <a href="' . url('admin/FinalSpec_approved/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
 
@@ -141,45 +141,42 @@ class OfferApprovedController extends Controller
         }
     }
 
-
     public function details($id)
     {
 
-        $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-            ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
-            ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
-            ->leftJoin('suppliers', 'offers.supplier_id', '=', 'suppliers.id')
+        $details = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
+            ->leftJoin('fin_years', 'final_specs.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('suppliers', 'final_specs.supplier_id', '=', 'suppliers.id')
             ->select(
-                'offers.*',
+                'final_specs.*',
                 'item_types.name as item_type_name',
-                'offers.*',
+                'final_specs.*',
                 'dte_managments.name as dte_managment_name',
-                'additional_documents.name as additional_documents_name',
                 'fin_years.year as fin_year_name',
                 'suppliers.firm_name as suppliers_name'
             )
-            ->where('offers.id', $id)
+            ->where('final_specs.id', $id)
             ->first();
 
-        $details->additional_documents = json_decode($details->additional_documents, true);
-        $additional_documents_names = [];
+        // $details->additional_documents = json_decode($details->additional_documents, true);
+        // $additional_documents_names = [];
 
-        foreach ($details->additional_documents as $document_id) {
-            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+        // foreach ($details->additional_documents as $document_id) {
+        //     $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-            array_push($additional_documents_names, $additional_names);
-        }
+        //     array_push($additional_documents_names, $additional_names);
+        // }
 
-        $details->suppliers = json_decode($details->supplier_id, true);
+        // $details->suppliers = json_decode($details->supplier_id, true);
 
-        $supplier_names_names = [];
+        // $supplier_names_names = [];
 
-        foreach ($details->suppliers as $Supplier_id) {
-            $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+        // foreach ($details->suppliers as $Supplier_id) {
+        //     $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
 
-            array_push($supplier_names_names, $supplier_names);
-        }
+        //     array_push($supplier_names_names, $supplier_names);
+        // }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -189,7 +186,7 @@ class OfferApprovedController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->whereIn('track_status', [1, 3])
-            ->where('doc_type_id',5)
+            ->where('doc_type_id',6)
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 5)
@@ -224,27 +221,27 @@ class OfferApprovedController extends Controller
      
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',6)->latest()->first();
 
         //End blade forward on off section....
 
 
 
-        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
+        return view('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden'));
     }
 
-    public function offerTracking(Request $request)
+    public function FinalSpecApprovedTracking(Request $request)
     {
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 5; //...... 5 for indent from offers table doc_serial.
+        $doc_type_id = 6; //...... 6 for Final Spec from finalspecs table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $doc_reference_number = $request->doc_reference_number;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
+        $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
@@ -266,7 +263,7 @@ class OfferApprovedController extends Controller
 
         if ($desig_position->position == 5) {
 
-            $data = Offer::find($doc_ref_id);
+            $data = FinalSpec::find($doc_ref_id);
 
             if ($data) {
 
@@ -291,4 +288,6 @@ class OfferApprovedController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
+
+    
 }

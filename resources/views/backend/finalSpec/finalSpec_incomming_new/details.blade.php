@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer')
+@section('title', 'Final Spec')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -87,14 +87,14 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer')
+@section('main_menu', 'Final Spec')
 @section('active_menu', 'Details')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Offer</h2>
+                <h2>Details of Final Spec</h2>
             </div>
             <div style="display: flex">
 
@@ -106,49 +106,40 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
+                              <tr>
+                                <th>Final Spec Referance Date</td>
+                                <td>{{ $details->reference_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            
                             <tr>
                                 <th>Tender Reference No</td>
                                 <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
-                                <th>Offer Receive Letter Date</td>
-                                <td>{{ $details->offer_rcv_ltr_dt ? $details->offer_rcv_ltr_dt:'No receive date is selected' }}</td>
+                                <th>Final Spec Receive Letter Date</td>
+                                <td>{{ $details->final_spec_receive_Ltr_dt  }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name ? $details->item_type_name:'No item type is selected' }}</td>
+                                <td>{{ $details->item_type_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>{{ $details->attribute ? $details->attribute:'No attribute is selected' }}</td>
-                            </tr>
-                            <tr>
-
-                                <th>Additional Documents</th>
-                                <td>
-                                    @if (!empty($additional_documents_names))
-                                        <ul>
-                                            @foreach ($additional_documents_names as $documents_name)
-
-                                                <li>{{ $documents_name }} </li>    
-
-
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No additional documents available.
-                                    @endif
-                                </td>
-
-                            </tr>
+                         
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{$details->fin_year_name ? $details->fin_year_name:'No Financial Year is selected' }}</td>
+                                <td>{{$details->fin_year_name  }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -164,14 +155,8 @@
                                     @endif
                                 </td>
                             </tr>
-                            <tr>
-                                <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no ?  $details->offer_rcv_ltr_no:'No Offer Receiver Letter is selected' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Quantity</td>
-                                <td>{{  $details->qty ?  $details->qty:'No Quantity is selected' }}</td>
-                            </tr>
+                          
+
 
                         </table>
                         <a  id="csrBtn" class="btn btn-success mt-3 btn-parameter"
@@ -250,7 +235,9 @@
                                     </form>
                                 </div>
                             </div>
+
                         @endif
+
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -274,7 +261,7 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i ') }}</td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach
@@ -291,13 +278,6 @@
                         </div>
                     </div>
 
-                    <!-- Notes Sectio
-                                                                                                n - Uncomment if needed -->
-                    {{-- <div class="col-md-6">
-                        @if ($notes == !null)
-                            ... <!-- Your notes HTML here -->
-                        @endif
-                    </div> --}}
                 </div>
                 {{-- @endif --}}
             </div>
@@ -334,7 +314,7 @@
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -349,7 +329,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/offer/offer_tracking') }}',
+                            url: '{{ url('admin/final_spec/final_spec_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -370,7 +350,7 @@
                                     } else {
                                         toastr.success('Forward Successful',
                                             response.success);
-                                        setTimeout(window.location.href ="{{ route('admin.offer/view') }}", 40000);
+                                        setTimeout(window.location.href ="{{ route('admin.FinalSpec/view') }}", 40000);
                                     }
                                 }
                             },

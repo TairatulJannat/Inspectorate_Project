@@ -27,7 +27,7 @@
                 $('#total_data').html(api.ajax.json().recordsTotal);
             },
             ajax: {
-                url: "{{ url('admin/outgoing_offer/all_data') }}",
+                url: "{{ url('admin/outgoing_FinalSpec/all_data') }}",
                 type: 'GET',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
@@ -36,56 +36,51 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    searchable: false
+                   
                 },
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-                    orderable: false
+                   
                 },
                 {
-                    data: 'tender_reference_no',
-                    name: 'tender_reference_no',
-                    orderable: false
+                    data: 'offer_reference_no',
+                    name: 'offer_reference_no',
+                   
                 },
                 {
                     data: 'item_type_name',
                     name: 'item_type_id',
-                    orderable: false
+                   
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                    orderable: false
+                    
                 },
 
 
                 {
-                    data: 'offer_rcv_ltr_dt',
-                    name: 'offer_rcv_ltr_dt',
-                    orderable: false
+                    data: 'final_spec_receive_Ltr_dt',
+                    name: 'final_spec_receive_Ltr_dt',
+                    
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                    orderable: false
-                },
-                {
-                    data: 'qty',
-                    name: 'qty',
-                    orderable: false
+                    
                 },
 
                 {
                     data: 'status',
                     name: 'status',
-                    orderable: false
+                   
                 },
 
                 {
                     data: 'action',
                     name: 'action',
-                    orderable: true
+                   
                 },
 
             ],

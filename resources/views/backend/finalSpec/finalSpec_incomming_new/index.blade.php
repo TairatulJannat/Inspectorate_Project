@@ -58,11 +58,11 @@
                         <div class="col-9">
                             <a href="{{ route('admin.FinalSpec/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
-                            <a href="" type="button"
+                            <a href="{{ route('admin.FinalSpec_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">On Process</a>
-                            <a href="" type="button"
+                            <a href="{{ route('admin.FinalSpec/outgoing') }}" type="button"
                                 class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="" type="button"
+                            <a href="{{ route('admin.FinalSpec_dispatch/view') }}" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 
                         </div>
@@ -81,12 +81,11 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference No</th>
-                                <th>Tender Reference No</th>
+                                <th>Offer Reference No</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
-                                <th>Receive Date</th>
+                                <th>Letter Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Item QTY</th>
                                 <th>Present state of spec</th>
                                 <th>Action</th>
                             </tr>

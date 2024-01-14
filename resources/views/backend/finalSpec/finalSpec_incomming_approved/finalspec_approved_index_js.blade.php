@@ -28,8 +28,8 @@
             },
             ajax: {
 
-                url: "{{ url('admin/finalspec/all_data') }}",
-                type: 'GET',
+                url: "{{ url('admin/FinalSpec_approved/all_data') }}",
+                type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
                 }
@@ -95,64 +95,54 @@
             table.draw(true);
         });
     });
-    // End:: All Data
+   
+ 
 
-    // Start:: save information
-    $('#save_info').off().on('submit', function(event) {
-        event.preventDefault();
-
-        var formData = new FormData($('#save_info')[0]);
-
-
-        disableButton()
-        $.ajax({
-            url: "{{ url('admin/finalspec/store') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            success: function(response) {
-                if (response.error) {
-                    error_notification(response.error)
-                    enableeButton()
-                }
-                if (response.success) {
-                    enableeButton()
-                    $('.modal-backdrop').remove();
-                    $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                    toastr.success('Information Saved', 'Saved');
-                }
-                setTimeout(window.location.href = "{{ route('admin.FinalSpec/view') }}", 40000);
-            },
-            error: function(response) {
-                enableeButton()
-                clear_error_field();
-                error_notification('Please fill up the form correctly and try again')
-                $('#error_sender').text(response.responseJSON.errors.sender);
-                $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                $('#error_spec_type').text(response.responseJSON.errors.spec_type);
-                $('#error_additional_documents').text(response.responseJSON.errors
-                    .additional_documents);
-                $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
-                $('#error_spec_received_date').text(response.responseJSON.errors
-                    .spec_received_date);
-                $('#error_estimated_value').text(response.responseJSON.errors
-                    .estimated_value);
-                $('#error_qty').text(response.responseJSON.errors
-                    .qty);
-                $('#error_indent_received_date').text(response.responseJSON.errors
-                    .indent_received_date);
-
-            }
-        });
-    })
-    // End:: save information
-
-    
-    
+    // Start:: delete user
+    // function delete_data(id) {
+    //     swal({
+    //         title: 'Are you sure?',
+    //         text: "You won't be able to revert this!",
+    //         type: 'success',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Yes, delete it!',
+    //         cancelButtonText: 'No, cancel!',
+    //         confirmButtonClass: 'btn btn-success',
+    //         cancelButtonClass: 'btn btn-danger',
+    //         buttonsStyling: false,
+    //         reverseButtons: true
+    //     }).then((result) => {
+    //         if (result.value) {
+    //             event.preventDefault();
+    //             $.ajax({
+    //                 type: 'get',
+    //                 url: '{{ url('admin/hall_price/delete') }}/' + id,
+    //                 success: function(response) {
+    //                     if (response) {
+    //                         if (response.permission == false) {
+    //                             toastr.warning('you dont have that Permission',
+    //                                 'Permission Denied');
+    //                         } else {
+    //                             toastr.success('Deleted Successful', 'Deleted');
+    //                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
+    //                         }
+    //                     }
+    //                 }
+    //             });
+    //         } else if (
+    //             result.dismiss === swal.DismissReason.cancel
+    //         ) {
+    //             swal(
+    //                 'Cancelled',
+    //                 'Your data is safe :)',
+    //                 'error'
+    //             )
+    //         }
+    //     })
+    // }
+    // End:: delete user
 
     function form_reset() {
         document.getElementById("search_form").reset();
@@ -161,15 +151,8 @@
     }
 
     function clear_error_field() {
-        $('#error_sender').text("");
-        $('#error_reference_no').text("");
-        $('#error_spec_type').text("");
-        $('#error_additional_documents').text("");
-        $('#error_item_type_id').text("");
-        $('#error_spec_received_date').text("");
-        $('#error_estimated_value').text("");
-        $('#error_qty').text("");
-        $('#error_qty').text("");
+        $('#error_name').text('');
+        $('#error_holiday_date').text('');
     }
 
     function disableButton() {
