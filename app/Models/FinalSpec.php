@@ -9,5 +9,6 @@ class FinalSpec extends Model
 {
     use HasFactory;
 
+    protected $table = 'final_specs';
     protected $fillable = [];
 }

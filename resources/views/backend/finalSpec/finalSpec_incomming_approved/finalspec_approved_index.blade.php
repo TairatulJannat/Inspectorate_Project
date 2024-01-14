@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer (On Process)')
+@section('title', 'Final Spec (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -37,7 +37,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer (On Process)')
+@section('main_menu', 'Final Spec (On Process)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -57,13 +57,13 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.offer/view') }}" type="button"
+                            <a href="{{ route('admin.FinalSpec/view') }}" type="button"
                             class="btn btn-success btn-sm">New Arrival</a>
-                            <a href="{{ route('admin.offer_approved/view') }}" type="button"
+                            <a href="{{ route('admin.FinalSpec_approved/view') }}" type="button"
                                 class="btn btn-secondary btn-sm">On Process </a>
-                            <a href="{{ route('admin.offer/outgoing') }}" type="button"
+                            <a href="" type="button"
                                 class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
+                            <a href="" type="button"
                                 class="btn btn-danger btn-sm">Dispatch</a>
 
                         </div>
@@ -82,12 +82,11 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference No</th>
-                                <th>Tender Reference No</th>
+                                <th>Offer Reference No</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
                                 <th>Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Item QTY</th>
                                 <th>Present state of spec</th>
                                 <th>Action</th>
                             </tr>
@@ -107,5 +106,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.offer.offer_incomming_approved.offer_approved_index_js')
+    @include('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_index_js')
 @endpush

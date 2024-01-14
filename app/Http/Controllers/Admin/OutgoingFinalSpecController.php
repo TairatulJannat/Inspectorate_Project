@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\FinalSpec;
 use App\Models\Indent;
 use App\Models\Offer;
 use App\Models\Supplier;
@@ -16,12 +17,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class OutgoingOfferController extends Controller
+class OutgoingFinalSpecController extends Controller
 {
     //
+
     public function outgoing()
     {
-        return view('backend.offer.offer_outgoing.outgoing');
+        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing');
     }
 
     public function all_data(Request $request)
@@ -37,44 +39,44 @@ class OutgoingOfferController extends Controller
 
 
             if (Auth::user()->id == 92) {
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('offers.status', '=', 1)
+                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
+                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('final_specs.status', '=', 1)
                     ->get();
             } else {
-                $offerIds = Offer::leftJoin('document_tracks', 'offers.id', '=', 'document_tracks.doc_ref_id')
+                $FinalspecIds = FinalSpec::leftJoin('document_tracks', 'final_specs.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('offers.insp_id', $insp_id)
-                    ->where('offers.status', 1)
-                    ->whereIn('offers.sec_id', $section_ids)->pluck('offers.id', 'offers.id')->toArray();
+                    ->where('final_specs.insp_id', $insp_id)
+                    ->where('final_specs.status', 1)
+                    ->whereIn('final_specs.sec_id', $section_ids)->pluck('final_specs.id', 'final_specs.id')->toArray();
 
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('offers.id', $offerIds)
-                    ->where('offers.status', '=', 1)
+                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
+                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('final_specs.id', $FinalspecIds)
+                    ->where('final_specs.status', '=', 1)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $offerId = [];
+                $FinalSpecId = [];
                 if ($query) {
-                    foreach ($query as $offer) {
-                        array_push($offerId, $offer->id);
+                    foreach ($query as $FinalSpec) {
+                        array_push($FinalSpecId, $FinalSpec->id);
                     }
                 }
 
                 //......Start for showing data for receiver designation
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $offerId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $FinalSpecId)
                     ->where('reciever_desig_id', $designation_id)
                     ->where('track_status', 2)
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = Offer::where('id', 'no data')->get();
+                    $query = FinalSpec::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
@@ -102,25 +104,25 @@ class OutgoingOfferController extends Controller
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Forward</a>
+                    <a href="' . url('admin/outgoing_FinalSpec/details/' . $data->id) . '" class="edit">Forward</a>
                     </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_FinalSpec/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/outgoing_FinalSpec/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_offer/details/' . $data->id) . '" class="edit">Forward</a>
+                    <a href="' . url('admin/outgoing_FinalSpec/details/' . $data->id) . '" class="edit">Forward</a>
                     </div>';
                     }
 
@@ -134,40 +136,38 @@ class OutgoingOfferController extends Controller
     public function details($id)
     {
 
-        $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-            ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
-            ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
-            ->leftJoin('suppliers', 'offers.supplier_id', '=', 'suppliers.id')
+        $details = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
+            ->leftJoin('fin_years', 'final_specs.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('suppliers', 'final_specs.supplier_id', '=', 'suppliers.id')
             ->select(
-                'offers.*',
+                'final_specs.*',
                 'item_types.name as item_type_name',
-                'offers.*',
+                'final_specs.*',
                 'dte_managments.name as dte_managment_name',
-                'additional_documents.name as additional_documents_name',
                 'fin_years.year as fin_year_name',
                 'suppliers.firm_name as suppliers_name'
             )
-            ->where('offers.id', $id)
+            ->where('final_specs.id', $id)
             ->first();
 
-        $details->additional_documents = json_decode($details->additional_documents, true);
-        $additional_documents_names = [];
+//         $details->additional_documents = json_decode($details->additional_documents, true);
+//         $additional_documents_names = [];
 
-        foreach ($details->additional_documents as $document_id) {
-            $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+//         foreach ($details->additional_documents as $document_id) {
+//             $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
-            array_push($additional_documents_names, $additional_names);
-        }
-        $details->suppliers = json_decode($details->supplier_id, true);
+//             array_push($additional_documents_names, $additional_names);
+//         }
+//         $details->suppliers = json_decode($details->supplier_id, true);
 
-        $supplier_names_names = [];
+//         $supplier_names_names = [];
 
-        foreach ($details->suppliers as $Supplier_id) {
-            $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-//    dd($supplier_names);
-            array_push($supplier_names_names, $supplier_names);
-        }
+//         foreach ($details->suppliers as $Supplier_id) {
+//             $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+// //    dd($supplier_names);
+//             array_push($supplier_names_names, $supplier_names);
+//         }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -177,7 +177,7 @@ class OutgoingOfferController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
-            ->where('doc_type_id',5)
+            ->where('doc_type_id',6)
             ->skip(1) // Skip the first row
             ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
@@ -202,21 +202,10 @@ class OutgoingOfferController extends Controller
 
         // delay cause for sec IC start
 
-        //Start blade notes section....
-        $notes = '';
 
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-
-        //End blade notes section....
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',6)->latest()->first();
 
         //End blade forward on off section....
 
@@ -227,16 +216,16 @@ class OutgoingOfferController extends Controller
         // end cover letter start
 
 
-        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names','cover_letter'));
+        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'auth_designation_id', 'sender_designation_id','DocumentTrack_hidden','cover_letter'));
     }
 
-    public function OutgoingOfferTracking(Request $request)
+    public function OutgoingFinalSpecTracking(Request $request)
     {
         // dd($request->id);
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 5; // 5 for doc type offers from doctype table column doc_serial
+        $doc_type_id = 6; // 6 for doc type Final Spec from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
@@ -263,7 +252,7 @@ class OutgoingOfferController extends Controller
 
         // ----delay_cause start here
         if ($desig_position->position == 3) {
-            $offer_data = Offer::find($doc_ref_id);
+            $offer_data = FinalSpec::find($doc_ref_id);
             $offer_data->delay_cause = $request->delay_cause;
             $offer_data->terms_conditions = $request->terms_conditions;
             $offer_data->delivery_date = $request->delivery_date;
@@ -274,7 +263,7 @@ class OutgoingOfferController extends Controller
 
         if ($desig_position->position == 7) {
 
-            $data = Offer::find($doc_ref_id);
+            $data = FinalSpec::find($doc_ref_id);
 
             if ($data) {
 
@@ -298,4 +287,5 @@ class OutgoingOfferController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
+
 }

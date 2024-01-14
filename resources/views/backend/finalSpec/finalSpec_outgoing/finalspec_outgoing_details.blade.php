@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer (Outgoing)')
+@section('title', 'Final Spec (Outgoing)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,13 +90,13 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer (Outgoing)')
+@section('main_menu', 'Final Spec  (Outgoing)')
 @section('active_menu', 'Outgoing Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Offer</h2>
+                <h2>Details of Final Spec </h2>
             </div>
             <div style="display: flex">
 
@@ -108,47 +108,40 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
+                              <tr>
+                                <th>Final Spec Referance Date</td>
+                                <td>{{ $details->reference_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            
                             <tr>
                                 <th>Tender Reference No</td>
-                                <td>{{ $details->tender_reference_no }}</td>
+                                <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
-                                <th>Receive Date</td>
-                                <td>{{ $details->offer_rcv_ltr_dt }}</td>
+                                <th>Final Spec Receive Letter Date</td>
+                                <td>{{ $details->final_spec_receive_Ltr_dt  }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>{{ $details->attribute }}</td>
-                            </tr>
-                            <tr>
-
-                                <th>Additional Documents</th>
-                                <td>
-                                    @if (!empty($additional_documents_names))
-                                        <ul>
-                                            @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name }} </li>
-                                                <!-- Adjust the key according to your array structure -->
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No additional documents available.
-                                    @endif
-                                </td>
-
-                            </tr>
+                         
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{$details->fin_year_name  }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -163,14 +156,6 @@
                                         No supplier names available.
                                     @endif
                                 </td>
-                            </tr>
-                            <tr>
-                                <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no }}</td>
-                            </tr>
-                            <tr>
-                                <th>Quantity</td>
-                                <td>{{ $details->qty }}</td>
                             </tr>
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
@@ -714,7 +699,7 @@
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -729,7 +714,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/outgoing_offer/tracking') }}',
+                            url: '{{ url('admin/outgoing_FinalSpec/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -754,7 +739,7 @@
                                             response.success);
 
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.offer/outgoing') }}",
+                                            "{{ route('admin.FinalSpec/outgoing') }}",
                                             40000);
                                     }
                                 }

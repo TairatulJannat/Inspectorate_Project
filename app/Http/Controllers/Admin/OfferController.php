@@ -391,6 +391,7 @@ class OfferController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 1)
+            ->where('doc_type_id',5)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -431,7 +432,7 @@ class OfferController extends Controller
         //End blade notes section....
          
           //Start blade forward on off section....
-          $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+          $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
 
           //End blade forward on off section....
 

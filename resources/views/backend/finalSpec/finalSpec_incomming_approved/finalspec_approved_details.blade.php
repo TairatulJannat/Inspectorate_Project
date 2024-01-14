@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer (Approved)')
+@section('title', 'Final Spec(Approved)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer (Approved) ')
+@section('main_menu', 'Final Spec (Approved) ')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -112,47 +112,40 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
+                              <tr>
+                                <th>Final Spec Referance Date</td>
+                                <td>{{ $details->reference_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            
                             <tr>
                                 <th>Tender Reference No</td>
-                                <td>{{ $details->tender_reference_no }}</td>
+                                <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
-                                <th>Receive Date</td>
-                                <td>{{ $details->offer_rcv_ltr_dt }}</td>
+                                <th>Final Spec Receive Letter Date</td>
+                                <td>{{ $details->final_spec_receive_Ltr_dt  }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                            <tr>
-                                <th>Attribute</td>
-                                <td>{{ $details->attribute }}</td>
-                            </tr>
-                            <tr>
-
-                                <th>Additional Documents</th>
-                                <td>
-                                    @if (!empty($additional_documents_names))
-                                        <ul>
-                                            @foreach ($additional_documents_names as $documents_name)
-                                                <li>{{ $documents_name }} </li>
-                                                <!-- Adjust the key according to your array structure -->
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No additional documents available.
-                                    @endif
-                                </td>
-
-                            </tr>
+                         
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{$details->fin_year_name  }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -167,14 +160,6 @@
                                         No supplier names available.
                                     @endif
                                 </td>
-                            </tr>
-                            <tr>
-                                <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no }}</td>
-                            </tr>
-                            <tr>
-                                <th>Quantity</td>
-                                <td>{{ $details->qty }}</td>
                             </tr>
 
 
@@ -331,7 +316,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.offer.offer_incomming_approved.offer_approved_index_js')
+    @include('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_index_js')
 
     <script>
         $(document).ready(function() {
@@ -354,7 +339,7 @@
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -369,7 +354,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/offer_approved/offer_tracking') }}',
+                            url: '{{ url('admin/FinalSpec_approved/FinalSpec_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -391,7 +376,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.offer_approved/view') }}",
+                                            "{{ route('admin.FinalSpec_approved/view') }}",
                                             40000);
                                     }
                                 }
