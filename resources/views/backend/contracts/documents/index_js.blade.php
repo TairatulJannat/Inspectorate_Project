@@ -92,7 +92,8 @@
                     },
 
                 ],
-                dom: 'lBfrtip',
+                dom: 'lfrtip',
+                // dom: 'lBfrtip',
                 buttons: ['excel', 'csv', 'pdf', 'copy'],
             });
 
@@ -247,31 +248,6 @@
         //         },
         //     });
         // });
-
-        // Delete Item Type ajax request
-
-
-        // // Show Item Type
-        // $(document).on('click', '.show_item_type', function(e) {
-        //     e.preventDefault();
-        //     let id = $(this).attr('id');
-        //     $.ajax({
-        //         url: '{{ url('admin/item_types/show') }}',
-        //         method: 'post',
-        //         data: {
-        //             id: id,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             $("#showItemTypeName").text(response.name);
-        //             $("#showItemTypeStatus").prop('checked', response.status == 1);
-
-        //             $('#showItemTypeModal').modal('show');
-        //         }
-        //     });
-        // });
-
-
     });
 
     function deleteData(id) {
