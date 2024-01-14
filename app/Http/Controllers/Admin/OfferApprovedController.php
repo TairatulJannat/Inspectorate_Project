@@ -27,7 +27,59 @@ class OfferApprovedController extends Controller
     public function index()
     {
 
-        return view('backend.offer.offer_incomming_approved.offer_approved_index');
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
+
+        if ($designation_id == 1 || $designation_id == 0) {
+            $offerNew = Offer::where('status', 0)->count();
+            $offerOnProcess = '0';
+            $offerCompleted = '0';
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('offers.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $offerNew = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('offers.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $offerOnProcess = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('offers.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $offerCompleted = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('offers.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('offers.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+
+        return view('backend.offer.offer_incomming_approved.offer_approved_index', compact('offerNew','offerOnProcess','offerCompleted','offerDispatch'));
     }
 
     public function all_data(Request $request)
@@ -230,7 +282,7 @@ class OfferApprovedController extends Controller
 
 
 
-        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
+        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
     }
 
     public function offerTracking(Request $request)

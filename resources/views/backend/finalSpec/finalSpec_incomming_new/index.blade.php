@@ -57,13 +57,13 @@
 
                         <div class="col-9">
                             <a href="{{ route('admin.FinalSpec/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival</a>
+                            class="btn btn-success btn-sm">New Arrival({{$finalSpecNew}})</a>
                             <a href="{{ route('admin.FinalSpec_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process</a>
+                                class="btn btn-secondary btn-sm">On Process({{$finalSpecOnProcess}})</a>
                             <a href="{{ route('admin.FinalSpec/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed</a>
+                                class="btn btn-info text-white btn-sm">Completed({{$finalSpecCompleted}})</a>
                             <a href="{{ route('admin.FinalSpec_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch</a>
+                                class="btn btn-danger btn-sm">Dispatch({{$finalSpecDispatch}})</a>
 
                         </div>
                         <div>
@@ -90,8 +90,19 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+
+                                    <span class="icon p-3 m-2" style="color: #1B4C43;">&#11044; New Arrival</span>
+                                    <span class="icon p-3 m-2" style="color: #BA895D;">&#11044; On Process</span>
+                                    <span class="icon p-3 m-2" style="color: #0DCAF0;">&#11044; Completed</span>
+                                    <span class="icon p-3 m-2" style="color: #B53F4B;">&#11044; Dispatch</span>
+                                    <span class="icon p-3 m-2" style="color: #FF8E36;">&#11044; Forward</span>
+                                    <span class="icon p-3 m-2" style="color: #0D6DA8;">&#11044; Forwarded</span>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
