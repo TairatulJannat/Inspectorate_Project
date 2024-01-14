@@ -28,7 +28,7 @@
             },
             ajax: {
 
-                url: "{{ url('admin/draft_contract_approved/all_data') }}",
+                url: "{{ url('admin/contract_approved/all_data') }}",
                 type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
@@ -46,8 +46,8 @@
                 },
 
                 {
-                    data: 'item_type_name',
-                    name: 'item_type_id',
+                    data: 'item_name',
+                    name: 'item_name',
 
                 },
                 {

@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'DraftContract (Dispatch)')
+@section('title', 'Contract (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/doc_design/doc.css') }}">
@@ -38,7 +38,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'DraftContract (Dispatch)')
+@section('main_menu', 'Contract (Dispatch)')
 @section('active_menu', 'All Data')
 @section('content')
 
@@ -58,14 +58,14 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.draft_contract/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival ({{$draft_contractNew}})</a>
-                            <a href="{{ route('admin.draft_contract_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process ({{$draft_contractOnProcess}})</a>
-                            <a href="{{ route('admin.draft_contract/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed ({{$draft_contractCompleted}})</a>
-                            <a href="{{ route('admin.draft_contract_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch ({{$draft_contractDispatch}})</a>
+                            <a href="{{ route('admin.contract/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival ({{$contractNew}})</a>
+                            <a href="{{ route('admin.contract_approved/view') }}" type="button"
+                                class="btn btn-secondary btn-sm">On Process ({{$contractOnProcess}})</a>
+                            <a href="{{ route('admin.contract/outgoing') }}" type="button"
+                                class="btn btn-info text-white btn-sm">Completed ({{$contractCompleted}})</a>
+                            <a href="{{ route('admin.contract_dispatch/view') }}" type="button"
+                                class="btn btn-danger btn-sm">Dispatch ({{$contractDispatch}})</a>
 
                         </div>
                         <div>
@@ -119,5 +119,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_index_js')
+    @include('backend.contract.contract_dispatch.contract_dispatch_index_js')
 @endpush
