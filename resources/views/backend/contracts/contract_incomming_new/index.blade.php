@@ -50,7 +50,7 @@
         <div class="card">
             @if (Auth::user()->id == 128)
                 <div>
-                    <a href="create" type="button" class="btn btn-success m-3 fa fa-plus float-md-end"> Create Contract</a>
+                    <a href="create" type="button" class="btn btn-success m-3 float-md-end">Create Contract</a>
                 </div>
             @endif
             <div class="card-header">

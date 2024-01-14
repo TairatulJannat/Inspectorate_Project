@@ -39,7 +39,7 @@
             <form action="" method="POST" id="store-contract" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    <div class=" header">
+                    <div class="header">
                         <div class="col-md-3">
                             <div class="form-group d-flex">
                                 <label class="col-6 pt-2" for="admin-section">Select Section:</label>
