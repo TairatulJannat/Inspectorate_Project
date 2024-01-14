@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Log;
 use Validator;
 use App\Models\Items;
 use App\Models\Offer;
@@ -11,6 +12,7 @@ use App\Models\Supplier;
 use App\Models\Item_type;
 use App\Models\Inspectorate;
 use Illuminate\Http\Request;
+use App\Models\DraftContract;
 use App\Models\SupplierOffer;
 use App\Models\ParameterGroup;
 use App\Models\SupplierSpecData;
@@ -19,7 +21,6 @@ use Illuminate\Support\Facades\DB;
 use App\Imports\SupplierSpecImport;
 use App\Http\Controllers\Controller;
 use App\Models\AssignParameterValue;
-use App\Models\DraftContract;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -293,6 +294,7 @@ class ExcelController extends Controller
             $jsonData = $request->input('editedData');
             $itemId = $request->input('item-id');
             $itemTypeId = $request->input('item-type-id');
+            $indentRefNo = $request->input('indent-ref-no');
 
             $this->deleteAllParameterGroupsAndValues($itemId);
 
@@ -308,7 +310,7 @@ class ExcelController extends Controller
                     $lastInsertedId = $existingGroup->id;
                 }
 
-                $this->saveAssignParameterValues($lastInsertedId, $parameterGroup);
+                $this->saveAssignParameterValues($lastInsertedId, $parameterGroup, $indentRefNo);
             }
 
             DB::commit();
@@ -362,7 +364,7 @@ class ExcelController extends Controller
         return $newGroup;
     }
 
-    protected function saveAssignParameterValues($parameterGroupId, $parameterGroup)
+    protected function saveAssignParameterValues($parameterGroupId, $parameterGroup, $indentRefNo)
     {
         foreach ($parameterGroup as $parameterName => $parameterData) {
             if (is_array($parameterData)) {
@@ -372,6 +374,8 @@ class ExcelController extends Controller
                     'parameter_group_id' => $parameterGroupId,
                     'parameter_name' => $parameterName,
                     'parameter_value' => $parameterValue,
+                    'doc_type_id' => 3,
+                    'reference_no' => $indentRefNo,
                 ])->fresh();
 
                 // try {
