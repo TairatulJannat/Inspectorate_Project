@@ -1,11 +1,9 @@
 <style>
-
-   @media screen and (max-width: 1120px) {
+    @media screen and (max-width: 1120px) {
         .left-menu-header .font-success {
             display: none;
         }
     }
-
 </style>
 <div class="page-main-header">
     <div class="main-header-right row m-0">
@@ -23,7 +21,8 @@
         <div class="left-menu-header col">
             <ul>
                 <li>
-                    <h3 class="font-success" style="font-size: 24px;font-weight: bold">Inspectorate of Electronics & Instruments</h3>
+                    <h3 class="font-success" style="font-size: 24px;font-weight: bold">Inspectorate of Electronics &
+                        Instruments</h3>
                 </li>
             </ul>
         </div>
@@ -31,17 +30,13 @@
             <ul class="nav-menus">
                 <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i
                             data-feather="maximize"></i></a></li>
-
                 <li class="onhover-dropdown p-0 d-flex justify-content-center align-item center">
-
                     <div class=" dropdown-basic">
-
                         <div class="dropdown">
                             <button class="dropbtn btn-success" type="button" data-bs-original-title="" title="">
                                 <img class="img-90 rounded-circle"
                                     src="{{ asset('assets/backend/images/dashboard/1.png') }}" alt=""
                                     height='30px' width="30px">
-
                                 {{ \Illuminate\Support\Facades\Auth::user()->name }} <span><i
                                         class="icofont icofont-arrow-down"></i></span>
                             </button>
@@ -55,14 +50,6 @@
                             @csrf
                         </form>
                     </div>
-                    {{-- <button
-                        onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();"
-                        class="btn btn-primary" type="button"><a href="login_two.html"
-                            style="text-decoration: none;"><i data-feather="log-out"></i>Log out</a></button>
-                    <form id="logout-form" action="{{ route('admin_logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form> --}}
                 </li>
             </ul>
         </div>

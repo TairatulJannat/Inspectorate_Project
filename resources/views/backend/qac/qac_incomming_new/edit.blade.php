@@ -12,7 +12,27 @@
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    
+
+                    <div class=" header">
+                        {{-- <div class="col-md-3">
+                            <div class="form-group d-flex">
+                                <label class="col-6 pt-2" for="">Select Section:</label>
+                                <select class="form-control" id="admin_section" name="admin_section">
+                                    @foreach ($sections as $section)
+                                        <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_admin_section" class="text-danger error_field"></span>
+                            </div>
+                        </div> --}}
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import Indent Spec</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row mt-4">
 
                         <div class="col-md-4">

@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer')
+@section('title', 'Indent')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -38,6 +38,7 @@
         .col-5 {
             padding: 10px 15px !important;
         }
+
 
         .forward_status,
         .forward {
@@ -79,6 +80,10 @@
             min-height: 250px
         }
 
+
+
+
+
         .documents {
             display: flex;
             justify-content: center;
@@ -87,14 +92,15 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Offer')
+@section('main_menu', 'Indent')
 @section('active_menu', 'Details')
 @section('content')
+
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Offer</h2>
+                <h2>Details of Indent</h2>
             </div>
             <div style="display: flex">
 
@@ -107,31 +113,33 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
-                                <th>Tender Reference No</td>
-                                <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
+                                <th>Indent Number</td>
+                                <td>{{ $details->indent_number }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
-                                <th>Offer Receive Letter Date</td>
-
-                                <td>{{ $details->offer_rcv_ltr_dt }}</td>
-
+                                <th>Receive Date</td>
+                                <td>{{ $details->indent_received_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Reference Date</td>
+                                <td>{{ $details->indent_reference_date }}</td>
                             </tr>
 
                             <tr>
+                                <th>Eqpt Type</td>
+                                <td>{{ $details->item_type_name ? $details->item_type_name:'No item type is selected' }}</td>
+                            </tr>
+                            <tr>
                                 <th>Name of Eqpt</td>
-
-                                <td>{{ $details->item_type_name }}</td>
+                                <td>{{ $details->item_name ? $details->item_name:'No item is selected' }}</td>
                             </tr>
                             <tr>
                                 <th>Attribute</td>
-                                
-                                <td>{{ $details->attribute }}</td>
-                            </tr>
-
+                                <td>{{ $details->attribute?$details->attribute:'No attribute is selected' }}</td>
                             </tr>
                             <tr>
 
@@ -141,6 +149,7 @@
                                         <ul>
                                             @foreach ($additional_documents_names as $documents_name)
                                                 <li>{{ $documents_name }} </li>
+
                                             @endforeach
                                         </ul>
                                     @else
@@ -151,51 +160,43 @@
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
-
-                                <td>{{$details->fin_year_name }}</td>
-
+                                <td>{{ $details->fin_year_name  ? $details->fin_year_name : 'No financial year is selected'}}</td>
                             </tr>
                             <tr>
-                                <th>Supplier Name</th>
-                                <td>
-                                    @if (!empty($supplier_names_names))
-                                        <ul>
-                                            @foreach ($supplier_names_names as $supplierName)
-                                                <li>{{ $supplierName }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No supplier names available.
-                                    @endif
-                                </td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->nomenclature ? $details->nomenclature  : 'No nomenclature is selected'}}</td>
+                            </tr>
+                            {{-- <tr>
+                                <th>Make</td>
+                                <td>{{ $details->make }}?</td>
+                            </tr> --}}
+                            <tr>
+                                <th>Model</td>
+                                <td>{{ $details->model  ?  $details->model  : 'No model is selected'}}</td>
                             </tr>
                             <tr>
-                                <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no }}</td>
+                                <th>Country of Origin</td>
+                                <td>{{ $details->country_of_origin ? $details->country_of_origin  :'No country of origin is selected' }}</td>
                             </tr>
                             <tr>
-                                <th>Quantity</td>
-                                <td>{{  $details->qty}}</td>
+                                <th>Country of Assembly</td>
+                                <td>{{ $details->country_of_assembly ? $details->country_of_assembly  :'No country of assembly is selected'}}</td>
                             </tr>
-
 
                         </table>
+                        <a class="btn btn-success mt-3 btn-parameter"
+                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                            target="_blank">Pdf Document</a>
 
-                        @if ($desig_id != 1)
 
-                            <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
-                                href="{{ url('admin/csr/index') }}">CSR</a>
 
-                         @endif   
-                         @if ($desig_id != 1)
-                                <a class="btn btn-info mt-3 btn-parameter text-light"
-                                    href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
-                            @endif
 
-                      
+
 
                     </div>
                 </div>
+
 
                 {{-- @if (!$sender_designation_id) --}}
 
@@ -263,7 +264,9 @@
                                     </form>
                                 </div>
                             </div>
+
                         @endif
+
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -287,7 +290,7 @@
                                                         <td>{{ $document_track->sender_designation_name }}</td>
                                                         <td><i class="fa fa-arrow-right text-success"></i></td>
                                                         <td>{{ $document_track->receiver_designation_name }}</td>
-                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i') }}</td>
+                                                        <td>{{ $document_track->created_at->format('d-m-Y H:i ') }}</td>
                                                         <td>{{ $document_track->remarks }}</td>
                                                     </tr>
                                                 @endforeach
@@ -304,19 +307,13 @@
                         </div>
                     </div>
 
-                    <!-- Notes Sectio
-                                                                                                            n - Uncomment if needed -->
-                    {{-- <div class="col-md-6">
-                        @if ($notes == !null)
-                            ... <!-- Your notes HTML here -->
-                        @endif
-                    </div> --}}
                 </div>
-                {{-- @endif --}}
+
             </div>
 
         </div>
     </div>
+
 
 @endsection
 @push('js')
@@ -336,6 +333,7 @@
 
             });
 
+
             $('#submitBtn').off('click').on('click', function(event) {
 
                 event.preventDefault();
@@ -347,7 +345,7 @@
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'success',
+                    type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -362,7 +360,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/offer/offer_tracking') }}',
+                            url: '{{ url('admin/indent/indent_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -384,7 +382,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.offer/view') }}",
+                                            "{{ route('admin.indent/view') }}",
                                             40000);
                                     }
                                 }
@@ -401,6 +399,7 @@
                     } else if (
                         result.dismiss === swal.DismissReason.cancel
                     ) {
+
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -408,18 +407,10 @@
                         )
                     }
                 })
+
             });
 
-            $('#csrBtn').on('click', function(event) {
-                event.preventDefault();
 
-                var url = $(this).attr('href');
-                var tenderRefNo = $('#tenderRefNo').text();
-
-                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
-
-                window.location.href = redirectUrl;
-            });
         });
     </script>
 @endpush

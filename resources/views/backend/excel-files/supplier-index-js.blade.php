@@ -3,9 +3,10 @@
     var xhr;
 
     $(document).ready(function() {
+        var tenderRefNo = new URLSearchParams(window.location.search).get('tenderRefNo');
 
         $('#import-supplier-spec-data-form').submit(function() {
-            $('#itemTypeId, #indentId, #itemId').prop('disabled', false);
+            $('#tenderId, #itemTypeId, #indentId, #itemId').prop('disabled', false);
         });
 
         var itemsData = {!! $items !!};
@@ -42,10 +43,11 @@
                         $("#itemTypeId").val(response.itemTypeId).prop('selected', true)
                             .change();
                         $("#itemId").val(response.itemId).prop('selected', true).change();
-                        populateSupplierDropdown(response.suppliersData);
+                        populateSuppliersDropdown(response.suppliers);
+                        populateSuppliersTable(response.suppliersData);
                         toastr.success("Data found for this Tender!");
                     } else if (response.isSuccess === false) {
-                        toastr.error(response.message);
+                        toastr.success(response.message);
                         if (response.indentId) {
                             $("#indentId").val(response.indentId).prop('selected', true)
                                 .change();
@@ -56,8 +58,9 @@
                         }
                         if (response.itemId) {
                             $("#itemId").val(response.itemId).prop('selected', true)
-                            .change();
-                            populateSupplierDropdown(response.suppliersData);
+                                .change();
+                            populateSuppliersDropdown(response.suppliers);
+                            populateSuppliersTable(response.suppliersData);
                         }
                         var supplierDataContainer = $(".supplier-data");
                         supplierDataContainer.hide();
@@ -69,10 +72,23 @@
             });
         });
 
+        $("#tenderId").val(tenderRefNo);
+        $("#tenderId").trigger("change");
+
         var supplierDataContainer = $(".supplier-data");
         supplierDataContainer.hide();
 
-        function populateSupplierDropdown(suppliersData) {
+        function populateSuppliersDropdown(suppliers) {
+            $('#supplierId').empty();
+            $('#supplierId').append('<option value="" selected disabled>Select a supplier</option>');
+
+            $.each(suppliers, function(key, value) {
+                $('#supplierId').append('<option value="' + value.id + '">' + value.firm_name +
+                    '</option>');
+            });
+        }
+
+        function populateSuppliersTable(suppliersData) {
             var container = document.getElementById('supplierTableContainer');
             var tbody = container.querySelector('tbody');
 

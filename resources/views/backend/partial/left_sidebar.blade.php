@@ -168,25 +168,13 @@ $currentControllerName = Request::segment(2);
                     {{-- Side Menu Button Links for Contract --}}
                     @if (count(menu_check('Contract')) !== 0)
                         <li class="dropdown">
-                            <a class="nav-link menu-title text-white" href="javascript:void(0)">
-                                <i data-feather="file-text"></i> <!-- Add the icon for "Contract" -->
-                                <span>Contract</span>
+                            <a href="{{ url('admin/contract/index') }}"
+                                class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} nav-link menu-title text-white">
+                                <i data-feather="file-text"></i>
+                                <span>Contracts</span>
                             </a>
-                            <ul class="nav-submenu menu-content">
-                                <li>
-                                    <a href="{{ url('admin/contract/index') }}"
-                                        class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} text-white">
-                                        View Contracts
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('admin/contract/create') }}"
-                                        class="{{ Request::is('*/admin/contract/create') ? 'active' : '' }} text-white">
-                                        Create Contract
-                                    </a>
-                                </li>
 
-                            </ul>
+
                         </li>
                     @endif
 

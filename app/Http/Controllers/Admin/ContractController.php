@@ -2,86 +2,87 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Additional_document;
-use App\Models\AdminSection;
+use PDF;
+use Carbon\Carbon;
+use App\Models\Items;
+use App\Models\Indent;
+use App\Models\Section;
 use App\Models\Contract;
+use App\Models\Item_type;
 use App\Models\Designation;
+use App\Models\AdminSection;
+use Illuminate\Http\Request;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-use App\Models\Indent;
-use App\Models\Item_type;
-use App\Models\Items;
 use App\Models\ParameterGroup;
-use App\Models\Section;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Additional_document;
+use App\Http\Controllers\Controller;
+use App\Models\ContractProgress;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
-use PDF;
 
 class ContractController extends Controller
 {
-    //
     public function index()
     {
-        return view('backend.contracts.contract_incomming_new.index');
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
+
+        if ($designation_id == 1 || $designation_id == 0) {
+            $contractNew = Contract::where('status', 0)->count();
+            $contractOnProcess = '0';
+            $contractCompleted = '0';
+            $contractDispatch = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('contracts.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $contractNew = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('contracts.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $contractOnProcess = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('contracts.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $contractCompleted = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('contracts.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $contractDispatch = DocumentTrack::where('doc_type_id', 3)
+                ->leftJoin('contracts', 'document_tracks.doc_ref_id', '=', 'contracts.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('contracts.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+        return view('backend.contracts.contract_incomming_new.index', compact('contractNew', 'contractOnProcess', 'contractCompleted', 'contractDispatch'));
     }
 
     public function getAllData(Request $request)
     {
-        if ($request->ajax()) {
-            $contracts = Contract::all();
-
-            return DataTables::of($contracts)
-                ->addColumn('DT_RowIndex', function ($contract) {
-                    return $contract->id;
-                })
-                ->addColumn('ltr_no_of_contract', function ($contract) {
-                    return $contract->ltr_no_of_contract;
-                })
-                ->addColumn('ltr_date_contract', function ($contract) {
-                    return $contract->ltr_date_contract;
-                })
-                ->addColumn('contract_no', function ($contract) {
-                    return $contract->contract_no;
-                })
-                ->addColumn('contract_date', function ($contract) {
-                    return $contract->contract_date;
-                })
-                ->addColumn('contract_state', function ($contract) {
-                    return $contract->contract_state;
-                })
-                ->addColumn('con_fin_year', function ($contract) {
-                    return $contract->con_fin_year;
-                })
-                ->addColumn('supplier_id', function ($contract) {
-                    return $contract->supplier_id;
-                })
-                ->addColumn('contracted_value', function ($contract) {
-                    return $contract->contracted_value;
-                })
-                ->addColumn('delivery_schedule', function ($contract) {
-                    return $contract->delivery_schedule;
-                })
-                ->addColumn('currency_unit', function ($contract) {
-                    return $contract->currency_unit;
-                })
-                ->addColumn('status', function ($contract) {
-                    if ($contract->status == '0') {
-                        return '<span class="badge badge-success">New</span>';
-                    } else {
-                        return '<span class="badge badge-warning">None</span>';
-                    }
-                })
-                ->rawColumns(['status'])
-                ->addColumn('action', function ($contract) {
-                    return "action";
-                })
-                ->make(true);
-        }
-
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
@@ -91,125 +92,116 @@ class ContractController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->where('indents.status', 0)
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                $query = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'contracts.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'contracts.sec_id', '=', 'sections.id')
+                    ->where('contracts.status', 0)
+                    ->select('contracts.*', 'item_types.name as item_type_name', 'contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
-                $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
+                $contractIds = Contract::leftJoin('document_tracks', 'contracts.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('indents.insp_id', $insp_id)
-                    ->where('indents.status', 0)
-                    ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
+                    ->where('contracts.insp_id', $insp_id)
+                    ->where('contracts.status', 0)
+                    ->whereIn('contracts.sec_id', $section_ids)->pluck('contracts.id', 'contracts.id')->toArray();
 
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('indents.status', 0)
+                $query = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'contracts.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'contracts.sec_id', '=', 'sections.id')
+                    ->select('contracts.*', 'item_types.name as item_type_name', 'contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->where('contracts.status', 0)
                     ->get();
             } else {
-
-                $indentIds = Indent::leftJoin('document_tracks', 'indents.id', '=', 'document_tracks.doc_ref_id')
+                $contractIds = Contract::leftJoin('document_tracks', 'contracts.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('indents.insp_id', $insp_id)
-                    ->where('indents.status', 0)
-                    ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
+                    ->where('contracts.insp_id', $insp_id)
+                    ->where('contracts.status', 0)
+                    ->whereIn('contracts.sec_id', $section_ids)->pluck('contracts.id', 'contracts.id')->toArray();
 
-                $query = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'item_types.name as item_type_name', 'indents.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('indents.id', $indentIds)
-                    ->where('indents.status', 0)
+                $query = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', 'contracts.sender', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'contracts.sec_id', '=', 'sections.id')
+                    ->select('contracts.*', 'item_types.name as item_type_name', 'contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('contracts.id', $contractIds)
+                    ->where('contracts.status', 0)
                     ->get();
 
-
-                $indentId = [];
+                $contractId = [];
                 if ($query) {
-                    foreach ($query as $indent) {
-                        array_push($indentId, $indent->id);
+                    foreach ($query as $contract) {
+                        array_push($contractId, $contract->id);
                     }
                 }
 
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $indentId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $contractId)
                     ->where('reciever_desig_id', $designation_id)
                     ->first();
 
 
                 //......start for showing data for receiver designation
                 if (!$document_tracks_receiver_id) {
-                    $query = Indent::where('id', 'no data')->get();
+                    $query = Contract::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
 
-            // $query->orderBy('id', 'asc');
-
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
-
-                ->addColumn('status', function ($data) {
-
-                    if ($data->status == '0') {
-                        return '<button class="btn btn-success btn-sm">New</button>';
+                ->addColumn('status', function ($contract) {
+                    if ($contract->status == '0') {
+                        return '<span class="badge badge-success">New</span>';
                     } else {
-                        return '<button class="btn btn-success btn-sm">None</button>';
+                        return '<span class="badge badge-warning">None</span>';
                     }
                 })
-
-                ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                ->addColumn('action', function ($contract) {
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $contract->id)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
-                    // dd($DocumentTrack);
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
 
                             if ($designation_id == 3) {
-                                $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                                $actionBtn .= '<a href="' . url('admin/contract/edit/' . $contract->id) . '" class="edit2 ">Update</a>';
                             }
-                            $actionBtn .= '<a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit ">Forward</a>
+                            $actionBtn .= '<a href="' . url('admin/contract/index-doc/' . $contract->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/contract/details/' . $contract->id) . '" class="edit ">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">';
                             if ($designation_id == 3) {
-                                $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                                $actionBtn .= '<a href="' . url('admin/contract/edit/' . $contract->id) . '" class="edit2 ">Update</a>';
                             }
                             $actionBtn .= '
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/contract/index-doc/' . $contract->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/contract/details/' . $contract->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
                             if ($designation_id == 3) {
-                                $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                                $actionBtn .= '<a href="' . url('admin/contract/edit/' . $contract->id) . '" class="edit2 ">Update</a>';
                             }
                             $actionBtn .= '
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                            <a href="' . url('admin/indent/details/' . $data->id) . '" class="update">Forwarded</a>
+                            <a href="' . url('admin/contract/index-doc/' . $contract->id) . '" class="doc">Doc Status</a>
+                            <a href="' . url('admin/contract/details/' . $contract->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">';
                         if ($designation_id == 3) {
-                            $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
+                            $actionBtn .= '<a href="' . url('admin/contract/edit/' . $contract->id) . '" class="edit2 ">Update</a>';
                         }
                         $actionBtn .= '
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
-                        <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit ">Forward</a>
+                        <a href="' . url('admin/contract/index-doc/' . $contract->id) . '" class="doc">Doc Status</a>
+                        <a href="' . url('admin/contract/details/' . $contract->id) . '" class="edit ">Forward</a>
                         </div>';
                     }
-
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['status', 'action'])
                 ->make(true);
         }
     }
@@ -218,75 +210,79 @@ class ContractController extends Controller
     {
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
-        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $sections = Section::whereIn('id', $section_ids)->get();
-
         $dte_managments = Dte_managment::where('status', 1)->get();
-        $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         $item = Items::all();
         $fin_years = FinancialYear::all();
-        return view('backend.indent.indent_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
+        return view('backend.contracts.contract_incomming_new.create', compact('sections', 'item', 'dte_managments', 'item_types', 'fin_years'));
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
             'sender' => 'required',
-            'admin_section' => 'required',
-            'reference_no' => 'required',
-            'indent_received_date' => 'required',
-            'indent_reference_date' => 'required',
+            'admin-section' => 'required',
+            'ltr-no-contract' => 'required',
+            'ltr-date-contract' => 'required',
+            'contract-reference-no' => 'required',
+            'contract-number' => 'required',
+            'contract-date' => 'required',
+            'received-by' => 'required',
+        ], [
+            'sender.required' => 'Please select Sender',
+            'admin-section.required' => 'Please select Admin Section',
+            'ltr-no-contract.required' => 'Please enter letter Number of Contract',
+            'ltr-date-contract.required' => 'Please select letter Date of Contract',
+            'contract-reference-no.required' => 'Please enter Contract Reference Number',
+            'contract-number.required' => 'Please select Contract Number',
+            'contract-date.required' => 'Please select Contract Date',
+            'received-by.required' => 'Please select Received By',
         ]);
-        $insp_id = Auth::user()->inspectorate_id;
-        $sec_id = $request->admin_section;
 
-        $data = new Indent();
-        $data->insp_id = $insp_id;
-        $data->sec_id = $sec_id;
-        $data->sender = $request->sender;
-        $data->reference_no = $request->reference_no;
-        $data->indent_number = $request->indent_number;
+        DB::beginTransaction();
 
-        $data->additional_documents = json_encode($request->additional_documents);
-        $data->item_id = $request->item_id;
-        $data->item_type_id = $request->item_type_id;
-        $data->qty = $request->qty;
-        $data->estimated_value = $request->estimated_value;
-        $data->indent_received_date = $request->indent_received_date;
-        $data->indent_reference_date = $request->indent_reference_date;
-        $data->fin_year_id = $request->fin_year_id;
-        $data->attribute = $request->attribute;
-        $data->spare = $request->spare;
-        $data->checked_standard = $request->checked_standard;
-        $data->nomenclature = $request->nomenclature;
-        $data->make = $request->make;
-        $data->model = $request->model;
-        $data->country_of_origin = $request->country_of_origin;
-        $data->country_of_assembly = $request->country_of_assembly;
+        try {
+            $formData = $request->all();
 
-        $data->received_by = Auth::user()->id;
-        $data->remark = $request->remark;
-        $data->status = 0;
-        $data->created_at = Carbon::now()->format('Y-m-d');
-        $data->updated_at = Carbon::now()->format('Y-m-d');
+            $inspId = Auth::user()->inspectorate_id;
+            $secId = $formData['admin-section'];
 
-        if ($request->hasFile('doc_file')) {
+            $contractData = new Contract();
+            $contractData->insp_id = $inspId;
+            $contractData->sec_id = $secId;
+            $contractData->sender = $formData['sender'];
+            $contractData->ltr_no_of_contract = $formData['ltr-no-contract'];
+            $contractData->ltr_date_contract = $formData['ltr-date-contract'];
+            $contractData->reference_no = $formData['contract-reference-no'];
+            $contractData->contract_no = $formData['contract-number'];
+            $contractData->contract_date = $formData['contract-date'];
+            $contractData->received_by = Auth::user()->id;
+            $contractData->status = 0;
+            $contractData->created_at = Carbon::now()->format('Y-m-d');
+            $contractData->updated_at = Carbon::now()->format('Y-m-d');
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-            $data->doc_file = $path;
+            $contractData->save();
+
+            DB::commit();
+
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => "Contract saved successfully!"
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => "Something went wrong!",
+                'error' => $e->getMessage()
+            ], 200);
         }
-
-        // $data->created_by = auth()->id();
-        // $data->updated_by = auth()->id();
-
-        $data->save();
-
-        return response()->json(['success' => 'Done']);
     }
+
     public function edit($id)
     {
-
         $indent = Indent::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
@@ -350,7 +346,6 @@ class ContractController extends Controller
 
     public function details($id)
     {
-
         $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
             ->leftJoin('items', 'indents.item_id', '=', 'items.id')
@@ -377,7 +372,6 @@ class ContractController extends Controller
 
             array_push($additional_documents_names, $additional_names);
         }
-
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -412,7 +406,6 @@ class ContractController extends Controller
 
         //End close forward Status...
 
-
         //Start blade notes section....
         $notes = '';
 
@@ -431,13 +424,11 @@ class ContractController extends Controller
 
         //End blade forward on off section....
 
-
         return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
     }
 
     public function indentTracking(Request $request)
     {
-
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -465,7 +456,6 @@ class ContractController extends Controller
         $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
-
         if ($desig_position->position == 7) {
 
             $data = Indent::find($doc_ref_id);
@@ -490,12 +480,9 @@ class ContractController extends Controller
                 $value->save();
             }
         }
-
-
-
-
         return response()->json(['success' => 'Done']);
     }
+
     public function item_name($id)
     {
         $items = Items::where('item_type_id', $id)->get();
@@ -506,6 +493,7 @@ class ContractController extends Controller
     {
         return view('backend.indent.progress');
     }
+
     public function parameter(Request $request)
     {
         $indent = Indent::find($request->indent_id);
@@ -513,6 +501,7 @@ class ContractController extends Controller
         $item_type_id = $indent->item_type_id;
         return view('backend.indent.parameter', compact('item_id', 'item_type_id'));
     }
+
     public function parameterPdf(Request $request)
     {
         $indent = Indent::find($request->indent_id);
@@ -534,5 +523,118 @@ class ContractController extends Controller
         //     return $pdf->stream('cover_letter.pdf');
         // }
 
+    }
+
+    public function indexDoc($id)
+    {
+        $contractId = $id;
+        $additional_documents = Additional_document::all();
+        return view('backend.contracts.documents.index', compact('contractId', 'additional_documents'));
+    }
+
+    public function getAllDataDoc(Request $request)
+    {
+        $query = ContractProgress::where('contract_id', $request->contractId)
+            ->leftJoin('additional_documents', 'contract_progress.additional_doc_type_id', '=', 'additional_documents.id')
+            ->select('contract_progress.*', 'additional_documents.name as additional_documents_name')
+            ->get();
+
+        return DataTables::of($query)
+            ->setTotalRecords($query->count())
+            ->addIndexColumn()
+            ->addColumn('receive_status', function ($data) {
+                if ($data->receive_status == '0') {
+                    return '<span class="badge badge-success">Received</span>';
+                }
+                if ($data->receive_status == '1') {
+                    return '<span class="badge badge-warning">Not Received</span>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                $actionBtn = '<div class="" role="group">
+                        <a href="javascript:void(0)" class="edit_doc btn btn-secondary-gradien btn-sm fa fa-edit" data-id="' . $data->id . '"  data-bs-toggle="modal"
+                        data-bs-target="#editContractModal"> Edit</a>
+                        <a href="javascript:void(0)" class="delete btn btn-danger-gradien btn-sm fa fa-trash-o" onclick="deleteData(' . $data->id . ')"> Delete</a>
+                        </div>';
+                return $actionBtn;
+            })
+            ->rawColumns(['receive_status', 'action'])
+            ->make(true);
+    }
+
+    public function storeDoc(Request $request)
+    {
+        $this->validate($request, [
+            'additionalDocTypeId' => 'required',
+            'duration' => 'required',
+            'member' => 'required',
+        ], [
+            'additionalDocTypeId.required' => 'Please select Document Type',
+            'duration.required' => 'Please select Duration',
+            'member.required' => 'Please select Member Number',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $formData = $request->all();
+
+            $data = new ContractProgress();
+            $data->contract_id = $formData['contractId'];
+            $data->additional_doc_type_id = $formData['additionalDocTypeId'];
+            $data->duration = $formData['duration'];
+            $data->receive_status = $request->receiveStatus == "on" ? 1 : 0;
+            $data->receive_date = $request->receiveDate ? Carbon::parse($request->receiveDate)->toDateTimeString() : null;
+            $data->asking_date = $request->askingDate ? Carbon::parse($request->askingDate)->toDateTimeString() : null;
+            $data->member = $formData['member'];
+            $data->created_at = Carbon::now()->format('Y-m-d');
+            $data->updated_at = Carbon::now()->format('Y-m-d');
+
+            $data->save();
+
+            DB::commit();
+
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => "Additional Document saved successfully!"
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => "Something went wrong!",
+                'error' => $e->getMessage()
+            ], 200);
+        }
+    }
+
+    public function destroyDoc($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = ContractProgress::find($id);
+
+            if (!$data) {
+                throw new \Exception("Document not found");
+            }
+
+            $data->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => "Additional Document deleted successfully!"
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => "Something went wrong!",
+                'error' => $e->getMessage()
+            ], 200);
+        }
     }
 }

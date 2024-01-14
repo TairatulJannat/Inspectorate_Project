@@ -48,6 +48,11 @@
 
     <div class="col-sm-12 col-xl-12">
         <div class="card">
+            @if (Auth::user()->id == 128)
+                <div>
+                    <a href="create" type="button" class="btn btn-success m-3 float-md-end">Create Contract</a>
+                </div>
+            @endif
             <div class="card-header">
                 <div class="row justify-content-between align-items-center">
                     <div class="d-flex justify-content-between px-4 py-2">
@@ -65,7 +70,6 @@
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
                         </div>
                     </div>
-
                 </div>
             </div>
 

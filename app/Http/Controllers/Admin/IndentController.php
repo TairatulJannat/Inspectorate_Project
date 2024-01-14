@@ -79,9 +79,7 @@ class IndentController extends Controller
         }
 
 
-        return view('backend.indent.indent_incomming_new.index', compact('indentNew','indentOnProcess','indentCompleted','indentDispatch'));
-
-
+        return view('backend.indent.indent_incomming_new.index', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch'));
     }
 
     public function all_data(Request $request)

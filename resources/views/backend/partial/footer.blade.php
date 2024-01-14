@@ -30,6 +30,8 @@
 <script src="{{ asset('assets/backend/js/script.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="{{ asset('assets/backend/js/flatpickr.js') }}"></script>
+<script src="{{ asset('assets/backend/js/bootstrap-toggle.min.js') }}"></script>
 @stack('custom-scripts')
 @stack('js')
 {!! Toastr::message() !!}

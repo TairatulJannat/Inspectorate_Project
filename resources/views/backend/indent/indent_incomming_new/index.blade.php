@@ -25,7 +25,6 @@
             color: #ffff
         }
 
-
         .dt-buttons {
             margin-left: 8px;
         }
@@ -33,25 +32,40 @@
         .badge-secondary {
             background-color: #1B4C43 !important;
         }
-        .dt-buttons .buttons-html5{
+
+        .dt-buttons .buttons-html5 {
             background-color: #A1B53A !important;
-            border:none;
-        }
-        .btn-danger{
-            background-color: #b53f4b !important;
+            border: none;
         }
 
+        .btn-danger {
+            background-color: #b53f4b !important;
+        }
     </style>
 @endpush
 @section('main_menu', 'Indent (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="panel-heading">
-        <div class="invoice_date_filter" style="">
-
-        </div>
-
+        <div class="invoice_date_filter" style=""></div>
     </div>
     <br>
 
@@ -59,25 +73,21 @@
         <div class="card">
             <div class="card-header">
                 <div class="row justify-content-between align-items-center">
-
                     <div class="d-flex justify-content-between px-4 py-2">
-
                         <div class="col-9">
                             <a href="{{ route('admin.indent/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival ({{$indentNew}})</a>
+                                Arrival ({{ $indentNew }})</a>
                             <a href="{{ route('admin.indent_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process ({{$indentOnProcess}})</a>
+                                class="btn btn-secondary btn-sm">On Process ({{ $indentOnProcess }})</a>
                             <a href="{{ route('admin.indent/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed ({{$indentCompleted}})</a>
+                                class="btn btn-info text-white btn-sm">Completed ({{ $indentCompleted }})</a>
                             <a href="{{ route('admin.indent_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch ({{$indentDispatch}})</a>
-
+                                class="btn btn-danger btn-sm">Dispatch ({{ $indentDispatch }})</a>
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
                         </div>
                     </div>
-
                 </div>
             </div>
 
