@@ -148,7 +148,7 @@
         function resetForm() {
             document.getElementById("store-contract-doc").reset();
             $('.select2').val(null).trigger('change');
-            $('.contract-doc-datatable').DataTable().ajax.reload(null, false);
+            $('.contract-doc-datatable').DataTable().ajax.reload();
         }
 
         function clearErrorFields() {
@@ -272,7 +272,7 @@
                     success: function(response) {
                         if (response.isSuccess) {
                             toastr.success(response.Message, 'Deleted');
-                            $('.contract-doc-datatable').DataTable().ajax.reload(null, false);
+                            $('.contract-doc-datatable').DataTable().ajax.reload();
                         } else {
                             toastr.error('Something went wrong!', 'Error');
                         }
