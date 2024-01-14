@@ -135,6 +135,7 @@ class DraftContractController extends Controller
                 }
 
                 $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $draft_contractId)
+                    
                     ->where('reciever_desig_id', $designation_id)
                     ->first();
 
