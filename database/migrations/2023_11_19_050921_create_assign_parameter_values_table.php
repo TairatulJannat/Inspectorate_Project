@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('parameter_name')->nullable();
             $table->longText('parameter_value')->nullable();
             $table->unsignedBigInteger('parameter_group_id');
+            $table->unsignedBigInteger('doc_type_id');
+            $table->string('reference_no');
 
             // $table->foreign('parameter_group_id')
             //     ->references('id')->on('parameter_groups')

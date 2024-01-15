@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Log;
 use Validator;
 use App\Models\Items;
 use App\Models\Offer;
@@ -11,6 +12,7 @@ use App\Models\Supplier;
 use App\Models\Item_type;
 use App\Models\Inspectorate;
 use Illuminate\Http\Request;
+use App\Models\DraftContract;
 use App\Models\SupplierOffer;
 use App\Models\ParameterGroup;
 use App\Models\SupplierSpecData;
@@ -19,7 +21,6 @@ use Illuminate\Support\Facades\DB;
 use App\Imports\SupplierSpecImport;
 use App\Http\Controllers\Controller;
 use App\Models\AssignParameterValue;
-use App\Models\DraftContract;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -293,6 +294,7 @@ class ExcelController extends Controller
             $jsonData = $request->input('editedData');
             $itemId = $request->input('item-id');
             $itemTypeId = $request->input('item-type-id');
+            $indentRefNo = $request->input('indent-ref-no');
 
             $this->deleteAllParameterGroupsAndValues($itemId);
 
@@ -308,7 +310,7 @@ class ExcelController extends Controller
                     $lastInsertedId = $existingGroup->id;
                 }
 
-                $this->saveAssignParameterValues($lastInsertedId, $parameterGroup);
+                $this->saveAssignParameterValues($lastInsertedId, $parameterGroup, $indentRefNo);
             }
 
             DB::commit();
@@ -362,7 +364,7 @@ class ExcelController extends Controller
         return $newGroup;
     }
 
-    protected function saveAssignParameterValues($parameterGroupId, $parameterGroup)
+    protected function saveAssignParameterValues($parameterGroupId, $parameterGroup, $indentRefNo)
     {
         foreach ($parameterGroup as $parameterName => $parameterData) {
             if (is_array($parameterData)) {
@@ -372,6 +374,8 @@ class ExcelController extends Controller
                     'parameter_group_id' => $parameterGroupId,
                     'parameter_name' => $parameterName,
                     'parameter_value' => $parameterValue,
+                    'doc_type_id' => 3,
+                    'reference_no' => $indentRefNo,
                 ])->fresh();
 
                 // try {
@@ -446,7 +450,7 @@ class ExcelController extends Controller
                     continue;
                 }
 
-                $groupName = $row[0];
+                $groupName = $row[1];
 
                 if ($groupName !== null) {
                     $currentGroupName = $groupName;
@@ -457,9 +461,9 @@ class ExcelController extends Controller
                 }
 
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => trim($row[1]),
-                    'indent_parameter_value' => trim($row[2]),
-                    'parameter_value' => trim($row[3]),
+                    'parameter_name' => trim($row[2]),
+                    'indent_parameter_value' => trim($row[3]),
+                    'parameter_value' => trim($row[4]),
                 ];
             }
 
@@ -612,7 +616,7 @@ class ExcelController extends Controller
                 }
 
                 DB::commit();
-                return redirect()->to('admin/import-supplier-spec-data-index')->with('success', 'Supplier\'s Spec saved successfully.');
+                return redirect()->to('admin/offer/view')->with('success', 'Supplier\'s Spec saved successfully.');
             } else {
                 DB::rollBack();
                 return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Parameter group Name mismatch. Please check the Excel File.');
@@ -655,22 +659,23 @@ class ExcelController extends Controller
             ->groupBy('supplier_id')
             ->pluck('supplier_id');
 
+        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
+
+        $offerData = Offer::where('tender_reference_no', $tenderId)->first();
+        $selectedSupplierIds = json_decode($offerData->supplier_id);
+        $suppliers = Supplier::whereIn('id', $selectedSupplierIds)->get();
+
         if ($supplierIds->isEmpty()) {
             return response()->json([
                 'isSuccess' => false,
                 'message' => 'No supplier spec has been imported yet!',
+                'suppliers' => $suppliers,
                 'tendersData' => $tendersData->indent_reference_no,
                 'indentId' => $indentsData->id,
                 'itemTypeId' => $indentsData->item_type_id,
                 'itemId' => $indentsData->item_id,
             ]);
         }
-
-        $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
-
-        $offerData = Offer::where('tender_reference_no', $tenderId)->first();
-        $supplierIds = json_decode($offerData->supplier_id);
-        $suppliers = Supplier::whereIn('id', $supplierIds)->get();
 
         return response()->json([
             'isSuccess' => true,
@@ -682,11 +687,12 @@ class ExcelController extends Controller
             'itemId' => $indentsData->item_id,
         ]);
     }
+
     public function getDocData($referenceNo)
     {
-        $draftContract=DraftContract::where('reference_no',$referenceNo)->first();
-        $itemType=Item_type::where('id',$draftContract->item_type_id)->first();
-        $item=Items::where('id',$draftContract->item_id)->first();
-        return view('backend.excel-files.documet_data_import.view_page', compact('draftContract','itemType','item'));
+        $draftContract = DraftContract::where('reference_no', $referenceNo)->first();
+        $itemType = Item_type::where('id', $draftContract->item_type_id)->first();
+        $item = Items::where('id', $draftContract->item_id)->first();
+        return view('backend.excel-files.documet_data_import.view_page', compact('draftContract', 'itemType', 'item'));
     }
 }

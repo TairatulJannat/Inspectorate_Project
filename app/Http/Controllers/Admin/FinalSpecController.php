@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Additional_document;
-use App\Models\AdminSection;
+use Carbon\Carbon;
+use App\Models\Items;
+use App\Models\Offer;
+use App\Models\Indent;
+use App\Models\Tender;
+use App\Models\Section;
+use App\Models\Supplier;
+use App\Models\FinalSpec;
+use App\Models\Item_type;
 use App\Models\Designation;
+use App\Models\AdminSection;
+use Illuminate\Http\Request;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-
-use App\Models\Item_type;
-use App\Models\Items;
-use App\Models\Section;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
-use App\Models\FinalSpec;
-use App\Models\Indent;
-use App\Models\Offer;
-use App\Models\Supplier;
-use App\Models\Tender;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class FinalSpecController extends Controller
@@ -29,6 +28,7 @@ class FinalSpecController extends Controller
 
     public function index()
     {
+
         $insp_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -182,6 +182,7 @@ class FinalSpecController extends Controller
                             $actionBtn .= '<a href="' . url('admin/finalspec/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
+
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
@@ -484,5 +485,6 @@ class FinalSpecController extends Controller
         $suppliers = Supplier::whereIn('id',  $offer->suppliers)->get();
         
         return response()->json(['item' =>$item, 'itemType' =>$item_type,'tenderReferenceNo'=>$tender_reference_no,'indentReferenceNo'=> $indent_reference_no,'suppliernames'=> $suppliers]);
+
     }
 }

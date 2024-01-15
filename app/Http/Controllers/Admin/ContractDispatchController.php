@@ -179,8 +179,6 @@ class ContractDispatchController extends Controller
         }
     }
 
-
-
     public function details($id)
     {
 
