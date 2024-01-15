@@ -58,13 +58,13 @@
 
                         <div class="col-9">
                             <a href="{{ route('admin.offer/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival</a>
+                            class="btn btn-success btn-sm">New Arrival({{$offerNew}})</a>
                             <a href="{{ route('admin.offer_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process </a>
+                                class="btn btn-secondary btn-sm">On Process({{$offerOnProcess}})  </a>
                             <a href="{{ route('admin.offer/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed</a>
+                                class="btn btn-info text-white btn-sm">Completed({{$offerCompleted}})</a>
                             <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch</a>
+                                class="btn btn-danger btn-sm">Dispatch({{$offerDispatch}})</a>
 
                         </div>
                         <div>

@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Offer (Edit)')
+@section('title', 'Final Spec (Edit)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -29,8 +29,10 @@
                     </div> --}}
                         <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{ url('admin/import-supplier-spec-data-index') }}"
-                                    class="btn btn-success">Supplier Import Excel</a>
+
+                                <a href="{{ url('admin/import-supplier-spec-data-index') }}" class="btn btn-success">Final
+                                    Spec Import Excel</a>
+
                             </div>
                         </div>
                     </div>
@@ -39,28 +41,61 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="sender">Sender</label>
-                                <input type="hidden" value=" {{ $offer->id }}" id="editId" name="editId">
+
+                                <input type="hidden" value=" {{ $finalspec->id }}" id="editId" name="editId">
+
                                 <select class="form-control " id="sender" name="sender">
 
                                     <option value="">Please Select</option>
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
-                                            {{ $dte->id == $offer->sender ? 'selected' : '' }}>{{ $dte->name }}
+
+                                            {{ $dte->id == $finalspec->sender ? 'selected' : '' }}>{{ $dte->name }}
+
                                         </option>
                                     @endforeach
 
                                 </select>
                                 <span id="error_sender" class="text-danger error_field"></span>
                             </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="reference_no">Reference No.</label>
+                                <input type="text" class="form-control" id="reference_no" name="reference_no"
+                                    value="{{ $finalspec->reference_no ? $finalspec->reference_no : '' }} ">
+                                <span id="error_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="reference_date">Final Spec Reference Date</label>
+                                <input type="text" class="form-control" id="reference_date" name="reference_date"
+                                    value="{{ $finalspec->reference_date ? $finalspec->reference_date : '' }} ">
+                                <span id="error_reference_date" class="text-danger error_field"></span>
+                            </div>
+
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="reference_no">Reference Number</label>
-                                <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $offer->reference_no ? $offer->reference_no : '' }} ">
-                                <span id="error_reference_no" class="text-danger error_field"></span>
+
+                                <label for="offer_reference_no">Offer Reference Number</label>
+                                <select class="form-control " id="offer_reference_no" name="offer_reference_no">
+
+                                    <option value="">Please Select</option>
+
+                                    @foreach ($offer_reference_numbers as $offer_reference_number)
+                                        <option value="{{ $offer_reference_number->reference_no }}"
+                                            {{ $offer_reference_number->reference_no == $finalspec->offer_reference_no ? 'selected' : '' }}>
+                                            {{ $offer_reference_number->reference_no }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_tender_reference_no" class="text-danger error_field"></span>
+
                             </div>
                         </div>
 
@@ -71,11 +106,12 @@
 
                                     <option value="">Please Select</option>
 
-                                    @foreach ($tender_reference_numbers as $tender_reference_no)
-                                        <option value="{{ $tender_reference_no->id }}"
-                                            {{ $tender_reference_no->id == $offer->tender_reference_no ? 'selected' : '' }}>
-                                            {{ $tender_reference_no->reference_no }}</option>
-                                    @endforeach
+
+                                    {{-- @foreach ($tender_reference_numbers as $tender_reference_no)
+                                    <option value="{{ $tender_reference_no->id }}" 
+                                        {{ $tender_reference_no->id == $offer->tender_reference_no ? 'selected' : '' }}>{{ $tender_reference_no->reference_no }}</option>
+
+                                @endforeach --}}
 
                                 </select>
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
@@ -88,75 +124,38 @@
 
                                     <option value="">Please Select</option>
 
-                                    @foreach ($indent_reference_numbers as $indent_reference_no)
-                                        <option value="{{ $indent_reference_no->id }}"
-                                            {{ $indent_reference_no->id == $offer->indent_reference_no ? 'selected' : '' }}>
-                                            {{ $indent_reference_no->reference_no }}</option>
-                                    @endforeach
+                                    {{-- 
+                                @foreach ($indent_reference_numbers as $indent_reference_no)
+                                    <option value="{{ $indent_reference_no->id }}"
+                                    {{ $indent_reference_no->id == $offer->indent_reference_no ? 'selected' : '' }}>{{ $indent_reference_no->reference_no }}</option>
+
+                                @endforeach --}}
 
                                 </select>
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="offer_reference_date">Offer Reference Date</label>
-                                <input type="date" class="form-control" id="offer_reference_date"
-                                    name="offer_reference_date"
-                                    value="{{ $offer->offer_reference_date ? $offer->offer_reference_date : '' }}">
-                                <span id="offer_reference_date" class="text-danger error_field"></span>
-                            </div>
+
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
 
-                                <label for="additional_documents">Additional Documents</label>
-                                <select class="form-control select2" id="additional_documents" name="additional_documents[]"
-                                    multiple>
-                                    <option value="">Please Select</option>
-                                    @foreach ($additional_documnets as $additional_document)
-                                        <option value="{{ $additional_document->id }}">{{ $additional_document->name }}
-                                        </option>
-                                    @endforeach
-
-                                </select>
-                                <span id="error_additional_documents" class="text-danger error_field"></span>
-                            </div>
-                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="supplier_id">Suppiler</label>
 
-                                <select class="form-control select2" id="supplier_id" name="supplier_id[]" multiple>
-                                    <option value="">Please Select</option>
-                                    @foreach ($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
-                                    @endforeach
+                                <select class="form-control" id="supplier_id" name="supplier_id">
+                                    <option value="">Please Select </option>
+                                    {{-- @foreach ($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
+                                @endforeach --}}
 
                                 </select>
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="offer_rcv_ltr_no">Offer Receive Letter No</label>
-                                <input type="text" class="form-control" id="offer_rcv_ltr_no" name="offer_rcv_ltr_no">
-                                <span id="error_offer_rcv_ltr_no" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="offer_rcv_ltr_dt">Offer Receive Letter Date</label>
-                                <input type="date" class="form-control" id="offer_rcv_ltr_dt"
-                                    name="offer_rcv_ltr_dt">
-                                <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>
-                            </div>
-                        </div>
 
-
+                       
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -165,9 +164,11 @@
 
                                     <option selected disabled value="">Please Select</option>
 
-                                    @foreach ($item_types as $item_type)
-                                        <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
-                                    @endforeach
+                                    {{-- 
+                                @foreach ($item_types as $item_type)
+                                    <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
+                                @endforeach --}}
+
 
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
@@ -178,6 +179,7 @@
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
+
                                 <select class="form-control" id="item_id" name="item_id">
 
                                     <option value="">Please Select </option>
@@ -187,28 +189,6 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="qty">Item Qty</label>
-                                <input type="text" class="form-control" id="qty" name="qty">
-
-                                <span id="error_qty" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="attribute">Attribute</label>
-
-                                <select class="form-control" name="attribute" id="attribute">
-                                    <option value="">Please Select</option>
-                                    <option value="Controlled">Controlled</option>
-                                    <option value="Uncontrolled">Uncontrolled</option>
-                                </select>
-
-
-                                <span id="error_attribute" class="text-danger error_field"></span>
-                            </div>
-                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -227,21 +207,6 @@
                             </div>
                         </div>
 
-                        {{-- <div class="col-md-4">
-                        <label for="receive_status">Is Offer Vetted</label>
-                        <input class="form-check-input" type="checkbox" id="is_offer_vetted" name="is_offer_vetted" checked>
-                        <span class="text-danger error-text receive_status_error"></span>
-                    </div>
-                    <div class="col-md-4" id="offer_vetting_ltr_no">
-                        <label  for="receive_date">Offer Vetting Ltr No</label>
-                        <input class="form-control"  type="text" id="offer_vetting_ltr_no" name="offer_vetting_ltr_no" >
-                        <span class="text-danger error-text rreceive_date_error"></span>
-                    </div>
-                    <div class="col-md-4" id="offer_vetting_ltr_dt">
-                        <label  for="asking_date">Offer vetting Ltr Date</label>
-                        <input class="form-control" type="date" id="offer_vetting_ltr_dt" name="offer_vetting_ltr_dt" >
-                        <span class="text-danger error-text receiveDate_error"></span>
-                    </div> --}}
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -285,104 +250,6 @@
     </div>
 @endsection
 @push('js')
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
-        // Start:: Get Floor & User category & shift
-        $('#hall_id').off('change').on('change', function() {
-            var hall_id = $('#hall_id').val();
-            $('#floor_id').html('');
-            $('#user_category_id').html('');
-            $('#shift_id').html(`
-            <option value="">Please Select Shift</option>
-        `);
-            $.ajax({
-                url: "{{ url('admin/hall/get_floor') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#floor_id').append(`
-                        <option value="${item.id ? item.id : ''}">
-                            ${item.name ? item.name : ''}
-                        </option>
-                    `);
-                    });
-                }
-            });
-
-            $.ajax({
-                url: "{{ url('admin/hall/get_user_category') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#user_category_id').append(`
-                    <option value="${item.id ? item.id : ''}">
-                        ${item.name ? item.name : ''}
-                    </option>
-                `);
-                    });
-                }
-            });
-
-            $.ajax({
-                url: "{{ url('admin/hall/get_shift') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#shift_id').append(`
-                    <option value="${item.id ? item.id : ''}">
-                        ${item.name ? item.name : ''}
-                    </option>
-                `);
-                    });
-                }
-            });
-        })
-        // End:: Get Floor & User category & shift
-
-        $('#specify_event').off('change').on('change', function() {
-            if ($(this).prop('checked')) {
-                $('.event-name-container').show();
-            } else {
-                $('.event-name-container').hide();
-            }
-        })
-
-        $('#specify_month').off('change').on('change', function() {
-            if ($(this).prop('checked')) {
-                $('.months-container').show();
-            } else {
-                $('.months-container').hide();
-            }
-        })
-
-        // $('#specify_shift_charge').off('change').on('change', function() {
-        //     if ($(this).prop('checked')) {
-        //         $('.shift-container').show();
-        //     } else {
-        //         $('.shift-container').hide();
-        //     }
-        // })
-    </script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
@@ -399,7 +266,7 @@
             var formData = new FormData($('#update_form')[0]);
             disableButton()
             $.ajax({
-                url: "{{ url('admin/offer/update') }}",
+                url: "{{ url('admin/finalspec/update') }}",
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -418,7 +285,7 @@
                         toastr.success('Information Updated', 'Saved');
                         $('#edit_model').modal('hide');
                     }
-                    setTimeout(window.location.href = "{{ route('admin.offer/view') }}", 40000);
+                    setTimeout(window.location.href = "{{ route('admin.FinalSpec/view') }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
@@ -440,53 +307,7 @@
                 }
             });
         })
-        //End:: Update information
 
-        // Start:: delete user
-        // function delete_data(id) {
-        //     swal({
-        //         title: 'Are you sure?',
-        //         text: "You won't be able to revert this!",
-        //         type: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Yes, delete it!',
-        //         cancelButtonText: 'No, cancel!',
-        //         confirmButtonClass: 'btn btn-success',
-        //         cancelButtonClass: 'btn btn-danger',
-        //         buttonsStyling: false,
-        //         reverseButtons: true
-        //     }).then((result) => {
-        //         if (result.value) {
-        //             event.preventDefault();
-        //             $.ajax({
-        //                 type: 'get',
-        //                 url: '{{ url('admin/hall_price/delete') }}/' + id,
-        //                 success: function(response) {
-        //                     if (response) {
-        //                         if (response.permission == false) {
-        //                             toastr.warning('you dont have that Permission',
-        //                                 'Permission Denied');
-        //                         } else {
-        //                             toastr.success('Deleted Successful', 'Deleted');
-        //                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
-        //                         }
-        //                     }
-        //                 }
-        //             });
-        //         } else if (
-        //             result.dismiss === swal.DismissReason.cancel
-        //         ) {
-        //             swal(
-        //                 'Cancelled',
-        //                 'Your data is safe :)',
-        //                 'error'
-        //             )
-        //         }
-        //     })
-        // }
-        // End:: delete user
 
         function form_reset() {
             document.getElementById("search_form").reset();
@@ -524,29 +345,46 @@
     <script>
         $(document).ready(function() {
 
-            $('.select2').select2();
+            // $('.select2').select2();
 
 
-            $("#item_type_id").off('change').on('change', function() {
-
-                //  alert('123');
-                var itemtype_id = $('#item_type_id').val();
-
-                if (itemtype_id > 0) {
+            $('#offer_reference_no').off('change').on('change', function() {
+                var offerReferenceNo = $(this).val();
+                if (offerReferenceNo) {
                     $.ajax({
-                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
-                            '/' + itemtype_id,
+                        url: "{{ url('admin/final_spec/get_offer_details') }}" + '/' +
+                            offerReferenceNo,
                         type: 'GET',
-                        dataType: 'json',
-                        success: function(res) {
-                            console.log(res);
+                        success: function(response) {
+                            var item_html = '<option value="' + response.item.id + '">' +
+                                response.item.name + '</option>';
+                            var itemType_html = '<option value="' + response.itemType.id +
+                                '">' + response.itemType.name + '</option>';
+                            var tenderReferenceNo_html = '<option value="' + response
+                                .tenderReferenceNo.reference_no + '">' + response.tenderReferenceNo
+                                .reference_no + '</option>';
+                            var indentReferenceNo_html = '<option value="' + response
+                                .indentReferenceNo.reference_no + '">' + response.indentReferenceNo
+                                .reference_no + '</option>';                       
 
-                            var _html = '<option value="">Select an item</option>';
-                            $.each(res, function(index, item) {
-                                _html += '<option value="' + item.id + '">' + item
-                                    .name + '</option>';
-                            });
-                            $('#item_id').html(_html);
+                            var suppliers_html = "";
+
+                                $.each(response.suppliernames, function (index, supplierName) {
+                                    suppliers_html += '<option value="' + supplierName.id + '">' + supplierName.firm_name + '</option>';
+                                });
+
+                                
+
+                            $('#item_id').html(item_html);
+                            $('#item_type_id').html(itemType_html);
+                            $('#tender_reference_no').html(tenderReferenceNo_html);
+                            $('#indent_reference_no').html(indentReferenceNo_html);
+                            $('#supplier_id').html(suppliers_html);
+
+
+                        },
+                        error: function(error) {
+                            console.log(error);
                         }
                     });
                 }

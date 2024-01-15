@@ -398,8 +398,6 @@ class IndentController extends Controller
         }
         //End close forward Status...
 
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
         ->where('doc_type_id',  3)->latest()->first();

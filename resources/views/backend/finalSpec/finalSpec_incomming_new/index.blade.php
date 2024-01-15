@@ -63,11 +63,15 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.FinalSpec/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival</a>
-                            <a href="" type="button" class="btn btn-secondary btn-sm">On Process</a>
-                            <a href="" type="button" class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="" type="button" class="btn btn-danger btn-sm">Dispatch</a>
+                            <a href="{{ route('admin.FinalSpec/view') }}" type="button"
+                            class="btn btn-success btn-sm">New Arrival({{$finalSpecNew}})</a>
+                            <a href="{{ route('admin.FinalSpec_approved/view') }}" type="button"
+                                class="btn btn-secondary btn-sm">On Process({{$finalSpecOnProcess}})</a>
+                            <a href="{{ route('admin.FinalSpec/outgoing') }}" type="button"
+                                class="btn btn-info text-white btn-sm">Completed({{$finalSpecCompleted}})</a>
+                            <a href="{{ route('admin.FinalSpec_dispatch/view') }}" type="button"
+                                class="btn btn-danger btn-sm">Dispatch({{$finalSpecDispatch}})</a>
+
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
@@ -84,18 +88,28 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference No</th>
-                                <th>Tender Reference No</th>
+                                <th>Offer Reference No</th>
                                 <th>Name of Eqpt</th>
                                 <th>User Directorate</th>
-                                <th>Receive Date</th>
+                                <th>Letter Receive Date</th>
                                 <th>Section Name</th>
-                                <th>Item QTY</th>
                                 <th>Present state of spec</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+
+                                    <span class="icon p-3 m-2" style="color: #1B4C43;">&#11044; New Arrival</span>
+                                    <span class="icon p-3 m-2" style="color: #BA895D;">&#11044; On Process</span>
+                                    <span class="icon p-3 m-2" style="color: #0DCAF0;">&#11044; Completed</span>
+                                    <span class="icon p-3 m-2" style="color: #B53F4B;">&#11044; Dispatch</span>
+                                    <span class="icon p-3 m-2" style="color: #FF8E36;">&#11044; Forward</span>
+                                    <span class="icon p-3 m-2" style="color: #0D6DA8;">&#11044; Forwarded</span>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

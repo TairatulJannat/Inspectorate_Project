@@ -221,7 +221,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <span id="error_item_id" class="text-danger error_field"></span>
+                                <span id="error_fin_year_id" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -303,8 +303,13 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
+    <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
+          $(document).ready(function() {
             $('.select2').select2();
 
             const urlParams = new URLSearchParams(window.location.search);
@@ -327,110 +332,6 @@
 
                 window.location.href = redirectUrl;
             });
-        });
-
-        // Start:: Get Floor & User category & shift
-        $('#hall_id').off('change').on('change', function() {
-            var hall_id = $('#hall_id').val();
-            $('#floor_id').html('');
-            $('#user_category_id').html('');
-            $('#shift_id').html(`
-            <option value="">Please Select Shift</option>
-        `);
-            $.ajax({
-                url: "{{ url('admin/hall/get_floor') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#floor_id').append(`
-                        <option value="${item.id ? item.id : ''}">
-                            ${item.name ? item.name : ''}
-                        </option>
-                    `);
-                    });
-                }
-            });
-
-            $.ajax({
-                url: "{{ url('admin/hall/get_user_category') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#user_category_id').append(`
-                    <option value="${item.id ? item.id : ''}">
-                        ${item.name ? item.name : ''}
-                    </option>
-                `);
-                    });
-                }
-            });
-
-            $.ajax({
-                url: "{{ url('admin/hall/get_shift') }}",
-                type: "POST",
-                data: {
-                    hall_id: hall_id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    response.data.forEach(function(item) {
-                        $('#shift_id').append(`
-                    <option value="${item.id ? item.id : ''}">
-                        ${item.name ? item.name : ''}
-                    </option>
-                `);
-                    });
-                }
-            });
-        })
-        // End:: Get Floor & User category & shift
-
-        $('#specify_event').off('change').on('change', function() {
-            if ($(this).prop('checked')) {
-                $('.event-name-container').show();
-            } else {
-                $('.event-name-container').hide();
-            }
-        })
-
-        $('#specify_month').off('change').on('change', function() {
-            if ($(this).prop('checked')) {
-                $('.months-container').show();
-            } else {
-                $('.months-container').hide();
-            }
-        })
-
-        // $('#specify_shift_charge').off('change').on('change', function() {
-        //     if ($(this).prop('checked')) {
-        //         $('.shift-container').show();
-        //     } else {
-        //         $('.shift-container').hide();
-        //     }
-        // })
-    </script>
-    <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
-    <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2();
         });
 
         //Start:: Update information
