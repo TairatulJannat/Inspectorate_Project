@@ -9,6 +9,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Contract;
+use App\Models\DraftContract;
 use App\Models\Dte_managment;
 use App\Models\FinalSpec;
 use App\Models\FinancialYear;
@@ -277,7 +278,7 @@ class ContractController extends Controller
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         // $sections = Section::whereIn('id', $section_ids)->get();
-        $finalSpecs = FinalSpec::all();
+        $draft_contracts = DraftContract::all();
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
@@ -289,7 +290,7 @@ class ContractController extends Controller
             ->get();
         $item = Items::where('id', $contract->item_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.contract.contract_incomming_new.edit', compact('contract', 'item', 'dte_managments', 'item_types', 'fin_years', 'finalSpecs'));
+        return view('backend.contract.contract_incomming_new.edit', compact('contract', 'item', 'dte_managments', 'item_types', 'fin_years', 'draft_contracts'));
     }
 
     public function update(Request $request)
@@ -318,8 +319,12 @@ class ContractController extends Controller
         $data->reference_date = $request->contract_reference_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->supplier_id = $request->supplier_id;
+        $data->contracted_value = $request->contracted_value;
+        $data->currency_unit = $request->currency_unit;
+        $data->draft_contract_reference_no = $request->draft_contract_reference_no;
         $data->final_spec_reference_no = $request->final_spec_reference_no;
         $data->offer_reference_no = $request->offer_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
@@ -463,14 +468,14 @@ class ContractController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function finalSpecData($referenceNo)
+    public function draftContractData($referenceNo)
     {
 
-        $finalSpec=FinalSpec::where('reference_no', $referenceNo)->first();
-        $item=Items::where('id',$finalSpec->item_id)->first();
-        $itemType=Item_type::where('id',$finalSpec->item_type_id)->first();
-        $supplier=Supplier::where('id',$finalSpec->supplier_id)->first();
+        $draft_contract=DraftContract::where('reference_no', $referenceNo)->first();
+        $item=Items::where('id',$draft_contract->item_id)->first();
+        $itemType=Item_type::where('id',$draft_contract->item_type_id)->first();
+        $supplier=Supplier::where('id',$draft_contract->supplier_id)->first();
 
-        return response()->json(['item' => $item,'itemType' => $itemType, 'supplier' => $supplier, 'finalSpec'=>$finalSpec]);
+        return response()->json(['item' => $item,'itemType' => $itemType, 'supplier' => $supplier, 'draftContract'=>$draft_contract]);
     }
 }

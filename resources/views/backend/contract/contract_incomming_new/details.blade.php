@@ -126,6 +126,10 @@
                                 <td>{{ $details->final_spec_reference_no }}</td>
                             </tr>
                             <tr>
+                                <th>Draft Contract Reference No</td>
+                                <td>{{ $details->draft_contract_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
@@ -145,6 +149,10 @@
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_name  }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contracted Value</td>
+                                <td>{{ $details->contracted_value  }}</td>
                             </tr>
 
 
