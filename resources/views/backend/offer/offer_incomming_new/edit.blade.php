@@ -86,7 +86,7 @@
                                             {{ $offer->tender_reference_no }}</option>
                                     @endif
                                     @foreach ($tender_reference_numbers as $tender_reference_number)
-                                        <option value="{{ $offer->tender_reference_no }}">
+                                        <option value="{{ $tender_reference_number->reference_no }}">
                                             {{ $tender_reference_number->reference_no }}</option>
                                     @endforeach
 
@@ -391,53 +391,7 @@
                 }
             });
         })
-        //End:: Update information
-
-        // Start:: delete user
-        // function delete_data(id) {
-        //     swal({
-        //         title: 'Are you sure?',
-        //         text: "You won't be able to revert this!",
-        //         type: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Yes, delete it!',
-        //         cancelButtonText: 'No, cancel!',
-        //         confirmButtonClass: 'btn btn-success',
-        //         cancelButtonClass: 'btn btn-danger',
-        //         buttonsStyling: false,
-        //         reverseButtons: true
-        //     }).then((result) => {
-        //         if (result.value) {
-        //             event.preventDefault();
-        //             $.ajax({
-        //                 type: 'get',
-        //                 url: '{{ url('admin/hall_price/delete') }}/' + id,
-        //                 success: function(response) {
-        //                     if (response) {
-        //                         if (response.permission == false) {
-        //                             toastr.warning('you dont have that Permission',
-        //                                 'Permission Denied');
-        //                         } else {
-        //                             toastr.success('Deleted Successful', 'Deleted');
-        //                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
-        //                         }
-        //                     }
-        //                 }
-        //             });
-        //         } else if (
-        //             result.dismiss === swal.DismissReason.cancel
-        //         ) {
-        //             swal(
-        //                 'Cancelled',
-        //                 'Your data is safe :)',
-        //                 'error'
-        //             )
-        //         }
-        //     })
-        // }
-        // End:: delete user
+        
 
         function form_reset() {
             document.getElementById("search_form").reset();

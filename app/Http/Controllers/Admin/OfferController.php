@@ -293,6 +293,7 @@ class OfferController extends Controller
 
     public function update(Request $request)
     {
+        // dd($request->all());
 
         // $insp_id = Auth::user()->inspectorate_id;
         // $sec_id = $request->admin_section;
@@ -314,10 +315,14 @@ class OfferController extends Controller
         $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
-        $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
-        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        // $data->offer_vetting_ltr_no = $request->offer_vetting_ltr_no;
-        // $data->offer_vetting_ltr_dt = $request->offer_vetting_ltr_dt;
+        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+
+        if ($request->hasFile('pdf_file')) {
+
+            $path = $request->file('pdf_file')->store('uploads', 'public');
+            $data->pdf_file = $path;
+        }
+      
 
 
         $data->received_by = Auth::user()->id;

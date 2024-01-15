@@ -299,7 +299,13 @@ class FinalSpecController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->supplier_id = $request->supplier_id;
         $data->fin_year_id = $request->fin_year_id;
-        $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+
+        if ($request->hasFile('pdf_file')) {
+
+            $path = $request->file('pdf_file')->store('uploads', 'public');
+            $data->pdf_file = $path;
+        }
 
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
