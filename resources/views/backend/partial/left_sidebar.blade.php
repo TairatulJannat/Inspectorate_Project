@@ -122,8 +122,7 @@ $currentControllerName = Request::segment(2);
                     {{-- start final sepecification --}}
                     @if (count(menu_check('FinalSpec')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'FinalSpec' ? 'active' : '' }}"
-                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                class="nav-link menu-title {{ $currentControllerName == ' ' ? 'active' : '' }}"href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>Final Spec</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/FinalSpec/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('FinalSpec/view') !== null)
@@ -135,11 +134,14 @@ $currentControllerName = Request::segment(2);
                                 @if (sub_menu_check('FinalSpec/create') !== null)
                                     <li><a class="text-light" href="{{ route('admin.FinalSpec/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
-                                            Final Spec</a></li>
+                                            Final Spec</a>
+                                        </li>
                                 @endif
                             </ul>
                         </li>
                     @endif
+
+                  
 
                     {{-- Side Menu Button Links for draft Contract --}}
                     @if (count(menu_check('DraftContract')) !== 0)
@@ -189,33 +191,23 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
-                    {{-- @if (count(menu_check('Contract')) !== 0)
-                        <li class="dropdown">
-                            <a href="{{ url('admin/contract/index') }}"
-                                class="{{ Request::is('*/admin/contract/index') ? 'active' : '' }} nav-link menu-title text-white">
-                                <i data-feather="file-text"></i>
-                                <span>Contracts</span>
-                            </a>
+                  
 
-
-                        </li>
-                    @endif --}}
-
-                    {{-- Dummy SI Links --}}
-                    @if (count(menu_check('Offer')) !== 0)
+                    {{-- SI Links --}}
+                    @if (count(menu_check('Si')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Si' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>SI</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('offer/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Si/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('si/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.si/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
                                             SI</a>
                                     </li>
                                 @endif
-                                @if (sub_menu_check('offer/create') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                @if (sub_menu_check('si/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.si/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             SI</a></li>
                                 @endif

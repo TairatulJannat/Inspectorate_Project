@@ -346,16 +346,16 @@ class FinalSpecController extends Controller
         // }
 
 
-        $details->suppliers = json_decode($details->supplier_id, true);
+        // $details->suppliers = json_decode($details->supplier_id, true);
 
-        $supplier_names_names = [];
-        if ($details->suppliers) {
-            foreach ($details->suppliers as $Supplier_id) {
-                $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+        // $supplier_names_names = [];
+        // if ($details->suppliers) {
+        //     foreach ($details->suppliers as $Supplier_id) {
+        //         $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
 
-                array_push($supplier_names_names, $supplier_names);
-            }
-        }
+        //         array_push($supplier_names_names, $supplier_names);
+        //     }
+        // }
 
 
 
@@ -404,7 +404,7 @@ class FinalSpecController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'supplier_names_names'));
+        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden'));
     }
 
     public function finalSpecTracking(Request $request)
