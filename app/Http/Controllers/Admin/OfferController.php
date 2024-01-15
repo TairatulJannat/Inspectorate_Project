@@ -158,7 +158,7 @@ class OfferController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -254,7 +254,8 @@ class OfferController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
-        $data->offer_rcv_ltr_no = $request->offer_vetting_ltr_dt;
+        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
+        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
         // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
         // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
@@ -303,12 +304,14 @@ class OfferController extends Controller
         $data->reference_no = $request->reference_no;
         $data->offer_reference_date = $request->offer_reference_date;
         $data->tender_reference_no = $request->tender_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
         $data->attribute = $request->attribute;
         $data->additional_documents = json_encode($request->additional_documents);
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
+        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
         $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
@@ -388,6 +391,7 @@ class OfferController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 1)
+            ->where('doc_type_id',5)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -413,27 +417,14 @@ class OfferController extends Controller
 
         //End close forward Status...
 
-
-        //Start blade notes section....
-        $notes = '';
-
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-
-        //End blade notes section....
          
           //Start blade forward on off section....
-          $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+          $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
 
           //End blade forward on off section....
 
 
-        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'notes', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden','additional_documents_names', 'supplier_names_names'));
+        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden','additional_documents_names', 'supplier_names_names'));
     }
 
     public function offerTracking(Request $request)
@@ -447,7 +438,7 @@ class OfferController extends Controller
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
+        $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();

@@ -21,7 +21,59 @@ class OutgoingOfferController extends Controller
     //
     public function outgoing()
     {
-        return view('backend.offer.offer_outgoing.outgoing');
+
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $designation_id)->first();
+
+        if ($designation_id == 1 || $designation_id == 0) {
+            $offerNew = Offer::where('status', 0)->count();
+            $offerOnProcess = '0';
+            $offerCompleted = '0';
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('offers.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        } else {
+
+            $offerNew = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 1)
+                ->where('offers.status', 0)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $offerOnProcess = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 3)
+                ->where('offers.status', 3)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $offerCompleted = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 2)
+                ->where('offers.status', 1)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+
+            $offerDispatch = DocumentTrack::where('doc_type_id', 5)
+                ->leftJoin('offers', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->where('reciever_desig_id', $designation_id)
+                ->where('track_status', 4)
+                ->where('offers.status', 4)
+                ->whereIn('document_tracks.section_id', $section_ids)
+                ->count();
+        }
+        return view('backend.offer.offer_outgoing.outgoing', compact('offerNew','offerOnProcess','offerCompleted','offerDispatch'));
     }
 
     public function all_data(Request $request)
@@ -94,7 +146,7 @@ class OutgoingOfferController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 
@@ -177,6 +229,7 @@ class OutgoingOfferController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
+            ->where('doc_type_id',5)
             ->skip(1) // Skip the first row
             ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
@@ -201,21 +254,9 @@ class OutgoingOfferController extends Controller
 
         // delay cause for sec IC start
 
-        //Start blade notes section....
-        $notes = '';
-
-        $document_tracks_notes = DocumentTrack::where('doc_ref_id', $details->id)
-            ->where('track_status', 1)
-            ->where('reciever_desig_id', $desig_id)->get();
-
-        if ($document_tracks_notes->isNotEmpty()) {
-            $notes = $document_tracks_notes;
-        }
-
-        //End blade notes section....
 
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
 
         //End blade forward on off section....
 
@@ -226,7 +267,7 @@ class OutgoingOfferController extends Controller
         // end cover letter start
 
 
-        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'notes', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names','cover_letter'));
+        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position','auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names','cover_letter'));
     }
 
     public function OutgoingOfferTracking(Request $request)
@@ -240,7 +281,7 @@ class OutgoingOfferController extends Controller
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
+        $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
