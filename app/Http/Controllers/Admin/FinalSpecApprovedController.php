@@ -72,7 +72,7 @@ class FinalSpecApprovedController extends Controller
                 ->count();
 
             $finalSpecDispatch = DocumentTrack::where('doc_type_id', 6)
-                ->leftJoin('final_specs', 'document_tracks.doc_ref_id', '=', 'offers.id')
+                ->leftJoin('final_specs', 'document_tracks.doc_ref_id', '=', 'final_specs.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
                 ->where('final_specs.status', 4)
