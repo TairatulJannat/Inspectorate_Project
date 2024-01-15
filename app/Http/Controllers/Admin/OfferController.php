@@ -80,7 +80,7 @@ class OfferController extends Controller
         }
 
 
-        return view('backend.offer.offer_incomming_new.index', compact('offerNew','offerOnProcess','offerCompleted','offerDispatch'));
+        return view('backend.offer.offer_incomming_new.index', compact('offerNew', 'offerOnProcess', 'offerCompleted', 'offerDispatch'));
     }
 
     public function all_data(Request $request)
@@ -152,24 +152,24 @@ class OfferController extends Controller
                 ->addColumn('status', function ($data) {
                     if ($data->status == '0') {
                         return '<button class="btn btn-success btn-sm">New</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-success btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
-                            
+
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            
-                           
+
+
                             $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
@@ -186,7 +186,7 @@ class OfferController extends Controller
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            
+
                             $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
@@ -195,7 +195,7 @@ class OfferController extends Controller
                         if ($designation_id == 3) {
                             $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                         }
-                       
+
                         $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
@@ -221,12 +221,12 @@ class OfferController extends Controller
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
-        return view('backend.offer.offer_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'suppliers','tender_reference_numbers','indent_reference_numbers'));
+        return view('backend.offer.offer_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'suppliers', 'tender_reference_numbers', 'indent_reference_numbers'));
     }
 
     public function store(Request $request)
     {
-// dd($request->all());
+        // dd($request->all());
         // $this->validate($request, [
         //     'sender' => 'required',
         //     'admin_section' => 'required',
@@ -288,7 +288,7 @@ class OfferController extends Controller
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
-        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years','tender_reference_numbers','indent_reference_numbers','suppliers'));
+        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers'));
     }
 
     public function update(Request $request)
@@ -352,35 +352,33 @@ class OfferController extends Controller
             ->where('offers.id', $id)
             ->first();
 
-     
 
-        
-            $details->additional_documents = json_decode($details->additional_documents, true);
-                $additional_documents_names = [];
-                
-        if($details->additional_documents){
+
+
+        $details->additional_documents = json_decode($details->additional_documents, true);
+        $additional_documents_names = [];
+
+        if ($details->additional_documents) {
             foreach ($details->additional_documents as $document_id) {
                 $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
 
                 array_push($additional_documents_names, $additional_names);
             }
-            
         }
-            
-        
+
+
         $details->suppliers = json_decode($details->supplier_id, true);
-     
+
         $supplier_names_names = [];
-        if($details->suppliers ){
+        if ($details->suppliers) {
             foreach ($details->suppliers as $Supplier_id) {
                 $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
 
                 array_push($supplier_names_names, $supplier_names);
             }
-            
         }
-        
-        
+
+
 
 
         $designations = Designation::all();
@@ -391,7 +389,7 @@ class OfferController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 1)
-            ->where('doc_type_id',5)
+            ->where('doc_type_id', 5)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -417,14 +415,14 @@ class OfferController extends Controller
 
         //End close forward Status...
 
-         
-          //Start blade forward on off section....
-          $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
 
-          //End blade forward on off section....
+        //Start blade forward on off section....
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 5)->latest()->first();
+
+        //End blade forward on off section....
 
 
-        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden','additional_documents_names', 'supplier_names_names'));
+        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'additional_documents_names', 'supplier_names_names'));
     }
 
     public function offerTracking(Request $request)
@@ -489,12 +487,12 @@ class OfferController extends Controller
         return response()->json(['success' => 'Done']);
     }
 
-//         public function offerViewPdf($id)
-//     {
-//         $pdf = Offer::findOrFail($id);
-//         $path = storage_path("app/public/{$pdf->pdf_path}");
-// dd( $path);
-//         // Return the PDF file as a response
-//         return response()->file($path);
-//     }
+    //         public function offerViewPdf($id)
+    //     {
+    //         $pdf = Offer::findOrFail($id);
+    //         $path = storage_path("app/public/{$pdf->pdf_path}");
+    // dd( $path);
+    //         // Return the PDF file as a response
+    //         return response()->file($path);
+    //     }
 }

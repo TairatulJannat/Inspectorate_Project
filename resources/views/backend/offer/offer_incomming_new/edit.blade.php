@@ -59,10 +59,9 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference Number</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $offer->reference_no ? $offer->reference_no : '' }} ">
+                                    value="{{ $offer->reference_no ? $offer->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
-
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -153,7 +152,7 @@
                                             $supplierIds = json_decode($offer->supplier_id);
                                             $isSelected = in_array($supplier->id, $supplierIds ? $supplierIds : []) ? 'selected' : '';
                                         @endphp
-                                        
+
                                         <option value="{{ $supplier->id }}" {{ $isSelected }}>
                                             {{ $supplier->firm_name }}</option>
                                     @endforeach
@@ -310,7 +309,7 @@
 
 
 
-           <div class="col-md-4">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="pdf_file" style="color: yellow"><button type="button"
                                         class="btn btn-warning">Upload PDF</b></button></label><br>
@@ -333,7 +332,6 @@
     </div>
 @endsection
 @push('js')
-
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
@@ -342,6 +340,16 @@
     <script>
         $(document).ready(function() {
             $('.select2').select2();
+
+            $('#importExcelBtn').on('click', function(event) {
+                event.preventDefault();
+
+                var url = $(this).attr('href');
+                var offerRefNo = $('#reference_no').val();
+                var redirectUrl = url + '?offerRefNo=' + encodeURIComponent(offerRefNo);
+
+                window.location.href = redirectUrl;
+            });
         });
 
         //Start:: Update information
