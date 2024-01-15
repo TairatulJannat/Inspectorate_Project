@@ -6,32 +6,39 @@
     <style>
         .card .card-header {
             padding: 0px;
-            border-bottom: 1px solid rgba(182, 182, 182 , .6);
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
 
         }
-        .table{
-            border-radius:10px !important;
+
+        .table {
+            border-radius: 10px !important;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
-        .table thead{
+
+        .table thead {
             background: #1B4C43;
             color: #ffff
         }
-        .table thead tr th{
+
+        .table thead tr th {
 
             color: #ffff
         }
-        .dt-buttons{
-            margin-left:8px;
+
+        .dt-buttons {
+            margin-left: 8px;
         }
-        .badge-secondary{
+
+        .badge-secondary {
             background-color: #1B4C43 !important;
         }
-        .dt-buttons .buttons-html5{
+
+        .dt-buttons .buttons-html5 {
             background-color: #A1B53A !important;
-            border:none;
+            border: none;
         }
-        .btn-danger{
+
+        .btn-danger {
             background-color: #b53f4b !important;
         }
     </style>
@@ -56,15 +63,11 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.FinalSpec/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival</a>
-                            <a href="" type="button"
-                                class="btn btn-secondary btn-sm">On Process</a>
-                            <a href="" type="button"
-                                class="btn btn-info text-white btn-sm">Completed</a>
-                            <a href="" type="button"
-                                class="btn btn-danger btn-sm">Dispatch</a>
-
+                            <a href="{{ route('admin.FinalSpec/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival</a>
+                            <a href="" type="button" class="btn btn-secondary btn-sm">On Process</a>
+                            <a href="" type="button" class="btn btn-info text-white btn-sm">Completed</a>
+                            <a href="" type="button" class="btn btn-danger btn-sm">Dispatch</a>
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>

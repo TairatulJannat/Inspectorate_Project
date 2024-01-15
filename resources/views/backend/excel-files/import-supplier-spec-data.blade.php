@@ -5,6 +5,13 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.min.css') }}">
+    <style>
+        .required-field::before {
+            content: '*';
+            color: red;
+            margin-right: 5px;
+        }
+    </style>
 @endpush
 
 @section('main_menu', 'Excel Files')
@@ -112,7 +119,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 mt-2">
-                        <h6 class="card-title">Supplier: </h6>
+                        <h6 class="card-title required-field">Supplier: </h6>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">

@@ -137,6 +137,12 @@ $currentControllerName = Request::segment(2);
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Final Spec</a></li>
                                 @endif
+                                @if (sub_menu_check('FinalSpec/create') !== null)
+                                    <li><a class="text-light"
+                                            href="{{ url('admin/import-final-spec-data-index?refNo=FS-REF-14012024') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Import Final
+                                            Spec</a></li>
+                                @endif
                             </ul>
                         </li>
                     @endif
