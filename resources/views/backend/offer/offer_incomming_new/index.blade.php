@@ -6,32 +6,37 @@
     <style>
         .card .card-header {
             padding: 0px;
-            border-bottom: 1px solid rgba(182, 182, 182 , .6);
-
+            border-bottom: 1px solid rgba(182, 182, 182, .6);
         }
-        .table{
-            border-radius:10px !important;
+
+        .table {
+            border-radius: 10px !important;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
-        .table thead{
+
+        .table thead {
             background: #1B4C43;
             color: #ffff
         }
-        .table thead tr th{
 
+        .table thead tr th {
             color: #ffff
         }
-        .dt-buttons{
-            margin-left:8px;
+
+        .dt-buttons {
+            margin-left: 8px;
         }
-        .badge-secondary{
+
+        .badge-secondary {
             background-color: #1B4C43 !important;
         }
-        .dt-buttons .buttons-html5{
+
+        .dt-buttons .buttons-html5 {
             background-color: #A1B53A !important;
-            border:none;
+            border: none;
         }
-        .btn-danger{
+
+        .btn-danger {
             background-color: #b53f4b !important;
         }
     </style>
@@ -39,12 +44,26 @@
 @section('main_menu', 'Offer (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="panel-heading">
-        <div class="invoice_date_filter" style="">
-
-        </div>
-
+        <div class="invoice_date_filter" style=""></div>
     </div>
     <br>
 
@@ -52,28 +71,23 @@
         <div class="card">
             <div class="card-header">
                 <div class="row justify-content-between align-items-center">
-
                     <div class="d-flex justify-content-between px-4 py-2">
-
                         <div class="col-9">
-                            <a href="{{ route('admin.offer/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival({{$offerNew}})</a>
+                            <a href="{{ route('admin.offer/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival({{ $offerNew }})</a>
                             <a href="{{ route('admin.offer_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process({{$offerOnProcess}}) </a>
+                                class="btn btn-secondary btn-sm">On Process({{ $offerOnProcess }}) </a>
                             <a href="{{ route('admin.offer/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed({{$offerCompleted}})</a>
+                                class="btn btn-info text-white btn-sm">Completed({{ $offerCompleted }})</a>
                             <a href="{{ route('admin.offer_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch({{$offerDispatch}})</a>
-
+                                class="btn btn-danger btn-sm">Dispatch({{ $offerDispatch }})</a>
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
                         </div>
                     </div>
-
                 </div>
             </div>
-
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered yajra-datatable">
@@ -96,7 +110,6 @@
                         <tfoot>
                             <tr>
                                 <td colspan="10">
-
                                     <span class="icon p-3 m-2" style="color: #1B4C43;">&#11044; New Arrival</span>
                                     <span class="icon p-3 m-2" style="color: #BA895D;">&#11044; On Process</span>
                                     <span class="icon p-3 m-2" style="color: #0DCAF0;">&#11044; Completed</span>

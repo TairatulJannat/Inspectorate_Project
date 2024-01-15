@@ -29,8 +29,10 @@
                     </div> --}}
                         <div class="col-md-2">
                             <div class="form-group">
+
                                 <a href="{{ url('admin/import-supplier-spec-data-index') }}" class="btn btn-success">Final
                                     Spec Import Excel</a>
+
                             </div>
                         </div>
                     </div>
@@ -39,20 +41,25 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="sender">Sender</label>
+
                                 <input type="hidden" value=" {{ $finalspec->id }}" id="editId" name="editId">
+
                                 <select class="form-control " id="sender" name="sender">
 
                                     <option value="">Please Select</option>
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
+
                                             {{ $dte->id == $finalspec->sender ? 'selected' : '' }}>{{ $dte->name }}
+
                                         </option>
                                     @endforeach
 
                                 </select>
                                 <span id="error_sender" class="text-danger error_field"></span>
                             </div>
+
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -69,10 +76,12 @@
                                     value="{{ $finalspec->reference_date ? $finalspec->reference_date : '' }} ">
                                 <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
+
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
+
                                 <label for="offer_reference_no">Offer Reference Number</label>
                                 <select class="form-control " id="offer_reference_no" name="offer_reference_no">
 
@@ -86,6 +95,7 @@
 
                                 </select>
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
+
                             </div>
                         </div>
 
@@ -95,6 +105,7 @@
                                 <select class="form-control " id="tender_reference_no" name="tender_reference_no">
 
                                     <option value="">Please Select</option>
+
 
                                     {{-- @foreach ($tender_reference_numbers as $tender_reference_no)
                                     <option value="{{ $tender_reference_no->id }}" 
@@ -112,6 +123,7 @@
                                 <select class="form-control " id="indent_reference_no" name="indent_reference_no">
 
                                     <option value="">Please Select</option>
+
                                     {{-- 
                                 @foreach ($indent_reference_numbers as $indent_reference_no)
                                     <option value="{{ $indent_reference_no->id }}"
@@ -122,6 +134,7 @@
                                 </select>
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
+
                         </div>
 
 
@@ -141,17 +154,21 @@
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
+
                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
                                 <select class="form-control " id="item_type_id" name="item_type_id">
 
                                     <option selected disabled value="">Please Select</option>
+
                                     {{-- 
                                 @foreach ($item_types as $item_type)
                                     <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
                                 @endforeach --}}
+
 
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
@@ -162,6 +179,7 @@
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
+
                                 <select class="form-control" id="item_id" name="item_id">
 
                                     <option value="">Please Select </option>
@@ -170,6 +188,7 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -187,6 +206,7 @@
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">
