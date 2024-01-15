@@ -19,12 +19,13 @@
                                 <input type="hidden" name="item-id" value="{{ $itemId }}">
                                 <div class="item-type-id f-28">{{ $itemTypeName }}</div>
                                 <input type="hidden" name="item-type-id" value="{{ $itemTypeId }}">
-                                <div class="indent-id f-20">Indent No: <span class="fw-bold">{{ $indentNo }}</span>
+                                <div class="indent-no f-20">Indent No: <span class="fw-bold">{{ $indentNo }}</span>
                                 </div>
-                                <input type="hidden" name="indent-id" value="{{ $indentNo }}">
-                                <div class="indent-id f-20">Indent Ref. No: <span class="fw-bold">{{ $indentRefNo }}</span>
+                                <input type="hidden" name="indent-no" value="{{ $indentNo }}">
+                                <div class="indent-ref-no f-20">Indent Ref. No: <span
+                                        class="fw-bold">{{ $indentRefNo }}</span>
                                 </div>
-                                <input type="hidden" name="indent-id" value="{{ $indentRefNo }}">
+                                <input type="hidden" name="indent-ref-no" value="{{ $indentRefNo }}">
                             </div>
                         </div>
                     </div>

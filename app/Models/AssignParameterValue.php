@@ -13,6 +13,8 @@ class AssignParameterValue extends Model
         'parameter_group_id',
         'parameter_name',
         'parameter_value',
+        'doc_type_id',
+        'reference_no',
         'created_at',
         'updated_at',
     ];
