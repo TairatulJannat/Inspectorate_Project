@@ -662,7 +662,7 @@ class ExcelController extends Controller
 
         $suppliersData = Supplier::whereIn('id', $supplierIds)->get();
 
-        $offerData = Offer::where('tender_reference_no', $tenderId)->first();
+        $offerData = Offer::where('tender_reference_no', $tendersData->reference_no)->first();
         $selectedSupplierIds = json_decode($offerData->supplier_id);
         $suppliers = Supplier::whereIn('id', $selectedSupplierIds)->get();
 

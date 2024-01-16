@@ -431,6 +431,39 @@ class OfferController extends Controller
         return response()->json(['success' => 'Done']);
     }
 
+    public function getOfferDetails(Request $request)
+    {
+        try {
+            $offerRefNo = $request->input('offerRefNo');
+
+            $offerDetails = Offer::where('reference_no', $offerRefNo)->first();
+
+            if (!$offerDetails) {
+                return response()->json([
+                    'isSuccess' => false,
+                    'Message' => 'Offer Details not found.',
+                ], 200);
+            }
+
+            $tenderDetails = Tender::where('reference_no', $offerDetails->tender_reference_no)->first();
+
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => 'Offered supplier retrieved successfully.',
+                'offerDetails' => $offerDetails,
+                'tenderDetails' => $tenderDetails,
+            ], 200);
+        } catch (\Exception $e) {
+            \Log::error('Error in Get Offer Details: ' . $e->getMessage());
+
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => 'An error occurred while processing the request.',
+                'error' => $e->getMessage(),
+            ], 200);
+        }
+    }
+
     // public function offerViewPdf($id)
     // {
     //     $pdf = Offer::findOrFail($id);
