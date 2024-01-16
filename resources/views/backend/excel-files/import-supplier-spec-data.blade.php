@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'Import Supplier Spec Excel File')
+@section('title', 'Import Supplier Spec')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
@@ -15,7 +15,7 @@
 @endpush
 
 @section('main_menu', 'Excel Files')
-@section('active_menu', 'Import Supplier Spec Excel File')
+@section('active_menu', 'Import Supplier Spec')
 
 @section('content')
     @if (session('status'))

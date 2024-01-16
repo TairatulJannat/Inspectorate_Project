@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'Import Indent Spec Excel File')
+@section('title', 'Import Indent Spec')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
@@ -8,7 +8,7 @@
 @endpush
 
 @section('main_menu', 'Excel Files')
-@section('active_menu', 'Import Indent Spec Excel File')
+@section('active_menu', 'Import Indent Spec')
 
 @section('content')
     @if (session('status'))
