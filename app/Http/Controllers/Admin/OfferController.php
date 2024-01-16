@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Additional_document;
-use App\Models\AdminSection;
+use Carbon\Carbon;
+use App\Models\Items;
+use App\Models\Offer;
+use App\Models\Indent;
+use App\Models\Tender;
+use App\Models\Section;
+use App\Models\Supplier;
+use App\Models\Item_type;
 use App\Models\Designation;
+use App\Models\AdminSection;
+use Illuminate\Http\Request;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
-
-use App\Models\Item_type;
-use App\Models\Items;
-use App\Models\Section;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
-use App\Models\Indent;
-use App\Models\Offer;
-use App\Models\Supplier;
-use App\Models\Tender;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class OfferController extends Controller
@@ -78,14 +77,11 @@ class OfferController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-
-
         return view('backend.offer.offer_incomming_new.index', compact('offerNew', 'offerOnProcess', 'offerCompleted', 'offerDispatch'));
     }
 
     public function all_data(Request $request)
     {
-        // dd($request->all());
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
@@ -102,7 +98,6 @@ class OfferController extends Controller
                     ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
-
                 $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
@@ -110,7 +105,6 @@ class OfferController extends Controller
                     ->where('offers.status', 0)
                     ->get();
             } else {
-
                 $offerIds = Offer::leftJoin('document_tracks', 'offers.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('offers.insp_id', $insp_id)
@@ -143,8 +137,6 @@ class OfferController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            // $query->orderBy('id', 'asc');
-
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -169,20 +161,22 @@ class OfferController extends Controller
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
 
-
                             $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">';
+
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
+
                             $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
+
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
@@ -192,6 +186,7 @@ class OfferController extends Controller
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">';
+
                         if ($designation_id == 3) {
                             $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                         }
@@ -199,7 +194,6 @@ class OfferController extends Controller
                         $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
-
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])
@@ -212,7 +206,6 @@ class OfferController extends Controller
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $sections = Section::whereIn('id', $section_ids)->get();
-
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->get();
@@ -226,20 +219,8 @@ class OfferController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
-        // $this->validate($request, [
-        //     'sender' => 'required',
-        //     'admin_section' => 'required',
-        //     'reference_no' => 'required',
-        //     'spec_type' => 'required',
-        //     'additional_documents' => 'required',
-        //     'item_type_id' => 'required',
-        //     'spec_received_date' => 'required',
-
-        // ]);
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = $request->admin_section;
-
         $data = new Offer();
         $data->insp_id = $insp_id;
         $data->sec_id = $sec_id;
@@ -257,18 +238,12 @@ class OfferController extends Controller
         $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
-        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
-        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        // $data->offer_vetting_ltr_no = $request->offer_vetting_ltr_no;
-        // $data->offer_vetting_ltr_dt = $request->offer_vetting_ltr_dt;
-
 
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;
         $data->created_at = Carbon::now()->format('Y-m-d');
         $data->updated_at = Carbon::now()->format('Y-m-d');;
-
 
         $data->save();
 
@@ -293,13 +268,7 @@ class OfferController extends Controller
 
     public function update(Request $request)
     {
-
-        // $insp_id = Auth::user()->inspectorate_id;
-        // $sec_id = $request->admin_section;
-
         $data = Offer::findOrFail($request->editId);
-        // $data->insp_id = $insp_id;
-        // $data->sec_id = $sec_id;
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->offer_reference_date = $request->offer_reference_date;
@@ -315,17 +284,11 @@ class OfferController extends Controller
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
         $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
-        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        // $data->offer_vetting_ltr_no = $request->offer_vetting_ltr_no;
-        // $data->offer_vetting_ltr_dt = $request->offer_vetting_ltr_dt;
-
-
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;
         $data->created_at = Carbon::now()->format('Y-m-d');
         $data->updated_at = Carbon::now()->format('Y-m-d');;
-
 
         $data->save();
 
@@ -334,7 +297,6 @@ class OfferController extends Controller
 
     public function details($id)
     {
-
         $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
             ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
@@ -351,9 +313,6 @@ class OfferController extends Controller
             )
             ->where('offers.id', $id)
             ->first();
-
-
-
 
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
@@ -378,9 +337,6 @@ class OfferController extends Controller
             }
         }
 
-
-
-
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -404,7 +360,6 @@ class OfferController extends Controller
         }
 
         //Start close forward Status...
-
         $sender_designation_id = '';
         foreach ($document_tracks as $track) {
             if ($track->sender_designation_id === $desig_id) {
@@ -412,22 +367,17 @@ class OfferController extends Controller
                 break;
             }
         }
-
         //End close forward Status...
-
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 5)->latest()->first();
 
         //End blade forward on off section....
-
-
         return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'additional_documents_names', 'supplier_names_names'));
     }
 
     public function offerTracking(Request $request)
     {
-
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -438,7 +388,6 @@ class OfferController extends Controller
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
         $data = new DocumentTrack();
@@ -464,7 +413,6 @@ class OfferController extends Controller
 
                 $data->status = 3;
                 $data->save();
-
                 $value = new DocumentTrack();
                 $value->ins_id = $ins_id;
                 $value->section_id = $section_id;
@@ -480,19 +428,15 @@ class OfferController extends Controller
                 $value->save();
             }
         }
-
-
-
-
         return response()->json(['success' => 'Done']);
     }
 
-    //         public function offerViewPdf($id)
-    //     {
-    //         $pdf = Offer::findOrFail($id);
-    //         $path = storage_path("app/public/{$pdf->pdf_path}");
-    // dd( $path);
-    //         // Return the PDF file as a response
-    //         return response()->file($path);
-    //     }
+    // public function offerViewPdf($id)
+    // {
+    //     $pdf = Offer::findOrFail($id);
+    //     $path = storage_path("app/public/{$pdf->pdf_path}");
+    //     dd($path);
+    //     // Return the PDF file as a response
+    //     return response()->file($path);
+    // }
 }
