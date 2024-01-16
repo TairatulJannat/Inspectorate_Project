@@ -118,7 +118,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="final_spec_reference_no">Final Spec Reference No</label>
-                                <input type="text" id="final_spec_reference_no" class="form-control" name="final_spec_reference_no"
+                                <input type="text" id="final_spec_reference_no" class="form-control"
+                                    name="final_spec_reference_no"
                                     value="{{ $contract->final_spec_reference_no ? $contract->final_spec_reference_no : '' }}">
 
                                 <span id="error_final_spec_reference_no" class="text-danger error_field"></span>
@@ -172,8 +173,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="currency_unit">Currency Unit</label>
-                                <input type="text" id="currency_unit" name="currency_unit"
-                                    class="form-control">
+                                <input type="text" id="currency_unit" name="currency_unit" class="form-control">
 
                                 <span id="error_currency_unit" class="text-danger error_field"></span>
                             </div>
@@ -324,87 +324,84 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
+        $('#draft_contract_reference_no').off('change').on('change', function() {
+            var DraftContractReferenceNo = $(this).val();
 
-            $('#draft_contract_reference_no').off('change').on('change', function() {
-                var DraftContractReferenceNo = $(this).val();
-
-                if (DraftContractReferenceNo) {
-                    $.ajax({
-                        url: "{{ url('admin/contract/get_draft_contract_details') }}" + '/' +
+            if (DraftContractReferenceNo) {
+                $.ajax({
+                    url: "{{ url('admin/contract/get_draft_contract_details') }}" + '/' +
                         DraftContractReferenceNo,
-                        type: 'GET',
-                        success: function(response) {
+                    type: 'GET',
+                    success: function(response) {
 
-                            if (response.item) {
-                                var item_html = '<option value="' + response.item.id + '">' +
-                                    response.item.name + '</option>';
-                                $('#error_item_id').html('')
-                            } else {
-                                var item_html = ''
-                                $('#error_item_id').html('Item Not Found')
-                            }
-
-                            if (response.itemType) {
-                                var itemType_html = '<option value="' + response.itemType.id +
-                                    '">' + response.itemType.name + '</option>';
-                                $('#error_item_type_id').html('')
-                            } else {
-                                var itemType_html = ''
-                                $('#error_item_type_id').html('Item Type Not Found')
-                            }
-
-                            if (response.supplier) {
-                                var supplier_html = '<option value="' + response.supplier.id +
-                                    '">' + response.supplier.firm_name + '</option>';
-                                $('#error_supplier_id').html('')
-                            } else {
-                                var supplier_html = ''
-                                $('#error_supplier_id').html('Supplier Not Found')
-                            }
-
-                            if (response.draftContract.indent_reference_no) {
-                                var indent_html = response.draftContract.indent_reference_no;
-                                $('#error_indent_reference_no').html('')
-                            } else {
-                                var indent_html = ''
-                                $('#error_indent_reference_no').html(
-                                    'Indent Reference Id Not Found')
-                            }
-
-                            if (response.draftContract.offer_reference_no) {
-
-                                var offer_html = response.draftContract.offer_reference_no;
-                                $('#error_offer_reference_no').html('')
-                            } else {
-                                var offer_html = ''
-                                $('#error_offer_reference_no').html(
-                                    'Offer Reference no Not Found')
-                            }
-                            if (response.draftContract.final_spec_reference_no) {
-
-                                var final_spec_html = response.draftContract.final_spec_reference_no;
-                                $('#error_final_spec_reference_no').html('')
-                            } else {
-                                var final_spec_html = ''
-                                $('#error_final_spec_reference_no').html(
-                                    'Offer Reference no Not Found')
-                            }
-
-                            $('#item_id').html(item_html);
-                            $('#item_type_id').html(itemType_html);
-                            $('#supplier_id').html(supplier_html);
-                            $('#indent_reference_no').val(indent_html);
-                            $('#offer_reference_no').val(offer_html);
-                            $('#final_spec_reference_no').val(final_spec_html);
-
-                        },
-                        error: function(error) {
-                            console.log(error);
+                        if (response.item) {
+                            var item_html = '<option value="' + response.item.id + '">' +
+                                response.item.name + '</option>';
+                            $('#error_item_id').html('')
+                        } else {
+                            var item_html = ''
+                            $('#error_item_id').html('Item Not Found')
                         }
-                    });
-                }
-            });
+
+                        if (response.itemType) {
+                            var itemType_html = '<option value="' + response.itemType.id +
+                                '">' + response.itemType.name + '</option>';
+                            $('#error_item_type_id').html('')
+                        } else {
+                            var itemType_html = ''
+                            $('#error_item_type_id').html('Item Type Not Found')
+                        }
+
+                        if (response.supplier) {
+                            var supplier_html = '<option value="' + response.supplier.id +
+                                '">' + response.supplier.firm_name + '</option>';
+                            $('#error_supplier_id').html('')
+                        } else {
+                            var supplier_html = ''
+                            $('#error_supplier_id').html('Supplier Not Found')
+                        }
+
+                        if (response.draftContract.indent_reference_no) {
+                            var indent_html = response.draftContract.indent_reference_no;
+                            $('#error_indent_reference_no').html('')
+                        } else {
+                            var indent_html = ''
+                            $('#error_indent_reference_no').html(
+                                'Indent Reference Id Not Found')
+                        }
+
+                        if (response.draftContract.offer_reference_no) {
+
+                            var offer_html = response.draftContract.offer_reference_no;
+                            $('#error_offer_reference_no').html('')
+                        } else {
+                            var offer_html = ''
+                            $('#error_offer_reference_no').html(
+                                'Offer Reference no Not Found')
+                        }
+                        if (response.draftContract.final_spec_reference_no) {
+
+                            var final_spec_html = response.draftContract.final_spec_reference_no;
+                            $('#error_final_spec_reference_no').html('')
+                        } else {
+                            var final_spec_html = ''
+                            $('#error_final_spec_reference_no').html(
+                                'Offer Reference no Not Found')
+                        }
+
+                        $('#item_id').html(item_html);
+                        $('#item_type_id').html(itemType_html);
+                        $('#supplier_id').html(supplier_html);
+                        $('#indent_reference_no').val(indent_html);
+                        $('#offer_reference_no').val(offer_html);
+                        $('#final_spec_reference_no').val(final_spec_html);
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     </script>
 @endpush

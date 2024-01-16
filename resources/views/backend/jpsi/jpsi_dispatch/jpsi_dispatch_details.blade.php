@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Contract (Dispatch)')
+@section('title', 'PSI (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,17 +90,17 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Contract (Dispatch) ')
+@section('main_menu', 'PSI (Dispatch) ')
 @section('active_menu', 'Details')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Contract</h2>
+                <h2>Details of PSI</h2>
             </div>
             <div style="display: flex">
-                <div class="card-body col-5">
+                <div class="card-body col-4">
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -108,22 +108,6 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
 
-                            <tr>
-                                <th>Indent Reference No</td>
-                                <td>{{ $details->indent_reference_no }}</td>
-                            </tr>
-                            <tr>
-                                <th>Offer Reference No</td>
-                                <td>{{ $details->offer_reference_no }}</td>
-                            </tr>
-                            <tr>
-                                <th>Final Spec Reference No</td>
-                                <td>{{ $details->final_spec_reference_no }}</td>
-                            </tr>
-                            <tr>
-                                <th>Contract Reference No</td>
-                                <td>{{ $details->draft_contract_reference_no }}</td>
-                            </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
@@ -133,27 +117,20 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Reference Date</td>
+                                <th>Referance Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
-                            </tr>
-                            <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
-                            </tr>
-                            <tr>
-                                <th>Contracted Value</td>
-                                <td>{{ $details->contracted_value  }}</td>
+                                <td>{{ $details->item_type_name }}</td>
                             </tr>
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
+
 
                         </table>
 
@@ -165,7 +142,7 @@
                     </div>
                 </div>
 
-                <div class="card-body col-7">
+                <div class="card-body col-8">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
@@ -302,6 +279,7 @@
 
                     </div>
 
+
                 </div>
 
             </div>
@@ -315,7 +293,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.contract.contract_dispatch.contract_dispatch_index_js') --}}
+    {{-- @include('backend.psi.psi_dispatch.psi_dispatch_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -356,12 +334,13 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/contract_dispatch/tracking') }}',
+                            url: '{{ url('admin/psi_dispatch/psi_tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
                                 'doc_reference_number': doc_reference_number,
                                 'remarks': remarks,
+
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -377,7 +356,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.contract_dispatch/view') }}",
+                                            "{{ route('admin.psi_dispatch/view') }}",
                                             40000);
                                     }
                                 }

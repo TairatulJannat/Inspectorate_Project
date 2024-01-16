@@ -26,18 +26,19 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div> --}}
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import Indent Spec</a>
+                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import
+                                    Indent Spec</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="row mt-4">
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="hidden" value=" {{$qac->id}}" id="editId" name="editId">
+                                <input type="hidden" value=" {{ $qac->id }}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -68,8 +69,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="qac_received_date">Qac Received Date</label>
-                                <input type="date" class="form-control" id="qac_received_date"
-                                    name="qac_received_date"
+                                <input type="date" class="form-control" id="qac_received_date" name="qac_received_date"
                                     value="{{ $qac->received_date ? $qac->received_date : '' }}">
                                 <span id="error_qac_received_date" class="text-danger error_field"></span>
                             </div>
@@ -77,8 +77,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="qac_reference_date">Qac Reference Date</label>
-                                <input type="date" class="form-control" id="qac_reference_date"
-                                    name="qac_reference_date"
+                                <input type="date" class="form-control" id="qac_reference_date" name="qac_reference_date"
                                     value="{{ $qac->reference_date ? $qac->reference_date : '' }}">
                                 <span id="error_qac_reference_date" class="text-danger error_field"></span>
                             </div>
@@ -86,12 +85,56 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
-                                <input type="text" class="form-control" id="contract_reference_no" name="contract_reference_no"
-                                    value="{{ $qac->contract_reference_no ? $qac->contract_reference_no : '' }} ">
+
+                                @foreach ($contracts as $contract)
+                                    <select class="form-control select2" id="contract_reference_no"
+                                        name="contract_reference_no">
+                                        <option value="">Select a Contract No</option>
+                                        <option value="{{ $contract->reference_no }}"
+                                            {{ $contract->reference_no == $qac->contract_reference_no ? 'selected' : '' }}>
+                                            {{ $contract->reference_no }}
+                                        </option>
+                                    </select>
+                                @endforeach
+
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_no">Indent Reference No.</label>
 
+                                <input type="text" class="form-control" id="indent_reference_no"
+                                    name="indent_reference_no"
+                                    value="{{ $qac->indent_reference_no ? $qac->contract_reference_no : '' }} ">
+                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="offer_reference_no">Offer Reference No.</label>
+
+                                <input type="text" class="form-control" id="offer_reference_no" name="offer_reference_no"
+                                    value="{{ $qac->offer_reference_no ? $qac->offer_reference_no : '' }} ">
+                                <span id="error_offer_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="supplier_id">Supplier</label>
+                                <select name="supplier_id" id="supplier_id" class="form-control">
+                                    <option value="">Selete Supplier</option>
+                                    @if ($supplier)
+                                        <option value="{{ $supplier->id }}"
+                                            {{ $supplier->id == $qac->supplier_id ? 'selected' : '' }}>
+                                            {{ $supplier->firm_name }}
+                                        </option>
+                                    @endif
+                                </select>
+                                <span id="error_supplier_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
@@ -188,7 +231,6 @@
     </div>
 @endsection
 @push('js')
-
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
@@ -272,33 +314,78 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
+        $('#contract_reference_no').off('change').on('change', function() {
+            var ContractReferenceNo = $(this).val();
 
+            if (ContractReferenceNo) {
+                $.ajax({
+                    url: "{{ url('admin/qac/get_contract_details') }}" + '/' +
+                        ContractReferenceNo,
+                    type: 'GET',
+                    success: function(response) {
 
-            $("#item_type_id").off('change').on('change', function() {
-
-                //  alert('123');
-                var itemtype_id = $('#item_type_id').val();
-
-                if (itemtype_id > 0) {
-                    $.ajax({
-                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
-                            '/' + itemtype_id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(res) {
-                            console.log(res);
-
-                            var _html = '<option value="">Select an item</option>';
-                            $.each(res, function(index, item) {
-                                _html += '<option value="' + item.id + '">' + item
-                                    .name + '</option>';
-                            });
-                            $('#item_id').html(_html);
+                        if (response.item) {
+                            var item_html = '<option value="' + response.item.id + '">' +
+                                response.item.name + '</option>';
+                            $('#error_item_id').html('')
+                        } else {
+                            var item_html = ''
+                            $('#error_item_id').html('Item Not Found')
                         }
-                    });
-                }
-            });
+
+                        if (response.itemType) {
+                            var itemType_html = '<option value="' + response.itemType.id +
+                                '">' + response.itemType.name + '</option>';
+                            $('#error_item_type_id').html('')
+                        } else {
+                            var itemType_html = ''
+                            $('#error_item_type_id').html('Item Type Not Found')
+                        }
+
+                        if (response.supplier) {
+                            var supplier_html = '<option value="' + response.supplier.id +
+                                '">' + response.supplier.firm_name + '</option>';
+                            $('#error_supplier_id').html('')
+                        } else {
+                            var supplier_html = ''
+                            $('#error_supplier_id').html('Supplier Not Found')
+                        }
+
+                        if (response.contract.indent_reference_no) {
+                            var indent_html = response.contract.indent_reference_no;
+                            $('#error_indent_reference_no').html('')
+                        } else {
+                            var indent_html = ''
+                            $('#error_indent_reference_no').html(
+                                'Indent Reference Id Not Found')
+                        }
+
+                        if (response.contract.offer_reference_no) {
+
+                            var offer_html = response.contract.offer_reference_no;
+                            $('#error_offer_reference_no').html('')
+                        } else {
+                            var offer_html = ''
+                            $('#error_offer_reference_no').html(
+                                'Offer Reference no Not Found')
+                        }
+
+
+                        $('#item_id').html(item_html);
+                        $('#item_type_id').html(itemType_html);
+                        $('#supplier_id').html(supplier_html);
+                        $('#indent_reference_no').val(indent_html);
+                        $('#offer_reference_no').val(offer_html);
+
+                        // $('#contract_reference_no').val(response.contract.reference_no).trigger(
+                        //     'change');
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     </script>
 @endpush
