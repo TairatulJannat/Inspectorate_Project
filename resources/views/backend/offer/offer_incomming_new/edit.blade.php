@@ -76,22 +76,19 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="tender_reference_no">Tender Reference Number</label>
-                                <select class="form-control " id="tender_reference_no" name="tender_reference_no">
-
+                                <select class="form-control" id="tender_reference_no" name="tender_reference_no">
                                     <option value="">Please Select</option>
-
                                     @if ($offer->tender_reference_no)
-                                        <option value={{ $offer->tender_reference_no }} selected>
-                                            {{ $offer->tender_reference_no }}</option>
+                                        <option value="{{ $offer->tender_reference_no }}" selected>
+                                            {{ $offer->tender_reference_no }}
+                                        </option>
                                     @endif
                                     @foreach ($tender_reference_numbers as $tender_reference_number)
-                                        <option value="{{ $offer->tender_reference_no }}">
-                                            {{ $tender_reference_number->reference_no }}</option>
+                                        <option value="{{ $tender_reference_number->reference_no }}">
+                                            {{ $tender_reference_number->reference_no }}
+                                        </option>
                                     @endforeach
-
                                 </select>
-
-
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
