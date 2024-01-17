@@ -96,6 +96,7 @@ class PsiOutgoingController extends Controller
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('psies.inspectorate_id', $insp_id)
                     ->where('psies.status', 1)
+                    ->where('document_tracks.doc_type_id', 8)
                     ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
 
                 $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
@@ -143,7 +144,7 @@ class PsiOutgoingController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('document_tracks.doc_type_id', 8)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 

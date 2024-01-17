@@ -119,6 +119,7 @@ class QacController extends Controller
                 $qacIds = Qac::leftJoin('document_tracks', 'qacs.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('qacs.inspectorate_id', $insp_id)
+                    ->where('document_tracks.doc_type_id', 7)
                     ->where('qacs.status', 0)
                     ->whereIn('qacs.section_id', $section_ids)->pluck('qacs.id')->toArray();
 
@@ -165,7 +166,7 @@ class QacController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 7)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {

@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI (On Process)')
+@section('title', 'JPSI (On Process)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI (On Process) ')
+@section('main_menu', 'JPSI (On Process) ')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of PSI</h2>
+                <h2>Details of JPSI</h2>
             </div>
             <div style="display: flex">
 
@@ -127,8 +127,20 @@
                             </tr>
 
                             <tr>
+                                <th>Indent reference no</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer reference no</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contract reference no</td>
+                                <td>{{ $details->contract_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
 
                             <tr>
@@ -284,7 +296,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.psi.psi_incomming_approved.psi_approved_index_js') --}}
+    {{-- @include('backend.jpsi.jpsi_incomming_approved.jpsi_approved_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -307,7 +319,7 @@
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -322,7 +334,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/psi_approved/psi_tracking') }}',
+                            url: '{{ url('admin/jpsi_approved/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -344,7 +356,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.psi_approved/view') }}",
+                                            "{{ route('admin.jpsi_approved/view') }}",
                                             40000);
                                     }
                                 }

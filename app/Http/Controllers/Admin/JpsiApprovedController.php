@@ -27,7 +27,7 @@ class jpsiApprovedController extends Controller
             $jpsiNew = jpsi::where('status', 0)->count();
             $jpsiOnProcess = '0';
             $jpsiCompleted = '0';
-            $jpsiDispatch = DocumentTrack::where('doc_type_id', 8)
+            $jpsiDispatch = DocumentTrack::where('doc_type_id', 12)
                 ->leftJoin('jpsies', 'document_tracks.doc_ref_id', '=', 'jpsies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
@@ -36,7 +36,7 @@ class jpsiApprovedController extends Controller
                 ->count();
         } else {
 
-            $jpsiNew = DocumentTrack::where('doc_type_id', 8)
+            $jpsiNew = DocumentTrack::where('doc_type_id', 12)
                 ->leftJoin('jpsies', 'document_tracks.doc_ref_id', '=', 'jpsies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
@@ -44,7 +44,7 @@ class jpsiApprovedController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $jpsiOnProcess = DocumentTrack::where('doc_type_id', 8)
+            $jpsiOnProcess = DocumentTrack::where('doc_type_id', 12)
                 ->leftJoin('jpsies', 'document_tracks.doc_ref_id', '=', 'jpsies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
@@ -52,7 +52,7 @@ class jpsiApprovedController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $jpsiCompleted = DocumentTrack::where('doc_type_id', 8)
+            $jpsiCompleted = DocumentTrack::where('doc_type_id', 12)
                 ->leftJoin('jpsies', 'document_tracks.doc_ref_id', '=', 'jpsies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
@@ -60,7 +60,7 @@ class jpsiApprovedController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $jpsiDispatch = DocumentTrack::where('doc_type_id', 8)
+            $jpsiDispatch = DocumentTrack::where('doc_type_id', 12)
                 ->leftJoin('jpsies', 'document_tracks.doc_ref_id', '=', 'jpsies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
@@ -82,32 +82,33 @@ class jpsiApprovedController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = jpsi::leftJoin('item_types', 'jpsies.item_type_id', '=', 'item_types.id')
+                $query = jpsi::leftJoin('items', 'jpsies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'jpsies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'jpsies.section_id', '=', 'sections.id')
                     ->where('jpsies.status', 3)
-                    ->select('jpsies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('jpsies.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = jpsi::leftJoin('item_types', 'jpsies.item_type_id', '=', 'item_types.id')
+                $query = jpsi::leftJoin('items', 'jpsies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'jpsies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'jpsies.section_id', '=', 'sections.id')
-                    ->select('jpsies.*', 'item_types.name as item_type_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('jpsies.*', 'items.name as item_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('jpsies.status', 3)
                     ->get();
             } else {
 
                 $jpsiIds = jpsi::leftJoin('document_tracks', 'jpsies.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
+                    ->where('document_tracks.doc_type_id',12)
                     ->where('jpsies.inspectorate_id', $insp_id)
                     ->where('jpsies.status', 3)
                     ->whereIn('jpsies.section_id', $section_ids)->pluck('jpsies.id', 'jpsies.id')->toArray();
 
-                $query = jpsi::leftJoin('item_types', 'jpsies.item_type_id', '=', 'item_types.id')
+                $query = jpsi::leftJoin('items', 'jpsies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'jpsies.section_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'jpsies.section_id', '=', 'sections.id')
-                    ->select('jpsies.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('jpsies.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('jpsies.id', $jpsiIds)
                     ->where('jpsies.status', 3)
                     ->get();
@@ -147,7 +148,7 @@ class jpsiApprovedController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 12)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 
@@ -189,10 +190,12 @@ class jpsiApprovedController extends Controller
 
         $details = jpsi::leftJoin('item_types', 'jpsies.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'jpsies.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('items', 'jpsies.item_id', '=', 'items.id')
             ->leftJoin('fin_years', 'jpsies.fin_year_id', '=', 'fin_years.id')
             ->select(
                 'jpsies.*',
                 'item_types.name as item_type_name',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name'
             )
@@ -210,7 +213,7 @@ class jpsiApprovedController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('doc_type_id',  8)
+            ->where('doc_type_id', 12)
             ->whereIn('track_status', [1, 3])
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
@@ -246,7 +249,7 @@ class jpsiApprovedController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  8)->latest()->first();
+        ->where('doc_type_id', 12)->latest()->first();
 
         //End blade forward on off section....
 
@@ -254,13 +257,13 @@ class jpsiApprovedController extends Controller
         return view('backend.jpsi.jpsi_incomming_approved.jpsi_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
-    public function jpsiTracking(Request $request)
+    public function Tracking(Request $request)
     {
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 8; //...... 8 for jpsi from jpsi table doc_serial.
+        $doc_type_id = 12; //...... 8 for jpsi from jpsi table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $doc_reference_number = $request->doc_reference_number;

@@ -122,32 +122,38 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Reference Date</td>
+                                <th>Referance Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
+                                <th>Indent reference no</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer reference no</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contract reference no</td>
+                                <td>{{ $details->contract_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
-
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
-
-
 
                         </table>
 
-                         @if ($desig_id != 1)
-                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
-                         @endif
+                        @if ($desig_id != 1)
+                            <a class="btn btn-info mt-3 btn-parameter text-light"
+                                href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
+                        @endif
 
 
 
@@ -321,7 +327,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/jpsi/psi_tracking') }}',
+                            url: '{{ url('admin/jpsi/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -351,7 +357,8 @@
                             error: function(xhr, status, error) {
 
 
-                                $('.error_receiver_designation').text(xhr.responseJSON.error);
+                                $('.error_receiver_designation').text(xhr.responseJSON
+                                    .error);
                                 toastr.error(xhr.responseJSON.error);
                             }
                         });

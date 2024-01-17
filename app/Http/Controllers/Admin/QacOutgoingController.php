@@ -96,6 +96,7 @@ class QacOutgoingController extends Controller
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('qacs.inspectorate_id', $insp_id)
                     ->where('qacs.status', 1)
+                    ->where('document_tracks.doc_type_id', 7)
                     ->whereIn('qacs.section_id', $section_ids)->pluck('qacs.id', 'qacs.id')->toArray();
 
                 $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
@@ -143,7 +144,7 @@ class QacOutgoingController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 7)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 

@@ -78,18 +78,18 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_reference_date">PSI Reference Date</label>
-                                <input type="date" class="form-control" id="psi_reference_date"
-                                    name="psi_reference_date">
-                                <span id="error_psi_reference_date" class="text-danger error_field"></span>
+                                <label for="jpsi_reference_date">JPSI Reference Date</label>
+                                <input type="date" class="form-control" id="jpsi_reference_date"
+                                    name="jpsi_reference_date">
+                                <span id="error_jpsi_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_received_date">PSI Received Date</label>
-                                <input type="date" class="form-control" id="psi_received_date"
-                                    name="psi_received_date">
-                                <span id="error_psi_received_date" class="text-danger error_field"></span>
+                                <label for="jpsi_received_date">JPSI Received Date</label>
+                                <input type="date" class="form-control" id="jpsi_received_date"
+                                    name="jpsi_received_date">
+                                <span id="error_jpsi_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -123,6 +123,6 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.psi.psi_incomming_new.index_js')
+    @include('backend.jpsi.jpsi_incomming_new.index_js')
 
 @endpush

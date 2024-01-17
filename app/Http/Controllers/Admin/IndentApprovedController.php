@@ -107,6 +107,7 @@ class IndentApprovedController extends Controller
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('indents.insp_id', $insp_id)
                     ->where('indents.status', 3)
+                    ->where('document_tracks.doc_type_id', 3)
                     ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
 
                 $query = Indent::leftJoin('items', 'indents.item_id', '=', 'items.id')
@@ -152,7 +153,7 @@ class IndentApprovedController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id',  3)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 
@@ -274,7 +275,7 @@ class IndentApprovedController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  3)->latest()->first();
+        ->where('doc_type_id', 3)->latest()->first();
 
         //End blade forward on off section....
 

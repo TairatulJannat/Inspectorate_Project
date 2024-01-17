@@ -12,20 +12,33 @@
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    {{-- <div class=" header">
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import
-                                    Excel</a>
-                            </div>
+                    <div class=" header">
+                        {{-- <div class="col-md-3">
+                        <div class="form-group d-flex">
+                            <label class="col-6 pt-2" for="">Select Section:</label>
+                            <select class="form-control" id="admin_section" name="admin_section">
+                                @foreach ($sections as $section)
+                                    <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                @endforeach
+
+                            </select>
+                            <span id="error_admin_section" class="text-danger error_field"></span>
                         </div>
                     </div> --}}
+                        {{-- <div class="col-md-2">
+                        <div class="form-group">
+                            <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import
+                                Indent Spec</a>
+                        </div>
+                    </div> --}}
+                    </div>
+
                     <div class="row mt-4">
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="hidden" value=" {{$jpsi->id}}" id="editId" name="editId">
+                                <input type="hidden" value=" {{ $jpsi->id }}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -55,16 +68,15 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="jpsi_received_date">JPSI Received Date</label>
-                                <input type="date" class="form-control" id="jpsi_received_date"
-                                    name="jpsi_received_date"
+                                <label for="jpsi_received_date">Jpsi Received Date</label>
+                                <input type="date" class="form-control" id="jpsi_received_date" name="jpsi_received_date"
                                     value="{{ $jpsi->received_date ? $jpsi->received_date : '' }}">
                                 <span id="error_jpsi_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="jpsi_reference_date">JPSI Reference Date</label>
+                                <label for="jpsi_reference_date">Jpsi Reference Date</label>
                                 <input type="date" class="form-control" id="jpsi_reference_date"
                                     name="jpsi_reference_date"
                                     value="{{ $jpsi->reference_date ? $jpsi->reference_date : '' }}">
@@ -74,12 +86,56 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
-                                <input type="text" class="form-control" id="contract_reference_no" name="contract_reference_no"
-                                    value="{{ $jpsi->contract_reference_no ? $jpsi->contract_reference_no : '' }} ">
+
+                                @foreach ($contracts as $contract)
+                                    <select class="form-control select2" id="contract_reference_no"
+                                        name="contract_reference_no">
+                                        <option value="">Select a Contract No</option>
+                                        <option value="{{ $contract->reference_no }}"
+                                            {{ $contract->reference_no == $jpsi->contract_reference_no ? 'selected' : '' }}>
+                                            {{ $contract->reference_no }}
+                                        </option>
+                                    </select>
+                                @endforeach
+
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_no">Indent Reference No.</label>
 
+                                <input type="text" class="form-control" id="indent_reference_no"
+                                    name="indent_reference_no"
+                                    value="{{ $jpsi->indent_reference_no ? $jpsi->contract_reference_no : '' }} ">
+                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="offer_reference_no">Offer Reference No.</label>
+
+                                <input type="text" class="form-control" id="offer_reference_no" name="offer_reference_no"
+                                    value="{{ $jpsi->offer_reference_no ? $jpsi->offer_reference_no : '' }} ">
+                                <span id="error_offer_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="supplier_id">Supplier</label>
+                                <select name="supplier_id" id="supplier_id" class="form-control">
+                                    <option value="">Selete Supplier</option>
+                                    @if ($supplier)
+                                        <option value="{{ $supplier->id }}"
+                                            {{ $supplier->id == $jpsi->supplier_id ? 'selected' : '' }}>
+                                            {{ $supplier->firm_name }}
+                                        </option>
+                                    @endif
+                                </select>
+                                <span id="error_supplier_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
@@ -176,7 +232,6 @@
     </div>
 @endsection
 @push('js')
-
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
@@ -260,33 +315,78 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
+        $('#contract_reference_no').off('change').on('change', function() {
+            var ContractReferenceNo = $(this).val();
 
+            if (ContractReferenceNo) {
+                $.ajax({
+                    url: "{{ url('admin/qac/get_contract_details') }}" + '/' +
+                        ContractReferenceNo,
+                    type: 'GET',
+                    success: function(response) {
 
-            $("#item_type_id").off('change').on('change', function() {
-
-                //  alert('123');
-                var itemtype_id = $('#item_type_id').val();
-
-                if (itemtype_id > 0) {
-                    $.ajax({
-                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
-                            '/' + itemtype_id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(res) {
-                            console.log(res);
-
-                            var _html = '<option value="">Select an item</option>';
-                            $.each(res, function(index, item) {
-                                _html += '<option value="' + item.id + '">' + item
-                                    .name + '</option>';
-                            });
-                            $('#item_id').html(_html);
+                        if (response.item) {
+                            var item_html = '<option value="' + response.item.id + '">' +
+                                response.item.name + '</option>';
+                            $('#error_item_id').html('')
+                        } else {
+                            var item_html = ''
+                            $('#error_item_id').html('Item Not Found')
                         }
-                    });
-                }
-            });
+
+                        if (response.itemType) {
+                            var itemType_html = '<option value="' + response.itemType.id +
+                                '">' + response.itemType.name + '</option>';
+                            $('#error_item_type_id').html('')
+                        } else {
+                            var itemType_html = ''
+                            $('#error_item_type_id').html('Item Type Not Found')
+                        }
+
+                        if (response.supplier) {
+                            var supplier_html = '<option value="' + response.supplier.id +
+                                '">' + response.supplier.firm_name + '</option>';
+                            $('#error_supplier_id').html('')
+                        } else {
+                            var supplier_html = ''
+                            $('#error_supplier_id').html('Supplier Not Found')
+                        }
+
+                        if (response.contract.indent_reference_no) {
+                            var indent_html = response.contract.indent_reference_no;
+                            $('#error_indent_reference_no').html('')
+                        } else {
+                            var indent_html = ''
+                            $('#error_indent_reference_no').html(
+                                'Indent Reference Id Not Found')
+                        }
+
+                        if (response.contract.offer_reference_no) {
+
+                            var offer_html = response.contract.offer_reference_no;
+                            $('#error_offer_reference_no').html('')
+                        } else {
+                            var offer_html = ''
+                            $('#error_offer_reference_no').html(
+                                'Offer Reference no Not Found')
+                        }
+
+
+                        $('#item_id').html(item_html);
+                        $('#item_type_id').html(itemType_html);
+                        $('#supplier_id').html(supplier_html);
+                        $('#indent_reference_no').val(indent_html);
+                        $('#offer_reference_no').val(offer_html);
+
+                        // $('#contract_reference_no').val(response.contract.reference_no).trigger(
+                        //     'change');
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     </script>
 @endpush

@@ -29,7 +29,7 @@ class PsiDispatchController extends Controller
             $psiNew = Psi::where('status', 0)->count();
             $psiOnProcess = '0';
             $psiCompleted = '0';
-            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
@@ -38,7 +38,7 @@ class PsiDispatchController extends Controller
                 ->count();
         } else {
 
-            $psiNew = DocumentTrack::where('doc_type_id', 7)
+            $psiNew = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
@@ -46,7 +46,7 @@ class PsiDispatchController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiOnProcess = DocumentTrack::where('doc_type_id', 7)
+            $psiOnProcess = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
@@ -54,7 +54,7 @@ class PsiDispatchController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiCompleted = DocumentTrack::where('doc_type_id', 7)
+            $psiCompleted = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
@@ -62,7 +62,7 @@ class PsiDispatchController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiDispatch = DocumentTrack::where('doc_type_id', 7)
+            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
                 ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
@@ -96,6 +96,7 @@ class PsiDispatchController extends Controller
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('psies.inspectorate_id', $insp_id)
                     ->where('psies.status', 4)
+                    ->where('document_tracks.doc_type_id', 8)
                     ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
 
                 $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
@@ -142,7 +143,7 @@ class PsiDispatchController extends Controller
                 ->addColumn('action', function ($data) {
 
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('document_tracks.doc_type_id', 8)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
                     if ($DocumentTrack) {
@@ -264,7 +265,7 @@ class PsiDispatchController extends Controller
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 7; //...... 7 for psi from psies table doc_serial.
+        $doc_type_id = 8; //...... 8 for psi from psies table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
