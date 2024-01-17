@@ -38,11 +38,11 @@ class ExcelController extends Controller
             $indents = Indent::all();
             $suppliers = Supplier::all();
             $tenders = Tender::with('indent')->get();
-            foreach ($tenders as $tender) {
-                if ($tender->indent) {
-                    $tender->reference_no = $tender->reference_no . ' (' . $tender->indent->reference_no . ')';
-                }
-            }
+            // foreach ($tenders as $tender) {
+            //     if ($tender->indent) {
+            //         $tender->reference_no = $tender->reference_no . ' (' . $tender->indent->reference_no . ')';
+            //     }
+            // }
         } catch (\Exception $e) {
             return redirect()->to('admin/csr/index')->with('error', 'Failed to retrieve from Database.');
         }
@@ -52,7 +52,7 @@ class ExcelController extends Controller
 
     public function getCSRData($request)
     {
-
+        dd($request);
         $customMessages = [
             'tender-id.required' => 'Please select an Tender.',
         ];

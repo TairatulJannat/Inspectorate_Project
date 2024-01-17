@@ -156,7 +156,7 @@ class TenderController extends Controller
         $fin_years = FinancialYear::all();
         $indent_reference_numbers = Indent::all();
         // dd( $fin_years);
-        return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections', 'fin_years','indent_reference_numbers'));
+        return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections', 'fin_years', 'indent_reference_numbers'));
     }
 
     public function store(Request $request)
@@ -314,21 +314,19 @@ class TenderController extends Controller
 
     public function info(Request $request)
     {
-        $tenderData = Tender::where('id', $request->tenderRefNo)->get();
+        $tenderData = Tender::where('reference_no', $request->tenderRefNo)->get();
 
         return response()->json([
             'isSuccess' => true,
-            'Message' => "Data fetched successfully!",
+            'Message' => "Tender Data fetched successfully!",
             'Data' => $tenderData
         ], 200);
     }
 
     public function infoToCSR(Request $request)
     {
-        $tenderData = $request->tenderId;
-
         $tenderData = Tender::findOrFail($request->tenderId);
-        $offerData = Offer::where('tender_reference_no', $tenderData->id)->first();
+        $offerData = Offer::where('tender_reference_no', $tenderData->reference_no)->first();
 
         $itemId = $offerData->item_id;
         $itemTypeId = $offerData->item_type_id;
