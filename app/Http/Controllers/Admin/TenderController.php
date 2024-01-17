@@ -345,7 +345,7 @@ class TenderController extends Controller
             $indentRefNo = 'Indent Reference Number not found';
         }
 
-        $tenderData = Tender::where('id', $offerData->tender_reference_no)->get();
+        $tenderData = Tender::where('reference_no', $offerData->tender_reference_no)->get();
 
         if ($tenderData->isNotEmpty()) {
             $tenderRefNo = $tenderData[0]['reference_no'];
