@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI')
+@section('title', 'SI')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -92,7 +92,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI')
+@section('main_menu', 'SI')
 @section('active_menu', 'Details')
 @section('content')
 
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of PSI</h2>
+                <h2>Details of SI</h2>
             </div>
             <div style="display: flex">
 
@@ -146,7 +146,7 @@
                         </table>
 
                          @if ($desig_id != 1)
-                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
+                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Check Documents</a>
                          @endif
 
 
@@ -321,7 +321,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/psi/psi_tracking') }}',
+                            url: '{{ url('admin/si/trackingtracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -343,7 +343,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.psi/view') }}",
+                                            "{{ route('admin.si/view') }}",
                                             40000);
                                     }
                                 }

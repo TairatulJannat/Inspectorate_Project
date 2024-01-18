@@ -339,34 +339,6 @@ class FinalSpecController extends Controller
 
 
 
-
-        //     $details->additional_documents = json_decode($details->additional_documents, true);
-        //         $additional_documents_names = [];
-
-        // if($details->additional_documents){
-        //     foreach ($details->additional_documents as $document_id) {
-        //         $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-        //         array_push($additional_documents_names, $additional_names);
-        //     }
-
-        // }
-
-
-        // $details->suppliers = json_decode($details->supplier_id, true);
-
-        // $supplier_names_names = [];
-        // if ($details->suppliers) {
-        //     foreach ($details->suppliers as $Supplier_id) {
-        //         $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-
-        //         array_push($supplier_names_names, $supplier_names);
-        //     }
-        // }
-
-
-
-
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -478,7 +450,6 @@ class FinalSpecController extends Controller
     public function get_offer_details($offerReferenceNo)
     {
         $offer = Offer::where('reference_no' ,$offerReferenceNo)->first();
-// dd($offer);
         $item=Items::where('id' , $offer->item_id)->first();
         $item_type=Item_type::where('id' , $offer->item_type_id)->first();
         $tender_reference_no = Tender::where('reference_no',$offer->tender_reference_no)->first();

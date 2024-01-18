@@ -78,7 +78,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="reference_date">PSI Reference Date</label>
+                                <label for="reference_date">SI Reference Date</label>
                                 <input type="date" class="form-control" id="reference_date"
                                     name="reference_date">
                                 <span id="error_reference_date" class="text-danger error_field"></span>

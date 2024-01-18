@@ -28,13 +28,13 @@
             },
             ajax: {
 
-                url: "{{ url('admin/psi_dispatch/all_data') }}",
+                url: "{{ url('admin/si_dispatch/all_data') }}",
                 type: 'Post',
                 data: function(d) {
                     d._token = '{{ csrf_token() }}'
                 }
             },
-             columns: [{
+            columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
                     searchable: true
@@ -87,107 +87,9 @@
             table.draw(true);
         });
     });
-    // End:: All Data
+    
 
-    // Start:: save information
-
-    // End:: save information
-
-    //Start:: Update information
-    // $('#update_form').off().on('submit', function(event) {
-    //     event.preventDefault();
-    //     var formData = new FormData($('#update_form')[0]);
-
-    //     disableButton()
-    //     $.ajax({
-    //         url: "{{ url('admin/hall_price/update') }}",
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-    //         },
-    //         success: function(response) {
-    //             if (response.error) {
-    //                 error_notification(response.error)
-    //                 enableeButton()
-    //             }
-    //             if (response.success) {
-    //                 enableeButton()
-    //                 $('.yajra-datatable').DataTable().ajax.reload(null, false);
-    //                 toastr.success('Information Updated', 'Saved');
-    //                 $('#edit_model').modal('hide');
-    //             }
-    //             setTimeout(window.location.href = "{{ route('admin.prelimgeneral/view') }}", 40000);
-    //         },
-    //         error: function(response) {
-    //             enableeButton()
-    //             clear_error_field();
-    //             error_notification('Please fill up the form correctly and try again')
-    //             // $('#error_hall_id').text(response.responseJSON.errors.hall_id);
-    //             // $('#error_floor_id').text(response.responseJSON.errors.floor_id);
-    //             // $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
-    //             // $('#error_specify_event').text(response.responseJSON.errors.specify_event);
-    //             // $('#error_event_name').text(response.responseJSON.errors.event_name);
-    //             // $('#error_specify_month').text(response.responseJSON.errors.specify_month);
-    //             // $('#error_months').text(response.responseJSON.errors.months);
-    //             // $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
-    //             // $('#error_specify_shift_charge').text(response.responseJSON.errors
-    //             //     .specify_shift_charge);
-    //             // $('#error_shift_id').text(response.responseJSON.errors.shift_id);
-    //             // $('#error_price').text(response.responseJSON.errors.price);
-    //             // $('#error_status').text(response.responseJSON.errors.status);
-    //         }
-    //     });
-    // })
-    //End:: Update information
-
-    // Start:: delete user
-    function delete_data(id) {
-        swal({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-            buttonsStyling: false,
-            reverseButtons: true
-        }).then((result) => {
-            if (result.value) {
-                event.preventDefault();
-                $.ajax({
-                    type: 'get',
-                    url: '{{ url('admin/hall_price/delete') }}/' + id,
-                    success: function(response) {
-                        if (response) {
-                            if (response.permission == false) {
-                                toastr.warning('you dont have that Permission',
-                                    'Permission Denied');
-                            } else {
-                                toastr.success('Deleted Successful', 'Deleted');
-                                $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                            }
-                        }
-                    }
-                });
-            } else if (
-                result.dismiss === swal.DismissReason.cancel
-            ) {
-                swal(
-                    'Cancelled',
-                    'Your data is safe :)',
-                    'error'
-                )
-            }
-        })
-    }
-    // End:: delete user
+   
 
     function form_reset() {
         document.getElementById("search_form").reset();

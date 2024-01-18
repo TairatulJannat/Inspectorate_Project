@@ -1,10 +1,10 @@
 @extends('backend.app')
-@section('title', 'Psi (Edit)')
+@section('title', 'si (Edit)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.css') }}">
 @endpush
-@section('main_menu', 'Psi')
+@section('main_menu', 'si')
 @section('active_menu', 'Edit')
 @section('content')
     <div class="col-sm-12 col-xl-12">
@@ -25,7 +25,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="hidden" value=" {{$psi->id}}" id="editId" name="editId">
+                                <input type="hidden" value=" {{ $si->id }}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -33,7 +33,7 @@
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
-                                            {{ $dte->id == $psi->sender_id ? 'selected' : '' }}>{{ $dte->name }}
+                                            {{ $dte->id == $si->sender_id ? 'selected' : '' }}>{{ $dte->name }}
                                         </option>
                                     @endforeach
 
@@ -44,9 +44,9 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="reference_no">Reference No.</label>
+                                <label for="reference_no">Si Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $psi->reference_no ? $psi->reference_no : '' }} ">
+                                    value="{{ $si->reference_no ? $si->reference_no : '' }} ">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -55,28 +55,37 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_received_date">PSI Received Date</label>
-                                <input type="date" class="form-control" id="psi_received_date"
-                                    name="psi_received_date"
-                                    value="{{ $psi->received_date ? $psi->received_date : '' }}">
-                                <span id="error_psi_received_date" class="text-danger error_field"></span>
+                                <label for="received_date">Si Received Date</label>
+                                <input type="date" class="form-control" id="received_date" name="received_date"
+                                    value="{{ $si->received_date ? $si->received_date : '' }}">
+                                <span id="error_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="psi_reference_date">PSI Reference Date</label>
-                                <input type="date" class="form-control" id="psi_reference_date"
-                                    name="psi_reference_date"
-                                    value="{{ $psi->reference_date ? $psi->reference_date : '' }}">
-                                <span id="error_psi_reference_date" class="text-danger error_field"></span>
+                                <label for="reference_date">Si Reference Date</label>
+                                <input type="date" class="form-control" id="reference_date" name="reference_date"
+                                    value="{{ $si->reference_date ? $si->reference_date : '' }}">
+                                <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+
                                 <label for="contract_reference_no">Contract Reference No.</label>
-                                <input type="text" class="form-control" id="contract_reference_no" name="contract_reference_no"
-                                    value="{{ $psi->contract_reference_no ? $psi->contract_reference_no : '' }} ">
+                                <select class="form-control " id="contract_reference_no" name="contract_reference_no">
+
+                                    <option value="">Please Select</option>
+
+                                    @foreach ($contracts as $contract)
+                                        <option value="{{ $contract->reference_no }}"
+                                            {{ $contract->reference_no == $si->contract_reference_no ? 'selected' : '' }}>
+                                            {{ $contract->reference_no }}</option>
+                                    @endforeach
+
+                                </select>
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
+
                             </div>
                         </div>
 
@@ -87,12 +96,6 @@
 
                                     <option selected disabled value="">Please Select</option>
 
-                                    @foreach ($item_types as $item_type)
-                                        <option value="{{ $item_type->id }}"
-                                            {{ $item_type->id == $psi->item_type_id ? 'selected' : '' }}>
-                                            {{ $item_type->name }}
-                                        </option>
-                                    @endforeach
 
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
@@ -103,15 +106,52 @@
                             <div class="form-group">
                                 <label for="item_id">Item</label>
 
-                                <select class="form-control select2" id="item_id" name="item_id" required>
+                                <select class="form-control" id="item_id" name="item_id" required>
                                     <option value="">Please Select</option>
-                                    @if ($psi->item_id)
-                                        <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
-                                    @endif
+
                                 </select>
 
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="offer_reference_no">Offer Reference Number</label>
+                                <select class="form-control " id="offer_reference_no" name="offer_reference_no">
+
+                                    <option value="">Please Select</option>
+
+
+                                </select>
+                                <span id="error_tender_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_no">Indent Reference Number</label>
+                                <select class="form-control " id="indent_reference_no" name="indent_reference_no">
+
+                                    <option value="">Please Select</option>
+
+
+                                </select>
+                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+
+                                <label for="supplier_id">Suppiler</label>
+
+                                <select class="form-control" id="supplier_id" name="supplier_id">
+                                    <option value="">Please Select </option>
+
+                                </select>
+                                <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -125,7 +165,7 @@
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
                                         <option value={{ $fin_year->id }}
-                                            {{ $fin_year->id == $psi->fin_year_id ? 'selected' : '' }}>
+                                            {{ $fin_year->id == $si->fin_year_id ? 'selected' : '' }}>
                                             {{ $fin_year->year }}
                                         </option>
                                     @endforeach
@@ -150,7 +190,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
-                                <textarea name="remark" id="remark" class="form-control"> {{ $psi->remarks ? $psi->remarks : '' }}</textarea>
+                                <textarea name="remark" id="remark" class="form-control"> {{ $si->remarks ? $si->remarks : '' }}</textarea>
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -167,7 +207,7 @@
 
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
-                        <a href="{{ route('admin.psi/view') }}" type="button" class="btn btn-secondary">Cancel</a>
+                        <a href="{{ route('admin.si/view') }}" type="button" class="btn btn-secondary">Cancel</a>
                         <button class="btn btn-primary" type="submit" id="form_submission_button">Update</button>
                     </div>
                 </div>
@@ -176,7 +216,6 @@
     </div>
 @endsection
 @push('js')
-
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
@@ -193,7 +232,7 @@
             var formData = new FormData($('#update_form')[0]);
             disableButton()
             $.ajax({
-                url: "{{ url('admin/psi/update') }}",
+                url: "{{ url('admin/si/update') }}",
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -212,7 +251,7 @@
                         toastr.success('Information Updated', 'Saved');
                         $('#edit_model').modal('hide');
                     }
-                    setTimeout(window.location.href = "{{ route('admin.psi/view') }}", 40000);
+                    setTimeout(window.location.href = "{{ route('admin.si/view') }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
@@ -262,27 +301,41 @@
     <script>
         $(document).ready(function() {
 
+            // $('.select2').select2();
 
-            $("#item_type_id").off('change').on('change', function() {
 
-                //  alert('123');
-                var itemtype_id = $('#item_type_id').val();
-
-                if (itemtype_id > 0) {
+            $('#contract_reference_no').off('change').on('change', function() {
+                var contractReferenceNo = $(this).val();
+                if (contractReferenceNo) {
                     $.ajax({
-                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
-                            '/' + itemtype_id,
+                        url: "{{ url('admin/si/get_contract_details') }}" + '/' +
+                            contractReferenceNo,
                         type: 'GET',
-                        dataType: 'json',
-                        success: function(res) {
-                            console.log(res);
+                        success: function(response) {
+                            var item_html = '<option value="' + response.item.id + '">' +
+                                response.item.name + '</option>';
+                            var itemType_html = '<option value="' + response.itemType.id +
+                                '">' + response.itemType.name + '</option>';
+                            var offerReferenceNo_html = '<option value="' + response
+                                .offerReferenceNo + '">' + response
+                                .offerReferenceNo +
+                                '</option>';
+                            var indentReferenceNo_html = '<option value="' + response.indentReferenceNo + '">' + response.indentReferenceNo +
+                                '</option>';
+                            var supplier_html = '<option value="' + response.supplier.id +
+                                '">' + response.supplier.firm_name + '</option>';
 
-                            var _html = '<option value="">Select an item</option>';
-                            $.each(res, function(index, item) {
-                                _html += '<option value="' + item.id + '">' + item
-                                    .name + '</option>';
-                            });
-                            $('#item_id').html(_html);
+
+                            $('#item_id').html(item_html);
+                            $('#item_type_id').html(itemType_html);
+                            $('#offer_reference_no').html(offerReferenceNo_html);
+                            $('#indent_reference_no').html(indentReferenceNo_html);
+                            $('#supplier_id').html(supplier_html);
+
+
+                        },
+                        error: function(error) {
+                            console.log(error);
                         }
                     });
                 }
