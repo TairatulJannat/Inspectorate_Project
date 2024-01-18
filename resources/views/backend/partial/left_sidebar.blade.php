@@ -281,20 +281,20 @@ $currentControllerName = Request::segment(2);
                     @endif
 
                     {{-- Dummy I-Note Links --}}
-                    @if (count(menu_check('Offer')) !== 0)
+                    @if (count(menu_check('Inote')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Inote' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>I-Note</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('offer/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Inote/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('inote/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.inote/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
                                             I-Note</a>
                                     </li>
                                 @endif
-                                @if (sub_menu_check('offer/create') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                @if (sub_menu_check('inote/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.inote/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             I-Note</a></li>
                                 @endif

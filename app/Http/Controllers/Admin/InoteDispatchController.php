@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
-use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
-use App\Models\Psi;
+use App\Models\Inote;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\Facades\DataTables;;
 
+use Illuminate\Http\Request;
 
-class PsiOutgoingController extends Controller
+class InoteDispatchController extends Controller
 {
+    //
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -26,55 +26,55 @@ class PsiOutgoingController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $psiNew = Psi::where('status', 0)->count();
-            $psiOnProcess = '0';
-            $psiCompleted = '0';
-            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $inoteNew = Inote::where('status', 0)->count();
+            $inoteOnProcess = '0';
+            $inoteCompleted = '0';
+            $inoteDispatch = DocumentTrack::where('doc_type_id', 13)
+                ->leftJoin('inotes', 'document_tracks.doc_ref_id', '=', 'inotes.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('psies.status', 4)
+                ->where('inotes.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         } else {
 
-            $psiNew = DocumentTrack::where('doc_type_id', 8)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $inoteNew = DocumentTrack::where('doc_type_id', 13)
+                ->leftJoin('inotes', 'document_tracks.doc_ref_id', '=', 'inotes.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 1)
-                ->where('psies.status', 0)
+                ->where('inotes.status', 0)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiOnProcess = DocumentTrack::where('doc_type_id', 8)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $inoteOnProcess = DocumentTrack::where('doc_type_id', 13)
+                ->leftJoin('inotes', 'document_tracks.doc_ref_id', '=', 'inotes.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 3)
-                ->where('psies.status', 3)
+                ->where('inotes.status', 3)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiCompleted = DocumentTrack::where('doc_type_id', 8)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $inoteCompleted = DocumentTrack::where('doc_type_id', 13)
+                ->leftJoin('inotes', 'document_tracks.doc_ref_id', '=', 'inotes.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 2)
-                ->where('psies.status', 1)
+                ->where('inotes.status', 1)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
 
-            $psiDispatch = DocumentTrack::where('doc_type_id', 8)
-                ->leftJoin('psies', 'document_tracks.doc_ref_id', '=', 'psies.id')
+            $inoteDispatch = DocumentTrack::where('doc_type_id', 13)
+                ->leftJoin('inotes', 'document_tracks.doc_ref_id', '=', 'inotes.id')
                 ->where('reciever_desig_id', $designation_id)
                 ->where('track_status', 4)
-                ->where('psies.status', 4)
+                ->where('inotes.status', 4)
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.psi.psi_outgoing.outgoing', compact('psiNew','psiOnProcess','psiCompleted','psiDispatch'));
+        return view('backend.inote.inote_dispatch.inote_dispatch_index', compact('inoteNew', 'inoteOnProcess', 'inoteCompleted', 'inoteDispatch'));
     }
+
     public function all_data(Request $request)
     {
-
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
@@ -83,128 +83,139 @@ class PsiOutgoingController extends Controller
             $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
             $desig_position = Designation::where('id', $designation_id)->first();
 
-
             if (Auth::user()->id == 92) {
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name', 'psies.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('psies.status', '=', 1)
+                $query = Inote::leftJoin('items', 'inotes.item_id', '=', 'items.id')
+                    ->leftJoin('dte_managments', 'inotes.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'inotes.section_id', '=', 'sections.id')
+                    ->where('inotes.status', 4)
+                    ->select('inotes.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
-                $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
-                    ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('psies.inspectorate_id', $insp_id)
-                    ->where('psies.status', 1)
-                    ->where('document_tracks.doc_type_id', 8)
-                    ->whereIn('psies.section_id', $section_ids)->pluck('psies.id', 'psies.id')->toArray();
 
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('psies.id', $psiIds)
-                    ->where('psies.status', '=', 1)
+                $inoteIds = Inote::leftJoin('document_tracks', 'inotes.id', '=', 'document_tracks.doc_ref_id')
+                    ->where('document_tracks.reciever_desig_id', $designation_id)
+                    ->where('document_tracks.doc_type_id', 13)
+                    ->where('inotes.inspectorate_id', $insp_id)
+                    ->where('inotes.status', 4)
+                    ->whereIn('inotes.section_id', $section_ids)->pluck('inotes.id', 'inotes.id')->toArray();
+
+                $query = Inote::leftJoin('items', 'inotes.item_id', '=', 'items.id')
+                    ->leftJoin('dte_managments', 'inotes.sender_id', '=', 'dte_managments.id')
+                    ->leftJoin('sections', 'inotes.section_id', '=', 'sections.id')
+                    ->select('inotes.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->whereIn('inotes.id', $inoteIds)
+                    ->where('inotes.status', 4)
                     ->get();
 
                 //......Start for DataTable Forward and Details btn change
-                $psiId = [];
+                $inoteId = [];
                 if ($query) {
-                    foreach ($query as $psi) {
-                        array_push($psiId, $psi->id);
+                    foreach ($query as $inote) {
+                        array_push($inoteId, $inote->id);
                     }
                 }
 
-                //......Start for showing data for receiver designation
-
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $psiId)
+                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $inoteId)
                     ->where('reciever_desig_id', $designation_id)
-                    ->where('track_status', 2)
+                    ->where('track_status', 4)
                     ->first();
 
                 if (!$document_tracks_receiver_id) {
-                    $query = Psi::where('id', 'no data')->get();
+                    $query = Inote::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
 
             // $query->orderBy('id', 'asc');
-
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
 
                 ->addColumn('status', function ($data) {
 
-                    if ($data->status == '1') {
-                        return '<button class="btn  btn-info text-white btn-sm">Completed</button>';
+                    if ($data->status == '4') {
+                        return '<button class="btn btn-danger btn-sm">Dispatched</button>';
                     } else {
-                        return '<button class="btn btn-info text-white  btn-sm">None</button>';
+                        return '<button class="btn btn-danger btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
+
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('document_tracks.doc_type_id', 8)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 13)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
-
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="edit">Forward</a>
-                    </div>';
+                            <a href="' . url('admin/inote_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
+                            </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="update">Forwarded</a>
-                            </div>';
+                        <a href="' . url('admin/inote_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
+                        </div>';
                         }
 
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">
 
-                            <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="update">Forwarded</a>
-                            </div>';
+                        <a href="' . url('admin/inote_dispatch/details/' . $data->id) . '" class="update">Forwarded</a>
+                        </div>';
                         }
                     } else {
                         $actionBtn = '<div class="btn-group" role="group">
 
-                    <a href="' . url('admin/outgoing_psi/details/' . $data->id) . '" class="edit">forward</a>
-                    </div>';
+                        <a href="' . url('admin/inote_dispatch/details/' . $data->id) . '" class="edit">Forward</a>
+                        </div>';
                     }
 
                     return $actionBtn;
                 })
-
                 ->rawColumns(['action', 'status'])
                 ->make(true);
         }
     }
 
+
+
     public function details($id)
     {
 
-        $details = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
-            ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-            ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name')
-            ->where('psies.id', $id)
-            ->where('psies.status', 1)
+        $details = Inote::leftJoin('item_types', 'inotes.item_type_id', '=', 'item_types.id')
+            ->leftJoin('dte_managments', 'inotes.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('items', 'inotes.item_id', '=', 'items.id')
+            ->leftJoin('fin_years', 'inotes.fin_year_id', '=', 'fin_years.id')
+            ->select(
+                'inotes.*',
+                'item_types.name as item_type_name',
+                'items.name as item_name',
+                'dte_managments.name as dte_managment_name',
+                'fin_years.year as fin_year_name'
+            )
+            ->where('inotes.id', $id)
             ->first();
-
-
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
+
+        // dd($skipId);
+
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->where('track_status', 2)
-            ->where('doc_type_id',  8)
+            ->where('doc_type_id', 13)
+            ->whereIn('track_status', [2, 4])
+            ->whereNot(function ($query) {
+                $query->where('sender_designation.id', 7)
+                    ->where('receiver_designation.id', 3)
+                    ->where('document_tracks.track_status', 2);
+            })
             ->skip(1) // Skip the first row
-            ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
+            ->take(PHP_INT_MAX)
             ->select(
                 'document_tracks.*',
                 'sender_designation.name as sender_designation_name',
@@ -212,13 +223,11 @@ class PsiOutgoingController extends Controller
             )
             ->get();
 
-
         $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
-        if ($auth_designation_id) {
 
+        if ($auth_designation_id) {
             $desig_id = $auth_designation_id->desig_id;
         }
-
         // delay cause for sec IC start
 
         $admin_id = Auth::user()->id;
@@ -226,84 +235,80 @@ class PsiOutgoingController extends Controller
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
         // delay cause for sec IC start
+
+        //Start close forward Status...
+
+        $sender_designation_id = '';
+        foreach ($document_tracks as $track) {
+            if ($track->sender_designation_id === $desig_id) {
+                $sender_designation_id = $track->sender_designation_id;
+                break;
+            }
+        }
+
+
+        //End close forward Status...
 
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  8)->latest()->first();
+            ->where('doc_type_id', 13)->latest()->first();
 
         //End blade forward on off section....
 
-        // start cover letter start
 
-        $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
-
-        // end cover letter start
-
-
-        return view('backend.psi.psi_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.inote.inote_dispatch.inote_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
     }
 
-    public function OutgoingpsiTracking(Request $request)
+    public function Tracking(Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $doc_type_id = 8; // 8 for doc type qac from doctype table column doc_serial
+        $doc_type_id = 13; //...... 12 for inote from inotes table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = Psi::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
+        $section_id = Inote::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-        // dd( $desig_position);
+
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
         $data->doc_type_id = $doc_type_id;
         $data->doc_ref_id = $doc_ref_id;
         $data->doc_reference_number = $doc_reference_number;
-        $data->track_status = 2;
-        $data->remarks = $remarks;
-
+        $data->track_status = 4;
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
+        $data->remarks = $remarks;
         $data->created_at = Carbon::now('Asia/Dhaka');
         $data->updated_at = Carbon::now('Asia/Dhaka');
         $data->save();
 
-        // ----delay_cause and terms and conditions start here
-        if ($desig_position->position == 3) {
-            $psi_data = Psi::find($doc_ref_id);
-            $psi_data->delay_cause = $request->delay_cause;
-            $psi_data->delivery_date = $request->delivery_date;
 
+        if ($desig_position->position == 1) {
 
-            $psi_data->delivery_by = Auth::user()->id;
-            $psi_data->save();
-        }
-        // ----delay_cause and terms and conditions end here
-
-        if ($desig_position->position == 7) {
-
-            $data = Psi::find($doc_ref_id);
+            $data = Inote::find($doc_ref_id);
 
             if ($data) {
 
-                $data->status = 4;
+                $data->status = 2;
                 $data->save();
+
                 $value = new DocumentTrack();
                 $value->ins_id = $ins_id;
                 $value->section_id = $section_id;
                 $value->doc_type_id = $doc_type_id;
                 $value->doc_ref_id = $doc_ref_id;
-                $value->doc_reference_number = $doc_reference_number;
+                // $value->doc_reference_number = $doc_reference_number;
                 $value->track_status = 4;
-                $value->remarks = $remarks;
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
+                $value->remarks = $remarks;
                 $value->created_at = Carbon::now('Asia/Dhaka');
                 $value->updated_at = Carbon::now('Asia/Dhaka');
                 $value->save();
@@ -311,5 +316,14 @@ class PsiOutgoingController extends Controller
         }
 
         return response()->json(['success' => 'Done']);
+    }
+
+
+    public function parameter(Request $request)
+    {
+        $inote = Inote::find($request->inote_id);
+        $item_id = $inote->item_id;
+        $item_type_id = $inote->item_type_id;
+        return view('backend.inote.parameter', compact('item_id', 'item_type_id'));
     }
 }

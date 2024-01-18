@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cover letter</title>
@@ -13,13 +13,15 @@
         }
 
         @font-face {
-            font-family: 'BanglaFont';
-            src: url('/fonts/Nikosh.ttf') format('truetype');
+            font-family: 'nikosh';
+            src: url('/Nikosh.ttf') format('truetype');
             /* Replace with the actual path to your Bangla font file */
         }
-        body{
-            font-family: 'BanglaFont', Times, serif;
+
+        body {
+            font-family: 'nikosh', 'Times New Roman', sans-serif;
         }
+
         header {
             position: fixed;
             top: -80px;
@@ -48,7 +50,7 @@
 
         .row {
             font-size: 14px;
-            font-family: 'Nikosh', sans-serif;
+            font-family: 'nikosh', sans-serif;
             /* Use single quotes around font family name */
         }
 
