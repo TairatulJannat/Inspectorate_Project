@@ -117,6 +117,7 @@ class PsiController extends Controller
                 $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('psies.inspectorate_id', $insp_id)
+                    ->where('document_tracks.doc_type_id', 8)
                     ->where('psies.status', 0)
                     ->whereIn('psies.section_id', $section_ids)->pluck('psies.id')->toArray();
 
@@ -163,7 +164,7 @@ class PsiController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('document_tracks.doc_type_id', 8)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {

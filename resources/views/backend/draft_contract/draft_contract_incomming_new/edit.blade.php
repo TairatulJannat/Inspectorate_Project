@@ -132,7 +132,7 @@
 
                                 <select class="form-control select2" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
-                                    
+
                                 </select>
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
@@ -297,7 +297,6 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
 
             $('#final_spec_reference_no').off('change').on('change', function() {
                 var FinalSpecReferenceNo = $(this).val();
@@ -367,6 +366,5 @@
                     });
                 }
             });
-        });
     </script>
 @endpush

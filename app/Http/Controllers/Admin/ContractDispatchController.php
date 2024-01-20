@@ -143,7 +143,7 @@ class ContractDispatchController extends Controller
                 ->addColumn('action', function ($data) {
 
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 10)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
                     if ($DocumentTrack) {
@@ -183,13 +183,13 @@ class ContractDispatchController extends Controller
     {
 
         $details = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
-            ->leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'contracts.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'contracts.fin_year_id', '=', 'fin_years.id')
             ->select(
                 'contracts.*',
                 'item_types.name as item_type_name',
-                'contracts.*',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name'
             )
@@ -259,7 +259,7 @@ class ContractDispatchController extends Controller
         return view('backend.contract.contract_dispatch.contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
     }
 
-    public function DispatchTracking(Request $request)
+    public function ContractTracking(Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;

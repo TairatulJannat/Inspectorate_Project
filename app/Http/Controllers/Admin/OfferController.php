@@ -239,6 +239,7 @@ class OfferController extends Controller
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
 
+
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;
@@ -268,6 +269,8 @@ class OfferController extends Controller
 
     public function update(Request $request)
     {
+
+
         $data = Offer::findOrFail($request->editId);
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
@@ -283,7 +286,16 @@ class OfferController extends Controller
         $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
-        $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+
+        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+
+        if ($request->hasFile('pdf_file')) {
+
+            $path = $request->file('pdf_file')->store('uploads', 'public');
+            $data->pdf_file = $path;
+        }
+      
+
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;

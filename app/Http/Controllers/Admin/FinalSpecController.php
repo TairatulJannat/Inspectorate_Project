@@ -285,7 +285,13 @@ class FinalSpecController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->supplier_id = $request->supplier_id;
         $data->fin_year_id = $request->fin_year_id;
-        $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+
+        if ($request->hasFile('pdf_file')) {
+
+            $path = $request->file('pdf_file')->store('uploads', 'public');
+            $data->pdf_file = $path;
+        }
 
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
@@ -315,6 +321,7 @@ class FinalSpecController extends Controller
             ->where('final_specs.id', $id)
             ->first();
 
+
         //     $details->additional_documents = json_decode($details->additional_documents, true);
         //         $additional_documents_names = [];
 
@@ -327,16 +334,17 @@ class FinalSpecController extends Controller
 
         // }
 
-        $details->suppliers = json_decode($details->supplier_id, true);
+//         $details->suppliers = json_decode($details->supplier_id, true);
 
-        $supplier_names_names = [];
-        if ($details->suppliers) {
-            foreach ($details->suppliers as $Supplier_id) {
-                $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+//         $supplier_names_names = [];
+//         if ($details->suppliers) {
+//             foreach ($details->suppliers as $Supplier_id) {
+//                 $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
 
-                array_push($supplier_names_names, $supplier_names);
-            }
-        }
+//                 array_push($supplier_names_names, $supplier_names);
+//             }
+//         }
+
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -376,7 +384,10 @@ class FinalSpecController extends Controller
             ->latest()->first();
         //End blade forward on off section....
 
-        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'supplier_names_names'));
+
+
+        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden'));
+
     }
 
     public function finalSpecTracking(Request $request)
@@ -436,13 +447,13 @@ class FinalSpecController extends Controller
     }
     public function get_offer_details($offerReferenceNo)
     {
-        $offer = Offer::where('reference_no', $offerReferenceNo)->first();
-        // dd($offer);
-        $item = Items::where('id', $offer->item_id)->first();
-        $item_type = Item_type::where('id', $offer->item_type_id)->first();
-        $tender_reference_no = Tender::where('reference_no', $offer->tender_reference_no)->first();
 
-        $indent_reference_no = Indent::where('reference_no', $offer->indent_reference_no)->first();
+        $offer = Offer::where('reference_no' ,$offerReferenceNo)->first();
+        $item=Items::where('id' , $offer->item_id)->first();
+        $item_type=Item_type::where('id' , $offer->item_type_id)->first();
+        $tender_reference_no = Tender::where('reference_no',$offer->tender_reference_no)->first();
+        
+        $indent_reference_no = Indent::where('reference_no',$offer->indent_reference_no)->first();
 
         $offer->suppliers = json_decode($offer->supplier_id, true);
 
