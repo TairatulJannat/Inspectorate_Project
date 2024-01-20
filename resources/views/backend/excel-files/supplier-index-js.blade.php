@@ -4,6 +4,7 @@
 
     $(document).ready(function() {
         var offerRefNo = new URLSearchParams(window.location.search).get('offerRefNo');
+        document.getElementById('offerRefNo').value = offerRefNo;
         var tenderId = '';
 
         $('#import-supplier-spec-data-form').submit(function() {

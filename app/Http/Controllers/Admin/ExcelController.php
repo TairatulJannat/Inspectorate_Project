@@ -473,6 +473,7 @@ class ExcelController extends Controller
             $indentId = $request->input('indent-id');
             $supplierId = $request->input('supplier-id');
             $tenderId = $request->input('tender-id');
+            $offerRefNo = $request->input('offerRefNo');
 
             $item = Items::find($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';
@@ -501,6 +502,7 @@ class ExcelController extends Controller
                 'supplierFirmName' => $supplierFirmName,
                 'tenderId' => $tenderId,
                 'tenderRefNo' => $tenderRefNo,
+                'offerRefNo' => $offerRefNo,
             ]);
         } catch (UnreadableFileException $e) {
             return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'The uploaded file is unreadable.');
@@ -520,6 +522,7 @@ class ExcelController extends Controller
             $itemId = $request->input('item-id');
             $indentId = $request->input('indent-id');
             $tenderId = $request->input('tender-id');
+            $offerRefNo = $request->input('offerRefNo');
             $supplierId = $request->input('supplier-id');
             $offerStatus = request('offer_status');
             $offerSummary = request('offer_summary');
@@ -579,6 +582,7 @@ class ExcelController extends Controller
                                 $newParameter->compliance_status = $pGroup['compliance_status'];
                                 $newParameter->remarks = $pGroup['remarks'];
                                 $newParameter->indent_id = $indentId;
+                                $newParameter->offer_reference_no = $offerRefNo;
                                 $newParameter->supplier_id = $supplierId;
                                 $newParameter->tender_id = $tenderId;
 
@@ -588,36 +592,27 @@ class ExcelController extends Controller
                     }
                 }
 
-                $supplierOfferTableName = 'supplier_offers';
-
-                // Check if the record exists
-                $existingRecord = DB::table($supplierOfferTableName)
-                    ->select('id')
-                    ->where('supplier_id', $supplierId)
-                    ->where('item_id', $itemId)
-                    ->first();
-
-                if ($existingRecord) {
-                    // Update the existing record
-                    DB::table($supplierOfferTableName)
-                        ->where('id', $existingRecord->id)
-                        ->update([
-                            'offer_status' => $offerStatus,
-                            'offer_summary' => $offerSummary,
-                            'remarks_summary' => $remarksSummary,
-                        ]);
-                } else {
-                    $newSupplierOffer = new SupplierOffer();
-                    $newSupplierOffer->supplier_id = $supplierId;
-                    $newSupplierOffer->item_id = $itemId;
-                    $newSupplierOffer->offer_status = $offerStatus;
-                    $newSupplierOffer->offer_summary = $offerSummary;
-                    $newSupplierOffer->remarks_summary = $remarksSummary;
-                    $newSupplierOffer->save();
-                }
-
                 DB::commit();
-                return redirect()->to('admin/offer/view')->with('success', 'Supplier\'s Spec saved successfully.');
+
+                $item = Items::find($itemId);
+                $itemName = $item ? $item->name : 'Unknown Item';
+
+                $indent = Indent::find($indentId);
+                $indentRefNo = $indent ? $indent->reference_no : 'Unknown Indent';
+
+                $tender = Tender::find($tenderId);
+                $tenderRefNo = $tender ? $tender->reference_no : 'Unknown Tender';
+
+                $supplier = Supplier::find($supplierId);
+                $supplierFirmName = $supplier ? $supplier->firm_name : 'Unknown Supplier';
+
+                $supplierSpecData = SupplierSpecData::where('offer_reference_no', $offerRefNo)->get();
+
+                $nonEmptyRemarks = $supplierSpecData->pluck('remarks')->filter()->toArray();
+
+                $mergedRemarks = empty($nonEmptyRemarks) ? '' : '<ol><li>' . implode('</li><li>', $nonEmptyRemarks) . '</li></ol>';
+
+                return view('backend.excel-files.display-saved-supplier-data', compact('mergedRemarks', 'offerRefNo', 'itemId', 'itemName', 'indentId', 'indentRefNo', 'tenderId', 'tenderRefNo', 'supplierId', 'supplierFirmName'));
             } else {
                 DB::rollBack();
                 return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Parameter group Name mismatch. Please check the Excel File.');
@@ -627,6 +622,63 @@ class ExcelController extends Controller
             \Log::error('Error saving data: ' . $e->getMessage());
 
             return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Error saving data. ' . $e->getMessage());
+        }
+    }
+
+    // protected function displaySupplierEditedData(Request $request)
+    // {
+    //     return view('backend.excel-files.display-imported-supplier-data');
+    // }
+
+    protected function saveRemarksForSupplier(Request $request)
+    {
+        $itemId = $request['item-id'];
+        $supplierId = $request['supplier-id'];
+        $offerStatus = $request['offer_status'];
+        $offerSummary = $request['offer_summary'];
+        $remarksSummary = $request['remarks_summary'];
+        $supplierOfferTableName = 'supplier_offers';
+
+        try {
+            DB::beginTransaction();
+
+            // Check if the record exists
+            $existingRecord = DB::table($supplierOfferTableName)
+                ->select('id')
+                ->where('supplier_id', $supplierId)
+                ->where('item_id', $itemId)
+                ->lockForUpdate() // Optional: Lock the record for update
+                ->first();
+
+            if ($existingRecord) {
+                // Update the existing record
+                DB::table($supplierOfferTableName)
+                    ->where('id', $existingRecord->id)
+                    ->update([
+                        'offer_status' => $offerStatus,
+                        'offer_summary' => $offerSummary,
+                        'remarks_summary' => $remarksSummary,
+                    ]);
+            } else {
+                // Insert a new record
+                $newSupplierOffer = new SupplierOffer();
+                $newSupplierOffer->supplier_id = $supplierId;
+                $newSupplierOffer->item_id = $itemId;
+                $newSupplierOffer->offer_status = $offerStatus;
+                $newSupplierOffer->offer_summary = $offerSummary;
+                $newSupplierOffer->remarks_summary = $remarksSummary;
+                $newSupplierOffer->save();
+            }
+
+            DB::commit();
+
+            return redirect()->to('admin/offer/view')->with('success', 'Supplier\'s Spec saved successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            \Log::error('Error saving supplier data: ' . $e->getMessage());
+
+            return redirect()->to('admin/offer/view')->with('error', 'An error occurred while saving data.');
         }
     }
 

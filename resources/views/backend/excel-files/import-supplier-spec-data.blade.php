@@ -42,6 +42,7 @@
             @csrf
             <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
                 <div class="row">
+                    <input type="hidden" name="offerRefNo" id="offerRefNo" class="offer-ref-no">
                     <div class="col-md-2 mt-2">
                         <h6>Tender Reference No.: </h6>
                     </div>
