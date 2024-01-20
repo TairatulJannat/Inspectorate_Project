@@ -20,15 +20,6 @@
             height: 100vh;
         }
 
-        .background {
-            background-color: #1b6dbf95;
-            height: 100vh;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            padding: 100px;
-        }
-
 
         .container {
             width: 1100px !important;
@@ -134,7 +125,7 @@
         }
 
         .bg-blue-box::after {
-            background: #FF9184;
+            background: #f74b38;
         }
 
         .card-title {
