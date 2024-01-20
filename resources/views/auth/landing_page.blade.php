@@ -7,14 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Inspectorate Automation System </title>
     <style>
-        *{
-        box-sizing: border-box;
+        * {
+            box-sizing: border-box;
         }
+
         body {
             /* background-color: #e8eceb; */
             padding: 0;
             margin: 0;
-            background-image: url('{{ asset('assets/backend/images/backgroundimage.jpeg') }}');
+            /* background-image: url('{{ asset('assets/backend/images/backgroundimage.jpeg') }}'); */
             background-size: cover;
             font-family: "Arial", sans-serif;
             height: 100vh;
@@ -190,8 +191,13 @@
 
 <body>
     <div class="background">
-        <div class="container">
-            <p class="container-title">Welcome to Inspectorate Automation System</p>
+        <div class="">
+            <a href="{{ url('/admin/login') }}">
+                <div style="">
+                    <img src={{ asset('assets/backend/images/bgimg2.jpeg') }} width="100%" height="900px">
+                </div>
+            </a>
+            {{-- <p class="container-title">Welcome to Inspectorate Automation System</p>
 
             <div class="gradient-cards">
                 <div class="card">
@@ -332,7 +338,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </body>

@@ -160,7 +160,7 @@
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
                                 Letter</a> --}}
                         @endif
-                        <a class="btn btn-success text-light ml-2 mt-2"  href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Genarate I-Note</a>
+                        <a class="btn btn-success text-light ml-2 mt-2"  href="{{ url('admin/inote/generateinote') }}/{{ $details->id }}">Genarate I-Note</a>
                     </div>
                 </div>
 

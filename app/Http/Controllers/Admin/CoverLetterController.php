@@ -46,7 +46,7 @@ class CoverLetterController extends Controller
     }
     public function coverLetterGeneratePdf($doc_reference_id)
     {
-         $cover_letter = CoverLetter::where('doc_reference_id', $doc_reference_id)->first();
+        $cover_letter = CoverLetter::where('doc_reference_id', $doc_reference_id)->first();
         if ($cover_letter) {
             $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
             return $pdf->stream('cover_letter.pdf');
@@ -74,7 +74,7 @@ class CoverLetterController extends Controller
     public function edit(Request $request)
     {
 
-        $data=CoverLetter::find($request->editId);
+        $data = CoverLetter::find($request->editId);
         // dd( $request->all());
         $data->letter_reference_no = $request->letter_reference_no;
         $data->inspectorate_name = $request->inspectorate_name;
@@ -103,4 +103,9 @@ class CoverLetterController extends Controller
     }
 
 
+    public function GenerateINotePdf($doc_reference_id)
+    {
+        $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
+        return $pdf->stream('cover_letter.pdf');
+    }
 }

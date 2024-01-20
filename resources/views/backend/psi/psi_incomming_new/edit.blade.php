@@ -74,9 +74,54 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
-                                <input type="text" class="form-control" id="contract_reference_no" name="contract_reference_no"
-                                    value="{{ $psi->contract_reference_no ? $psi->contract_reference_no : '' }} ">
+
+                                @foreach ($contracts as $contract)
+                                    <select class="form-control select2" id="contract_reference_no"
+                                        name="contract_reference_no">
+                                        <option value="">Select a Contract No</option>
+                                        <option value="{{ $contract->reference_no }}"
+                                            {{ $contract->reference_no == $psi->contract_reference_no ? 'selected' : '' }}>
+                                            {{ $contract->reference_no }}
+                                        </option>
+                                    </select>
+                                @endforeach
+
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_no">Indent Reference No.</label>
+
+                                <input type="text" class="form-control" id="indent_reference_no"
+                                    name="indent_reference_no"
+                                    value="{{ $psi->indent_reference_no ? $psi->contract_reference_no : '' }} ">
+                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="offer_reference_no">Offer Reference No.</label>
+
+                                <input type="text" class="form-control" id="offer_reference_no" name="offer_reference_no"
+                                    value="{{ $psi->offer_reference_no ? $psi->offer_reference_no : '' }} ">
+                                <span id="error_offer_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="supplier_id">Supplier</label>
+                                <select name="supplier_id" id="supplier_id" class="form-control">
+                                    <option value="">Selete Supplier</option>
+                                    @if ($supplier)
+                                        <option value="{{ $supplier->id }}"
+                                            {{ $supplier->id == $psi->supplier_id ? 'selected' : '' }}>
+                                            {{ $supplier->firm_name }}
+                                        </option>
+                                    @endif
+                                </select>
+                                <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -287,6 +332,81 @@
                     });
                 }
             });
+        });
+    </script>
+    <script>
+        $('#contract_reference_no').off('change').on('change', function() {
+            var ContractReferenceNo = $(this).val();
+
+            if (ContractReferenceNo) {
+                $.ajax({
+                    url: "{{ url('admin/qac/get_contract_details') }}" + '/' +
+                        ContractReferenceNo,
+                    type: 'GET',
+                    success: function(response) {
+
+                        if (response.item) {
+                            var item_html = '<option value="' + response.item.id + '">' +
+                                response.item.name + '</option>';
+                            $('#error_item_id').html('')
+                        } else {
+                            var item_html = ''
+                            $('#error_item_id').html('Item Not Found')
+                        }
+
+                        if (response.itemType) {
+                            var itemType_html = '<option value="' + response.itemType.id +
+                                '">' + response.itemType.name + '</option>';
+                            $('#error_item_type_id').html('')
+                        } else {
+                            var itemType_html = ''
+                            $('#error_item_type_id').html('Item Type Not Found')
+                        }
+
+                        if (response.supplier) {
+                            var supplier_html = '<option value="' + response.supplier.id +
+                                '">' + response.supplier.firm_name + '</option>';
+                            $('#error_supplier_id').html('')
+                        } else {
+                            var supplier_html = ''
+                            $('#error_supplier_id').html('Supplier Not Found')
+                        }
+
+                        if (response.contract.indent_reference_no) {
+                            var indent_html = response.contract.indent_reference_no;
+                            $('#error_indent_reference_no').html('')
+                        } else {
+                            var indent_html = ''
+                            $('#error_indent_reference_no').html(
+                                'Indent Reference Id Not Found')
+                        }
+
+                        if (response.contract.offer_reference_no) {
+
+                            var offer_html = response.contract.offer_reference_no;
+                            $('#error_offer_reference_no').html('')
+                        } else {
+                            var offer_html = ''
+                            $('#error_offer_reference_no').html(
+                                'Offer Reference no Not Found')
+                        }
+
+
+                        $('#item_id').html(item_html);
+                        $('#item_type_id').html(itemType_html);
+                        $('#supplier_id').html(supplier_html);
+                        $('#indent_reference_no').val(indent_html);
+                        $('#offer_reference_no').val(offer_html);
+
+                        // $('#contract_reference_no').val(response.contract.reference_no).trigger(
+                        //     'change');
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     </script>
 @endpush
