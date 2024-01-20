@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI (Dispatch)')
+@section('title', 'SI (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,14 +90,14 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI (Dispatch) ')
+@section('main_menu', 'SI (Dispatch) ')
 @section('active_menu', 'Details')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of PSI</h2>
+                <h2>Details of SI</h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-4">
@@ -117,18 +117,23 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Eqpt Type</td>
+                                <td>{{ $details->item_type_name  }}</td>
                             </tr>
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>{{ $details->item_name  }}</td>
+                            </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{ $details->fin_year_name  }}</td>
                             </tr>
 
 
@@ -319,7 +324,7 @@
                     title: `Are you sure to delivered
                         ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -334,7 +339,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/psi_dispatch/psi_tracking') }}',
+                            url: '{{ url('admin/si_dispatch/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -356,7 +361,7 @@
                                         toastr.success('Forward Successful',
                                             response.success);
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.psi_dispatch/view') }}",
+                                            "{{ route('admin.si_dispatch/view') }}",
                                             40000);
                                     }
                                 }

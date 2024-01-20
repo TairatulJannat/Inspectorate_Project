@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'PSI (Completed)')
+@section('title', 'SI (Completed)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,7 +90,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'PSI')
+@section('main_menu', 'SI')
 @section('active_menu', 'Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
@@ -118,18 +118,23 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Eqpt Type</td>
+                                <td>{{ $details->item_type_name  }}</td>
                             </tr>
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>{{ $details->item_name  }}</td>
+                            </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{ $details->fin_year_name  }}</td>
                             </tr>
 
 
@@ -139,7 +144,7 @@
                         {{-- <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
                         <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Pdf Document</a>
+                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -699,7 +704,7 @@
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -714,7 +719,7 @@
                         event.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '{{ url('admin/outgoing_psi/tracking') }}',
+                            url: '{{ url('admin/outgoing_si/tracking') }}',
                             data: {
                                 'reciever_desig_id': reciever_desig_id,
                                 'doc_ref_id': doc_ref_id,
@@ -739,7 +744,7 @@
                                             response.success);
 
                                         setTimeout(window.location.href =
-                                            "{{ route('admin.psi/outgoing') }}",
+                                            "{{ route('admin.si/outgoing') }}",
                                             40000);
                                     }
                                 }
