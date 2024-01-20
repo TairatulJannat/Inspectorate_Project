@@ -98,7 +98,7 @@
             </div>
             <div style="display: flex">
 
-                <div class="card-body col-4">
+                <div class="card-body col-5">
 
                     <div class="table-responsive">
                         <table class="table table-bordered ">
@@ -160,12 +160,12 @@
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
                                 Letter</a> --}}
                         @endif
-
+                        <a class="btn btn-success text-light ml-2 mt-2"  href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Genarate I-Note</a>
                     </div>
                 </div>
 
 
-                <div class="card-body col-8">
+                <div class="card-body col-7">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
@@ -207,10 +207,16 @@
                                                 <div class="d-flex">
 
 
+                                                    <div
+                                                        class="col-md-6 m-2 d-flex justify-content-center align-items-center">
 
+                                                        <a class="btn btn-success text-light ml-2 pt-3" style='height: 60px'
+                                                            href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Approve
+                                                            I-Note</a>
+                                                    </div>
                                                     @if (!$cover_letter)
                                                         <div
-                                                            class="col-md-12 m-2 d-flex justify-content-center align-items-center">
+                                                            class="col-md-6 m-2 d-flex justify-content-center align-items-center">
                                                             <button class="btn btn-warning text-light ml-2"
                                                                 style='height: 60px' type="button" data-bs-toggle="modal"
                                                                 data-bs-target=".bd-example-modal-lg">Create Cover
@@ -282,6 +288,12 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <div class="col-md-12 m-2 d-flex justify-content-center align-items-center">
+
+                                                <a class="btn btn-success text-light ml-2 pt-3" style='height: 60px'
+                                                    href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Approve
+                                                    I-Note</a>
+                                            </div>
 
                                             <div class="col-md-2">
 
@@ -296,7 +308,7 @@
 
                         @endif
 
-                        <a href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">view page</a>
+
                         <div class="forward_status col-md-12 mb-3">
                             <div>
                                 <h4 class="text-success">Vetting Status</h4>
