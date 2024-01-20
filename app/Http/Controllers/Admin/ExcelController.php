@@ -9,19 +9,20 @@ use App\Models\Offer;
 use App\Models\Indent;
 use App\Models\Tender;
 use App\Models\Supplier;
+use App\Models\FinalSpec;
 use App\Models\Item_type;
 use App\Models\Inspectorate;
 use Illuminate\Http\Request;
 use App\Models\DraftContract;
 use App\Models\SupplierOffer;
 use App\Models\ParameterGroup;
+use App\Imports\FinalSpecImport;
 use App\Models\SupplierSpecData;
 use App\Imports\IndentSpecImport;
 use Illuminate\Support\Facades\DB;
 use App\Imports\SupplierSpecImport;
 use App\Http\Controllers\Controller;
 use App\Models\AssignParameterValue;
-use App\Models\FinalSpec;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -759,25 +760,17 @@ class ExcelController extends Controller
     public function importFinalSpecEditedData(Request $request)
     {
         $request->validate([
-            'item-type-id' => ['required', 'exists:item_types,id'],
-            'item-id' => ['required', 'exists:items,id'],
-            'indent-id' => ['required', 'exists:indents,id'],
-            'supplier-id' => ['required', 'exists:suppliers,id'],
-            'tender-id' => ['required', 'exists:tenders,id'],
+            'supplierId' => ['required', 'exists:suppliers,id'],
             'file' => 'required|mimes:xlsx,csv|max:2048',
         ], [
-            'item-type-id.required' => __('Please choose an Item Type ID.'),
-            'item-id.required' => __('Please choose an Item ID.'),
-            'indent-id.required' => __('Please choose an Indent ID.'),
-            'supplier-id.required' => __('Please choose an Supplier ID.'),
-            'tender-id.required' => __('Please choose an Tender ID.'),
+            'supplierId.required' => __('Please choose an Supplier ID.'),
             'file.required' => __('Please choose an Excel/CSV file.'),
             'file.mimes' => __('The file must be of type: xlsx, csv.'),
             'file.max' => __('The file size must not exceed 2048 kilobytes.'),
         ]);
 
         try {
-            $importedData = Excel::toCollection(new SupplierSpecImport, $request->file('file'))->first();
+            $importedData = Excel::toCollection(new FinalSpecImport, $request->file('file'))->first();
 
             $parameterGroups = [];
             $currentGroupName = null;
@@ -804,11 +797,15 @@ class ExcelController extends Controller
                 ];
             }
 
-            $itemId = $request->input('item-id');
-            $itemTypeId = $request->input('item-type-id');
-            $indentId = $request->input('indent-id');
-            $supplierId = $request->input('supplier-id');
-            $tenderId = $request->input('tender-id');
+            $finalSpecRefNo = $request->finalSpecRefNo;
+            $finalSpecData = FinalSpec::where('reference_no', $finalSpecRefNo)->first();
+
+            $itemId = $finalSpecData['item_id'];
+            $itemTypeId = $finalSpecData['item_type_id'];
+            $indentRefNo = $request['indentRefNo'];
+            $tenderRefNo = $request['tenderRefNo'];
+            $offerRefNo = $request['offerRefNo'];
+            $supplierId = $request['supplierId'];
 
             $item = Items::find($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';
@@ -816,16 +813,19 @@ class ExcelController extends Controller
             $itemType = Item_Type::find($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-            $indent = Indent::find($indentId);
-            $indentRefNo = $indent ? $indent->reference_no : 'Unknown Indent';
+            $indent = Indent::where('reference_no', $indentRefNo)->first();
+            $indentId = $indent ? $indent->id : 'Unknown Indent';
+
+            $tender = Tender::where('reference_no', $tenderRefNo)->first();
+            $tenderId = $tender ? $tender->id : 'Unknown Tender';
+
+            $offer = Offer::where('reference_no', $offerRefNo)->first();
+            $offerId = $offer ? $tender->id : 'Unknown Offer';
 
             $supplier = Supplier::find($supplierId);
             $supplierFirmName = $supplier ? $supplier->firm_name : 'Unknown Supplier';
 
-            $tender = Tender::find($tenderId);
-            $tenderRefNo = $tender ? $tender->reference_no : 'Unknown Tender';
-
-            return view('backend.excel-files.display-imported-supplier-data', [
+            return view('backend.excel-files.display-imported-final-spec-data', [
                 'parameterGroups' => $parameterGroups,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
@@ -833,17 +833,20 @@ class ExcelController extends Controller
                 'itemName' => $itemName,
                 'indentId' => $indentId,
                 'indentRefNo' => $indentRefNo,
-                'supplierId' => $supplierId,
-                'supplierFirmName' => $supplierFirmName,
                 'tenderId' => $tenderId,
                 'tenderRefNo' => $tenderRefNo,
+                'offerId' => $offerId,
+                'offerRefNo' => $offerRefNo,
+                'supplierId' => $supplierId,
+                'finalSpecRefNo' => $finalSpecRefNo,
+                'supplierFirmName' => $supplierFirmName,
             ]);
         } catch (UnreadableFileException $e) {
-            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'The uploaded file is unreadable.');
+            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'The uploaded file is unreadable.');
         } catch (SheetNotFoundException $e) {
-            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
+            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
         } catch (\Exception $e) {
-            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
+            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
         }
     }
 
@@ -856,10 +859,9 @@ class ExcelController extends Controller
             $itemId = $request->input('item-id');
             $indentId = $request->input('indent-id');
             $tenderId = $request->input('tender-id');
+            $tenderId = $request->input('tender-id');
+            $finalSpecRefNo = $request->input('finalSpecRefNo');
             $supplierId = $request->input('supplier-id');
-            $offerStatus = request('offer_status');
-            $offerSummary = request('offer_summary');
-            $remarksSummary = request('remarks_summary');
 
             $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
             $databaseParameterGroupCount = $indentParameterGroups->count();
@@ -868,14 +870,13 @@ class ExcelController extends Controller
 
             if ($parameterGroupCount !== $databaseParameterGroupCount) {
                 DB::rollBack();
-                return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Parameter group count mismatch. Please check the Excel File.');
+                return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Parameter group count mismatch. Please check the Excel File.');
             }
 
-            // Delete existing data for the supplier and parameter groups
             foreach ($indentParameterGroups as $indentParameterGroup) {
                 $parameterGroupId = $indentParameterGroup->id;
 
-                SupplierSpecData::where('supplier_id', $supplierId)
+                AssignParameterValue::where('reference_no', $finalSpecRefNo)
                     ->where('parameter_group_id', $parameterGroupId)
                     ->delete();
             }
@@ -902,21 +903,13 @@ class ExcelController extends Controller
                     foreach ($jsonData as $groupName => $parameterGroup) {
                         if ($indentParameterGroup->name == $groupName) {
                             foreach ($parameterGroup as $pGroup) {
-                                $newParameter = new SupplierSpecData();
+                                $newParameter = new AssignParameterValue();
                                 $newParameter->parameter_group_id = $parameterGroupId;
                                 $newParameter->parameter_name = $pGroup['parameter_name'];
-                                $result = DB::table($tableName)
-                                    ->select('id')
-                                    ->where('parameter_group_id', $parameterGroupId)
-                                    ->where('parameter_name', $pGroup['parameter_name'])
-                                    ->first();
-                                $newParameter->parameter_id = $result->id;
                                 $newParameter->parameter_value = $pGroup['parameter_value'];
-                                $newParameter->compliance_status = $pGroup['compliance_status'];
+                                $newParameter->doc_type_id = 6;
+                                $newParameter->reference_no = $finalSpecRefNo;
                                 $newParameter->remarks = $pGroup['remarks'];
-                                $newParameter->indent_id = $indentId;
-                                $newParameter->supplier_id = $supplierId;
-                                $newParameter->tender_id = $tenderId;
 
                                 $newParameter->save();
                             }
@@ -924,39 +917,11 @@ class ExcelController extends Controller
                     }
                 }
 
-                $supplierOfferTableName = 'supplier_offers';
-
-                // Check if the record exists
-                $existingRecord = DB::table($supplierOfferTableName)
-                    ->select('id')
-                    ->where('supplier_id', $supplierId)
-                    ->where('item_id', $itemId)
-                    ->first();
-
-                if ($existingRecord) {
-                    // Update the existing record
-                    DB::table($supplierOfferTableName)
-                        ->where('id', $existingRecord->id)
-                        ->update([
-                            'offer_status' => $offerStatus,
-                            'offer_summary' => $offerSummary,
-                            'remarks_summary' => $remarksSummary,
-                        ]);
-                } else {
-                    $newSupplierOffer = new SupplierOffer();
-                    $newSupplierOffer->supplier_id = $supplierId;
-                    $newSupplierOffer->item_id = $itemId;
-                    $newSupplierOffer->offer_status = $offerStatus;
-                    $newSupplierOffer->offer_summary = $offerSummary;
-                    $newSupplierOffer->remarks_summary = $remarksSummary;
-                    $newSupplierOffer->save();
-                }
-
                 DB::commit();
-                return redirect()->to('admin/offer/view')->with('success', 'Supplier\'s Spec saved successfully.');
+                return redirect()->to('admin/FinalSpec/view')->with('success', 'Final Spec\'s file saved successfully.');
             } else {
                 DB::rollBack();
-                return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Parameter group Name mismatch. Please check the Excel File.');
+                return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Parameter group Name mismatch. Please check the Excel File.');
             }
         } catch (\Exception $e) {
             DB::rollBack();

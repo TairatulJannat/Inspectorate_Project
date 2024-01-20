@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-md-3">
                             <span id="offerRefNoDisplay" class="text-display fw-bold text-danger"></span>
-                            <input type="hidden" name="offerRefNo" id="offerRefNo" class="offerRefNo"
+                            <input type="hidden" name="offerRefNo" id="offerRefNo" class="offer-ref-no"
                                 oninput="displayText(this.value, 'offerRefNoDisplay')" readonly>
                         </div>
                     </div>
@@ -65,14 +65,14 @@
                             <label for="tenderRefNo">Tender Reference Number:</label>
                         </div>
                         <div class="col-md-3"><span id="tenderRefNoDisplay" class="text-display fw-bold text-danger"></span>
-                            <input type="hidden" name="tenderRefNo" id="tenderRefNo" class="tenderRefNo"
+                            <input type="hidden" name="tenderRefNo" id="tenderRefNo" class="tender-ref-no"
                                 oninput="displayText(this.value, 'tenderRefNoDisplay')" readonly>
                         </div>
                         <div class="col-md-3">
                             <label for="indentRefNo">Indent Reference Number:</label>
                         </div>
                         <div class="col-md-3"><span id="indentRefNoDisplay" class="text-display fw-bold text-danger"></span>
-                            <input type="hidden" name="indentRefNo" id="indentRefNo" class="indentRefNo"
+                            <input type="hidden" name="indentRefNo" id="indentRefNo" class="indent-ref-no"
                                 oninput="displayText(this.value, 'indentRefNoDisplay')" readonly>
                         </div>
                     </div>
@@ -81,22 +81,22 @@
             <div class="card-body f-20">
                 <div class="row mb-3">
                     <div class="col-md-2">
-                        <label for="indentRefNo" class="fw-bold bg-success p-1 required-field">Selected Supplier:</label>
+                        <label for="supplierId" class="fw-bold bg-success p-1 required-field">Selected Supplier:</label>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <select class="form-control select2 supplier-id" id="supplierId" name="supplier-id"
+                            <select class="form-control select2 supplier-id" id="supplierId" name="supplierId"
                                 style="width: 100% !important;">
                                 <option value="" selected disabled>Select Supplier</option>
                                 @foreach ($suppliers as $supplier)
                                     <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
                                 @endforeach
                             </select>
-                            @error('supplier-id')
+                            @error('supplierId')
                                 <div class="invalid-feedback d-block f-14">{{ $message }}</div>
                             @enderror
                         </div>
-                        <span class="text-danger error-text supplier-id-error"></span>
+                        <span class="text-danger error-text supplierId-error"></span>
                     </div>
                 </div>
                 <div class="row">

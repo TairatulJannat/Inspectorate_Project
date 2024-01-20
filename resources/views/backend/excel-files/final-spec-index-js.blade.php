@@ -23,6 +23,10 @@
                 $('#offerRefNoDisplay').text(finalSpecData['offer_reference_no']);
                 $('#tenderRefNoDisplay').text(finalSpecData['tender_reference_no']);
                 $('#indentRefNoDisplay').text(finalSpecData['indent_reference_no']);
+                $('#finalSpecRefNo').val(finalSpecData['reference_no']);
+                $('#offerRefNo').val(finalSpecData['offer_reference_no']);
+                $('#tenderRefNo').val(finalSpecData['tender_reference_no']);
+                $('#indentRefNo').val(finalSpecData['indent_reference_no']);
 
                 offerRefNo = finalSpecData['offer_reference_no'];
             }

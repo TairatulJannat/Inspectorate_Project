@@ -46,6 +46,23 @@
 @section('main_menu', 'Final Spec (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="panel-heading">
         <div class="invoice_date_filter" style="">
@@ -63,14 +80,14 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.FinalSpec/view') }}" type="button"
-                            class="btn btn-success btn-sm">New Arrival({{$finalSpecNew}})</a>
+                            <a href="{{ route('admin.FinalSpec/view') }}" type="button" class="btn btn-success btn-sm">New
+                                Arrival({{ $finalSpecNew }})</a>
                             <a href="{{ route('admin.FinalSpec_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process({{$finalSpecOnProcess}})</a>
+                                class="btn btn-secondary btn-sm">On Process({{ $finalSpecOnProcess }})</a>
                             <a href="{{ route('admin.FinalSpec/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed({{$finalSpecCompleted}})</a>
+                                class="btn btn-info text-white btn-sm">Completed({{ $finalSpecCompleted }})</a>
                             <a href="{{ route('admin.FinalSpec_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch({{$finalSpecDispatch}})</a>
+                                class="btn btn-danger btn-sm">Dispatch({{ $finalSpecDispatch }})</a>
 
                         </div>
                         <div>
