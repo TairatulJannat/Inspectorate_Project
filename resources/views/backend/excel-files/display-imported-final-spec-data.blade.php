@@ -18,7 +18,7 @@
     <div class="card">
         <div class="card-body" style="background-color: honeydew !important;">
             @if ($parameterGroups)
-                <form method="post" action="{{ url('admin/save-supplier-spec-data') }}" id="editSupplierExcelInput">
+                <form method="post" action="{{ url('admin/save-final-spec-data') }}" id="editSupplierExcelInput">
                     @csrf
 
                     <div class="row mb-3">
@@ -37,6 +37,10 @@
                                 <div class="offerRefNo f-20">Offer Ref. No: <span class="fw-bold">{{ $offerRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="offerRefNo" value="{{ $offerRefNo }}">
+                                <div class="finalSpecRefNo f-20">Final Spec Ref. No: <span
+                                        class="fw-bold">{{ $finalSpecRefNo }}</span>
+                                </div>
+                                <input type="hidden" name="finalSpecRefNo" value="{{ $finalSpecRefNo }}">
                                 <div class="supplier-id f-20">Supplier Name: <span
                                         class="fw-bold">{{ $supplierFirmName }}</span></div>
                                 <input type="hidden" name="supplier-id" value="{{ $supplierId }}">
@@ -51,8 +55,7 @@
                                     <th style="background-color: #bdf5fb">Sl No.</th>
                                     <th style="background-color: #bdf5fb">Parameter name</th>
                                     <th style="background-color: #bdf5fb">Indent Parameter value</th>
-                                    <th style="background-color: #b0e0bc">Supplier Parameter value</th>
-                                    <th style="background-color: #b0e0bc">Compliance Status</th>
+                                    <th style="background-color: #b0e0bc">Final Spec value</th>
                                     <th style="background-color: #b0e0bc">Remarks</th>
                                 </tr>
                             </thead>
@@ -71,7 +74,7 @@
                                         <tr>
                                             <td class="col-md-1 py-1 text-center" style="background-color: #bdf5fb">
                                                 {{ $slNo + 1 }}</td>
-                                            <td class="col-md-2 py-1" style="background-color: #bdf5fb">
+                                            <td class="col-md-3 py-1" style="background-color: #bdf5fb">
                                                 <textarea class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
                                             </td>
@@ -82,14 +85,6 @@
                                             <td class="col-md-3 py-1" style="background-color: #b0e0bc">
                                                 <textarea class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
-                                            </td>
-                                            <td class="col-md-1 py-1" style="background-color: #b0e0bc">
-                                                <select class="form-control select2"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][compliance_status]">
-                                                    <option value="Comply" selected>Comply</option>
-                                                    <option value="Partially Comply">Partially Comply</option>
-                                                    <option value="Non Comply">Non Comply</option>
-                                                </select>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
                                                 <textarea class="form-control" name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][remarks]"></textarea>

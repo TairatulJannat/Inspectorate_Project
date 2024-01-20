@@ -24,11 +24,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class FinalSpecController extends Controller
 {
-    //
-
     public function index()
     {
-
         $insp_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -81,8 +78,7 @@ class FinalSpecController extends Controller
                 ->count();
         }
 
-
-        return view('backend.finalSpec.finalSpec_incomming_new.index', compact('finalSpecNew','finalSpecOnProcess','finalSpecCompleted','finalSpecDispatch'));
+        return view('backend.finalSpec.finalSpec_incomming_new.index', compact('finalSpecNew', 'finalSpecOnProcess', 'finalSpecCompleted', 'finalSpecDispatch'));
     }
 
     public function all_data(Request $request)
@@ -144,7 +140,6 @@ class FinalSpecController extends Controller
                 }
                 //......End for showing data for receiver designation
             }
-
             // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
@@ -160,17 +155,15 @@ class FinalSpecController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',6)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 6)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
-
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/finalSpec/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-
 
                             $actionBtn .= '<a href="' . url('admin/finalspec/details/' . $data->id) . '" class="edit">Forward</a>
                             </div>';
@@ -183,13 +176,11 @@ class FinalSpecController extends Controller
                             </div>';
                         }
 
-
                         if ($designation_id  ==  $DocumentTrack->sender_designation_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/finalSpec/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-
                             $actionBtn .= '<a href="' . url('admin/finalspec/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
@@ -198,11 +189,9 @@ class FinalSpecController extends Controller
                         if ($designation_id == 3) {
                             $actionBtn .= '<a href="' . url('admin/finalSpec/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                         }
-
                         $actionBtn .= ' <a href="' . url('admin/finalspec/details/' . $data->id) . '" class="edit">Forward</a>
                         </div>';
                     }
-
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'status'])
@@ -252,13 +241,11 @@ class FinalSpecController extends Controller
         $data->final_spec_receive_Ltr_dt = $request->final_spec_receive_Ltr_dt;
         $data->fin_year_id = $request->fin_year_id;
 
-
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;
         $data->created_at = Carbon::now()->format('Y-m-d');
         $data->updated_at = Carbon::now()->format('Y-m-d');;
-
 
         $data->save();
 
@@ -280,7 +267,6 @@ class FinalSpecController extends Controller
         $offer_reference_numbers = Offer::all();
         return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers'));
     }
-
 
     public function update(Request $request)
     {
@@ -313,7 +299,6 @@ class FinalSpecController extends Controller
         $data->created_at = Carbon::now()->format('Y-m-d');
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-
         $data->save();
 
         return response()->json(['success' => 'Done']);
@@ -321,7 +306,6 @@ class FinalSpecController extends Controller
 
     public function details($id)
     {
-
         $details = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'final_specs.fin_year_id', '=', 'fin_years.id')
@@ -337,6 +321,29 @@ class FinalSpecController extends Controller
             ->where('final_specs.id', $id)
             ->first();
 
+
+        //     $details->additional_documents = json_decode($details->additional_documents, true);
+        //         $additional_documents_names = [];
+
+        // if($details->additional_documents){
+        //     foreach ($details->additional_documents as $document_id) {
+        //         $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
+
+        //         array_push($additional_documents_names, $additional_names);
+        //     }
+
+        // }
+
+//         $details->suppliers = json_decode($details->supplier_id, true);
+
+//         $supplier_names_names = [];
+//         if ($details->suppliers) {
+//             foreach ($details->suppliers as $Supplier_id) {
+//                 $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
+
+//                 array_push($supplier_names_names, $supplier_names);
+//             }
+//         }
 
 
         $designations = Designation::all();
@@ -362,7 +369,6 @@ class FinalSpecController extends Controller
         }
 
         //Start close forward Status...
-
         $sender_designation_id = '';
         foreach ($document_tracks as $track) {
             if ($track->sender_designation_id === $desig_id) {
@@ -370,25 +376,22 @@ class FinalSpecController extends Controller
                 break;
             }
         }
-
         //End close forward Status...
-
-
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
             ->where('doc_type_id', 6)
             ->latest()->first();
-
         //End blade forward on off section....
 
 
+
         return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden'));
+
     }
 
     public function finalSpecTracking(Request $request)
     {
-
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -416,7 +419,6 @@ class FinalSpecController extends Controller
         $data->updated_at =  Carbon::now('Asia/Dhaka');
         $data->save();
 
-
         if ($desig_position->position == 7) {
 
             $data = FinalSpec::find($doc_ref_id);
@@ -441,27 +443,22 @@ class FinalSpecController extends Controller
                 $value->save();
             }
         }
-
-
-
-
         return response()->json(['success' => 'Done']);
     }
     public function get_offer_details($offerReferenceNo)
     {
+
         $offer = Offer::where('reference_no' ,$offerReferenceNo)->first();
         $item=Items::where('id' , $offer->item_id)->first();
         $item_type=Item_type::where('id' , $offer->item_type_id)->first();
         $tender_reference_no = Tender::where('reference_no',$offer->tender_reference_no)->first();
         
         $indent_reference_no = Indent::where('reference_no',$offer->indent_reference_no)->first();
-        
-        $offer->suppliers = json_decode($offer->supplier_id, true);
-     
-    
-        $suppliers = Supplier::whereIn('id',  $offer->suppliers)->get();
-        
-        return response()->json(['item' =>$item, 'itemType' =>$item_type,'tenderReferenceNo'=>$tender_reference_no,'indentReferenceNo'=> $indent_reference_no,'suppliernames'=> $suppliers]);
 
+        $offer->suppliers = json_decode($offer->supplier_id, true);
+
+        $suppliers = Supplier::whereIn('id',  $offer->suppliers)->get();
+
+        return response()->json(['item' => $item, 'itemType' => $item_type, 'tenderReferenceNo' => $tender_reference_no, 'indentReferenceNo' => $indent_reference_no, 'suppliernames' => $suppliers]);
     }
 }

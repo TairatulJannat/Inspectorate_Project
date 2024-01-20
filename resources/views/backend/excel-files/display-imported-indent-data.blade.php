@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+                        <button type="submit" class="btn btn-success-gradien mt-3">Save Changes</button>
                     </div>
                 </form>
             @else

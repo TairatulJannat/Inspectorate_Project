@@ -3,24 +3,65 @@
     var xhr;
 
     $(document).ready(function() {
-        var offerRefNo = new URLSearchParams(window.location.search).get('offerRefNo');
-        document.getElementById('offerRefNo').value = offerRefNo;
-        var tenderId = '';
+        $('.select2').select2();
+        toastr.options.preventDuplicates = true;
+
+        var refNo = new URLSearchParams(window.location.search).get('refNo');
+
+        var itemsData = {!! $items !!};
+        var itemTypesData = {!! $itemTypes !!};
+        var tendersData = {!! $tenders !!};
+        var indentsData = {!! $indents !!};
+        var suppliersData = {!! $suppliers !!};
+        var finalSpecsData = {!! $finalSpecs !!};
+
+        var offerRefNo = '';
+
+        for (const finalSpecData of finalSpecsData) {
+            if (finalSpecData['reference_no'] === refNo) {
+                $('#finalSpecRefNoDisplay').text(finalSpecData['reference_no']);
+                $('#offerRefNoDisplay').text(finalSpecData['offer_reference_no']);
+                $('#tenderRefNoDisplay').text(finalSpecData['tender_reference_no']);
+                $('#indentRefNoDisplay').text(finalSpecData['indent_reference_no']);
+                $('#finalSpecRefNo').val(finalSpecData['reference_no']);
+                $('#offerRefNo').val(finalSpecData['offer_reference_no']);
+                $('#tenderRefNo').val(finalSpecData['tender_reference_no']);
+                $('#indentRefNo').val(finalSpecData['indent_reference_no']);
+
+                offerRefNo = finalSpecData['offer_reference_no'];
+            }
+        }
+
+        $.ajax({
+            url: '{{ url('admin/get-offered-suppliers') }}',
+            method: 'POST',
+            data: {
+                'offerRefNo': offerRefNo,
+                '_token': '{{ csrf_token() }}'
+            },
+            processData: true,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            cache: false,
+            success: function(response) {
+                if (response.isSuccess === false) {
+                    toastr.error(response.Message);
+                } else if (response.isSuccess === true) {
+                    toastr.success(response.Message);
+                    populateSuppliersDropdown(response.suppliers);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', xhr.responseText);
+                toastr.error('An error occurred while processing the request.');
+            },
+        });
 
         $('#import-supplier-spec-data-form').submit(function() {
             $('#tenderId, #itemTypeId, #indentId, #itemId').prop('disabled', false);
         });
 
-        var itemsData = {!! $items !!};
-        var itemTypesData = {!! $itemTypes !!};
-        var tendersData = {!! $tenders !!};
-        var $indentsData = {!! $indents !!};
-        var $suppliersData = {!! $suppliers !!};
-
         populateItemsDropdown(itemsData);
-
-        $('.select2').select2();
-        // toastr.options.preventDuplicates = true;
 
         $('#searchItemParametersButton').submit(function(e) {
             e.preventDefault();
@@ -47,7 +88,7 @@
                         $("#itemId").val(response.itemId).prop('selected', true).change();
                         populateSuppliersDropdown(response.suppliers);
                         populateSuppliersTable(response.suppliersData);
-                        toastr.success("Please select file to Import!");
+                        toastr.success("Data found for this Tender!");
                     } else if (response.isSuccess === false) {
                         toastr.success(response.message);
                         if (response.indentId) {
@@ -74,32 +115,8 @@
             });
         });
 
-        $.ajax({
-            url: '{{ url('admin/offer/get-offer-details') }}',
-            method: 'GET',
-            data: {
-                'offerRefNo': offerRefNo,
-                '_token': '{{ csrf_token() }}'
-            },
-            processData: true,
-            dataType: "json",
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            cache: false,
-            success: function(response) {
-                if (response.isSuccess === false) {
-                    toastr.error(response.Message);
-                } else if (response.isSuccess === true) {
-                    tenderId = response.tenderDetails.id;
-                    $("#tenderId").val(tenderId);
-                    $("#tenderId").trigger("change");
-                    // toastr.success(response.Message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log('Error:', xhr.responseText);
-                toastr.error('An error occurred while processing the request.');
-            },
-        });
+        $("#tenderId").val(tenderRefNo);
+        $("#tenderId").trigger("change");
 
         var supplierDataContainer = $(".supplier-data");
         supplierDataContainer.hide();
