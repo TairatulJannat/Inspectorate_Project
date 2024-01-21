@@ -1,14 +1,21 @@
 @extends('backend.app')
 
-@section('title', 'Import Indent Spec Excel File')
+@section('title', 'Import Final Spec')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.min.css') }}">
+    <style>
+        .required-field::before {
+            content: '*';
+            color: red;
+            margin-right: 5px;
+        }
+    </style>
 @endpush
 
 @section('main_menu', 'Excel Files')
-@section('active_menu', 'Import Indent Spec Excel File')
+@section('active_menu', 'Import Final Spec')
 
 @section('content')
     @if (session('status'))
@@ -29,56 +36,74 @@
         </div>
     @endif
 
-    <div class="card" style="background-color: darkseagreen;">
-        <form id="import-indent-spec-data-form" method="POST" action="{{ url('admin/import-indent-spec-data') }}"
+    <div class="card shadow-lg" style="background-color: darkseagreen;">
+        <form id="import-final-spec-data-form" method="POST" action="{{ url('admin/import-final-spec-data') }}"
             accept-charset="utf-8" enctype="multipart/form-data">
             @csrf
-            <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
-                <div class="row">
-                    <input type="hidden" id="indentNo" name="indentNo" value="">
-                    <div class="col-md-2 mt-2">
-                        <h6>Item Type: </h6>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <select class="form-control select2 item-type-id" id="itemTypeId" name="item-type-id"
-                                style="width: 100% !important;" disabled>
-                                <option value="" selected disabled>Item Type</option>
-                                @foreach ($itemTypes as $itemType)
-                                    <option value="{{ $itemType->id }}">{{ $itemType->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('item-type-id')
-                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
-                            @enderror
+            <div class="card-header p-5 pb-3" style="background-color: #b6e9b6 !important;">
+                <div class="f-20">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="finalSpecRefNo">Final Spec Reference Number:</label>
                         </div>
-                        <span class="text-danger error-text item-type-id-error"></span>
-                    </div>
-                    <div class="col-md-2 mt-2">
-                        <h6 class="card-title">Item: </h6>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <select class="form-control select2 item-id" id="itemId" name="item-id"
-                                style="width: 100% !important;" disabled>
-                                <option value="" selected disabled>Item</option>
-                                @foreach ($items as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('item-id')
-                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
-                            @enderror
+                        <div class="col-md-3">
+                            <span id="finalSpecRefNoDisplay" class="text-display fw-bold text-danger"></span>
+                            <input type="hidden" name="finalSpecRefNo" id="finalSpecRefNo" class="final-spec-ref-no"
+                                oninput="displayText(this.value, 'finalSpecRefNoDisplay')" readonly>
                         </div>
-                        <span class="text-danger error-text item-id-error"></span>
+                        <div class="col-md-3">
+                            <label for="offerRefNo">Offer Reference Number:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <span id="offerRefNoDisplay" class="text-display fw-bold text-danger"></span>
+                            <input type="hidden" name="offerRefNo" id="offerRefNo" class="offer-ref-no"
+                                oninput="displayText(this.value, 'offerRefNoDisplay')" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="tenderRefNo">Tender Reference Number:</label>
+                        </div>
+                        <div class="col-md-3"><span id="tenderRefNoDisplay" class="text-display fw-bold text-danger"></span>
+                            <input type="hidden" name="tenderRefNo" id="tenderRefNo" class="tender-ref-no"
+                                oninput="displayText(this.value, 'tenderRefNoDisplay')" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="indentRefNo">Indent Reference Number:</label>
+                        </div>
+                        <div class="col-md-3"><span id="indentRefNoDisplay" class="text-display fw-bold text-danger"></span>
+                            <input type="hidden" name="indentRefNo" id="indentRefNo" class="indent-ref-no"
+                                oninput="displayText(this.value, 'indentRefNoDisplay')" readonly>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body f-20">
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label for="supplierId" class="fw-bold bg-success p-1 required-field">Selected Supplier:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <select class="form-control select2 supplier-id" id="supplierId" name="supplierId"
+                                style="width: 100% !important;">
+                                <option value="" selected disabled>Select Supplier</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
+                                @endforeach
+                            </select>
+                            @error('supplierId')
+                                <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <span class="text-danger error-text supplierId-error"></span>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
-                            <label for="file" class="form-label mb-2 text-white f-22">Choose Excel/CSV File:</label>
+                            <label for="file" class="form-label mb-2 f-20 fw-bold bg-success p-1 required-field">Choose
+                                Excel/CSV File:</label>
                             <input class="form-control" type="file" id="file" name="file">
                             @error('file')
                                 <div class="invalid-feedback d-block f-14">{{ $message }}</div>
@@ -102,5 +127,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- Developer's JS file for brand page -->
-    @include('backend.excel-files.indent-index-js')
+    @include('backend.excel-files.final-spec-index-js')
 @endpush

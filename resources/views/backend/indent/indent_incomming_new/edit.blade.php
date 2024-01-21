@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $indent->reference_no ? $indent->reference_no : '' }} ">
+                                    value="{{ $indent->reference_no ? $indent->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -309,7 +309,7 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
-          $(document).ready(function() {
+        $(document).ready(function() {
             $('.select2').select2();
 
             const urlParams = new URLSearchParams(window.location.search);

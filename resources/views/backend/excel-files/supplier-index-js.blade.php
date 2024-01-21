@@ -3,7 +3,9 @@
     var xhr;
 
     $(document).ready(function() {
-        var tenderRefNo = new URLSearchParams(window.location.search).get('tenderRefNo');
+        var offerRefNo = new URLSearchParams(window.location.search).get('offerRefNo');
+        document.getElementById('offerRefNo').value = offerRefNo;
+        var tenderId = '';
 
         $('#import-supplier-spec-data-form').submit(function() {
             $('#tenderId, #itemTypeId, #indentId, #itemId').prop('disabled', false);
@@ -45,7 +47,7 @@
                         $("#itemId").val(response.itemId).prop('selected', true).change();
                         populateSuppliersDropdown(response.suppliers);
                         populateSuppliersTable(response.suppliersData);
-                        toastr.success("Data found for this Tender!");
+                        toastr.success("Please select file to Import!");
                     } else if (response.isSuccess === false) {
                         toastr.success(response.message);
                         if (response.indentId) {
@@ -72,8 +74,32 @@
             });
         });
 
-        $("#tenderId").val(tenderRefNo);
-        $("#tenderId").trigger("change");
+        $.ajax({
+            url: '{{ url('admin/offer/get-offer-details') }}',
+            method: 'GET',
+            data: {
+                'offerRefNo': offerRefNo,
+                '_token': '{{ csrf_token() }}'
+            },
+            processData: true,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            cache: false,
+            success: function(response) {
+                if (response.isSuccess === false) {
+                    toastr.error(response.Message);
+                } else if (response.isSuccess === true) {
+                    tenderId = response.tenderDetails.id;
+                    $("#tenderId").val(tenderId);
+                    $("#tenderId").trigger("change");
+                    // toastr.success(response.Message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', xhr.responseText);
+                toastr.error('An error occurred while processing the request.');
+            },
+        });
 
         var supplierDataContainer = $(".supplier-data");
         supplierDataContainer.hide();

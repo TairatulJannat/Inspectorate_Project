@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\CoverLetter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Mpdf\Mpdf;
 use PDF;
+
+
 
 class CoverLetterController extends Controller
 {
@@ -48,12 +51,30 @@ class CoverLetterController extends Controller
             $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
             return $pdf->stream('cover_letter.pdf');
         }
+        // $fontPath = public_path('fonts');
+
+        // // Create an mPDF object
+        // $mpdf = new Mpdf([
+        //     'fontDir' => [public_path('fonts')],
+        //     'fontdata' => [
+        //         'nikosh' => [
+        //             'R' => 'Nikosh.ttf',
+        //         ],
+        //     ],
+        // ]);
+
+        // // Add content to the PDF
+        // $html = view('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->render();
+        // $mpdf->WriteHTML($html);
+
+        // // Output or download the PDF
+        // $mpdf->Output('sample.pdf', 'D');
     }
 
     public function edit(Request $request)
     {
 
-        $data=CoverLetter::find($request->editId);
+        $data = CoverLetter::find($request->editId);
         // dd( $request->all());
         $data->letter_reference_no = $request->letter_reference_no;
         $data->inspectorate_name = $request->inspectorate_name;
@@ -79,5 +100,12 @@ class CoverLetterController extends Controller
         $data->save();
 
         return response()->json(['success' => "Letter information updated"]);
+    }
+
+
+    public function GenerateINotePdf($doc_reference_id)
+    {
+        $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
+        return $pdf->stream('cover_letter.pdf');
     }
 }

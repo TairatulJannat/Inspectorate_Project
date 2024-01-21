@@ -148,7 +148,7 @@ class ContractApprovedController extends Controller
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 10)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 

@@ -16,6 +16,7 @@ class SupplierSpecData extends Model
         'indent_id',
         'supplier_id',
         'tender_id',
+        'offer_reference_no',
     ];
 
     // Optional: Define relationships with other models

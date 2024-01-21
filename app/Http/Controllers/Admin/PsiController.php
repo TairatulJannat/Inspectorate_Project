@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
@@ -15,6 +16,7 @@ use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\Psi;
 use App\Models\Section;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -117,6 +119,7 @@ class PsiController extends Controller
                 $psiIds = Psi::leftJoin('document_tracks', 'psies.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('psies.inspectorate_id', $insp_id)
+                    ->where('document_tracks.doc_type_id', 8)
                     ->where('psies.status', 0)
                     ->whereIn('psies.section_id', $section_ids)->pluck('psies.id')->toArray();
 
@@ -163,7 +166,7 @@ class PsiController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('document_tracks.doc_type_id', 8)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -278,13 +281,15 @@ class PsiController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
+        $contracts=Contract::all();
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->get();
         $item = Items::where('id', $psi->item_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.psi.psi_incomming_new.edit', compact('psi', 'item', 'dte_managments', 'item_types', 'fin_years'));
+        $supplier = Supplier::where('id', $psi->supplier_id)->first();
+        return view('backend.psi.psi_incomming_new.edit', compact('psi','supplier','contracts', 'item', 'dte_managments', 'item_types', 'fin_years'));
     }
 
     public function update(Request $request)
@@ -308,6 +313,9 @@ class PsiController extends Controller
         $data->sender_id = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->contract_reference_no = $request->contract_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
+        $data->offer_reference_no = $request->offer_reference_no;
+        $data->supplier_id = $request->supplier_id;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->psi_received_date;
@@ -456,9 +464,5 @@ class PsiController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function item_name($id)
-    {
-        $items = Items::where('item_type_id', $id)->get();
-        return response()->json($items);
-    }
+   
 }
