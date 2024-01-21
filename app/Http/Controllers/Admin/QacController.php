@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
@@ -16,6 +17,7 @@ use App\Models\Items;
 use App\Models\ParameterGroup;
 use App\Models\Qac;
 use App\Models\Section;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -117,6 +119,7 @@ class QacController extends Controller
                 $qacIds = Qac::leftJoin('document_tracks', 'qacs.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('qacs.inspectorate_id', $insp_id)
+                    ->where('document_tracks.doc_type_id', 7)
                     ->where('qacs.status', 0)
                     ->whereIn('qacs.section_id', $section_ids)->pluck('qacs.id')->toArray();
 
@@ -163,7 +166,7 @@ class QacController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 7)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -276,15 +279,16 @@ class QacController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
-
+        $contracts=Contract::all();
         // $selected_document =$qac->additional_documents;
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->get();
         $item = Items::where('id', $qac->item_id)->first();
+        $supplier = Supplier::where('id', $qac->supplier_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.qac.qac_incomming_new.edit', compact('qac', 'item', 'dte_managments', 'item_types', 'fin_years'));
+        return view('backend.qac.qac_incomming_new.edit', compact('qac', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts','supplier'));
     }
 
     public function update(Request $request)
@@ -306,8 +310,11 @@ class QacController extends Controller
 
         $data->sender_id = $request->sender;
         $data->reference_no = $request->reference_no;
-        $data->reference_no = $request->contract_reference_no;
+        $data->contract_reference_no = $request->contract_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
+        $data->offer_reference_no = $request->offer_reference_no;
         $data->item_id = $request->item_id;
+        $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->qac_received_date;
         $data->reference_date = $request->qac_reference_date;
@@ -455,9 +462,14 @@ class QacController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function item_name($id)
+    public function getContractData ($referenceNo)
     {
-        $items = Items::where('item_type_id', $id)->get();
-        return response()->json($items);
+
+        $contract=Contract::where('reference_no', $referenceNo)->first();
+        $item=Items::where('id',$contract->item_id)->first();
+        $itemType=Item_type::where('id',$contract->item_type_id)->first();
+        $supplier=Supplier::where('id',$contract->supplier_id)->first();
+
+        return response()->json(['item' => $item,'itemType' => $itemType, 'supplier' => $supplier, 'contract'=>$contract]);
     }
 }

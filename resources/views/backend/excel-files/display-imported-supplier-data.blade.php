@@ -34,6 +34,9 @@
                                 <div class="tender-id f-20">Tender Ref. No: <span class="fw-bold">{{ $tenderRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="tender-id" value="{{ $tenderId }}">
+                                <div class="offerRefNo f-20">Offer Ref. No: <span class="fw-bold">{{ $offerRefNo }}</span>
+                                </div>
+                                <input type="hidden" name="offerRefNo" value="{{ $offerRefNo }}">
                                 <div class="supplier-id f-20">Supplier Name: <span
                                         class="fw-bold">{{ $supplierFirmName }}</span></div>
                                 <input type="hidden" name="supplier-id" value="{{ $supplierId }}">
@@ -99,29 +102,8 @@
                         </table>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 bg-warning">
-                            <p class="bg-warning px-1 pt-1 mb-0">Offer Summary:</p>
-                            <textarea class="form-control offer_summary" name="offer_summary" id="offer_summary" style="color: black !important"></textarea>
-                        </div>
-                        <div class="col-md-6 bg-warning">
-                            <p class="bg-warning px-1 pt-1 mb-0">Remarks Summary:</p>
-                            <textarea class="form-control remarks_summary" name="remarks_summary" id="remarks_summary"
-                                style="color: black !important"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3 bg-warning">
-                            <p class="bg-warning px-1 pt-1 mb-0">Offer Status:</p>
-                            <select class="form-control select2 mb-2" name="offer_status">
-                                <option value="Accepted" selected>Accepted</option>
-                                <option value="Rejected">Rejected</option>
-                            </select>
-                        </div>
-                        <div class="col-md-9">
-                            <button type="submit" class="btn btn-success-gradien mt-3 float-end">Save Changes</button>
-                        </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success-gradien mt-3">Save Changes</button>
                     </div>
                 </form>
             @else
@@ -142,7 +124,7 @@
             .create(document.querySelector('#offer_summary'))
             .then(editor => {
                 editor.setData(
-                    '<ol><li>Offer No: </li><li>Model: </li><li>Name of Manufacturer: </li><li>Name of Principal: </li><li>Name of Local Agent: </li><li>Country of Origin: Sweden</li><li>Country of Manufacture: Sweden</li><li>Country of Assembly: Sweden</li><li>Port of Shipment: Sweden</li></ol>'
+                    '<ol><li>Offer No: </li><li>Model: </li><li>Name of Manufacturer: </li><li>Name of Principal: </li><li>Name of Local Agent: </li><li>Country of Origin: </li><li>Country of Manufacture: </li><li>Country of Assembly: </li><li>Port of Shipment: </li></ol>'
                 );
             })
             .catch(error => {

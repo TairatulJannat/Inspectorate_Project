@@ -117,6 +117,7 @@ class IndentController extends Controller
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('indents.insp_id', $insp_id)
                     ->where('indents.status', 0)
+                    ->where('document_tracks.doc_type_id', 3)
                     ->whereIn('indents.sec_id', $section_ids)->pluck('indents.id', 'indents.id')->toArray();
 
                 $query = Indent::leftJoin('items', 'indents.item_id', '=', 'items.id')
@@ -158,7 +159,7 @@ class IndentController extends Controller
                     }
                 })
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 3)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -423,7 +424,7 @@ class IndentController extends Controller
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-        // $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
 
         $doc_ref_id = $request->doc_ref_id;

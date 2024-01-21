@@ -137,11 +137,17 @@ $currentControllerName = Request::segment(2);
                                             Final Spec</a>
                                         </li>
                                 @endif
+                                @if (sub_menu_check('FinalSpec/create') !== null)
+                                    <li><a class="text-light"
+                                            href="{{ url('admin/import-final-spec-data-index?refNo=FS-REF-14012024') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Import Final
+                                            Spec</a></li>
+                                @endif
                             </ul>
                         </li>
                     @endif
 
-                  
+
 
                     {{-- Side Menu Button Links for draft Contract --}}
                     @if (count(menu_check('DraftContract')) !== 0)
@@ -191,7 +197,7 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
-                  
+
 
                     {{-- SI Links --}}
                     @if (count(menu_check('Si')) !== 0)
@@ -259,20 +265,20 @@ $currentControllerName = Request::segment(2);
                     @endif
 
                     {{-- Dummy JPSI Links --}}
-                    @if (count(menu_check('Offer')) !== 0)
+                    @if (count(menu_check('Jpsi')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Jpsi' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>JPSI</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('offer/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                            <ul class="nav-submenu menu-content {{ Request::is('*/jpsi/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('jpsi/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.jpsi/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
                                             JPSI</a>
                                     </li>
                                 @endif
-                                @if (sub_menu_check('offer/create') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                @if (sub_menu_check('jpsi/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.jpsi/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             JPSI</a></li>
                                 @endif
@@ -281,20 +287,20 @@ $currentControllerName = Request::segment(2);
                     @endif
 
                     {{-- Dummy I-Note Links --}}
-                    @if (count(menu_check('Offer')) !== 0)
+                    @if (count(menu_check('Inote')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Inote' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>I-Note</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('offer/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/view') }}"
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Inote/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('inote/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.inote/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View
                                             I-Note</a>
                                     </li>
                                 @endif
-                                @if (sub_menu_check('offer/create') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.offer/create') }}"
+                                @if (sub_menu_check('inote/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.inote/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             I-Note</a></li>
                                 @endif

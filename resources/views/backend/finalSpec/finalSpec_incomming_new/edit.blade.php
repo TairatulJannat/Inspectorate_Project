@@ -29,15 +29,12 @@
                     </div> --}}
                         <div class="col-md-2">
                             <div class="form-group">
-
-                                <a href="{{ url('admin/import-supplier-spec-data-index') }}" class="btn btn-success">Final
-                                    Spec Import Excel</a>
-
+                                <a href="{{ url('admin/import-final-spec-data-index') }}" class="btn btn-success"
+                                    id="importExcelBtn">Final Spec Import Excel</a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="sender">Sender</label>
@@ -50,7 +47,6 @@
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
-
                                             {{ $dte->id == $finalspec->sender ? 'selected' : '' }}>{{ $dte->name }}
 
                                         </option>
@@ -65,7 +61,7 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $finalspec->reference_no ? $finalspec->reference_no : '' }} ">
+                                    value="{{ $finalspec->reference_no ? $finalspec->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -155,7 +151,7 @@
                             </div>
                         </div>
 
-                       
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -258,6 +254,16 @@
     <script>
         $(document).ready(function() {
             $('.select2').select2();
+
+            $('#importExcelBtn').on('click', function(event) {
+                event.preventDefault();
+
+                var url = $(this).attr('href');
+                var refNo = $('#reference_no').val();
+                var redirectUrl = url + '?refNo=' + encodeURIComponent(refNo);
+
+                window.location.href = redirectUrl;
+            });
         });
 
         //Start:: Update information
@@ -361,19 +367,22 @@
                             var itemType_html = '<option value="' + response.itemType.id +
                                 '">' + response.itemType.name + '</option>';
                             var tenderReferenceNo_html = '<option value="' + response
-                                .tenderReferenceNo.reference_no + '">' + response.tenderReferenceNo
+                                .tenderReferenceNo.reference_no + '">' + response
+                                .tenderReferenceNo
                                 .reference_no + '</option>';
                             var indentReferenceNo_html = '<option value="' + response
-                                .indentReferenceNo.reference_no + '">' + response.indentReferenceNo
-                                .reference_no + '</option>';                       
+                                .indentReferenceNo.reference_no + '">' + response
+                                .indentReferenceNo
+                                .reference_no + '</option>';
 
                             var suppliers_html = "";
 
-                                $.each(response.suppliernames, function (index, supplierName) {
-                                    suppliers_html += '<option value="' + supplierName.id + '">' + supplierName.firm_name + '</option>';
-                                });
+                            $.each(response.suppliernames, function(index, supplierName) {
+                                suppliers_html += '<option value="' + supplierName.id +
+                                    '">' + supplierName.firm_name + '</option>';
+                            });
 
-                                
+
 
                             $('#item_id').html(item_html);
                             $('#item_type_id').html(itemType_html);

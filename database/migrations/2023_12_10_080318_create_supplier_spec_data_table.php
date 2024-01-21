@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tender_id');
             $table->unsignedBigInteger('indent_id');
+            $table->string('offer_reference_no');
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('parameter_group_id');
             $table->unsignedBigInteger('parameter_id');

@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'Draft Contract (Dispatch)')
+@section('title', 'Contract (Dispatch)')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -90,17 +90,17 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Draft Contract (Dispatch) ')
+@section('main_menu', 'Contract (Dispatch) ')
 @section('active_menu', 'Details')
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Draft Contract</h2>
+                <h2>Details of Contract</h2>
             </div>
             <div style="display: flex">
-                <div class="card-body col-4">
+                <div class="card-body col-5">
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -121,7 +121,7 @@
                                 <td>{{ $details->final_spec_reference_no }}</td>
                             </tr>
                             <tr>
-                                <th>Draft Contract Reference No</td>
+                                <th>Contract Reference No</td>
                                 <td>{{ $details->draft_contract_reference_no }}</td>
                             </tr>
                             <tr>
@@ -165,7 +165,7 @@
                     </div>
                 </div>
 
-                <div class="card-body col-8">
+                <div class="card-body col-7">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
 
@@ -301,7 +301,6 @@
                         @endif
 
                     </div>
-
 
                 </div>
 

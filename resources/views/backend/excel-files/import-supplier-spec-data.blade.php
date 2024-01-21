@@ -1,14 +1,21 @@
 @extends('backend.app')
 
-@section('title', 'Import Supplier Spec Excel File')
+@section('title', 'Import Supplier Spec')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/select2.min.css') }}">
+    <style>
+        .required-field::before {
+            content: '*';
+            color: red;
+            margin-right: 5px;
+        }
+    </style>
 @endpush
 
 @section('main_menu', 'Excel Files')
-@section('active_menu', 'Import Supplier Spec Excel File')
+@section('active_menu', 'Import Supplier Spec')
 
 @section('content')
     @if (session('status'))
@@ -35,6 +42,7 @@
             @csrf
             <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
                 <div class="row">
+                    <input type="hidden" name="offerRefNo" id="offerRefNo" class="offer-ref-no">
                     <div class="col-md-2 mt-2">
                         <h6>Tender Reference No.: </h6>
                     </div>
@@ -112,7 +120,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 mt-2">
-                        <h6 class="card-title">Supplier: </h6>
+                        <h6 class="card-title required-field">Supplier: </h6>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
