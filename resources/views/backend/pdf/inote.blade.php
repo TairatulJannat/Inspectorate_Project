@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>I-Note</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap.css') }}">
     <style>
         body {
             font-size: 10px;
@@ -52,15 +50,15 @@
 
                         <div class="col-6">
                             <div class=" col-12 d-flex justify-content-between">
-                                <div class=" d-flex col-4 ">বই নং : IE-EM-01</div>
-                                <div class=" d-flex col-4 ">সেট নং : 02</div>
-                                <div class=" d-flex col-4 ">কপি সংখ্যা : 10
+                                <div class=" d-flex col-4 ">বই নং : {{$inote_letter->book_no}}</div>
+                                <div class=" d-flex col-4 ">সেট নং : {{$inote_letter->set_no}}</div>
+                                <div class=" d-flex col-4 ">কপি সংখ্যা : {{$inote_letter->copy_number}}
                                 </div>
                             </div>
                             <div class=" col-12 d-flex justify-content-between">
 
-                                <div class=" d-flex col-4 ">কপি নং :</div>
-                                <div class=" d-flex col-8 ">পরিদর্শন পত্র নং : EM/1/29/01
+                                <div class=" d-flex col-4 ">কপি নং : {{$inote_letter->copy_no}}</div>
+                                <div class=" d-flex col-8 ">পরিদর্শন পত্র নং : {{$inote_letter->visiting_letter_no}}
                                 </div>
                             </div>
                         </div>
@@ -76,41 +74,41 @@
                         <div class="col-6 ">
                             <div>
                                 ১. মূলাবেদন গ্রহন অথবা চুক্তিপত্র অথবা দর/ধারাবাহিক চুক্তিপত্র নং ও
-                                তারিখ-
+                                তারিখ- {{$inote_letter->contract_reference_no}}
                             </div>
                             <div>
-                                ২. চাহিদা পত্র নং ও তারিখ-
+                                ২. চাহিদা পত্র নং ও তারিখ- {{$inote_letter->indent_reference_no}}
 
                             </div>
                         </div>
                         <div class="col-6 ">
                             <div>
-                                ৩. সরবরাহকারীর নাম ও ঠিকানা-
+                                ৩. সরবরাহকারীর নাম ও ঠিকানা- {{$inote_letter->supplier_info}}
 
                             </div>
                             <div>
-                                ৪. গ্রাহক-
+                                ৪. গ্রাহক- {{$inote_letter->sender_id}}
 
                             </div>
                         </div>
                         <div class="col-6 ">
                             <div>
-                                ৫. চাহিদাকারী-
+                                ৫. চাহিদাকারী-{{$inote_letter->cahidakari}}
 
                             </div>
                             <div>
                                 ৬. দ্রব্যাদি পরিদর্শনের জন্য অর্পন/প্রেরন রেলযোগে করা
-                                হইল-
+                                হইল- {{$inote_letter->visiting_process}}
 
                             </div>
                         </div>
                         <div class="col-6 ">
                             <div>
-                                ৭. সরবরাহকারীর অর্পন পত্র নং ও তারিখ-
+                                ৭. সরবরাহকারীর অর্পন পত্র নং ও তারিখ- {{$inote_letter->supplier_orpon_letter}}
 
                             </div>
                             <div>
-                                ৮. পূর্ন/অংশ/বাদ বাকি অংশ অর্পন করা হইল-
+                                ৮. পূর্ন/অংশ/বাদ বাকি অংশ অর্পন করা হইল- {{$inote_letter->status}}
 
                             </div>
                         </div>
@@ -118,7 +116,7 @@
                             <div>
                                 ৯. দ্রব্যাদি পরিভাষিত সময়ে অথবা যোগ্য কর্তৃপক্ষ কর্তৃক বর্ধিত
                                 সময়ে সরবরাহ করা হইয়াছে/না হইয়াছে/শাস্তি প্রদানের জন্য ক্রয় অফিসারকে জ্ঞাত করা
-                                হইল-
+                                হইল- {{$inote_letter->punishment}}
 
                             </div>
 
@@ -126,7 +124,7 @@
                         <div class="col-6 ">
 
                             <div>
-                                ১০. রেল রশিদ ফেরত নং ও তারিখ-
+                                ১০. রেল রশিদ ফেরত নং ও তারিখ- {{$inote_letter->slip_return}}
 
                             </div>
                         </div>
@@ -181,27 +179,25 @@
                                 <td> ১৩</td>
                             </tr>
                             <tr>
-                                <td rowspan="2"> </td>
-                                <td rowspan="2" colspan="3">
+                                <td rowspan="2"> {{$inote_letter->serial_1}} </td>
+                                <td rowspan="2" colspan="3"> {{$inote_letter->serial_2to4}}
                                 </td>
 
 
-                                <td rowspan="2"> </td>
-                                <td rowspan="2"> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td rowspan="2"> </td>
+                                <td rowspan="2">{{$inote_letter->serial_5}} </td>
+                                <td rowspan="2"> {{$inote_letter->serial_6}}</td>
+                                <td>{{$inote_letter->serial_7}} </td>
+                                <td> {{$inote_letter->serial_8}}</td>
+                                <td>{{$inote_letter->serial_9}} </td>
+                                <td>{{$inote_letter->serial_10}} </td>
+                                <td> {{$inote_letter->serial_11}}</td>
+                                <td> {{$inote_letter->serial_12}}</td>
+                                <td rowspan="2">{{$inote_letter->serial_13}} </td>
                             </tr>
                             <tr>
 
                                 <td colspan="6">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                    unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                    {{$inote_letter->body_info}}
                                 </td>
 
 
@@ -239,7 +235,10 @@
 
                 </div>
             </div>
-            <button class="btn btn-info print-button" id="print_button">Print</button>
+            <div>
+                <button class="btn btn-info print-button m-5 px-5 py-3" id="print_button">Print</button>
+            </div>
+            
         </div>
 
     </div>

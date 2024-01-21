@@ -15,6 +15,7 @@ use App\Models\Indent;
 use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\inote;
+use App\Models\InoteLetter;
 use App\Models\Section;
 use App\Models\Supplier;
 use Carbon\Carbon;
@@ -274,7 +275,7 @@ class InoteController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
-        $contracts=Contract::all();
+        $contracts = Contract::all();
         // $selected_document =$indent->additional_documents;
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
@@ -283,7 +284,7 @@ class InoteController extends Controller
         $item = Items::where('id', $inote->item_id)->first();
         $supplier = Supplier::where('id', $inote->supplier_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.inote.inote_incomming_new.edit', compact('inote', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','supplier'));
+        return view('backend.inote.inote_incomming_new.edit', compact('inote', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts', 'supplier'));
     }
 
     public function update(Request $request)
@@ -464,8 +465,63 @@ class InoteController extends Controller
         return response()->json($items);
     }
 
-    public function InoteIssu ($id){
+    public function InoteIssu($id)
+    {
+        $inote=Inote::find($id);
+        $supplier=Supplier::find($inote->supplier_id);
+        $supplier_details='';
+        if($supplier){
+            $supplier_details= $supplier->firm_name.', '.$supplier->address_of_local_agent;
+        }
+        return view('backend.inote.inoteHtml' , compact('inote','supplier_details'));
+    }
+    public function InoteLetterStore(Request $request)
+    {
+        
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        return view('backend.inote.inoteHtml');
+        $inote_reference_no = $request->inote_reference_no;
+        $reciever_desig_id = $request->reciever_desig_id;
+        $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
+
+        $inote = new InoteLetter();
+
+        $inote->inspectorate_id=$ins_id;
+        $inote->section_id=$section_id;
+        $inote->book_no=$request->book_no;
+        $inote->book_no=$request->book_no;
+        $inote->set_no=$request->set_no;
+        $inote->copy_number=$request->copy_number;
+        $inote->copy_no=$request->copy_no;
+        $inote->visiting_letter_no=$request->visiting_letter_no;
+        $inote->contract_reference_no=$request->contract_reference_no;
+        $inote->inote_reference_no=$request->inote_reference_no;
+        $inote->indent_reference_no=$request->indent_reference_no;
+        $inote->supplier_info=$request->supplier_info;
+        $inote->sender_id=$request->sender_id;
+        $inote->cahidakari=$request->cahidakari;
+        $inote->visiting_process=$request->visiting_process;
+        $inote->status=$request->status;
+        $inote->punishment=$request->punishment;
+        $inote->slip_return=$request->slip_return;
+        $inote->slip_return=$request->slip_return;
+        $inote->slip_return=$request->slip_return;
+        $inote->serial_1=$request->serial_1;
+        $inote->serial_2to4=$request->serial_2to4;
+        $inote->serial_5=$request->serial_5;
+        $inote->serial_6=$request->serial_6;
+        $inote->serial_7=$request->serial_7;
+        $inote->serial_8=$request->serial_8;
+        $inote->serial_9=$request->serial_9;
+        $inote->serial_10=$request->serial_10;
+        $inote->serial_11=$request->serial_11;
+        $inote->serial_12=$request->serial_12;
+        $inote->serial_13=$request->serial_13;
+        $inote->body_info=$request->body_info;
+        $inote->save();
+        return response()->json(['success' => 'Done']);
     }
 }

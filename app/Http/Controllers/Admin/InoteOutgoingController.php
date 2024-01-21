@@ -9,6 +9,7 @@ use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Inote;
+use App\Models\InoteLetter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -238,11 +239,12 @@ class InoteOutgoingController extends Controller
         // start cover letter start
 
         $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
+        $inote_letter = InoteLetter::where('inote_reference_no', $details->reference_no)->first();
 
         // end cover letter start
 
 
-        return view('backend.inote.inote_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.inote.inote_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'inote_letter'));
     }
 
     public function Tracking (Request $request)
