@@ -69,7 +69,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="inote_received_date"> Received Date</label>
-                                <input type="date" class="form-control" id="inote_received_date" name="inote_received_date"
+                                <input type="date" class="form-control" id="inote_received_date"
+                                    name="inote_received_date"
                                     value="{{ $inote->received_date ? $inote->received_date : '' }}">
                                 <span id="error_inote_received_date" class="text-danger error_field"></span>
                             </div>
@@ -87,16 +88,19 @@
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
 
-                                @foreach ($contracts as $contract)
-                                    <select class="form-control select2" id="contract_reference_no"
-                                        name="contract_reference_no">
-                                        <option value="">Select a Contract No</option>
+
+                                <select class="form-control select2" id="contract_reference_no"
+                                    name="contract_reference_no">
+                                    <option value="">Select a Contract No</option>
+                                    @foreach ($contracts as $contract)
+
                                         <option value="{{ $contract->reference_no }}"
                                             {{ $contract->reference_no == $inote->contract_reference_no ? 'selected' : '' }}>
                                             {{ $contract->reference_no }}
                                         </option>
-                                    </select>
-                                @endforeach
+                                    @endforeach
+                                </select>
+
 
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>

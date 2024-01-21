@@ -105,7 +105,9 @@ class CoverLetterController extends Controller
 
     public function GenerateINotePdf($doc_reference_id)
     {
-        $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
-        return $pdf->stream('cover_letter.pdf');
+
+        // $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
+        // return $pdf->stream('cover_letter.pdf');
+        return view('backend.pdf.inote');
     }
 }
