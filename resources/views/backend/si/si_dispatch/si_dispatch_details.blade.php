@@ -126,8 +126,8 @@
                                 <td>{{ $details->item_type_name  }}</td>
                             </tr>
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <th>Supplier</td>
+                                <td>{{ $details->firm_name_name  }}</td>
                             </tr>
 
 
