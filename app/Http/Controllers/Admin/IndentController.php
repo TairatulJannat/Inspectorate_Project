@@ -511,7 +511,7 @@ class IndentController extends Controller
         $parameterGroups = ParameterGroup::with('assignParameterValues')
             ->where('item_id', $item_id)
             ->get();
-        dd($parameterGroups);
+        // dd($parameterGroups);
 
         // if ( $item_id ) {
         //     $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');

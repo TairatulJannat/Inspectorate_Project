@@ -568,13 +568,12 @@
                                     <div class="col-4"></div>
                                     <div class="col-4"></div>
                                     <div class="col-4 mt-5">
-
-                                        <input type="text" class="form-control" id="name" placeholder="Name"
-                                            value="{{ $cover_letter->name }}">
-
-                                        <input type="text" class="form-control" id="designation"
-                                            placeholder="Designation" value="{{ $cover_letter->designation }}">
-
+    
+                                        <div class="mt-2">
+                                            <label for="signature">Signature Details </label>
+                                            <textarea class="form-control " name="signature" id="signature"></textarea>
+                                        </div>
+    
                                     </div>
                                 </div>
                                 <div class="row">

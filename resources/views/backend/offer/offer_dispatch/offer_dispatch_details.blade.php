@@ -176,6 +176,9 @@
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{url('admin/csr/index') }}">CSR</a>
                         <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                        <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                            class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                            Letter</a>
                     </div>
                 </div>
 
