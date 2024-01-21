@@ -107,7 +107,7 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                              <tr>
+                            <tr>
                                 <th>Final Spec Referance Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
@@ -115,7 +115,7 @@
                                 <th>Offer Reference No</td>
                                 <td>{{ $details->offer_reference_no }}</td>
                             </tr>
-                            
+
                             <tr>
                                 <th>Tender Reference No</td>
                                 <td>{{ $details->tender_reference_no }}</td>
@@ -130,17 +130,17 @@
                             </tr>
                             <tr>
                                 <th>Final Spec Receive Letter Date</td>
-                                <td>{{ $details->final_spec_receive_Ltr_dt  }}</td>
+                                <td>{{ $details->final_spec_receive_Ltr_dt }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                         
+
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{$details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -158,9 +158,12 @@
                             </tr>
 
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{url('admin/csr/index') }}">CSR</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                        <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                        <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                            class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                            Letter</a>
                     </div>
                 </div>
 
@@ -257,7 +260,7 @@
                                         <tbody>
                                             @if ($document_tracks !== null)
                                                 @foreach ($document_tracks as $document_track)
-                                                @if ($document_track->track_status == 2)
+                                                    @if ($document_track->track_status == 2)
                                                         <tr style="background-color: #c8fff528">
                                                             <td>{{ $document_track->sender_designation_name }}</td>
                                                             <td><i class="fa fa-arrow-right text-success"></i></td>
@@ -274,7 +277,6 @@
                                                             <td>{{ $document_track->remarks }}</td>
                                                         </tr>
                                                     @endif
-
                                                 @endforeach
                                             @else
                                                 <tr>

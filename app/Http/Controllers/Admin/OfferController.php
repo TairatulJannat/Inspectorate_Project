@@ -157,27 +157,24 @@ class OfferController extends Controller
                     }
                 })
                 ->addColumn('action', function ($data) {
-
                     $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
                         if ($designation_id  ==  $DocumentTrack->reciever_desig_id) {
                             $actionBtn = '<div class="btn-group" role="group">';
-                            
+
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            
-                           
-                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
+                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit ">Forward</a>
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">';
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
 
@@ -186,8 +183,7 @@ class OfferController extends Controller
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            
-                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
                     } else {
@@ -195,8 +191,7 @@ class OfferController extends Controller
                         if ($designation_id == 3) {
                             $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                         }
-                       
-                        $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
+                        $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit ">Forward</a>
                         </div>';
                     }
 

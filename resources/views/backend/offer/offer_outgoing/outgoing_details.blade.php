@@ -473,10 +473,10 @@
                                 <div class="col-4"></div>
                                 <div class="col-4 mt-5">
 
-                                    <input type="text" class="form-control" id="name" placeholder="Name">
-
-                                    <input type="text" class="form-control" id="designation"
-                                        placeholder="Designation">
+                                    <div class="mt-2">
+                                        <label for="signature">Signature Details </label>
+                                        <textarea class="form-control " name="signature" id="signature"></textarea>
+                                    </div>
 
                                 </div>
                             </div>
