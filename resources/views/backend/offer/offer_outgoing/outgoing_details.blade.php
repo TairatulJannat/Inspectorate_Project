@@ -662,43 +662,53 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
     integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    // ClassicEditor
-    //     .create(document.querySelector(''))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-    ClassicEditor
-        .create(document.querySelector('#body_1'))
-        .catch(error => {
-            console.error(error);
-        });
-    ClassicEditor
-        .create(document.querySelector('#body_2'))
-        .catch(error => {
-            console.error(error);
-        });
-    ClassicEditor
-        .create(document.querySelector('#anxs'))
-        .catch(error => {
-            console.error(error);
-        });
-    // ClassicEditor
-    //     .create(document.querySelector('#bodyEdit_1'))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-    // ClassicEditor
-    //     .create(document.querySelector('#bodyEdit_2'))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-    // ClassicEditor
-    //     .create(document.querySelector('#anxsEdit'))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-</script>
+    <script>
+        // ClassicEditor
+        //     .create(document.querySelector(''))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        ClassicEditor
+            .create(document.querySelector('#body_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxs'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signature'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxsEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signatureEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
     <script>
         $(document).ready(function() {
