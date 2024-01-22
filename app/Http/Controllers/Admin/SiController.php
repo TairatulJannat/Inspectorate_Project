@@ -245,6 +245,7 @@ class SiController extends Controller
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
             $data->received_date = $request->received_date;
+            $data->supplier_id = $request->supplier_id;
             $data->reference_date = $request->reference_date;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
@@ -311,6 +312,7 @@ class SiController extends Controller
         $data->offer_reference_no = $request->offer_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->item_id = $request->item_id;
+        $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->received_date;
         $data->reference_date = $request->reference_date;
@@ -341,12 +343,14 @@ class SiController extends Controller
             ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
             ->leftJoin('fin_years', 'stage_inspections.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('suppliers', 'stage_inspections.supplier_id', '=', 'suppliers.id')
             ->select(
                 'stage_inspections.*',
                 'item_types.name as item_type_name',
                 'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
-                'fin_years.year as fin_year_name'
+                'fin_years.year as fin_year_name',
+                'suppliers.firm_name as firm_name_name'
             )
             ->where('stage_inspections.id', $id)
             ->first();

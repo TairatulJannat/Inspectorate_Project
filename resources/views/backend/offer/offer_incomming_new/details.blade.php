@@ -173,10 +173,7 @@
                                     @endif
                                 </td>
                             </tr>
-                            <tr>
-                                <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no }}</td>
-                            </tr>
+
                             <tr>
                                 <th>Quantity</td>
                                 <td>{{  $details->qty}}</td>

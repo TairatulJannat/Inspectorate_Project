@@ -170,10 +170,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Offer Receiver Letter No</td>
-                                <td>{{ $details->offer_rcv_ltr_no }}</td>
-                            </tr>
-                            <tr>
                                 <th>Quantity</td>
                                 <td>{{ $details->qty }}</td>
                             </tr>
@@ -575,25 +571,24 @@
                                 <div class="my-2">
                                     <label for="body_1">Refs: </label>
                                     <textarea class="form-control body_1" name="bodyEdit_1" id="bodyEdit_1">
-                              {!! $cover_letter->body_1 !!}
-                  </textarea>
+                                {!! $cover_letter->body_1 !!}
+                    </textarea>
                                 </div>
                                 <div class="mt-2">
                                     <label for="body_2">Body </label>
                                     <textarea class="form-control body_2" name="bodyEdit_2" id="bodyEdit_2">
-                              {!! $cover_letter->body_2 !!}
-                  </textarea>
+                                {!! $cover_letter->body_2 !!}
+                    </textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-4"></div>
                                     <div class="col-4"></div>
                                     <div class="col-4 mt-5">
 
-                                        <input type="text" class="form-control" id="name" placeholder="Name"
-                                            value="{{ $cover_letter->name }}">
-
-                                        <input type="text" class="form-control" id="designation"
-                                            placeholder="Designation" value="{{ $cover_letter->designation }}">
+                                        <div class="mt-2">
+                                            <label for="signatureEdit">Signature Details </label>
+                                            <textarea class="form-control " name="signatureEdit" id="signatureEdit"> {!! $cover_letter->signature !!}</textarea>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -601,8 +596,7 @@
                                     <div>
                                         <label for="anxs">Anxs: </label>
                                         <textarea class="form-control" name="anxs" id="anxsEdit">
-                                  {!! $cover_letter->anxs !!}
-                              </textarea>
+                                    {!! $cover_letter->anxs !!}</textarea>
                                     </div>
 
                                 </div>
@@ -620,6 +614,25 @@
 
                                     </div>
                                 </div>
+                                <div class="row mt-2">
+                                    <div>
+                                        <label for="anxs">Internal: </label>
+                                        <textarea class="form-control" name="internal" id="internal">
+                                    {!! $cover_letter->internal !!}</textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 mt-2">
+
+                                        <input type="text" class="form-control" id="internal_act" placeholder="Act"
+                                            value="{{ $cover_letter->internal_act }}">
+                                        <input type="text" class="form-control" id="internal_info" placeholder="Info"
+                                            value="{{ $cover_letter->internal_info }}">
+
+                                    </div>
+                                </div>
+
                                 <div class="col-12 text-center">RESTRICTED</div>
 
                                 <div>
@@ -634,7 +647,6 @@
             </div>
         </div>
     @endif
-
 
     {{-- start edit cover letter --}}
 

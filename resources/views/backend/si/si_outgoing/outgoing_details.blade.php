@@ -123,12 +123,12 @@
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
+                                <th>Supplier</td>
+                                <td>{{ $details->firm_name_name  }}</td>
                             </tr>
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <td>{{ $details->item_type_name  }}</td>
                             </tr>
 
 
@@ -136,6 +136,7 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name  }}</td>
                             </tr>
+
 
 
                         </table>
