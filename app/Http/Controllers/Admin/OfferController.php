@@ -241,7 +241,6 @@ class OfferController extends Controller
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
         $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
 
 
@@ -288,8 +287,7 @@ class OfferController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
-        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
+        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->fin_year_id = $request->fin_year_id;
 
         // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
@@ -481,12 +479,14 @@ class OfferController extends Controller
         }
     }
 
-    // public function offerViewPdf($id)
-    // {
-    //     $pdf = Offer::findOrFail($id);
-    //     $path = storage_path("app/public/{$pdf->pdf_path}");
-    //     dd($path);
-    //     // Return the PDF file as a response
-    //     return response()->file($path);
-    // }
+    public function get_indent_details($indentReferenceNo)
+    {
+
+        $indent = Indent::where('reference_no' ,$indentReferenceNo)->first();
+        $item=Items::where('id' , $indent->item_id)->first();
+        $item_type=Item_type::where('id' , $indent->item_type_id)->first();
+
+
+        return response()->json(['item' => $item, 'itemType' => $item_type]);
+    }
 }
