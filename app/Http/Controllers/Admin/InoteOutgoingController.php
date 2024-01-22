@@ -97,7 +97,7 @@ class InoteOutgoingController extends Controller
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('inotes.inspectorate_id', $insp_id)
                     ->where('inotes.status', 1)
-                    ->where('document_tracks.doc_type_id',12)
+                    ->where('document_tracks.doc_type_id', 13)
                     ->whereIn('inotes.section_id', $section_ids)->pluck('inotes.id', 'inotes.id')->toArray();
 
                 $query = Inote::leftJoin('items', 'inotes.item_id', '=', 'items.id')

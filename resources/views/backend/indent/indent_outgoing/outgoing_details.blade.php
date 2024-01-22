@@ -160,7 +160,7 @@
                                 <th>Nomenclature</td>
                                 <td>{{ $details->nomenclature }}</td>
                             </tr>
-                          
+
                             <tr>
                                 <th>Model</td>
                                 <td>{{ $details->model }}</td>
@@ -628,8 +628,8 @@
                                             value="{{ $cover_letter->extl }}">
                                         <input type="text" class="form-control" id="act" placeholder="Act"
                                             value="{{ $cover_letter->act }}">
-                                        <input type="text" class="form-control" id="info" placeholder="info"
-                                            {{ $cover_letter->info }}>
+                                        <input type="text" class="form-control infoedit" id="info" placeholder="info"
+                                        value="{{ $cover_letter->info }}">
 
                                     </div>
                                 </div>
@@ -723,6 +723,11 @@
             });
         ClassicEditor
             .create(document.querySelector('#signatureEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('.infoedit'))
             .catch(error => {
                 console.error(error);
             });

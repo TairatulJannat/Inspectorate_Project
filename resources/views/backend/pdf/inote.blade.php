@@ -50,15 +50,15 @@
 
                         <div class="col-6">
                             <div class=" col-12 d-flex justify-content-between">
-                                <div class=" d-flex col-4 ">বই নং : {{$inote_letter->book_no}}</div>
-                                <div class=" d-flex col-4 ">সেট নং : {{$inote_letter->set_no}}</div>
-                                <div class=" d-flex col-4 ">কপি সংখ্যা : {{$inote_letter->copy_number}}
+                                <div class=" d-flex col-4 ">বই নং : {{ $inote_letter->book_no }}</div>
+                                <div class=" d-flex col-4 ">সেট নং : {{ $inote_letter->set_no }}</div>
+                                <div class=" d-flex col-4 ">কপি সংখ্যা : {{ $inote_letter->copy_number }}
                                 </div>
                             </div>
                             <div class=" col-12 d-flex justify-content-between">
 
-                                <div class=" d-flex col-4 ">কপি নং : {{$inote_letter->copy_no}}</div>
-                                <div class=" d-flex col-8 ">পরিদর্শন পত্র নং : {{$inote_letter->visiting_letter_no}}
+                                <div class=" d-flex col-4 ">কপি নং : {{ $inote_letter->copy_no }}</div>
+                                <div class=" d-flex col-8 ">পরিদর্শন পত্র নং : {{ $inote_letter->visiting_letter_no }}
                                 </div>
                             </div>
                         </div>
@@ -74,41 +74,41 @@
                         <div class="col-6 ">
                             <div>
                                 ১. মূলাবেদন গ্রহন অথবা চুক্তিপত্র অথবা দর/ধারাবাহিক চুক্তিপত্র নং ও
-                                তারিখ- {{$inote_letter->contract_reference_no}}
+                                তারিখ- {{ $inote_letter->contract_reference_no }}
                             </div>
                             <div>
-                                ২. চাহিদা পত্র নং ও তারিখ- {{$inote_letter->indent_reference_no}}
+                                ২. চাহিদা পত্র নং ও তারিখ- {{ $inote_letter->indent_reference_no }}
 
                             </div>
                         </div>
                         <div class="col-6 ">
                             <div>
-                                ৩. সরবরাহকারীর নাম ও ঠিকানা- {{$inote_letter->supplier_info}}
+                                ৩. সরবরাহকারীর নাম ও ঠিকানা- {{ $inote_letter->supplier_info }}
 
                             </div>
                             <div>
-                                ৪. গ্রাহক- {{$inote_letter->sender_id}}
+                                ৪. গ্রাহক- {{ $inote_letter->sender_id }}
 
                             </div>
                         </div>
                         <div class="col-6 ">
                             <div>
-                                ৫. চাহিদাকারী-{{$inote_letter->cahidakari}}
+                                ৫. চাহিদাকারী-{{ $inote_letter->cahidakari }}
 
                             </div>
                             <div>
                                 ৬. দ্রব্যাদি পরিদর্শনের জন্য অর্পন/প্রেরন রেলযোগে করা
-                                হইল- {{$inote_letter->visiting_process}}
+                                হইল- {{ $inote_letter->visiting_process }}
 
                             </div>
                         </div>
                         <div class="col-6 ">
                             <div>
-                                ৭. সরবরাহকারীর অর্পন পত্র নং ও তারিখ- {{$inote_letter->supplier_orpon_letter}}
+                                ৭. সরবরাহকারীর অর্পন পত্র নং ও তারিখ- {{ $inote_letter->supplier_orpon_letter }}
 
                             </div>
                             <div>
-                                ৮. পূর্ন/অংশ/বাদ বাকি অংশ অর্পন করা হইল- {{$inote_letter->status}}
+                                ৮. পূর্ন/অংশ/বাদ বাকি অংশ অর্পন করা হইল- {{ $inote_letter->status }}
 
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                             <div>
                                 ৯. দ্রব্যাদি পরিভাষিত সময়ে অথবা যোগ্য কর্তৃপক্ষ কর্তৃক বর্ধিত
                                 সময়ে সরবরাহ করা হইয়াছে/না হইয়াছে/শাস্তি প্রদানের জন্য ক্রয় অফিসারকে জ্ঞাত করা
-                                হইল- {{$inote_letter->punishment}}
+                                হইল- {{ $inote_letter->punishment }}
 
                             </div>
 
@@ -124,7 +124,7 @@
                         <div class="col-6 ">
 
                             <div>
-                                ১০. রেল রশিদ ফেরত নং ও তারিখ- {{$inote_letter->slip_return}}
+                                ১০. রেল রশিদ ফেরত নং ও তারিখ- {{ $inote_letter->slip_return }}
 
                             </div>
                         </div>
@@ -179,25 +179,25 @@
                                 <td> ১৩</td>
                             </tr>
                             <tr>
-                                <td rowspan="2"> {{$inote_letter->serial_1}} </td>
-                                <td rowspan="2" colspan="3"> {{$inote_letter->serial_2to4}}
+                                <td rowspan="2"> {{ $inote_letter->serial_1 }} </td>
+                                <td rowspan="2" colspan="3"> {{ $inote_letter->serial_2to4 }}
                                 </td>
 
 
-                                <td rowspan="2">{{$inote_letter->serial_5}} </td>
-                                <td rowspan="2"> {{$inote_letter->serial_6}}</td>
-                                <td>{{$inote_letter->serial_7}} </td>
-                                <td> {{$inote_letter->serial_8}}</td>
-                                <td>{{$inote_letter->serial_9}} </td>
-                                <td>{{$inote_letter->serial_10}} </td>
-                                <td> {{$inote_letter->serial_11}}</td>
-                                <td> {{$inote_letter->serial_12}}</td>
-                                <td rowspan="2">{{$inote_letter->serial_13}} </td>
+                                <td rowspan="2">{{ $inote_letter->serial_5 }} </td>
+                                <td rowspan="2"> {{ $inote_letter->serial_6 }}</td>
+                                <td>{{ $inote_letter->serial_7 }} </td>
+                                <td> {{ $inote_letter->serial_8 }}</td>
+                                <td>{{ $inote_letter->serial_9 }} </td>
+                                <td>{{ $inote_letter->serial_10 }} </td>
+                                <td> {{ $inote_letter->serial_11 }}</td>
+                                <td> {{ $inote_letter->serial_12 }}</td>
+                                <td rowspan="2">{{ $inote_letter->serial_13 }} </td>
                             </tr>
                             <tr>
 
                                 <td colspan="6">
-                                    {{$inote_letter->body_info}}
+                                    {{ $inote_letter->body_info }}
                                 </td>
 
 
@@ -238,7 +238,7 @@
             <div>
                 <button class="btn btn-info print-button m-5 px-5 py-3" id="print_button">Print</button>
             </div>
-            
+
         </div>
 
     </div>
@@ -252,22 +252,29 @@
         function printPage() {
             // Set the print styles
             var printStyles = `
-                @page {
-                    size: A4 landscape;
+            @page {
+                size: A4 landscape;
 
+                @top-center {
+                    content: "Your Page Header Here";
                 }
+                @bottom-center {
+                    content: "Your Page Footer Here";
+                }
+            }
                 @media print {
                     body {
                         margin: 0;
                     }
                     .print-button {
-            display: none !important;
+                        display: none !important;
         }
                 }
             `;
 
             // Create a style element and append it to the head
             var style = document.createElement('style');
+            style.type = 'text/css';
             style.innerHTML = printStyles;
             document.head.appendChild(style);
 

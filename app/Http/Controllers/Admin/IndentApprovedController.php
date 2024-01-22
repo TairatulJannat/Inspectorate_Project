@@ -288,15 +288,14 @@ class IndentApprovedController extends Controller
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $doc_reference_number = $request->doc_reference_number;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
-        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $section_id = Indent::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
         $data = new DocumentTrack();

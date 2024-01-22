@@ -266,15 +266,14 @@ class OutgoingIndentController extends Controller
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
         $doc_type_id = 3; // 3 for doc type indent from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-
+        $section_id = Indent::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
         // dd( $desig_position);
         $data = new DocumentTrack();
