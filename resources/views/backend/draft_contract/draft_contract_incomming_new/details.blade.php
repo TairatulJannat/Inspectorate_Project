@@ -96,7 +96,6 @@
 @section('active_menu', 'Details')
 @section('content')
 
-
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
@@ -138,10 +137,7 @@
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
-                            <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
-                            </tr>
+
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_name  }}</td>
@@ -282,7 +278,6 @@
         </div>
     </div>
 
-
 @endsection
 @push('js')
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
@@ -362,8 +357,6 @@
                                     'Please fill up the form correctly and try again'
                                 )
                                  $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
-
-
                             }
                         });
 

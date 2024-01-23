@@ -135,10 +135,6 @@
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
-                            </tr>
-                            <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_name  }}</td>
                             </tr>
@@ -706,7 +702,7 @@
             $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-
+                disableButton()
 
                 var reciever_desig_id = $('#designations').val()
                 var delivery_date = $('#delivery_date').val()
@@ -719,7 +715,7 @@
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',

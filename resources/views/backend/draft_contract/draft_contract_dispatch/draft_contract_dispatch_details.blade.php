@@ -109,6 +109,18 @@
                             </tr>
 
                             <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Final Spec Reference No</td>
+                                <td>{{ $details->final_spec_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
@@ -117,19 +129,21 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <td>{{ $details->item_name  }}</td>
                             </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{ $details->fin_year_name  }}</td>
                             </tr>
+
 
 
                         </table>
@@ -310,6 +324,7 @@
             $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
+                disableButton()
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
@@ -318,7 +333,7 @@
                     title: `Are you sure to delivered
                         ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',

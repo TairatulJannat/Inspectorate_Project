@@ -138,10 +138,6 @@
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
-                            </tr>
-                            <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_name  }}</td>
                             </tr>
@@ -186,13 +182,14 @@
                                                                 </option>
                                                             @endforeach
                                                         </select>
+                                                        <span id="error_designation" class="text-danger"></span>
                                                     </div>
                                                 @endif
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <button class="btn btn-success" id="submitBtn"
+                                                    <button class="btn btn-success" id="form_submission_button"
                                                         style="height: 40px;">Deliver</button>
                                                 </div>
                                             </div>
@@ -223,13 +220,14 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                             @endif
                                             <div class="col-md-6 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
-                                                <button class="btn btn-success" id="submitBtn"
+                                                <button class="btn btn-success" id="form_submission_button"
                                                     style="height: 40px;">Deliver</button>
                                             </div>
                                         </div>
@@ -315,7 +313,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.contract.contract_dispatch.contract_dispatch_index_js') --}}
+     @include('backend.contract.contract_dispatch.contract_dispatch_index_js')
 
     <script>
         $(document).ready(function() {
@@ -329,10 +327,10 @@
 
             });
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-
+                disableButton()
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
@@ -341,7 +339,7 @@
                     title: `Are you sure to delivered
                         ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -382,12 +380,12 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
-
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+                            error: function(response) {
+                                enableeButton()
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
                             }
                         });
 

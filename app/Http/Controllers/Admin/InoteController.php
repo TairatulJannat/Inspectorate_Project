@@ -406,7 +406,6 @@ class InoteController extends Controller
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
 
-
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
@@ -477,7 +476,7 @@ class InoteController extends Controller
     }
     public function InoteLetterStore(Request $request)
     {
-        
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();

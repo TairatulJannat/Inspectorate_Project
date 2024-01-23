@@ -35,7 +35,7 @@ class ContractController extends Controller
         $desig_position = Designation::where('id', $designation_id)->first();
 
         if ($designation_id == 1 || $designation_id == 0) {
-            $contractNew =Contract::where('status', 0)->count();
+            $contractNew = Contract::where('status', 0)->count();
             $contractOnProcess = '0';
             $contractCompleted = '0';
             $contractDispatch = DocumentTrack::where('doc_type_id', 10)
@@ -95,7 +95,7 @@ class ContractController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query =Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
+                $query = Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'contracts.section_id', '=', 'sections.id')
                     ->where('contracts.status', 0)
@@ -103,7 +103,7 @@ class ContractController extends Controller
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query =Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
+                $query = Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'contracts.section_id', '=', 'sections.id')
                     ->where('contracts.inspectorate_id', $insp_id)
@@ -114,14 +114,14 @@ class ContractController extends Controller
             } else {
 
                 // contract ids from document tracks table
-                $contractIds =Contract::leftJoin('document_tracks', 'contracts.id', '=', 'document_tracks.doc_ref_id')
+                $contractIds = Contract::leftJoin('document_tracks', 'contracts.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('contracts.inspectorate_id', $insp_id)
                     ->where('contracts.status', 0)
                     ->where('document_tracks.doc_type_id', 10)
                     ->whereIn('contracts.section_id', $section_ids)->pluck('contracts.id')->toArray();
 
-                $query =Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
+                $query = Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'contracts.section_id', '=', 'sections.id')
                     ->select('contracts.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
@@ -144,7 +144,7 @@ class ContractController extends Controller
 
                 //......start for showing data for receiver designation
                 if (!$document_tracks_receiver_id) {
-                    $query =Contract::where('id', 'no data')->get();
+                    $query = Contract::where('id', 'no data')->get();
                 }
 
                 //......End for showing data for receiver designation
@@ -167,7 +167,7 @@ class ContractController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id',10)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 10)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -273,7 +273,7 @@ class ContractController extends Controller
     }
     public function edit($id)
     {
-        $contract =Contract::find($id);
+        $contract = Contract::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -310,7 +310,7 @@ class ContractController extends Controller
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
 
-        $data =Contract::findOrFail($request->editId);
+        $data = Contract::findOrFail($request->editId);
         $data->sender_id = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->item_id = $request->item_id;
@@ -348,7 +348,7 @@ class ContractController extends Controller
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
-        $details =Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
+        $details = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'contracts.item_id', '=', 'items.id')
             ->leftJoin('fin_years', 'contracts.fin_year_id', '=', 'fin_years.id')
@@ -404,16 +404,18 @@ class ContractController extends Controller
         return view('backend.contract.contract_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
-    public function ContractTracking (Request $request)
+    public function ContractTracking(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
+            return response()->json(['error' => $validator->errors()], 422);
         }
 
         $ins_id = Auth::user()->inspectorate_id;
@@ -426,8 +428,13 @@ class ContractController extends Controller
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id =Contract::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
+        $section_id = Contract::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
 
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
@@ -443,7 +450,7 @@ class ContractController extends Controller
         $data->save();
 
         if ($desig_position->position == 7) {
-            $data =Contract::find($doc_ref_id);
+            $data = Contract::find($doc_ref_id);
 
             if ($data) {
 
@@ -471,11 +478,11 @@ class ContractController extends Controller
     public function draftContractData($referenceNo)
     {
 
-        $draft_contract=DraftContract::where('reference_no', $referenceNo)->first();
-        $item=Items::where('id',$draft_contract->item_id)->first();
-        $itemType=Item_type::where('id',$draft_contract->item_type_id)->first();
-        $supplier=Supplier::where('id',$draft_contract->supplier_id)->first();
+        $draft_contract = DraftContract::where('reference_no', $referenceNo)->first();
+        $item = Items::where('id', $draft_contract->item_id)->first();
+        $itemType = Item_type::where('id', $draft_contract->item_type_id)->first();
+        $supplier = Supplier::where('id', $draft_contract->supplier_id)->first();
 
-        return response()->json(['item' => $item,'itemType' => $itemType, 'supplier' => $supplier, 'draftContract'=>$draft_contract]);
+        return response()->json(['item' => $item, 'itemType' => $itemType, 'supplier' => $supplier, 'draftContract' => $draft_contract]);
     }
 }
