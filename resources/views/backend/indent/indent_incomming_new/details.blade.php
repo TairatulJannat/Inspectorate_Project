@@ -140,7 +140,7 @@
                             </tr>
                             <tr>
                                 <th>Attribute</td>
-                                <td>{{ $details->attribute}}</td>
+                                <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
 
@@ -178,12 +178,12 @@
                             </tr>
                             <tr>
                                 <th>Country of Origin</td>
-                                <td>{{ $details->country_of_origin}}
+                                <td>{{ $details->country_of_origin }}
                                 </td>
                             </tr>
                             <tr>
                                 <th>Country of Assembly</td>
-                                <td>{{ $details->country_of_assembly  }}
+                                <td>{{ $details->country_of_assembly }}
                                 </td>
                             </tr>
 
@@ -222,12 +222,13 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <button class="btn btn-success" id="submitBtn"
+                                                    <button class="btn btn-success" id="form_submission_button"
                                                         style="height: 40px;">Forward</button>
                                                 </div>
                                             </div>
@@ -254,12 +255,13 @@
                                                         <option value="{{ $d->id }}">{{ $d->name }}</option>
                                                     @endforeach
                                                 </select>
+                                                <span id="error_designation" class="text-danger"></span>
                                             </div>
                                             <div class="col-md-6 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
-                                                <button class="btn btn-success" id="submitBtn"
+                                                <button class="btn btn-success" id="form_submission_button"
                                                     style="height: 40px;">Forward</button>
                                             </div>
                                         </div>
@@ -324,7 +326,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
+    @include('backend.indent.indent_incomming_new.index_js')
 
     <script>
         $(document).ready(function() {
@@ -332,14 +334,12 @@
             $('#designations').on('change', function() {
 
                 reciever_desig_text = $(this).find('option:selected').text();
-
             });
 
-
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-
+                disableButton()
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
@@ -389,10 +389,15 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                clear_error_field();
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
 
-                                console.error(xhr.responseText);
-                                toastr.error(error);
+
                             }
                         });
 
@@ -407,10 +412,7 @@
                         )
                     }
                 })
-
             });
-
-
         });
     </script>
 @endpush

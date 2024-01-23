@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DraftContractDispatchController extends Controller
 {
@@ -84,11 +85,11 @@ class DraftContractDispatchController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                $query = DraftContract::leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
                     ->where('draft_contracts.status', 4)
-                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'draft_contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('draft_contracts.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -98,10 +99,10 @@ class DraftContractDispatchController extends Controller
                     ->where('draft_contracts.status', 4)
                     ->whereIn('draft_contracts.section_id', $section_ids)->pluck('draft_contracts.id', 'draft_contracts.id')->toArray();
 
-                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                $query = DraftContract::leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
-                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'draft_contracts.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('draft_contracts.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('draft_contracts.id', $draft_contractIds)
                     ->where('draft_contracts.status', 4)
                     ->get();
@@ -178,18 +179,17 @@ class DraftContractDispatchController extends Controller
         }
     }
 
-
-
     public function details($id)
     {
 
         $details = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'draft_contracts.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
             ->select(
                 'draft_contracts.*',
                 'item_types.name as item_type_name',
-                'draft_contracts.*',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name'
             )
@@ -261,6 +261,18 @@ class DraftContractDispatchController extends Controller
 
     public function DispatchTracking(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -274,6 +286,11 @@ class DraftContractDispatchController extends Controller
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

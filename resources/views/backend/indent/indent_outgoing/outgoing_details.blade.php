@@ -220,6 +220,7 @@
                                                     <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                         style="height: 40px; margin-left: 10px;"></textarea>
                                                 </div>
+                                                <span id="error_designation" class="text-danger"></span>
                                                 <div class="d-flex">
                                                     @if ($desig_position->position == 3)
                                                         <div class=" col-md-6 mt-2">
@@ -260,7 +261,7 @@
 
                                                 <div class="col-md-2">
                                                     @if ($cover_letter)
-                                                        <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                        <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
                                                             style="height: 40px;">Deliver</button>
                                                     @else
                                                         <button class="delivery-btn btn btn-info text-white mt-2"
@@ -299,7 +300,7 @@
                                                         <option value={{ $d->id }}>{{ $d->name }}</option>
                                                     @endforeach
                                                 </select>
-
+                                                <span id="error_designation" class="text-danger"></span>
                                                 <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                     style="height: 40px; margin-left: 10px;"></textarea>
                                             </div>
@@ -322,7 +323,7 @@
                                             <div class="col-md-2">
 
 
-                                                <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
                                                     style="height: 40px;">Deliver</button>
                                             </div>
                                         </div>
@@ -404,7 +405,6 @@
     </div>
     {{-- start Modal for cover letter --}}
 
-
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -422,6 +422,7 @@
                             <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                             <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                            <input type="hidden" id="doc_type_id" value="3">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">
                                     <div class="input-group ">
@@ -526,7 +527,6 @@
             </div>
         </div>
     </div>
-
     {{-- start Modal for cover letter --}}
 
     {{-- start edit cover letter --}}
@@ -549,6 +549,7 @@
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                                 <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <input type="hidden" id="doc_type_id" value="3">
                                 <div class="row text-center">
                                     <div class="col-6 align-self-end">
                                         <div class="input-group ">
@@ -628,8 +629,8 @@
                                             value="{{ $cover_letter->extl }}">
                                         <input type="text" class="form-control" id="act" placeholder="Act"
                                             value="{{ $cover_letter->act }}">
-                                        <input type="text" class="form-control infoedit" id="info" placeholder="info"
-                                        value="{{ $cover_letter->info }}">
+                                        <input type="text" class="form-control infoedit" id="info"
+                                            placeholder="info" value="{{ $cover_letter->info }}">
 
                                     </div>
                                 </div>
@@ -667,7 +668,6 @@
         </div>
     @endif
 
-
     {{-- start edit cover letter --}}
 @endsection
 @push('js')
@@ -676,7 +676,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
+    @include('backend.indent.indent_outgoing.outgoing_index_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -745,11 +745,9 @@
             });
 
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-
-
                 var reciever_desig_id = $('#designations').val()
                 var delivery_date = $('#delivery_date').val()
                 var delay_cause = $('#delay_cause').val()
@@ -806,12 +804,13 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
 
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
                             }
                         });
 

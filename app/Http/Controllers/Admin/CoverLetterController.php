@@ -19,6 +19,7 @@ class CoverLetterController extends Controller
 
         $data = new CoverLetter();
         $data->inspectorate_id = $request->insp_id;
+        $data->doc_type_id = $request->doc_type_id;
         $data->section_id = $request->sec_id;
         $data->doc_reference_id = $request->doc_reference_no;
         $data->letter_reference_no = '23.01.901.051.' . $request->letter_reference_no . '.' . Carbon::now()->format('d.m.y');
@@ -77,6 +78,7 @@ class CoverLetterController extends Controller
 
         $data = CoverLetter::find($request->editId);
         // dd( $request->all());
+        $data->doc_type_id = $request->doc_type_id;
         $data->letter_reference_no = $request->letter_reference_no;
         $data->inspectorate_name = $request->inspectorate_name;
         $data->inspectorate_place = $request->place;
