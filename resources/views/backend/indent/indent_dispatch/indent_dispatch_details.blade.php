@@ -151,7 +151,7 @@
                                 <th>Nomenclature</td>
                                 <td>{{ $details->nomenclature }}</td>
                             </tr>
-                         
+
                             <tr>
                                 <th>Model</td>
                                 <td>{{ $details->model }}</td>
@@ -168,11 +168,11 @@
                         </table>
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
-                            <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
-                                target="_blank">Pdf Document</a>
-                            <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
-                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
-                                Letter</a>
+                        <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                        <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
+                            class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                            Letter</a>
                     </div>
                 </div>
 
@@ -197,13 +197,14 @@
                                                                 </option>
                                                             @endforeach
                                                         </select>
+                                                        <span id="error_designation" class="text-danger"></span>
                                                     </div>
                                                 @endif
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <button class="btn btn-success" id="submitBtn"
+                                                    <button class="btn btn-success" id="form_submission_button"
                                                         style="height: 40px;">Deliver</button>
                                                 </div>
                                             </div>
@@ -234,13 +235,14 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                             @endif
                                             <div class="col-md-6 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
-                                                <button class="btn btn-success" id="submitBtn"
+                                                <button class="btn btn-success" id="form_submission_button"
                                                     style="height: 40px;">Deliver</button>
                                             </div>
                                         </div>
@@ -311,16 +313,16 @@
                             </div>
                         @endif
                         @if ($details->terms_conditions !== null)
-                        <div class="forward_status col-md-12 mt-3">
-                            <div>
-                                <h4 class="text-success">Terms Conditions</h4>
-                                <hr>
-                                <div class="table-responsive">
-                                    {{$details->terms_conditions}}
+                            <div class="forward_status col-md-12 mt-3">
+                                <div>
+                                    <h4 class="text-success">Terms Conditions</h4>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        {{ $details->terms_conditions }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
                     </div>
 
 
@@ -337,7 +339,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_dispatch.indent_dispatch_index_js') --}}
+    @include('backend.indent.indent_dispatch.indent_dispatch_index_js')
 
     <script>
         $(document).ready(function() {
@@ -347,11 +349,9 @@
                 reciever_desig_text = $(this).find('option:selected').text();
                 reciever_desig_text =
                     `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
-
-
             });
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
 
@@ -405,12 +405,14 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
 
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+
                             }
                         });
 

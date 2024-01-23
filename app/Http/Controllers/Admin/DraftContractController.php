@@ -94,21 +94,21 @@ class DraftContractController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                $query = DraftContract::leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
                     ->where('draft_contracts.status', 0)
-                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('draft_contracts.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                $query = DraftContract::leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
                     ->where('draft_contracts.inspectorate_id', $insp_id)
                     ->where('draft_contracts.status', 0)
                     ->whereIn('draft_contracts.section_id', $section_ids)
-                    ->select('draft_contracts.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('draft_contracts.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -119,10 +119,10 @@ class DraftContractController extends Controller
                     ->where('draft_contracts.status', 0)
                     ->whereIn('draft_contracts.section_id', $section_ids)->pluck('draft_contracts.id')->toArray();
 
-                $query = DraftContract::leftJoin('item_types', 'draft_contracts.item_type_id', '=', 'item_types.id')
+                $query = DraftContract::leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
-                    ->select('draft_contracts.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('draft_contracts.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('draft_contracts.id', $draft_contractIds)
                     ->where('draft_contracts.status', 0)
                     ->get();
@@ -402,10 +402,12 @@ class DraftContractController extends Controller
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
+            return response()->json(['error' => $validator->errors()], 422);
         }
 
         $ins_id = Auth::user()->inspectorate_id;
@@ -420,6 +422,11 @@ class DraftContractController extends Controller
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = DraftContract::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
 
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+         }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

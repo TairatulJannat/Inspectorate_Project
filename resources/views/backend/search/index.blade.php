@@ -311,8 +311,7 @@
             html += `<a class="btn btn-success mt-3 btn-parameter"
                         href="javascript:void(0)"
                         onclick="redirectToParameter(${details.id})">Parameter</a>
-                    <a class="btn btn-success mt-3 "
-                        href="{{url('/pdf/indent')}}">Download PDF</a>
+                    
                     `;
 
 
@@ -460,7 +459,7 @@
             if (data.length !== 0) {
                 html += `<div class="forward_status col-md-12 mb-3">
                         <div>
-                            <h4 class="title text-center bg-info ">OutGoing</h4>
+                            <h4 class="title text-center bg-info ">Completed</h4>
 
                             <div class="table-responsive">
                                 <table class="table">
@@ -505,7 +504,7 @@
             if (data.length !== 0) {
                 html += `<div class="forward_status col-md-12 mb-3">
                         <div>
-                            <h4 class="title text-center bg-secondary">Decision</h4>
+                            <h4 class="title text-center bg-secondary">On Process</h4>
 
                             <div class="table-responsive">
                                 <table class="table">

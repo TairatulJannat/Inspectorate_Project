@@ -3,7 +3,6 @@
         $('.select2').select2();
     });
 
-
     // Start:: All Data
     $(function() {
         var table = $('.yajra-datatable').DataTable({
@@ -46,8 +45,8 @@
                 },
 
                 {
-                    data: 'item_type_name',
-                    name: 'item_type_id',
+                    data: 'item_name',
+                    name: 'item_name',
 
                 },
                 {

@@ -235,6 +235,7 @@ class IndentController extends Controller
             'indent_received_date' => 'required',
             'indent_reference_date' => 'required',
         ]);
+
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = $request->admin_section;
 
@@ -414,7 +415,8 @@ class IndentController extends Controller
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
-
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
@@ -422,21 +424,24 @@ class IndentController extends Controller
         }
 
 
+
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
-
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        // $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-
         $desig_position = Designation::where('id', $sender_designation_id)->first();
         $section_id = Indent::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
 
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+         }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

@@ -388,8 +388,8 @@
                         <form action="" id="myForm">
                             @csrf
                             <div class="col-12 text-center">RESTRICTED</div>
-                            <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
-                            <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                            <input type="hidden" id="insp_id" value="{{ $details->inspectorate_id }}">
+                            <input type="hidden" id="sec_id" value="{{ $details->section_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">

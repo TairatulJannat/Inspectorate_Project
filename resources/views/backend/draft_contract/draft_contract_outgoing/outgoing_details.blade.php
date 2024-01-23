@@ -110,6 +110,18 @@
                             </tr>
 
                             <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Final Spec Reference No</td>
+                                <td>{{ $details->final_spec_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
@@ -118,19 +130,25 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Eqpt Type</td>
+                                <td>{{ $details->item_type_name  }}</td>
                             </tr>
+                            <tr>
+                                <th>Name of Eqpt</td>
+                                <td>{{ $details->item_name  }}</td>
+                            </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{ $details->fin_year_name  }}</td>
                             </tr>
+
 
 
                         </table>
@@ -179,6 +197,7 @@
                                                     <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                         style="height: 40px; margin-left: 10px;"></textarea>
                                                 </div>
+                                                <span id="error_designation" class="text-danger"></span>
                                                 <div class="d-flex">
                                                     @if ($desig_position->position == 3)
                                                         <div class=" col-md-6 mt-2">
@@ -213,7 +232,7 @@
 
                                                 <div class="col-md-2">
                                                     @if ($cover_letter)
-                                                        <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                        <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
                                                             style="height: 40px;">Deliver</button>
                                                     @else
                                                         <button class="delivery-btn btn btn-info text-white mt-2"
@@ -256,6 +275,7 @@
                                                 <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                     style="height: 40px; margin-left: 10px;"></textarea>
                                             </div>
+                                            <span id="error_designation" class="text-danger"></span>
                                             <div class="d-flex">
                                                 @if ($desig_position->position == 3)
                                                     <div class=" col-md-6 mt-2">
@@ -362,8 +382,8 @@
                         <form action="" id="myForm">
                             @csrf
                             <div class="col-12 text-center">RESTRICTED</div>
-                            <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
-                            <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                            <input type="hidden" id="insp_id" value="{{ $details->inspectorate_id }}">
+                            <input type="hidden" id="sec_id" value="{{ $details->section_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">
@@ -619,7 +639,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.draft_contract.draft_contract_outgoing.outgoing_index_js') --}}
+    @include('backend.draft_contract.draft_contract_outgoing.outgoing_index_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -683,7 +703,7 @@
             });
 
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
 
@@ -744,12 +764,14 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
 
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+
                             }
                         });
 
@@ -778,7 +800,6 @@
                 formData[fieldId] = fieldValue;
             });
 
-            console.log(formData);
 
             $.ajax({
                 url: '{{ url('admin/cover_letter/create') }}',

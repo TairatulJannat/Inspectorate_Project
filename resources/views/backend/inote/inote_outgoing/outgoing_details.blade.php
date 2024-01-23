@@ -160,7 +160,10 @@
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
                                 Letter</a> --}}
                         @endif
-                        <a class="btn btn-success text-light ml-2 mt-2"  href="{{ url('admin/inote/generateinote') }}/{{ $details->id }}">Genarate I-Note</a>
+
+                        @if($inote_letter)
+                        <a class="btn btn-success text-light ml-2 mt-2"  href="{{ url('admin/inote/generateinote') }}/{{ $inote_letter->id }}">Genarate I-Note</a>
+                        @endif
                     </div>
                 </div>
 
@@ -206,14 +209,16 @@
                                                 </div>
                                                 <div class="d-flex">
 
-
-                                                    <div
+                                                    @if (!$inote_letter)
+                                                        <div
                                                         class="col-md-6 m-2 d-flex justify-content-center align-items-center">
 
                                                         <a class="btn btn-success text-light ml-2 pt-3" style='height: 60px'
                                                             href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Approve
                                                             I-Note</a>
-                                                    </div>
+                                                        </div>
+                                                    @endif
+                                                    
                                                     @if (!$cover_letter)
                                                         <div
                                                             class="col-md-6 m-2 d-flex justify-content-center align-items-center">
