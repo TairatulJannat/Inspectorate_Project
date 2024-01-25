@@ -32,7 +32,9 @@ class UserController extends Controller
                 'add_menu' => 'yes',
                 'modal' => 'yes',
             ];
-            return view('backend.user.all_user', compact('users', 'page_data', 'role', 'inspectorates'));
+            $section = Section::all();
+            $designation = Designation::all();
+            return view('backend.user.all_user', compact('users', 'page_data', 'role', 'inspectorates', 'section', 'designation'));
         } else {
 
             $auth_inspectorate_id =  Auth::user()->inspectorate_id;
@@ -42,7 +44,9 @@ class UserController extends Controller
                 'add_menu' => 'yes',
                 'modal' => 'yes',
             ];
-            return view('backend.user.all_user', compact('users', 'page_data', 'role'));
+            $section = Section::where('inspectorate_id',  $auth_inspectorate_id)->get();
+            $designation = Designation::all();
+            return view('backend.user.all_user', compact('users', 'page_data', 'role', 'section', 'designation'));
         }
     }
 
@@ -54,6 +58,9 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:3', 'confirmed'],
             'role_id' => ['required'],
+            'sec_id' => 'required|array',
+            'sec_id.*' => 'exists:sections,id',
+            'desig_id' => 'required|exists:designations,id'
         ]);
         if (Auth::user()->id == 92) {
             $auth_inspectorate_id = $request->insp_id;
@@ -70,6 +77,21 @@ class UserController extends Controller
             $user->created_by = Auth::user()->id;
             $user->password = Hash::make($request->password);
             $user->save();
+
+            $user_id = $user->id;
+            if ($user_id) {
+                foreach ($request->sec_id as $sectionId) {
+
+                    $admin_section = new AdminSection();
+                    $admin_section->admin_id = $user_id;
+                    $admin_section->sec_id = $sectionId;
+                    $admin_section->desig_id = $request->desig_id;
+                    $admin_section->created_at = Carbon::now();
+                    $admin_section->updated_at = Carbon::now();
+                    $admin_section->save();
+                }
+            }
+
         } else {
             $auth_inspectorate_id = Auth::user()->inspectorate_id;
 
@@ -84,6 +106,20 @@ class UserController extends Controller
             $user->created_by = Auth::user()->id;
             $user->password = Hash::make($request->password);
             $user->save();
+
+            $user_id = $user->id;
+            if ($user_id) {
+                foreach ($request->sec_id as $sectionId) {
+
+                    $admin_section = new AdminSection();
+                    $admin_section->admin_id = $user_id;
+                    $admin_section->sec_id = $sectionId;
+                    $admin_section->desig_id = $request->desig_id;
+                    $admin_section->created_at = Carbon::now();
+                    $admin_section->updated_at = Carbon::now();
+                    $admin_section->save();
+                }
+            }
         }
 
 
@@ -103,14 +139,41 @@ class UserController extends Controller
 
         $user = Admin::find($id);
 
+
         $output = '';
         $role_loop = '';
+
         foreach ($role as $data) {
             $role_loop .= '<option value="' . $data->id . '" ' . (($data->id == $user->role_id) ? 'selected="selected"'
                 : "") . '>' . $data->name . '</option>';
         }
+        $all_sections=Section::all();
+        $assign_section=AdminSection::where('admin_id',$user->id)->get();
 
-        $output .= '<div class="form-group"> <label for="Route_name">user name</label> <input type="text" class="form-control" name="name" value="' . $user->name . '"> </div><div class="form-group"> <label for="mobile">Mobile</label> <input type="text" class="form-control" name="mobile" value="' . $user->mobile . '"> </div><input type="hidden" name="user_id" value="' . $id . '"> <div class="form-group"> <label for="Route_name">user Email</label> <input id="email" type="email" class="form-control" name="email" value="' . $user->email . '" required autocomplete="email"> </div><div class="form-group"> <label for="status">Role</label> <select class="form-control" id="status" name="role_id"> ' . $role_loop . ' </select> </div>';
+        $section_loop='';
+        foreach ($all_sections as $section) {
+            $isChecked = false;
+
+            foreach ($assign_section as $as) {
+                if ($section->id == $as->sec_id) {
+                    $isChecked = true;
+                    break; // No need to continue checking if the section is already found
+                }
+            }
+
+            $section_loop .= '<br><input id="sec_id" name="sec_id[]" type="checkbox" ' . ($isChecked ? 'checked' : '') . '/>' . $section->name ;
+        }
+        $allDesig=Designation::all();
+        $assignDesig=AdminSection::where('admin_id', $user->id)->first();
+        $designation_loop = '';
+
+        foreach ($allDesig as $data) {
+            $designation_loop .= '<option value="' . $data->id . '" ' . (($data->id == $assignDesig->desig_id) ? 'selected="selected"'
+                : "") . '>' . $data->name . '</option>';
+        }
+
+        $output .= '<div class="form-group"> <label for="Route_name">user name</label> <input type="text" class="form-control" name="name" value="' . $user->name . '"> </div><div class="form-group"> <label for="mobile">Mobile</label> <input type="text" class="form-control" name="mobile" value="' . $user->mobile . '"> </div><input type="hidden" name="user_id" value="' . $id . '"> <div class="form-group"> <label for="Route_name">user Email</label> <input id="email" type="email" class="form-control" name="email" value="' . $user->email . '" required autocomplete="email"> </div><div class="form-group"> <label for="status">Role</label> <select class="form-control" id="status" name="role_id"> ' . $role_loop . ' </select> </div>
+        <div class="form-group">  <label for="section_multiple">Assign Section</label>'.$section_loop.'</div><div class="form-group"> <label for="desig_id">Designaton</label> <select class="form-control" id="desig_id" name="desig_id"> ' . $role_loop . ' </select> </div>';
 
 
         return $output;
@@ -144,7 +207,7 @@ class UserController extends Controller
             $admin_section->sec_id = $sectionId;
             $admin_section->desig_id = $request->desig_id;
             $admin_section->created_at = Carbon::now();
-            $admin_section->created_at = Carbon::now();
+            $admin_section->updated_at = Carbon::now();
             $admin_section->save();
         }
 

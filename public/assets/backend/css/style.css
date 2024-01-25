@@ -5929,7 +5929,11 @@ table tbody .border-bottom-warning td {
 }
 
 .page-wrapper .page-body-wrapper .page-header {
-    padding-bottom: 30px;
+    padding:10px;
+    padding-bottom: 20px;
+    background-color: rgba(28,103,88,1);
+    border-radius: 5px 5px 0 0;
+    color: #ffff;
 }
 
 .page-wrapper .page-body-wrapper .page-header .row {
@@ -5961,7 +5965,7 @@ table tbody .border-bottom-warning td {
 }
 
 .page-wrapper .page-body-wrapper .page-header .breadcrumb li {
-    color: #717171;
+    color: #fff;
     font-size: 13px;
     letter-spacing: 1px;
     font-weight: 500;
@@ -5972,7 +5976,7 @@ table tbody .border-bottom-warning td {
 }
 
 .page-wrapper .page-body-wrapper .page-header .breadcrumb .breadcrumb-item a {
-    color: #24695c;
+    color:#B4EEB4;
 }
 
 /*======= Page Header css ends  ======= */
