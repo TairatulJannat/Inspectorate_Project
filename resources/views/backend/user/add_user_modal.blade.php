@@ -66,7 +66,7 @@
                         <label for="status">Assign Section</label>
                         @if ($section)
                             @foreach ($section as $s)
-                                <br> <input type="checkbox" value="{{ $s->id }}" id="sec_id" name="sec_id[]">
+                                <br> <input type="checkbox" value="{{ $s->id }}"  name="sec_id[]">
                                 {{ $s->name }}
                             @endforeach
                         @endif

@@ -52,7 +52,7 @@ class UserController extends Controller
 
     public function save_user(Request $request)
     {
-
+        
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -79,6 +79,7 @@ class UserController extends Controller
             $user->save();
 
             $user_id = $user->id;
+            
             if ($user_id) {
                 foreach ($request->sec_id as $sectionId) {
 
@@ -161,7 +162,7 @@ class UserController extends Controller
                 }
             }
 
-            $section_loop .= '<br><input id="sec_id" name="sec_id[]" type="checkbox" ' . ($isChecked ? 'checked' : '') . '/>' . $section->name ;
+            $section_loop .= '<br><input  name="sec_id[]" type="checkbox" value="' . $section->id . '" ' . ($isChecked ? 'checked' : '') . '/>' . $section->name ;
         }
         $allDesig=Designation::all();
         $assignDesig=AdminSection::where('admin_id', $user->id)->first();
@@ -178,43 +179,10 @@ class UserController extends Controller
 
         return $output;
     }
-    public function assign_section($id)
-    {
-        $admin_id = $id;
-        if (Auth::user()->id == 92) {
-            $section = Section::all();
-            $designation = Designation::all();
-        } else {
-            $auth_inspectorate_id =  Auth::user()->inspectorate_id;
-            $section = Section::where('inspectorate_id',  $auth_inspectorate_id)->get();
-            $designation = Designation::all();
-        }
-
-
-        return view('backend.user.assign_section_modal', compact('section', 'designation', 'admin_id'));
-    }
-    public function store_assign_section(Request $request)
-    {
-        $request->validate([
-            'sec_id' => 'required|array',
-            'sec_id.*' => 'exists:sections,id',
-            'desig_id' => 'required|exists:designations,id'
-        ]);
-        foreach ($request->sec_id as $sectionId) {
-
-            $admin_section = new AdminSection();
-            $admin_section->admin_id = $request->admin_id;
-            $admin_section->sec_id = $sectionId;
-            $admin_section->desig_id = $request->desig_id;
-            $admin_section->created_at = Carbon::now();
-            $admin_section->updated_at = Carbon::now();
-            $admin_section->save();
-        }
-
-        return response()->json(['success' => 'Done']);
-    }
+   
     public function upadte_user(Request $request)
     {
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $request->user_id],
@@ -233,7 +201,19 @@ class UserController extends Controller
         //        $user->password = Hash::make(123456);
         $user->update();
 
-        Toastr::success('User Created Successfully', 'Created');
+        AdminSection::where('admin_id', $request->user_id)->delete();
+
+        foreach ($request->sec_id as $sectionId) {
+        $admin_section = new AdminSection();
+        $admin_section->admin_id = $request->user_id;
+        $admin_section->sec_id = $sectionId;
+        $admin_section->desig_id = $request->desig_id;
+        $admin_section->created_at = Carbon::now();
+        $admin_section->updated_at = Carbon::now();
+        $admin_section->save();
+    }
+
+        Toastr::success('User Updated Successfully', 'Updated');
         return redirect()->route('admin.all_user');
     }
 
@@ -267,4 +247,5 @@ class UserController extends Controller
         Toastr::error('User deleted Successfully', 'Deleted');
         return redirect()->route('admin.all_user');
     }
+    
 }

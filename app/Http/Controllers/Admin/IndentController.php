@@ -23,6 +23,11 @@ use PDF;
 
 class IndentController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
 
@@ -274,8 +279,10 @@ class IndentController extends Controller
             $path = $request->file('doc_file')->store('uploads', 'public');
             $data->doc_file = $path;
         }
-
         $data->save();
+
+        // save aditional file
+        
 
         return response()->json(['success' => 'Done']);
     }
@@ -302,6 +309,7 @@ class IndentController extends Controller
 
     public function update(Request $request)
     {
+
         $data = Indent::findOrFail($request->editId);
 
         $data->sender = $request->sender;
@@ -335,6 +343,8 @@ class IndentController extends Controller
         }
 
         $data->save();
+
+        $this->fileController->SaveFile($data->insp_id,$data->sec_id, $request->file_name, $request->file, 3, $request->reference_no);
 
         return response()->json(['success' => 'Done']);
     }
@@ -402,7 +412,7 @@ class IndentController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  3)->latest()->first();
+            ->where('doc_type_id',  3)->latest()->first();
         //End blade forward on off section....
 
         return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
@@ -441,7 +451,7 @@ class IndentController extends Controller
             if ($reciever_desig_id == $sender_designation_id) {
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
-         }
+        }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
