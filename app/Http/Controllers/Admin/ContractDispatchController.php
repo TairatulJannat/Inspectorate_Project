@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Contract;
+use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;;
@@ -196,7 +197,9 @@ class ContractDispatchController extends Controller
             )
             ->where('contracts.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 10)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -257,7 +260,7 @@ class ContractDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.contract.contract_dispatch.contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
+        return view('backend.contract.contract_dispatch.contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden', 'files'));
     }
 
     public function ContractTracking(Request $request)
@@ -273,7 +276,7 @@ class ContractDispatchController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-        
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $doc_type_id = 10; //...... 10 for contract from contracts table doc_serial.
@@ -289,7 +292,7 @@ class ContractDispatchController extends Controller
             if ($reciever_desig_id == $sender_designation_id) {
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
-         }
+        }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

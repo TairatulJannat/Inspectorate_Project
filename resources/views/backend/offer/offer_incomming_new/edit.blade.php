@@ -15,18 +15,7 @@
 
                 <div class="card-body">
                     <div class=" header">
-                        {{-- <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="additional_documents">Select Section</label>
-                            <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
-                                @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}">{{ $section->name }}</option>
-                                @endforeach
 
-                            </select>
-                            <span id="error_admin_section" class="text-danger error_field"></span>
-                        </div>
-                    </div> --}}
                         <div class="col-md-2">
                             <div class="form-group">
                                 <a id="importExcelBtn" href="{{ url('admin/import-supplier-spec-data-index') }}"
@@ -73,7 +62,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_rcv_ltr_dt">Offer Receive Letter Date</label>
@@ -102,7 +91,7 @@
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-                     
+
 
 
                         <div class="col-md-4">
@@ -182,7 +171,7 @@
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-     
+
 
 
                         <div class="col-md-4">
@@ -307,15 +296,27 @@
                             </div>
                         </div>
 
+                    </div>
+                </div>
+                <div  class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
 
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="pdf_file"><b>Upload Document</b></label>
-                                <input type="file" class="form-control-file" id="pdf_file" name="pdf_file">
-                                <span id="error_pdf_file" class="text-danger error_field"></span>
+                    <div class="file-container">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control file-name" name="file_name[]"
+                                    placeholder="File Name" id="file_name_0">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input file" name="file[]" id="file_0">
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <a class="btn btn-primary" id="addFile">Add More File</a>
 
                     </div>
                 </div>
@@ -337,6 +338,15 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
+        
+        let fileCount = 1;
+        $("#addFile").click(function() {
+            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            $(".file-container").append(newFileInput);
+
+            // Increment the fileCount for the next set of inputs
+            fileCount++;
+        });
         $(document).ready(function() {
             $('.select2').select2();
 
@@ -398,7 +408,7 @@
                 }
             });
         })
-        
+
 
         function form_reset() {
             document.getElementById("search_form").reset();
@@ -476,7 +486,7 @@
                                 response.item.name + '</option>';
                             var itemType_html = '<option value="' + response.itemType.id +
                                 '">' + response.itemType.name + '</option>';
-                            
+
 
 
 

@@ -11,6 +11,7 @@ use App\Models\DocumentTrack;
 use App\Models\Contract;
 use App\Models\DraftContract;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinalSpec;
 use App\Models\FinancialYear;
 use App\Models\Item_type;
@@ -26,6 +27,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ContractController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -284,13 +290,15 @@ class ContractController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
-        $item_types = Item_type::where('status', 1)
-            ->where('inspectorate_id', $inspectorate_id)
+        $item_types = Item_type::where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->get();
-        $item = Items::where('id', $contract->item_id)->first();
+        $item = Items::where('inspectorate_id', $inspectorate_id)
+            ->whereIn('section_id', $section_ids)
+            ->get();
+        $supplier = Supplier::where('insp_id', $inspectorate_id)->get();
         $fin_years = FinancialYear::all();
-        return view('backend.contract.contract_incomming_new.edit', compact('contract', 'item', 'dte_managments', 'item_types', 'fin_years', 'draft_contracts'));
+        return view('backend.contract.contract_incomming_new.edit', compact('contract', 'item', 'dte_managments', 'item_types', 'fin_years', 'draft_contracts', 'supplier'));
     }
 
     public function update(Request $request)
@@ -330,14 +338,19 @@ class ContractController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
+        // $path = '';
+        // if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->attached_file = $path ? $path : $data->attached_file;
+        //     $path = $request->file('doc_file')->store('uploads', 'public');
+        // }
+        // $data->attached_file = $path ? $path : $data->attached_file;
 
         $data->save();
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 10,  $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -361,7 +374,9 @@ class ContractController extends Controller
             )
             ->where('contracts.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 10)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -392,7 +407,6 @@ class ContractController extends Controller
 
         //End close forward Status...
 
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
             ->where('doc_type_id', 10)
@@ -401,7 +415,7 @@ class ContractController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.contract.contract_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.contract.contract_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function ContractTracking(Request $request)

@@ -26,9 +26,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PsiController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
+
     public function index()
     {
-
 
         $insp_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
@@ -281,7 +286,7 @@ class PsiController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
-        $contracts=Contract::all();
+        $contracts = Contract::all();
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
@@ -289,7 +294,7 @@ class PsiController extends Controller
         $item = Items::where('id', $psi->item_id)->first();
         $fin_years = FinancialYear::all();
         $supplier = Supplier::where('id', $psi->supplier_id)->first();
-        return view('backend.psi.psi_incomming_new.edit', compact('psi','supplier','contracts', 'item', 'dte_managments', 'item_types', 'fin_years'));
+        return view('backend.psi.psi_incomming_new.edit', compact('psi', 'supplier', 'contracts', 'item', 'dte_managments', 'item_types', 'fin_years'));
     }
 
     public function update(Request $request)
@@ -325,14 +330,20 @@ class PsiController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
+        // $path = '';
+        // if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->attached_file = $path ? $path : $data->attached_file;
+        //     $path = $request->file('doc_file')->store('uploads', 'public');
+        // }
+        // $data->attached_file = $path ? $path : $data->attached_file;
 
         $data->save();
+
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 7,  $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -464,5 +475,4 @@ class PsiController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-   
 }

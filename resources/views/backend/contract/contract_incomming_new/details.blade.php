@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -100,7 +99,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Contract</h2>
+                <h2><b>Details of Contract</b></h2>
             </div>
             <div style="display: flex">
 
@@ -157,12 +156,16 @@
                             </tr>
 
                         </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
 
-                         @if ($desig_id != 1)
+                         {{-- @if ($desig_id != 1)
                              <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
-                         @endif
+                         @endif --}}
 
                     </div>
+
                 </div>
 
 

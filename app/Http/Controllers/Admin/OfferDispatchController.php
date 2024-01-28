@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -78,7 +79,7 @@ class OfferDispatchController extends Controller
                 ->count();
         }
 
-        return view('backend.offer.offer_dispatch.offer_dispatch_index', compact('offerNew','offerOnProcess','offerCompleted','offerDispatch'));
+        return view('backend.offer.offer_dispatch.offer_dispatch_index', compact('offerNew', 'offerOnProcess', 'offerCompleted', 'offerDispatch'));
     }
 
     public function all_data(Request $request)
@@ -143,14 +144,14 @@ class OfferDispatchController extends Controller
                 ->addColumn('status', function ($data) {
                     if ($data->status == '4') {
                         return '<button class="btn btn-danger btn-sm">Dispatched</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-danger btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
 
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
                     if ($DocumentTrack) {
@@ -205,6 +206,9 @@ class OfferDispatchController extends Controller
             )
             ->where('offers.id', $id)
             ->first();
+        // Attached File
+        $files = File::where('doc_type_id', 5)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
 
@@ -230,8 +234,8 @@ class OfferDispatchController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->whereIn('track_status',[2,4])
-            ->where('doc_type_id',5)
+            ->whereIn('track_status', [2, 4])
+            ->where('doc_type_id', 5)
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 3)
@@ -271,15 +275,12 @@ class OfferDispatchController extends Controller
 
         //End close forward Status...
 
-
-       
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 5)->latest()->first();
 
         //End blade forward on off section....
 
-
-        return view('backend.offer.offer_dispatch.offer_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id','auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names' , 'DocumentTrack_hidden','supplier_names_names'));
+        return view('backend.offer.offer_dispatch.offer_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'additional_documents_names', 'DocumentTrack_hidden', 'supplier_names_names', 'files'));
     }
 
 

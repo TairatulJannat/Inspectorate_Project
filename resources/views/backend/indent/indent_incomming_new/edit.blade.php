@@ -266,21 +266,15 @@
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="doc_file">Upload Document</label>
-                                <input class="form-control" type="file" id="doc_file" name='doc_file'>
-                                <span id="doc_file" class="text-danger error_field"></span>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
-                <div>
-                    <h1 class="mb-4">Attach Document</h1>
+                <div  class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
 
                     <div class="file-container">
                         <div class="form-row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <input type="text" class="form-control file-name" name="file_name[]"
                                     placeholder="File Name" id="file_name_0">
                             </div>
@@ -294,7 +288,7 @@
 
                     <div class="mb-3">
                         <a class="btn btn-primary" id="addFile">Add More File</a>
-                      
+
                     </div>
                 </div>
 
@@ -342,7 +336,7 @@
         let fileCount = 1;
 
         $("#addFile").click(function() {
-            var newFileInput = '<div class="form-row mb-3"><div class="col-md-6"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
             $(".file-container").append(newFileInput);
 
             // Increment the fileCount for the next set of inputs

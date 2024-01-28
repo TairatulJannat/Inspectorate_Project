@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Indent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -201,6 +202,9 @@ class OutgoingIndentController extends Controller
             ->where('indents.id', $id)
             ->where('indents.status', 1)
             ->first();
+        // Attached File
+        $files = File::where('doc_type_id', 3)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
@@ -260,7 +264,7 @@ class OutgoingIndentController extends Controller
         // end cover letter start
 
 
-        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'cover_letter','files'));
     }
 
     public function OutgoingIndentTracking(Request $request)

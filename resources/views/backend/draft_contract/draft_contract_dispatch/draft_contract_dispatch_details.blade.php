@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -97,7 +96,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Draft Contract</h2>
+                <h2><b>Details of Draft Contract</b></h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-4">
@@ -135,21 +134,24 @@
 
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
 
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
 
 
 
                         </table>
-
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
+                        
+                        {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a> --}}
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                             class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                             Letter</a>
@@ -379,7 +381,8 @@
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
-                                $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
                             }
                         });

@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Contract;
+use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -94,7 +95,7 @@ class ContractApprovedController extends Controller
                 $query = Contract::leftJoin('items', 'contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'contracts.section_id', '=', 'sections.id')
-                    ->select('contracts.*', 'items.name as item_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('contracts.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('contracts.status', 3)
                     ->get();
             } else {
@@ -202,6 +203,9 @@ class ContractApprovedController extends Controller
             )
             ->where('contracts.id', $id)
             ->first();
+        // Attached File
+        $files = File::where('doc_type_id', 10)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -242,19 +246,16 @@ class ContractApprovedController extends Controller
 
         //End close forward Status...
 
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 10)->latest()->first();
+            ->where('doc_type_id', 10)->latest()->first();
 
         //End blade forward on off section....
 
-
-        return view('backend.contract.contract_approved.contract_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.contract.contract_approved.contract_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
-    public function ContractTracking (Request $request)
+    public function ContractTracking(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',

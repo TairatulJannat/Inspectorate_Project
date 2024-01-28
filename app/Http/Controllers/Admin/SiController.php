@@ -29,7 +29,11 @@ use Yajra\DataTables\Facades\DataTables;
 class SiController extends Controller
 {
     //
-
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -255,7 +259,7 @@ class SiController extends Controller
             $data->created_at = Carbon::now()->format('Y-m-d');
             $data->updated_at = Carbon::now()->format('Y-m-d');
 
-         
+
 
             $data->save();
 
@@ -284,7 +288,7 @@ class SiController extends Controller
             ->get();
         $item = Items::where('id', $si->item_id)->first();
         $fin_years = FinancialYear::all();
-        $contracts = Contract::all();    
+        $contracts = Contract::all();
         return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts'));
     }
 
@@ -321,14 +325,19 @@ class SiController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
+        // $path = '';
+        // if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->doc_file = $path ? $path : $data->doc_file;
+        //     $path = $request->file('doc_file')->store('uploads', 'public');
+        // }
+        // $data->doc_file = $path ? $path : $data->doc_file;
 
         $data->save();
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 11, $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -470,11 +479,11 @@ class SiController extends Controller
         $item=Items::where('id' , $contract->item_id)->first();
         $item_type=Item_type::where('id' , $contract->item_type_id)->first();
         $offer_reference_no = $contract->offer_reference_no;
-       
+
         $indent_reference_no = $contract->indent_reference_no;
 
         $supplier = Supplier::where('id',$contract->supplier_id)->first();
-             
+
         return response()->json(['item' =>$item, 'itemType' =>$item_type,'offerReferenceNo'=>$offer_reference_no,'indentReferenceNo'=> $indent_reference_no, 'supplier'=>$supplier]);
 
     }

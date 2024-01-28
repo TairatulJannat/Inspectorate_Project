@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\DraftContract;
+use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;;
@@ -195,7 +196,9 @@ class DraftContractDispatchController extends Controller
             )
             ->where('draft_contracts.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 9)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -244,10 +247,7 @@ class DraftContractDispatchController extends Controller
                 break;
             }
         }
-
-
         //End close forward Status...
-
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
@@ -255,8 +255,7 @@ class DraftContractDispatchController extends Controller
 
         //End blade forward on off section....
 
-
-        return view('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
+        return view('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden', 'files'));
     }
 
     public function DispatchTracking(Request $request)

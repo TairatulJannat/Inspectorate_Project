@@ -19,11 +19,17 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class FinalSpecController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -285,21 +291,20 @@ class FinalSpecController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->supplier_id = $request->supplier_id;
         $data->fin_year_id = $request->fin_year_id;
-        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
 
-        if ($request->hasFile('pdf_file')) {
-
-            $path = $request->file('pdf_file')->store('uploads', 'public');
-            $data->pdf_file = $path;
-        }
 
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;
         $data->created_at = Carbon::now()->format('Y-m-d');
         $data->updated_at = Carbon::now()->format('Y-m-d');
-
         $data->save();
+
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 6,  $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -321,30 +326,9 @@ class FinalSpecController extends Controller
             ->where('final_specs.id', $id)
             ->first();
 
-
-        //     $details->additional_documents = json_decode($details->additional_documents, true);
-        //         $additional_documents_names = [];
-
-        // if($details->additional_documents){
-        //     foreach ($details->additional_documents as $document_id) {
-        //         $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-        //         array_push($additional_documents_names, $additional_names);
-        //     }
-
-        // }
-
-//         $details->suppliers = json_decode($details->supplier_id, true);
-
-//         $supplier_names_names = [];
-//         if ($details->suppliers) {
-//             foreach ($details->suppliers as $Supplier_id) {
-//                 $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-
-//                 array_push($supplier_names_names, $supplier_names);
-//             }
-//         }
-
+        // Attached File
+        $files = File::where('doc_type_id', 6)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -386,8 +370,7 @@ class FinalSpecController extends Controller
 
 
 
-        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden'));
-
+        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'files'));
     }
 
     public function finalSpecTracking(Request $request)
@@ -448,12 +431,12 @@ class FinalSpecController extends Controller
     public function get_offer_details($offerReferenceNo)
     {
 
-        $offer = Offer::where('reference_no' ,$offerReferenceNo)->first();
-        $item=Items::where('id' , $offer->item_id)->first();
-        $item_type=Item_type::where('id' , $offer->item_type_id)->first();
-        $tender_reference_no = Tender::where('reference_no',$offer->tender_reference_no)->first();
-        
-        $indent_reference_no = Indent::where('reference_no',$offer->indent_reference_no)->first();
+        $offer = Offer::where('reference_no', $offerReferenceNo)->first();
+        $item = Items::where('id', $offer->item_id)->first();
+        $item_type = Item_type::where('id', $offer->item_type_id)->first();
+        $tender_reference_no = Tender::where('reference_no', $offer->tender_reference_no)->first();
+
+        $indent_reference_no = Indent::where('reference_no', $offer->indent_reference_no)->first();
 
         $offer->suppliers = json_decode($offer->supplier_id, true);
 

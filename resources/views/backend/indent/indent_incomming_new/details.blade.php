@@ -16,9 +16,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
+
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -100,7 +100,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Indent</h2>
+                <h2><b>Details of Indent</b></h2>
             </div>
             <div style="display: flex">
 
@@ -188,15 +188,19 @@
                             </tr>
 
                         </table>
+                        {{-- additional file design start here --}}
+                        @include('backend.files.file')
+                        {{-- additional file design end here --}}
                         @if ($desig_id != 1)
                             <a class="btn btn-success mt-3 btn-parameter"
                                 href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
 
-                            <a class="btn btn-info mt-3 btn-parameter text-light"
-                                href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                            {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
+                                href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a> --}}
                         @endif
 
                     </div>
+
                 </div>
 
 
@@ -395,7 +399,8 @@
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
-                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
 
                             }

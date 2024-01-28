@@ -25,7 +25,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="hidden" value=" {{$psi->id}}" id="editId" name="editId">
+                                <input type="hidden" value=" {{ $psi->id }}" id="editId" name="editId">
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
@@ -56,8 +56,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="psi_received_date">PSI Received Date</label>
-                                <input type="date" class="form-control" id="psi_received_date"
-                                    name="psi_received_date"
+                                <input type="date" class="form-control" id="psi_received_date" name="psi_received_date"
                                     value="{{ $psi->received_date ? $psi->received_date : '' }}">
                                 <span id="error_psi_received_date" class="text-danger error_field"></span>
                             </div>
@@ -65,8 +64,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="psi_reference_date">PSI Reference Date</label>
-                                <input type="date" class="form-control" id="psi_reference_date"
-                                    name="psi_reference_date"
+                                <input type="date" class="form-control" id="psi_reference_date" name="psi_reference_date"
                                     value="{{ $psi->reference_date ? $psi->reference_date : '' }}">
                                 <span id="error_psi_reference_date" class="text-danger error_field"></span>
                             </div>
@@ -75,16 +73,18 @@
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
 
-                                @foreach ($contracts as $contract)
-                                    <select class="form-control select2" id="contract_reference_no"
-                                        name="contract_reference_no">
-                                        <option value="">Select a Contract No</option>
+
+                                <select class="form-control select2" id="contract_reference_no"
+                                    name="contract_reference_no">
+                                    <option value="">Select a Contract No</option>
+                                    @foreach ($contracts as $contract)
                                         <option value="{{ $contract->reference_no }}"
                                             {{ $contract->reference_no == $psi->contract_reference_no ? 'selected' : '' }}>
                                             {{ $contract->reference_no }}
                                         </option>
-                                    </select>
-                                @endforeach
+                                    @endforeach
+                                </select>
+
 
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>
@@ -199,13 +199,35 @@
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="doc_file">Upload Document</label>
                                 <input class="form-control" type="file" id="doc_file" name='doc_file'>
                                 <span id="doc_file" class="text-danger error_field"></span>
                             </div>
+                        </div> --}}
+
+                    </div>
+                </div>
+                <div  class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
+
+                    <div class="file-container">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control file-name" name="file_name[]"
+                                    placeholder="File Name" id="file_name_0">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input file" name="file[]" id="file_0">
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <a class="btn btn-primary" id="addFile">Add More File</a>
 
                     </div>
                 </div>
@@ -221,13 +243,20 @@
     </div>
 @endsection
 @push('js')
-
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
+        let fileCount = 1;
+        $("#addFile").click(function() {
+            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            $(".file-container").append(newFileInput);
+
+            // Increment the fileCount for the next set of inputs
+            fileCount++;
+        });
         $(document).ready(function() {
             $('.select2').select2();
         });
