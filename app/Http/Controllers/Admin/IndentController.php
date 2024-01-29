@@ -257,7 +257,7 @@ class IndentController extends Controller
         $data->attribute = $request->attribute;
         $data->spare = $request->spare;
         $data->checked_standard = $request->checked_standard;
-        $data->nomenclature = $request->nomenclature;
+        // $data->nomenclature = $request->nomenclature;
         $data->make = $request->make;
         $data->model = $request->model;
         $data->country_of_origin = $request->country_of_origin;
@@ -318,7 +318,7 @@ class IndentController extends Controller
         $data->attribute = $request->attribute;
         $data->spare = $request->spare;
         $data->checked_standard = $request->checked_standard;
-        $data->nomenclature = $request->nomenclature;
+        // $data->nomenclature = $request->nomenclature;
         $data->make = $request->make;
         $data->model = $request->model;
         $data->country_of_origin = $request->country_of_origin;

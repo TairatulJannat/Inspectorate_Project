@@ -192,14 +192,6 @@
 
                                     <option selected disabled value="">Please Select</option>
 
-                                    {{-- @foreach ($item_types as $item_type)
-                                        <option value="{{ $item_type->id }}"
-                                            {{ $item_type->id == $offer->item_type_id ? 'selected' : '' }}>
-                                            {{ $item_type->name }}
-                                        </option>
-                                    @endforeach --}}
-
-
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
@@ -212,12 +204,7 @@
 
                                 <select class="form-control" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
-                                    {{-- @if ($item)
-                                        <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
-                                    @endif --}}
                                 </select>
-
-
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>

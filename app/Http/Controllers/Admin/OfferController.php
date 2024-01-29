@@ -91,17 +91,17 @@ class OfferController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+                $query = Offer::leftJoin('items', 'offers.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
                     ->where('offers.status', 0)
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('offers.*', 'items.name as item_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+                $query = Offer::leftJoin('items', 'offers.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('offers.*', 'items.name as item_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('offers.status', 0)
                     ->get();
             } else {
@@ -111,10 +111,10 @@ class OfferController extends Controller
                     ->where('offers.status', 0)
                     ->whereIn('offers.sec_id', $section_ids)->pluck('offers.id', 'offers.id')->toArray();
 
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+                $query = Offer::leftJoin('items', 'offers.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('offers.*', 'items.name as item_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('offers.id', $offerIds)
                     ->where('offers.status', 0)
                     ->get();

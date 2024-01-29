@@ -60,6 +60,7 @@
                                     <option value="">Please Select</option>
 
                                     @foreach ($dte_managments as $dte)
+                                    
                                         <option value="{{ $dte->id }}">{{ $dte->name }}</option>
                                     @endforeach
 

@@ -56,7 +56,7 @@
                                 <label for="sender">Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
-                                    <option value="">Please Select</option>
+                                    <Option>Select Section</Option>
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}">{{ $dte->name }}</option>

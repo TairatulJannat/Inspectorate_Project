@@ -93,18 +93,18 @@ class FinalSpecController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
                     ->where('final_specs.status', 0)
-                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*', 'items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
-                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*', 'items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('final_specs.status', 0)
                     ->get();
             } else {
@@ -115,10 +115,10 @@ class FinalSpecController extends Controller
                     ->where('final_specs.status', 0)
                     ->whereIn('final_specs.sec_id', $section_ids)->pluck('final_specs.id', 'final_specs.id')->toArray();
 
-                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
-                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*','items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('final_specs.id', $FinalSpecs)
                     ->where('final_specs.status', 0)
                     ->get();

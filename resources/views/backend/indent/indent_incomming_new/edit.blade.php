@@ -224,7 +224,7 @@
                                 <span id="error_fin_year_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="nomenclature">Nomenclature</label>
                                 <input type="text" class="form-control" id="nomenclature" name="nomenclature"
@@ -232,7 +232,7 @@
 
                                 <span id="error_nomenclature" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="make">Make</label>
