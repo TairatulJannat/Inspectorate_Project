@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Inote;
 use App\Models\InoteLetter;
 use Carbon\Carbon;
@@ -71,7 +72,7 @@ class InoteOutgoingController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.inote.inote_outgoing.outgoing', compact('inoteNew','inoteOnProcess','inoteCompleted','inoteDispatch'));
+        return view('backend.inote.inote_outgoing.outgoing', compact('inoteNew', 'inoteOnProcess', 'inoteCompleted', 'inoteDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -189,12 +190,14 @@ class InoteOutgoingController extends Controller
         $details = Inote::leftJoin('item_types', 'inotes.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'inotes.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'inotes.item_id', '=', 'items.id')
-            ->select('inotes.*', 'item_types.name as item_type_name','items.name as item_name', 'dte_managments.name as dte_managment_name')
+            ->select('inotes.*', 'item_types.name as item_type_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
             ->where('inotes.id', $id)
             ->where('inotes.status', 1)
             ->first();
 
-
+        // Attached File
+        $files = File::where('doc_type_id', 13)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -232,7 +235,7 @@ class InoteOutgoingController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 13)->latest()->first();
+            ->where('doc_type_id', 13)->latest()->first();
 
         //End blade forward on off section....
 
@@ -244,10 +247,10 @@ class InoteOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.inote.inote_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'inote_letter'));
+        return view('backend.inote.inote_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'inote_letter', 'files'));
     }
 
-    public function Tracking (Request $request)
+    public function Tracking(Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;

@@ -10,6 +10,7 @@ use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -342,7 +343,7 @@ class PsiController extends Controller
         //Multipule File Upload in files table
         $save_id = $data->id;
         if ($save_id) {
-            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 7,  $request->reference_no);
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 8,  $request->reference_no);
         }
 
         return response()->json(['success' => 'Done']);
@@ -367,7 +368,9 @@ class PsiController extends Controller
             )
             ->where('psies.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 8)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -395,10 +398,7 @@ class PsiController extends Controller
                 break;
             }
         }
-
         //End close forward Status...
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
             ->where('doc_type_id',  8)
@@ -406,8 +406,7 @@ class PsiController extends Controller
 
         //End blade forward on off section....
 
-
-        return view('backend.psi.psi_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.psi.psi_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden','files'));
     }
 
     public function psiTracking(Request $request)

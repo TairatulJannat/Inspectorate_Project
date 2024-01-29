@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -97,7 +96,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of QAC</h2>
+                <h2><strong>Details of QAC</strong></h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-4">
@@ -106,6 +105,10 @@
                             <tr>
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contract Referance No</td>
+                                <td>{{ $details->contract_reference_no }}</td>
                             </tr>
 
                             <tr>

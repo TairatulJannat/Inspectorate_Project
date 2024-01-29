@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -100,7 +99,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Si</h2>
+                <h2><strong>Details of SI</strong></h2>
             </div>
             <div style="display: flex">
 
@@ -113,6 +112,10 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
 
+                            <tr>
+                                <th>Contract Reference No</td>
+                                <td>{{ $details->contract_reference_no }}</td>
+                            </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
@@ -142,10 +145,12 @@
                             </tr>
 
 
+
                         </table>
 
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
-                            target="_blank">Pdf Document</a>
+                       {{-- additional file design start here --}}
+                       @include('backend.files.file')
+                       {{-- additional file design end here --}}
                     </div>
                 </div>
 
