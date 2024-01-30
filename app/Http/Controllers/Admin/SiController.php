@@ -103,21 +103,21 @@ class SiController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                $query = Si::leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
                     ->where('stage_inspections.status', 0)
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                $query = Si::leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
                     ->where('stage_inspections.inspectorate_id', $insp_id)
                     ->where('stage_inspections.status', 0)
                     ->whereIn('stage_inspections.section_id', $section_ids)
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*','items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -128,10 +128,10 @@ class SiController extends Controller
                     ->where('stage_inspections.status', 0)
                     ->whereIn('stage_inspections.section_id', $section_ids)->pluck('stage_inspections.id')->toArray();
 
-                $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                $query = Si::leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('stage_inspections.id', $siIds)
                     ->where('stage_inspections.status', 0)
                     ->get();
@@ -252,6 +252,7 @@ class SiController extends Controller
             $data->received_date = $request->received_date;
             $data->supplier_id = $request->supplier_id;
             $data->reference_date = $request->reference_date;
+            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -283,14 +284,33 @@ class SiController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
-        $item_types = Item_type::where('status', 1)
+        $item_types = Item_type::where('id', $si->item_id)->where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
-            ->get();
+            ->first();
+            
+            if ($item_types) {
+                // dd($item_types); 
+                 $itemTypeName = $item_types->name;
+                
+            } else{
+                $itemTypeName = Null;
+            }
+            
         $item = Items::where('id', $si->item_id)->first();
+        
+        if ($item) {
+            $itemName = $item->name;
+            // dd($itemName );  
+        } else{
+            $itemName = Null;
+        }
+        
         $fin_years = FinancialYear::all();
-        $contracts = Contract::all();
-        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts'));
+
+        $contracts = Contract::all();    
+        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','itemTypeName','itemName'));
+
     }
 
     public function update(Request $request)
@@ -320,6 +340,7 @@ class SiController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->received_date;
+        $data->provationally_status = $request->provationally_status;
         $data->reference_date = $request->reference_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;

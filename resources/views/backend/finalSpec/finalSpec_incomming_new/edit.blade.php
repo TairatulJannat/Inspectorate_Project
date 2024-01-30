@@ -87,7 +87,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="tender_reference_no">Tender Reference Number</label>
-                                <select class="form-control " id="tender_reference_no" name="tender_reference_no">
+
 
                                     <option value="">Please Select</option>
 
@@ -96,16 +96,21 @@
                                     <option value="{{ $tender_reference_no->id }}"
                                         {{ $tender_reference_no->id == $offer->tender_reference_no ? 'selected' : '' }}>{{ $tender_reference_no->reference_no }}</option>
 
-                                @endforeach --}}
+                                <input type="text" id="tender_reference_no" class="form-control"
+                                name="tender_reference_no"
+                                value="{{ $finalspec->tender_reference_no ? $finalspec->tender_reference_no : '' }}">
 
-                                </select>
+
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference Number</label>
-                                <select class="form-control " id="indent_reference_no" name="indent_reference_no">
+                                <input type="text" id="indent_reference_no" class="form-control"
+                                name="indent_reference_no"
+                                value="{{ $finalspec->indent_reference_no ? $finalspec->indent_reference_no : '' }}">
+
 
                                     <option value="">Please Select</option>
 
@@ -117,6 +122,7 @@
                                 @endforeach --}}
 
                                 </select>
+
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
 
@@ -129,13 +135,15 @@
 
                                 <label for="supplier_id">Suppiler</label>
 
-                                <select class="form-control" id="supplier_id" name="supplier_id">
+                                {{-- <select class="form-control" id="supplier_id" name="supplier_id">
                                     <option value="">Please Select </option>
-                                    {{-- @foreach ($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}">{{ $supplier->firm_name }}</option>
-                                @endforeach --}}
 
-                                </select>
+                                </select> --}}
+
+                                <input type="text" id="supplier_id" class="form-control"
+                                name="supplier_id"
+                                value="{{ $finalspec->supplier_id ? $finalspec->supplier_id : '' }}">
+
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -145,9 +153,10 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
-                                <select class="form-control " id="item_type_id" name="item_type_id">
+                                {{-- <select class="form-control " id="item_type_id" name="item_type_id">
 
                                     <option selected disabled value="">Please Select</option>
+
 
                                     {{--
                                 @foreach ($item_types as $item_type)
@@ -156,6 +165,12 @@
 
 
                                 </select>
+
+                                </select> --}}
+                                <input type="text" id="item_type_id" class="form-control"
+                                name="item_type_id"
+                                value="{{ $itemTypeName ? $itemTypeName : '' }}">
+
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -165,10 +180,14 @@
                                 <label for="item_id">Item</label>
 
 
-                                <select class="form-control" id="item_id" name="item_id">
+                                {{-- <select class="form-control" id="item_id" name="item_id">
 
-                                    <option value="">Please Select </option>
-                                </select>
+                                    <option value="{{ $itemName ? $itemName : '' }}">Please Select </option>
+                                </select> --}}
+
+                                <input type="text" id="item_id" class="form-control"
+                                name="item_id"
+                                value="{{ $itemName ? $itemName : '' }}">
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
@@ -183,10 +202,13 @@
 
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
-                                        <option value={{ $fin_year->id }}>{{ $fin_year->year }} </option>
+                                        <option value={{ $fin_year->id }} {{ $fin_year->id == $finalspec->fin_year_id ? 'selected' : '' }}>{{ $fin_year->year }} 
+                                            
+                                        </option>
                                     @endforeach
 
                                 </select>
+
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>

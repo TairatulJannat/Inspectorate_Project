@@ -94,7 +94,7 @@
                                 <label for="item_type_id">Item Type</label>
                                 <select class="form-control" id="item_type_id" name="item_type_id" required>
 
-                                    <option selected disabled value="">Please Select</option>
+                                    <option selected disabled value="{{ $itemTypeName ? $itemTypeName : '' }}">Please Select</option>
 
 
                                 </select>
@@ -107,7 +107,7 @@
                                 <label for="item_id">Item</label>
 
                                 <select class="form-control" id="item_id" name="item_id" required>
-                                    <option value="">Please Select</option>
+                                    <option value="{{ $itemName ? $itemName : '' }}">Please Select</option>
 
                                 </select>
 
@@ -119,24 +119,29 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference Number</label>
-                                <select class="form-control " id="offer_reference_no" name="offer_reference_no">
+                                {{-- <select class="form-control " id="offer_reference_no" name="offer_reference_no">
 
                                     <option value="">Please Select</option>
 
+                                </select> --}}
 
-                                </select>
+                                <input type="text" id="offer_reference_no" class="form-control"
+                                name="offer_reference_no"
+                                value="{{ $si->offer_reference_no ? $si->offer_reference_no : '' }}">
+
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference Number</label>
-                                <select class="form-control " id="indent_reference_no" name="indent_reference_no">
-
+                                {{-- <select class="form-control " id="indent_reference_no" name="indent_reference_no">
                                     <option value="">Please Select</option>
+                                </select> --}}
 
-
-                                </select>
+                                <input type="text" id="indent_reference_no" class="form-control"
+                                name="indent_reference_no"
+                                value="{{ $si->indent_reference_no ? $si->indent_reference_no : '' }}">
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
 
@@ -147,10 +152,14 @@
 
                                 <label for="supplier_id">Suppiler</label>
 
-                                <select class="form-control" id="supplier_id" name="supplier_id">
+                               {{-- <select class="form-control" id="supplier_id" name="supplier_id">
                                     <option value="">Please Select </option>
 
-                                </select>
+                                </select> --}}
+                                <input type="text" id="supplier_id" class="form-control"
+                                name="supplier_id"
+                                value="{{ $si->supplier_id ? $si->supplier_id : '' }}">
+
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -173,6 +182,25 @@
                                 </select>
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="checked_standard">Provationally status </label>
+                                <select class="form-control" name="provationally_status" id="provationally_status">
+                                    <option value="">Please Select</option>
+                                    <option value="0">
+                                        Provationally Accepted
+                                    </option>
+                                    <option value="1">Provationally Rejected</option>
+                                </select>
+                                {{-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="checked_standard"
+                                        name="checked_standard">
+                                </div> --}}
+
+                                <span id="error_checked_standard" class="text-danger error_field"></span>
                             </div>
                         </div>
 

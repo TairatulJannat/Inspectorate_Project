@@ -386,6 +386,7 @@
                             <input type="hidden" id="insp_id" value="{{ $details->inspectorate_id }}">
                             <input type="hidden" id="sec_id" value="{{ $details->section_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                            <input type="hidden" id="doc_type_id" value="10">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">
                                     <div class="input-group ">
@@ -513,6 +514,7 @@
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                                 <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <input type="hidden" id="doc_type_id" value="10">
                                 <div class="row text-center">
                                     <div class="col-6 align-self-end">
                                         <div class="input-group ">

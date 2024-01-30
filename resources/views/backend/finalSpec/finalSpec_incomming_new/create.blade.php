@@ -41,6 +41,7 @@
                             <div class="form-group">
                                 <label for="additional_documents">Select Section</label>
                                 <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
+                                    <Option>Select Section</Option>
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach

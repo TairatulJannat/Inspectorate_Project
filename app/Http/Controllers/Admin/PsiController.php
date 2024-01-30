@@ -103,21 +103,21 @@ class PsiController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                $query = Psi::leftJoin('items', 'psies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
                     ->where('psies.status', 0)
-                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                $query = Psi::leftJoin('items', 'psies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
                     ->where('psies.inspectorate_id', $insp_id)
                     ->where('psies.status', 0)
                     ->whereIn('psies.section_id', $section_ids)
-                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*',  'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -129,10 +129,10 @@ class PsiController extends Controller
                     ->where('psies.status', 0)
                     ->whereIn('psies.section_id', $section_ids)->pluck('psies.id')->toArray();
 
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                $query = Psi::leftJoin('items', 'psies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*',  'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('psies.id', $psiIds)
                     ->where('psies.status', 0)
                     ->get();
@@ -474,4 +474,6 @@ class PsiController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
+
 }
+

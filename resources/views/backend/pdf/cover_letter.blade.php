@@ -13,13 +13,13 @@
         }
 
         @font-face {
-            font-family: 'nikosh';
-            src: url('/Nikosh.ttf') format('truetype');
+            font-family: 'bengali';
+            src: url('/BengaliFont.ttf') format('truetype');
             /* Replace with the actual path to your Bangla font file */
         }
 
         body {
-            font-family: 'nikosh', 'Times New Roman', sans-serif;
+            font-family: 'bengali', 'Arial', sans-serif;
         }
 
         header {
@@ -50,7 +50,7 @@
 
         .row {
             font-size: 14px;
-            font-family: 'nikosh', sans-serif;
+            font-family: 'nikosh', 'Times New Roman', sans-serif;
             /* Use single quotes around font family name */
         }
 
