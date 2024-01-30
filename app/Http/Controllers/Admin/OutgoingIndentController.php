@@ -196,9 +196,10 @@ class OutgoingIndentController extends Controller
     {
 
         $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+        ->leftJoin('items', 'indents.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
-            ->select('indents.*', 'item_types.name as item_type_name','fin_years.year as fin_year_name',  'dte_managments.name as dte_managment_name')
+            ->select('indents.*', 'item_types.name as item_type_name','fin_years.year as fin_year_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
             ->where('indents.id', $id)
             ->where('indents.status', 1)
             ->first();

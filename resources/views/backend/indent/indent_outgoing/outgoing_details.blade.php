@@ -128,8 +128,8 @@
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
                             <tr>
                                 <th>Attribute</td>
@@ -156,10 +156,10 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <th>Nomenclature</td>
                                 <td>{{ $details->nomenclature }}</td>
-                            </tr>
+                            </tr> --}}
 
                             <tr>
                                 <th>Model</td>

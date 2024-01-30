@@ -133,7 +133,7 @@
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
+                                <th>Nomenclature</td>
                                 <td>{{ $details->item_name }}</td>
                             </tr>
 
