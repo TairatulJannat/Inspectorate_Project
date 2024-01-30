@@ -288,28 +288,30 @@ class SiController extends Controller
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->first();
-            
+
             if ($item_types) {
-                // dd($item_types); 
+                // dd($item_types);
                  $itemTypeName = $item_types->name;
-                
+
             } else{
                 $itemTypeName = Null;
             }
-            
+
         $item = Items::where('id', $si->item_id)->first();
-        
+
         if ($item) {
             $itemName = $item->name;
-            // dd($itemName );  
+            // dd($itemName );
         } else{
             $itemName = Null;
         }
-        
+
         $fin_years = FinancialYear::all();
 
-        $contracts = Contract::all();    
-        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','itemTypeName','itemName'));
+        $contracts = Contract::all();
+        $supplier=Supplier::where('id', $si->supplier_id)->first();
+
+        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','itemTypeName','itemName', 'supplier'));
 
     }
 
