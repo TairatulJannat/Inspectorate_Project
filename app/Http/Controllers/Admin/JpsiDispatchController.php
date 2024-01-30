@@ -7,6 +7,7 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Jpsi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -196,7 +197,7 @@ class JpsiDispatchController extends Controller
             )
             ->where('jpsies.id', $id)
             ->first();
-
+        $files = File::where('doc_type_id', 12)->where('reference_no', $details->reference_no)->get();
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -256,8 +257,7 @@ class JpsiDispatchController extends Controller
 
         //End blade forward on off section....
 
-
-        return view('backend.jpsi.jpsi_dispatch.jpsi_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
+        return view('backend.jpsi.jpsi_dispatch.jpsi_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden', 'files'));
     }
 
     public function Tracking(Request $request)

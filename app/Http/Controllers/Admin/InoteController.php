@@ -326,14 +326,12 @@ class InoteController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
+        $data->save();
         //Multipule File Upload in files table
         $save_id = $data->id;
         if ($save_id) {
-            $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 13, $request->reference_no);
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 13, $request->reference_no);
         }
-
-        $data->save();
-
         return response()->json(['success' => 'Done']);
     }
 
@@ -398,7 +396,7 @@ class InoteController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.inote.inote_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden','files'));
+        return view('backend.inote.inote_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function Tracking(Request $request)

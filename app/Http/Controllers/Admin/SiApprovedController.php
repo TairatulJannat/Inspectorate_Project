@@ -199,13 +199,13 @@ class SiApprovedController extends Controller
     public function details($id)
     {
 
-        $details = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+        $details = Si::leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'stage_inspections.fin_year_id', '=', 'fin_years.id')
             ->leftJoin('suppliers', 'stage_inspections.supplier_id', '=', 'suppliers.id')
             ->select(
                 'stage_inspections.*',
-                'item_types.name as item_type_name',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name',
                 'suppliers.firm_name as firm_name_name'

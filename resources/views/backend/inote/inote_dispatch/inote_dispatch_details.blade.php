@@ -109,7 +109,7 @@
                             </tr>
 
                             <tr>
-                                <th>User Directorate</td>
+                                <th>User Dte</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
@@ -134,7 +134,7 @@
                                 <td>{{ $details->contract_reference_no }}</td>
                             </tr>
                             <tr>
-                                <th>Name of Eqpt</td>
+                                <th>Nomenclature</td>
                                 <td>{{ $details->item_name }}</td>
                             </tr>
 

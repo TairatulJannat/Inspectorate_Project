@@ -127,8 +127,8 @@
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier</td>

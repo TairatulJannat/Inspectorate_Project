@@ -92,7 +92,7 @@
                                 <th>User Dte</th>
                                 <th>Receive Date</th>
                                 <th>SecName</th>
-                                <th>Present State Of PSI</th>
+                                <th>Present State Of SI</th>
                                 <th>Act</th>
                             </tr>
                         </thead>

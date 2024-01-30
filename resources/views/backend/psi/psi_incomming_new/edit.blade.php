@@ -146,7 +146,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_id">Item</label>
+                                <label for="item_id">Nomenclature</label>
 
                                 <select class="form-control select2" id="item_id" name="item_id" required>
                                     <option value="">Please Select</option>

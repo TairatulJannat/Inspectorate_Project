@@ -92,7 +92,7 @@
                                 <th>Nomenclature</th>
                                 <th>User Dte</th>
                                 <th>Receive Date</th>
-                                <th>Section Name</th>
+                                <th>Sec Name</th>
                                 <th>Present State Of Qac</th>
                                 <th>Act</th>
                             </tr>
