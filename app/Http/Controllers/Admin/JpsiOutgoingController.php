@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Jpsi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -70,7 +71,7 @@ class JpsiOutgoingController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.jpsi.jpsi_outgoing.outgoing', compact('jpsiNew','jpsiOnProcess','jpsiCompleted','jpsiDispatch'));
+        return view('backend.jpsi.jpsi_outgoing.outgoing', compact('jpsiNew', 'jpsiOnProcess', 'jpsiCompleted', 'jpsiDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -96,7 +97,7 @@ class JpsiOutgoingController extends Controller
                     ->where('document_tracks.reciever_desig_id', $designation_id)
                     ->where('jpsies.inspectorate_id', $insp_id)
                     ->where('jpsies.status', 1)
-                    ->where('document_tracks.doc_type_id',12)
+                    ->where('document_tracks.doc_type_id', 12)
                     ->whereIn('jpsies.section_id', $section_ids)->pluck('jpsies.id', 'jpsies.id')->toArray();
 
                 $query = Jpsi::leftJoin('items', 'jpsies.item_id', '=', 'items.id')
@@ -188,12 +189,12 @@ class JpsiOutgoingController extends Controller
         $details = Jpsi::leftJoin('item_types', 'jpsies.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'jpsies.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'jpsies.item_id', '=', 'items.id')
-            ->select('jpsies.*', 'item_types.name as item_type_name','items.name as item_name', 'dte_managments.name as dte_managment_name')
+            ->select('jpsies.*', 'item_types.name as item_type_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
             ->where('jpsies.id', $id)
             ->where('jpsies.status', 1)
             ->first();
 
-
+        $files = File::where('doc_type_id', 12)->where('reference_no', $details->reference_no)->get();
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -231,21 +232,18 @@ class JpsiOutgoingController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 12)->latest()->first();
+            ->where('doc_type_id', 12)->latest()->first();
 
         //End blade forward on off section....
 
         // start cover letter start
 
         $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
-
         // end cover letter start
-
-
-        return view('backend.jpsi.jpsi_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.jpsi.jpsi_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
     }
 
-    public function Tracking (Request $request)
+    public function Tracking(Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;

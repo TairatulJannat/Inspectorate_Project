@@ -86,12 +86,12 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference Number</th>
-                                <th>Name of Eqpt</th>
-                                <th>User Directorate</th>
+                                <th>Nomenclature</th>
+                                <th>User Dte</th>
                                 <th>Receive Date</th>
-                                <th>Section Name</th>
-                                <th>Present state of PSI</th>
-                                <th>Action</th>
+                                <th>Sec Name</th>
+                                <th>Present State of SI</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tbody>

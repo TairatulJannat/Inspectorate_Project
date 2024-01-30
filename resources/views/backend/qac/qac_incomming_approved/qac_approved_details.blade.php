@@ -114,7 +114,7 @@
                             </tr>
 
                             <tr>
-                                <th>User Directorate</td>
+                                <th>User Dte</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
@@ -127,8 +127,8 @@
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
 
                             <tr>

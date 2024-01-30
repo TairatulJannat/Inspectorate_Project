@@ -10,6 +10,7 @@ use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -26,6 +27,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class jpsiController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
 
@@ -118,7 +124,7 @@ class jpsiController extends Controller
                 // jpsi ids from document tracks table
                 $jpsiIds = Jpsi::leftJoin('document_tracks', 'jpsies.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('document_tracks.doc_type_id',12)
+                    ->where('document_tracks.doc_type_id', 12)
                     ->where('jpsies.inspectorate_id', $insp_id)
                     ->where('jpsies.status', 0)
                     ->whereIn('jpsies.section_id', $section_ids)->pluck('jpsies.id')->toArray();
@@ -279,7 +285,7 @@ class jpsiController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
-        $contracts=Contract::all();
+        $contracts = Contract::all();
         // $selected_document =$indent->additional_documents;
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
@@ -288,7 +294,7 @@ class jpsiController extends Controller
         $item = Items::where('id', $jpsi->item_id)->first();
         $supplier = Supplier::where('id', $jpsi->supplier_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.jpsi.jpsi_incomming_new.edit', compact('jpsi', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','supplier'));
+        return view('backend.jpsi.jpsi_incomming_new.edit', compact('jpsi', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts', 'supplier'));
     }
 
     public function update(Request $request)
@@ -324,14 +330,14 @@ class jpsiController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->attached_file = $path ? $path : $data->attached_file;
 
         $data->save();
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 12, $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -355,7 +361,9 @@ class jpsiController extends Controller
             )
             ->where('jpsies.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 12)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -395,7 +403,7 @@ class jpsiController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.jpsi.jpsi_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.jpsi.jpsi_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function Tracking(Request $request)

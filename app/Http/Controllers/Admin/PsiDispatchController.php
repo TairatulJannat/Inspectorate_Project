@@ -186,12 +186,13 @@ class PsiDispatchController extends Controller
     {
 
         $details = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'psies.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'psies.fin_year_id', '=', 'fin_years.id')
             ->select(
                 'psies.*',
                 'item_types.name as item_type_name',
-                'psies.*',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name'
             )
