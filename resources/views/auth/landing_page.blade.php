@@ -234,6 +234,11 @@
         color: #262626;
         }
     </style> --}}
+    <style>
+        .card{
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        }
+    </style>
 </head>
 
 <body>
@@ -392,24 +397,24 @@
     <div class="container">
             <div class="inspectorate-box">
                 <div>
-                    <h2> <b>WELCOME TO INSPECTORATE AUTOMATION SYSTEM</b> </h2>
+                    <h2 class="text-light"> <b>WELCOME TO INSPECTORATE AUTOMATION SYSTEM</b> </h2>
                 </div>
                 <div class="d-flex">
                     <div class="col-3 p-1">
                         <div class="card" >
-                            <img class="card-img-top" src="{{asset('assets/backend/images/pageheader.png')}}" alt="Card image cap">
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IA&E.png')}}" alt="image">
                             <div class="card-body">
-                              <h5 class="card-title">IA&E</h5>
-                              <p class="card-text text-center">Inspectorate of Armaments & Explosives</p>
+                              <h5 class="card-title p-0 m-0">IA&E</h5>
+                              <p class="card-text text-center ">Inspectorate of Armaments & Explosives</p>
                               <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
                             </div>
                           </div>
                     </div>
                     <div class="col-3 p-1">
                         <div class="card" >
-                            <img class="card-img-top" src="{{asset('assets/backend/images/pageheader.png')}}" alt="Card image cap">
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IV&EE.png')}}" alt="image">
                             <div class="card-body">
-                              <h5 class="card-title ">IV&EE</h5>
+                              <h5 class="card-title p-0 m-0 ">IV&EE</h5>
                               <p class="card-text text-center">Inspectorate of Vehicle & Engineers Equipment</p>
                               <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
                             </div>
@@ -418,9 +423,9 @@
 
                     <div class="col-3 p-1">
                         <div class="card" >
-                            <img class="card-img-top" src="{{asset('assets/backend/images/pageheader.png')}}" alt="Card image cap">
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IGS&C.png')}}" alt="image">
                             <div class="card-body">
-                              <h5 class="card-title">IGS&C</h5>
+                              <h5 class="card-title p-0 m-0">IGS&C</h5>
                               <p class="card-text text-center">Inspectorate of General Stores & Clothing</p>
                               <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
                             </div>
@@ -428,9 +433,9 @@
                     </div>
                     <div class="col-3 p-1">
                         <div class="card" >
-                            <img class="card-img-top" src="{{asset('assets/backend/images/pageheader.png')}}" alt="Card image cap">
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IE&I.png')}}" alt="image">
                             <div class="card-body">
-                              <h5 class="card-title">IE&I</h5>
+                              <h5 class="card-title p-0 m-0">IE&I</h5>
                               <p class="card-text text-center">Inspectorate of Electronics & Instruments  </p>
                               <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
                             </div>
