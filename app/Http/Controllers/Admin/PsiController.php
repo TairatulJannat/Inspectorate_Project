@@ -253,7 +253,7 @@ class PsiController extends Controller
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
             $data->received_date = $request->psi_received_date;
-            $data->reference_date = $request->psi_reference_date;
+            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -325,7 +325,7 @@ class PsiController extends Controller
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->psi_received_date;
-        $data->reference_date = $request->psi_reference_date;
+        $data->provationally_status = $request->provationally_status;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
@@ -476,4 +476,3 @@ class PsiController extends Controller
     }
 
 }
-

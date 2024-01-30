@@ -192,11 +192,12 @@
                                 <label for="checked_standard">Provationally status </label>
                                 <select class="form-control" name="provationally_status" id="provationally_status">
                                     <option value="">Please Select</option>
-                                    <option value="0">
+                                    <option value="0"{{ $si->provationally_status == '0' ? 'selected' : '' }}>
                                         Provationally Accepted
                                     </option>
-                                    <option value="1">Provationally Rejected</option>
+                                    <option value="1" {{ $si->provationally_status == '1' ? 'selected' : '' }}>Provationally Rejected</option>
                                 </select>
+
                                 {{-- <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="checked_standard"
                                         name="checked_standard">

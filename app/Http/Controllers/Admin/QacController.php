@@ -247,7 +247,7 @@ class QacController extends Controller
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
             $data->received_date = $request->qac_received_date;
-            $data->reference_date = $request->qac_reference_date;
+            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -317,7 +317,7 @@ class QacController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->qac_received_date;
-        $data->reference_date = $request->qac_reference_date;
+        $data->provationally_status = $request->provationally_status;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;

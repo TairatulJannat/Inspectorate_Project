@@ -398,6 +398,21 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+                    {{-- Side Menu Button Links for Items --}}
+
+                    {{-- Side Menu Button Links for Supllier --}}
+                    @if (count(menu_check('Supplier')) !== 0)
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
+                                    data-feather="list"></i><span>Supplier</span></a>
+                            <ul class="nav-submenu menu-content">
+                                <li><a href="{{ url('admin/supplier/index') }}"
+                                        class="{{ Request::is('*/admin/supplier/index') ? 'active' : '' }} text-white">Create Supplier
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                    {{-- Side Menu Button Links for Supllier --}}
 
                     {{-- Side Menu Button Links for Parameters --}}
                     {{-- @if (count(menu_check('Parameter')) !== 0)

@@ -84,14 +84,14 @@
                     <table class="table table-bordered yajra-datatable">
                         <thead>
                             <tr>
-                                <th>SL No</th>
+                                <th>Sl No</th>
                                 <th>Reference Number</th>
-                                <th>Name of Eqpt</th>
-                                <th>User Directorate</th>
+                                <th>Nomenclature</th>
+                                <th>User Dte</th>
                                 <th>Receive Date</th>
-                                <th>Section Name</th>
-                                <th>Present state of Draft Contract</th>
-                                <th>Action</th>
+                                <th>Sec Name</th>
+                                <th>Present State Of Contract</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tbody>

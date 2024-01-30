@@ -316,6 +316,7 @@ class OfferController extends Controller
     public function details($id)
     {
         $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'offers.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
             ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
             ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
@@ -323,6 +324,7 @@ class OfferController extends Controller
             ->select(
                 'offers.*',
                 'item_types.name as item_type_name',
+                'items.name as item_name',
                 'offers.*',
                 'dte_managments.name as dte_managment_name',
                 'additional_documents.name as additional_documents_name',

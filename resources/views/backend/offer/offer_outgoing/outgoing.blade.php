@@ -80,16 +80,16 @@
                     <table class="table table-bordered yajra-datatable">
                         <thead>
                             <tr>
-                                <th>SL No</th>
+                                <th>Sl No</th>
                                 <th>Reference No</th>
                                 <th>Tender Reference No</th>
-                                <th>Name of Eqpt</th>
-                                <th>User Directorate</th>
+                                <th>Nomenclature</th>
+                                <th>User Dte</th>
                                 <th>Receive Date</th>
-                                <th>Section Name</th>
-                                <th>Item QTY</th>
-                                <th>Present state of spec</th>
-                                <th>Action</th>
+                                <th>Sec Name</th>
+                                <th>Item Qty</th>
+                                <th>Present State Of Spec</th>
+                                <th>Act</th>
                             </tr>
                             </tr>
                         </thead>

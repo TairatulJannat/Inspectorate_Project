@@ -181,6 +181,25 @@
                             </div>
                         </div>
 
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="checked_standard">Provationally status </label>
+                                <select class="form-control" name="provationally_status" id="provationally_status">
+                                    <option value="">Please Select</option>
+                                    <option value="0"{{ $psi->provationally_status == '0' ? 'selected' : '' }}>
+                                        Provationally Accepted
+                                    </option>
+                                    <option value="1" {{ $psi->provationally_status == '1' ? 'selected' : '' }}>Provationally Rejected</option>
+                                </select>
+
+                                {{-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="checked_standard"
+                                        name="checked_standard">
+                                </div> --}}
+
+                                <span id="error_checked_standard" class="text-danger error_field"></span>
+                            </div>
+                        </div>
 
 
                         <div class="col-md-4">
