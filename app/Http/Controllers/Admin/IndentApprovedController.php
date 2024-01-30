@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -209,7 +210,9 @@ class IndentApprovedController extends Controller
             )
             ->where('indents.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 3)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
 
@@ -281,7 +284,7 @@ class IndentApprovedController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','files'));
     }
 
     public function indentTracking(Request $request)
@@ -314,7 +317,7 @@ class IndentApprovedController extends Controller
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
         }
-        
+
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

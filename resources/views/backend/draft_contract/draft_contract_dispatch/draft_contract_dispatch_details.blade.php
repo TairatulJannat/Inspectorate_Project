@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -97,7 +96,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Draft Contract</h2>
+                <h2><b>Details of Draft Contract</b></h2>
             </div>
             <div style="display: flex">
                 <div class="card-body col-4">
@@ -109,6 +108,18 @@
                             </tr>
 
                             <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Final Spec Reference No</td>
+                                <td>{{ $details->final_spec_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
@@ -117,14 +128,15 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
@@ -132,10 +144,14 @@
                             </tr>
 
 
-                        </table>
 
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                        </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
+                        
+                        {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a> --}}
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                             class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                             Letter</a>
@@ -310,6 +326,7 @@
             $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
+                disableButton()
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
@@ -318,7 +335,7 @@
                     title: `Are you sure to delivered
                         ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -364,7 +381,8 @@
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
-                                $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
                             }
                         });

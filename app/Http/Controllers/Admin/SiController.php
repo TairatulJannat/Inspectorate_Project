@@ -11,6 +11,7 @@ use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\DraftContract;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -29,7 +30,11 @@ use Yajra\DataTables\Facades\DataTables;
 class SiController extends Controller
 {
     //
-
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -166,7 +171,7 @@ class SiController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',11)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 11)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -256,7 +261,7 @@ class SiController extends Controller
             $data->created_at = Carbon::now()->format('Y-m-d');
             $data->updated_at = Carbon::now()->format('Y-m-d');
 
-         
+
 
             $data->save();
 
@@ -302,8 +307,10 @@ class SiController extends Controller
         }
         
         $fin_years = FinancialYear::all();
+
         $contracts = Contract::all();    
         return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','itemTypeName','itemName'));
+
     }
 
     public function update(Request $request)
@@ -340,14 +347,19 @@ class SiController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
+        // $path = '';
+        // if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->doc_file = $path ? $path : $data->doc_file;
+        //     $path = $request->file('doc_file')->store('uploads', 'public');
+        // }
+        // $data->doc_file = $path ? $path : $data->doc_file;
 
         $data->save();
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 11, $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -373,7 +385,9 @@ class SiController extends Controller
             )
             ->where('stage_inspections.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 11)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -413,7 +427,7 @@ class SiController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.si.si_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.si.si_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function SiTracking(Request $request)
@@ -484,18 +498,16 @@ class SiController extends Controller
 
     public function get_contract_details($contractReferenceNo)
     {
-        $contract = Contract::where('reference_no' ,$contractReferenceNo)->first();
+        $contract = Contract::where('reference_no', $contractReferenceNo)->first();
         // dd($contract);
-        $item=Items::where('id' , $contract->item_id)->first();
-        $item_type=Item_type::where('id' , $contract->item_type_id)->first();
+        $item = Items::where('id', $contract->item_id)->first();
+        $item_type = Item_type::where('id', $contract->item_type_id)->first();
         $offer_reference_no = $contract->offer_reference_no;
-       
+
         $indent_reference_no = $contract->indent_reference_no;
 
-        $supplier = Supplier::where('id',$contract->supplier_id)->first();
-             
-        return response()->json(['item' =>$item, 'itemType' =>$item_type,'offerReferenceNo'=>$offer_reference_no,'indentReferenceNo'=> $indent_reference_no, 'supplier'=>$supplier]);
+        $supplier = Supplier::where('id', $contract->supplier_id)->first();
 
+        return response()->json(['item' => $item, 'itemType' => $item_type, 'offerReferenceNo' => $offer_reference_no, 'indentReferenceNo' => $indent_reference_no, 'supplier' => $supplier]);
     }
-
 }

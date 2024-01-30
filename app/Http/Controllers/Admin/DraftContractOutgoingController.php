@@ -9,6 +9,7 @@ use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\DraftContract;
+use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +72,7 @@ class DraftContractOutgoingController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.draft_contract.draft_contract_outgoing.outgoing', compact('draft_contractNew','draft_contractOnProcess','draft_contractCompleted','draft_contractDispatch'));
+        return view('backend.draft_contract.draft_contract_outgoing.outgoing', compact('draft_contractNew', 'draft_contractOnProcess', 'draft_contractCompleted', 'draft_contractDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -189,10 +190,14 @@ class DraftContractOutgoingController extends Controller
             ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
             ->leftJoin('fin_years', 'draft_contracts.fin_year_id', '=', 'fin_years.id')
-            ->select('draft_contracts.*', 'item_types.name as item_type_name','items.name as item_name', 'dte_managments.name as dte_managment_name','fin_years.year as fin_year_name')
+            ->select('draft_contracts.*', 'item_types.name as item_type_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'fin_years.year as fin_year_name')
             ->where('draft_contracts.id', $id)
             ->where('draft_contracts.status', 1)
             ->first();
+
+        // Attached File
+        $files = File::where('doc_type_id', 9)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -229,7 +234,7 @@ class DraftContractOutgoingController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 9)->latest()->first();
+            ->where('doc_type_id', 9)->latest()->first();
 
         //End blade forward on off section....
 
@@ -240,7 +245,7 @@ class DraftContractOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.draft_contract.draft_contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.draft_contract.draft_contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
     }
 
     public function OutgoingTracking(Request $request)
@@ -272,7 +277,7 @@ class DraftContractOutgoingController extends Controller
             if ($reciever_desig_id == $sender_designation_id) {
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
-         }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;

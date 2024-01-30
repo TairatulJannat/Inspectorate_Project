@@ -9,6 +9,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -152,7 +153,7 @@ class SiDispatchController extends Controller
                 ->addColumn('action', function ($data) {
 
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id',  11)                                              ->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id',  11)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
                     if ($DocumentTrack) {
@@ -188,8 +189,6 @@ class SiDispatchController extends Controller
         }
     }
 
-
-
     public function details($id)
     {
 
@@ -207,13 +206,12 @@ class SiDispatchController extends Controller
             )
             ->where('stage_inspections.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 11)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-
-
-        // dd($skipId);
 
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
@@ -246,7 +244,6 @@ class SiDispatchController extends Controller
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
         // delay cause for sec IC start
-
         //Start close forward Status...
 
         $sender_designation_id = '';
@@ -256,11 +253,7 @@ class SiDispatchController extends Controller
                 break;
             }
         }
-
-
         //End close forward Status...
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
             ->where('doc_type_id',  11)->latest()->first();
@@ -268,7 +261,7 @@ class SiDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.si.si_dispatch.si_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
+        return view('backend.si.si_dispatch.si_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden' , 'files'));
     }
 
     public function siDispatchTracking(Request $request)

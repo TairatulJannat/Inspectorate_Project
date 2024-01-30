@@ -28,7 +28,7 @@
                                 <label for="section_multiple">Select Section</label>
                                 @if ($section)
                                     @foreach ($section as $s)
-                                        <br> <input type="checkbox" value="{{ $s->id }}" id="sec_id"
+                                        <br> <input type="checkbox" value="{{ $s->id }}" id="sec_id_' . $section->id . '"
                                             name="sec_id[]">
                                         {{ $s->name }}
                                     @endforeach

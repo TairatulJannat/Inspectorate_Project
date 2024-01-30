@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\DraftContract;
+use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -94,7 +95,7 @@ class DraftContractApprovedController extends Controller
                 $query = DraftContract::leftJoin('items', 'draft_contracts.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'draft_contracts.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'draft_contracts.section_id', '=', 'sections.id')
-                    ->select('draft_contracts.*', 'items.name as item_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('draft_contracts.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('draft_contracts.status', 3)
                     ->get();
             } else {
@@ -201,6 +202,9 @@ class DraftContractApprovedController extends Controller
             )
             ->where('draft_contracts.id', $id)
             ->first();
+        // Attached File
+        $files = File::where('doc_type_id', 9)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -241,16 +245,13 @@ class DraftContractApprovedController extends Controller
 
         //End close forward Status...
 
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 9)->latest()->first();
+            ->where('doc_type_id', 9)->latest()->first();
 
         //End blade forward on off section....
 
-
-        return view('backend.draft_contract.draft_contract_approved.draft_contract_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.draft_contract.draft_contract_approved.draft_contract_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function ApprovedTracking(Request $request)
@@ -283,7 +284,7 @@ class DraftContractApprovedController extends Controller
             if ($reciever_desig_id == $sender_designation_id) {
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
-         }
+        }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

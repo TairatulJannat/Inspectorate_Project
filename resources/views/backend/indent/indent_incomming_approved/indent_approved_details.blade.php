@@ -174,10 +174,14 @@
                             </tr>
 
                         </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
+                        
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
-                            target="_blank">Pdf Document</a>
+                        {{-- <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                            target="_blank">Pdf Document</a> --}}
                     </div>
                 </div>
 
@@ -323,7 +327,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-     @include('backend.indent.indent_incomming_approved.indent_approved_index_js') 
+    @include('backend.indent.indent_incomming_approved.indent_approved_index_js')
 
     <script>
         $(document).ready(function() {
@@ -394,7 +398,8 @@
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
-                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
                             }
                         });

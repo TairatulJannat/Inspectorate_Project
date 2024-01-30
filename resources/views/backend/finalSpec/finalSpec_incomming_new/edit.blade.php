@@ -15,18 +15,7 @@
 
                 <div class="card-body">
                     <div class=" header">
-                        {{-- <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="additional_documents">Select Section</label>
-                            <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
-                                @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}">{{ $section->name }}</option>
-                                @endforeach
 
-                            </select>
-                            <span id="error_admin_section" class="text-danger error_field"></span>
-                        </div>
-                    </div> --}}
                         <div class="col-md-2">
                             <div class="form-group">
                                 <a href="{{ url('admin/import-final-spec-data-index') }}" class="btn btn-success"
@@ -99,9 +88,18 @@
                             <div class="form-group">
                                 <label for="tender_reference_no">Tender Reference Number</label>
 
+
+                                    <option value="">Please Select</option>
+
+
+                                    {{-- @foreach ($tender_reference_numbers as $tender_reference_no)
+                                    <option value="{{ $tender_reference_no->id }}"
+                                        {{ $tender_reference_no->id == $offer->tender_reference_no ? 'selected' : '' }}>{{ $tender_reference_no->reference_no }}</option>
+
                                 <input type="text" id="tender_reference_no" class="form-control"
                                 name="tender_reference_no"
                                 value="{{ $finalspec->tender_reference_no ? $finalspec->tender_reference_no : '' }}">
+
 
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
@@ -112,6 +110,18 @@
                                 <input type="text" id="indent_reference_no" class="form-control"
                                 name="indent_reference_no"
                                 value="{{ $finalspec->indent_reference_no ? $finalspec->indent_reference_no : '' }}">
+
+
+                                    <option value="">Please Select</option>
+
+                                    {{--
+                                @foreach ($indent_reference_numbers as $indent_reference_no)
+                                    <option value="{{ $indent_reference_no->id }}"
+                                    {{ $indent_reference_no->id == $offer->indent_reference_no ? 'selected' : '' }}>{{ $indent_reference_no->reference_no }}</option>
+
+                                @endforeach --}}
+
+                                </select>
 
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
@@ -147,10 +157,20 @@
 
                                     <option selected disabled value="">Please Select</option>
 
+
+                                    {{--
+                                @foreach ($item_types as $item_type)
+                                    <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
+                                @endforeach --}}
+
+
+                                </select>
+
                                 </select> --}}
                                 <input type="text" id="item_type_id" class="form-control"
                                 name="item_type_id"
                                 value="{{ $itemTypeName ? $itemTypeName : '' }}">
+
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -212,16 +232,27 @@
                             </div>
                         </div>
 
+                    </div>
+                </div>
+                <div  class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
 
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="pdf_file" style="color: yellow"><button type="button"
-                                        class="btn btn-warning">Upload PDF</b></button></label><br>
-                                <input type="file" class="form-control-file" id="pdf_file" name="pdf_file">
-                                <span id="error_pdf_file" class="text-danger error_field"></span>
+                    <div class="file-container">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control file-name" name="file_name[]"
+                                    placeholder="File Name" id="file_name_0">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input file" name="file[]" id="file_0">
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <a class="btn btn-primary" id="addFile">Add More File</a>
 
                     </div>
                 </div>
@@ -243,6 +274,15 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
+        let fileCount = 1;
+        $("#addFile").click(function() {
+            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            $(".file-container").append(newFileInput);
+
+            // Increment the fileCount for the next set of inputs
+            fileCount++;
+        });
+
         $(document).ready(function() {
             $('.select2').select2();
 

@@ -7,6 +7,7 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Inote;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -93,7 +94,7 @@ class InoteApprovedController extends Controller
                 $query = Inote::leftJoin('items', 'inotes.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'inotes.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'inotes.section_id', '=', 'sections.id')
-                    ->select('inotes.*', 'items.name as item_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('inotes.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('inotes.status', 3)
                     ->get();
             } else {
@@ -201,11 +202,9 @@ class InoteApprovedController extends Controller
             )
             ->where('inotes.id', $id)
             ->first();
-
-
-
-
-
+        // Attached File
+        $files = File::where('doc_type_id', 13)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -249,12 +248,12 @@ class InoteApprovedController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 13)->latest()->first();
+            ->where('doc_type_id', 13)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.inote.inote_incomming_approved.inote_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.inote.inote_incomming_approved.inote_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function Tracking(Request $request)

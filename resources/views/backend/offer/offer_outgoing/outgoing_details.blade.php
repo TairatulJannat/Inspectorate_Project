@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -88,6 +87,7 @@
             column-gap: 10px;
             margin-bottom: 25px
         }
+
         .cover_letter {
             margin-top: 20px;
             height: 90px;
@@ -101,7 +101,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Offer</h2>
+                <h2><b>Details of Offer</b></h2>
             </div>
             <div style="display: flex">
 
@@ -174,13 +174,17 @@
                                 <td>{{ $details->qty }}</td>
                             </tr>
                         </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
                         <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                        {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a> --}}
 
-                            @if ($cover_letter)
+                        @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
-                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover Letter</a>
+                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                                Letter</a>
                             <button class="btn btn-warning text-light ml-2 mt-2" type="button" data-bs-toggle="modal"
                                 data-bs-target=".edit-modal-lg">Edit Cover
                                 Letter</button>
@@ -258,15 +262,14 @@
                                                 <div class="col-md-2">
 
                                                     @if ($cover_letter)
-                                                    <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
-                                                        style="height: 40px;">Deliver</button>
-                                                @else
-                                                <button class="delivery-btn btn btn-info text-white mt-2"
-                                                id="disabledSubmitBtn"
-                                                title="To Enable Button Create Cover Letter"
-                                                style="height: 40px;" disabled>Deliver</button>
-
-                                                @endif
+                                                        <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                            style="height: 40px;">Deliver</button>
+                                                    @else
+                                                        <button class="delivery-btn btn btn-info text-white mt-2"
+                                                            id="disabledSubmitBtn"
+                                                            title="To Enable Button Create Cover Letter"
+                                                            style="height: 40px;" disabled>Deliver</button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </form>
@@ -314,7 +317,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                           <div class="col-md-2">
+                                            <div class="col-md-2">
 
 
                                                 <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
@@ -662,8 +665,8 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
-    integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         // ClassicEditor
         //     .create(document.querySelector(''))

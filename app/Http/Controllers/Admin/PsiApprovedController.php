@@ -7,6 +7,7 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Psi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -93,7 +94,7 @@ class PsiApprovedController extends Controller
                 $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('psies.status', 3)
                     ->get();
             } else {
@@ -199,11 +200,9 @@ class PsiApprovedController extends Controller
             )
             ->where('psies.id', $id)
             ->first();
-
-
-
-
-
+        // Attached File
+        $files = File::where('doc_type_id', 8)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -232,7 +231,6 @@ class PsiApprovedController extends Controller
         }
 
         //Start close forward Status...
-
         $sender_designation_id = '';
         foreach ($document_tracks as $track) {
             if ($track->sender_designation_id === $desig_id) {
@@ -240,19 +238,15 @@ class PsiApprovedController extends Controller
                 break;
             }
         }
-
         //End close forward Status...
-
-
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  8)->latest()->first();
+            ->where('doc_type_id',  8)->latest()->first();
 
         //End blade forward on off section....
 
-
-        return view('backend.psi.psi_incomming_approved.psi_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.psi.psi_incomming_approved.psi_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden','files'));
     }
 
     public function psiTracking(Request $request)

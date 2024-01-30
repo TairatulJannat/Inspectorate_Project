@@ -14,9 +14,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -106,6 +105,10 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
+                            <tr>
+                                <th>Contract Referance No</td>
+                                <td>{{ $details->contract_reference_no }}</td>
+                            </tr>
 
                             <tr>
                                 <th>User Directorate</td>
@@ -143,12 +146,9 @@
                             </tr>
 
                         </table>
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a> --}}
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Pdf Document</a>
+                        {{-- additional file design start here --}}
+                        @include('backend.files.file')
+                        {{-- additional file design end here --}}
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -218,7 +218,7 @@
                                                             I-Note</a>
                                                         </div>
                                                     @endif
-                                                    
+
                                                     @if (!$cover_letter)
                                                         <div
                                                             class="col-md-6 m-2 d-flex justify-content-center align-items-center">

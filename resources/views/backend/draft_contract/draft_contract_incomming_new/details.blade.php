@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -96,11 +95,10 @@
 @section('active_menu', 'Details')
 @section('content')
 
-
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Draft Contract</h2>
+                <h2><b>Details of Draft Contract</b></h2>
             </div>
             <div style="display: flex">
 
@@ -138,28 +136,27 @@
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
-                            <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
-                            </tr>
+
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
 
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
 
-
-
                         </table>
-
-                         @if ($desig_id != 1)
-                             <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
-                         @endif
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
+                        {{-- @if ($desig_id != 1)
+                            <a class="btn btn-info mt-3 btn-parameter text-light"
+                                href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check
+                                Documents</a>
+                        @endif --}}
                     </div>
                 </div>
 
@@ -282,7 +279,6 @@
         </div>
     </div>
 
-
 @endsection
 @push('js')
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
@@ -361,9 +357,8 @@
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
-                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
-
-
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
                             }
                         });
 

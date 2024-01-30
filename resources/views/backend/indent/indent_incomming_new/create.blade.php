@@ -27,6 +27,7 @@
 @section('main_menu', 'Indent')
 @section('active_menu', 'Add Indent')
 @section('content')
+
     <div class="col-sm-12 col-xl-12">
 
         <div class="card">

@@ -9,7 +9,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap.css') }}">
     <style>
         body {
-            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            color:black;
         }
 
         .inote_boc {
@@ -34,12 +36,20 @@
             display: flex;
             justify-content: space-between;
         }
+
+        .print-container {
+            page-break-before: always;
+        }
+
+        .custom-table-border {
+            border-color: rgb(33, 33, 33);
+        }
     </style>
 
 </head>
 
 <body>
-    <div class="col-sm-12 col-xl-12 ">
+    <div class="print-container col-sm-12 col-xl-12 ">
         <div class="  inote_boc">
             <div class="p-2">
                 <div class="header-box">
@@ -134,7 +144,7 @@
                 </div>
                 <div class="mt-4 ">
 
-                    <table class="table table-bordered ">
+                    <table class="table table-bordered custom-table-border">
                         <thead>
                             <tr class="text-center">
                                 <th colspan="13">দ্রব্যাদি পরিদর্শনের বিবরণী</th>
@@ -235,6 +245,98 @@
 
                 </div>
             </div>
+
+
+        </div>
+
+    </div>
+    <hr>
+
+    <div class="print-container col-sm-12 col-xl-12 ">
+        <div class="  inote_boc">
+            <div class="p-2">
+                <div class="header-box">
+                    <div class="title">
+                        <b> 2 পরিদর্শন পত্র </b>
+                    </div>
+                    <div>
+                        <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    </div>
+
+                </div>
+                <div class="header-box">
+                    <div class="title">
+                        <b> 3 পরিদর্শন পত্র </b>
+                    </div>
+                    <div>
+                        <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    </div>
+                    <div>
+                        <p> 1. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                        <p> 2. bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</p>
+                        <p> 3. ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc</p>
+
+                    </div>
+
+                </div>
+
+                <div class="mt-4 ">
+
+                    <table class="table table-bordered custom-table-border">
+
+                        <tbody>
+                            <tr>
+                                <td class="col-1">
+                                    আইটেম</td>
+                                <td class="col-3"> দ্রব্যাদি (আর্মির জন্য)</td>
+                                <td class="col-2"> ক্যাট/পার্ট নং</td>
+                                <td class="col-1"> দ্রব্যাদির বিবরণ</td>
+                                <td class="col-3"> হিসাবের একক</td>
+                                <td class="col-2"> †একক</td>
+
+                            </tr>
+                            <tr>
+                                <td> ১</td>
+                                <td> ২</td>
+                                <td> ৩</td>
+                                <td> ৪</td>
+                                <td> ৫</td>
+                                <td> ৬</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer-box  ">
+                    <div>
+                        Station .....................Date................
+                        <br>
+                        Aria Circel......................................
+                    </div>
+
+                </div>
+                <div class="header-box">
+                    <div class="title">
+                        <b> 4 পরিদর্শন পত্র </b>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <p>1.mmmmmmmmmmmmmmmmmm</p>
+                            <p>2.cccccccccccccccccc</p>
+                            <p>3.fffffffffffffffffff</p>
+                        </div>
+                        <div class="col-6">
+                            <p>1.mmmmmmmmmmmmmmmmmm</p>
+                            <p>2.cccccccccccccccccc</p>
+                            <p>3.fffffffffffffffffff</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
             <div>
                 <button class="btn btn-info print-button m-5 px-5 py-3" id="print_button">Print</button>
             </div>
@@ -242,8 +344,6 @@
         </div>
 
     </div>
-
-
     <script>
         document.getElementById('print_button').addEventListener('click', function() {
             printPage();
@@ -253,7 +353,11 @@
             // Set the print styles
             var printStyles = `
             @page {
-                size: A4 landscape;
+                size: legal landscape;
+                margin-top: 0.5cm;
+                margin-left: 1.18cm;
+                margin-right: 0.75cm;
+                margin-bottom: 0.5cm;
 
                 @top-center {
                     content: "Your Page Header Here";
@@ -269,8 +373,7 @@
                     .print-button {
                         display: none !important;
         }
-                }
-            `;
+                }`;
 
             // Create a style element and append it to the head
             var style = document.createElement('style');

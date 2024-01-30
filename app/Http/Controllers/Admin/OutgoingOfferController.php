@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Indent;
 use App\Models\Offer;
 use App\Models\Supplier;
@@ -73,7 +74,7 @@ class OutgoingOfferController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.offer.offer_outgoing.outgoing', compact('offerNew','offerOnProcess','offerCompleted','offerDispatch'));
+        return view('backend.offer.offer_outgoing.outgoing', compact('offerNew', 'offerOnProcess', 'offerCompleted', 'offerDispatch'));
     }
 
     public function all_data(Request $request)
@@ -140,13 +141,13 @@ class OutgoingOfferController extends Controller
                 ->addColumn('status', function ($data) {
                     if ($data->status == '1') {
                         return '<button class="btn btn-info btn-sm">Completed</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-info btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
 
@@ -202,7 +203,9 @@ class OutgoingOfferController extends Controller
             )
             ->where('offers.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 5)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
 
@@ -217,7 +220,7 @@ class OutgoingOfferController extends Controller
 
         foreach ($details->suppliers as $Supplier_id) {
             $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-//    dd($supplier_names);
+            //    dd($supplier_names);
             array_push($supplier_names_names, $supplier_names);
         }
 
@@ -229,7 +232,7 @@ class OutgoingOfferController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->where('track_status', 2)
-            ->where('doc_type_id',5)
+            ->where('doc_type_id', 5)
             ->skip(1) // Skip the first row
             ->take(PHP_INT_MAX) // Take a large number of rows to emulate offset
             ->select(
@@ -254,20 +257,17 @@ class OutgoingOfferController extends Controller
 
         // delay cause for sec IC start
 
-
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 5)->latest()->first();
 
         //End blade forward on off section....
 
         // start cover letter start
-
-        $cover_letter=CoverLetter::where('doc_reference_id', $details->reference_no)->first();
-
+        $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
         // end cover letter start
 
 
-        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position','auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names','cover_letter'));
+        return view('backend.offer.offer_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'supplier_names_names', 'cover_letter','files'));
     }
 
     public function OutgoingOfferTracking(Request $request)

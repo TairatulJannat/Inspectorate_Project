@@ -16,13 +16,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
-
             margin: 30px 15px 30px 0
         }
 
@@ -132,7 +130,7 @@
                             </tr>
                             <tr>
                                 <th>Attribute</td>
-                                
+
                                 <td>{{ $details->attribute }}</td>
                             </tr>
 
@@ -181,19 +179,22 @@
 
 
                         </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
 
                         @if ($desig_id != 1)
 
                             <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
                                 href="{{ url('admin/csr/index') }}">CSR</a>
 
-                         @endif   
-                         @if ($desig_id != 1)
+                         @endif
+                         {{-- @if ($desig_id != 1)
                                 <a class="btn btn-info mt-3 btn-parameter text-light"
                                     href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
-                            @endif
+                            @endif --}}
 
-                      
+
 
                     </div>
                 </div>

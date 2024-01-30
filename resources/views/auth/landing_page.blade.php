@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Inspectorate Automation System </title>
-    <style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/LandingPage/style.css') }}">
+    {{-- <style>
         * {
             box-sizing: border-box;
         }
@@ -187,17 +189,67 @@
             justify-content: right;
         }
     </style>
+    <style>
+        *{
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        }
+        body {
+            font-family: Arial,
+        }
+
+        .landing-body {
+            background-color: #196536;
+            background-image: url('')
+            width: 100%;
+            height: 100vh;
+        }
+
+        .inspectorate-box div h2 {
+            background-color: #4F9DDB;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .card{
+        border-radius:5px !important;
+        }
+        .inspectorate-box{
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 50px 0 30px 0;
+
+        }
+        .card-body{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        }
+        .card-title{
+        color: #262626;
+        }
+    </style> --}}
+    <style>
+        .card{
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="background">
+    {{-- <div class="background">
         <div class="">
             <a href="{{ url('/admin/login') }}">
                 <div style="">
                     <img src={{ asset('assets/backend/images/bgimg2.jpeg') }} width="100%" height="900px">
                 </div>
             </a>
-            {{-- <p class="container-title">Welcome to Inspectorate Automation System</p>
+            <p class="container-title">Welcome to Inspectorate Automation System</p>
 
             <div class="gradient-cards">
                 <div class="card">
@@ -338,8 +390,60 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
         </div>
+    </div> --}}
+    <div class="landing-body">
+    <div class="container">
+            <div class="inspectorate-box">
+                <div>
+                    <h2 class="text-light"> <b>WELCOME TO INSPECTORATE AUTOMATION SYSTEM</b> </h2>
+                </div>
+                <div class="d-flex">
+                    <div class="col-3 p-1">
+                        <div class="card" >
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IA&E.png')}}" alt="image">
+                            <div class="card-body">
+                              <h5 class="card-title p-0 m-0">IA&E</h5>
+                              <p class="card-text text-center ">Inspectorate of Armaments & Explosives</p>
+                              <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-3 p-1">
+                        <div class="card" >
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IV&EE.png')}}" alt="image">
+                            <div class="card-body">
+                              <h5 class="card-title p-0 m-0 ">IV&EE</h5>
+                              <p class="card-text text-center">Inspectorate of Vehicle & Engineers Equipment</p>
+                              <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
+                            </div>
+                          </div>
+                    </div>
+
+                    <div class="col-3 p-1">
+                        <div class="card" >
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IGS&C.png')}}" alt="image">
+                            <div class="card-body">
+                              <h5 class="card-title p-0 m-0">IGS&C</h5>
+                              <p class="card-text text-center">Inspectorate of General Stores & Clothing</p>
+                              <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-3 p-1">
+                        <div class="card" >
+                            <img class="card-img-top" src="{{asset('assets/backend/images/IE&I.png')}}" alt="image">
+                            <div class="card-body">
+                              <h5 class="card-title p-0 m-0">IE&I</h5>
+                              <p class="card-text text-center">Inspectorate of Electronics & Instruments  </p>
+                              <a href="{{url('admin/login')}}" class="btn btn-success">Login</a>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+    </div>
     </div>
 </body>
 

@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -100,7 +99,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Offer</h2>
+                <h2> <b>Details of Final Spec</b></h2>
             </div>
             <div style="display: flex">
 
@@ -112,7 +111,7 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                              <tr>
+                            <tr>
                                 <th>Final Spec Referance Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
@@ -120,7 +119,7 @@
                                 <th>Offer Reference No</td>
                                 <td>{{ $details->offer_reference_no }}</td>
                             </tr>
-                            
+
                             <tr>
                                 <th>Tender Reference No</td>
                                 <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
@@ -135,17 +134,17 @@
                             </tr>
                             <tr>
                                 <th>Final Spec Receive Letter Date</td>
-                                <td>{{ $details->final_spec_receive_Ltr_dt  }}</td>
+                                <td>{{ $details->final_spec_receive_Ltr_dt }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                         
+
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{$details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -164,9 +163,11 @@
 
 
                         </table>
-                        <a class="btn btn-success mt-3 btn-parameter"
-                        href="{{url('admin/csr/index') }}">CSR</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
+                        <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
+                        {{-- <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a> --}}
                     </div>
                 </div>
 
@@ -294,7 +295,7 @@
                     </div>
 
                     <!-- Notes Sectio
-                            n - Uncomment if needed -->
+                                n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->

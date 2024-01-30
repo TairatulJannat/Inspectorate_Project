@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -8,6 +9,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -20,6 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use PDF;
 use Yajra\DataTables\Facades\DataTables;
+
 class SiApprovedController extends Controller
 {
     //
@@ -102,7 +105,7 @@ class SiApprovedController extends Controller
                 $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('stage_inspections.status', 3)
                     ->get();
             } else {
@@ -210,10 +213,9 @@ class SiApprovedController extends Controller
             ->where('stage_inspections.id', $id)
             ->first();
 
-
-
-
-
+        // Attached File
+        $files = File::where('doc_type_id', 11)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -257,12 +259,12 @@ class SiApprovedController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  11)->latest()->first();
+            ->where('doc_type_id',  11)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.si.si_incomming_approved.si_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.si.si_incomming_approved.si_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function SiTracking(Request $request)

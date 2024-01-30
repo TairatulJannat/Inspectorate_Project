@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -96,7 +95,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Contract</h2>
+                <h2><b>Details of Contract</b></h2>
             </div>
             <div style="display: flex">
 
@@ -139,10 +138,6 @@
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
-                            </tr>
-                            <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_name  }}</td>
                             </tr>
@@ -160,12 +155,10 @@
 
 
                         </table>
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a> --}}
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Pdf Document</a>
+
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -205,6 +198,7 @@
                                                     <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                         style="height: 40px; margin-left: 10px;"></textarea>
                                                 </div>
+                                                <span id="error_designation" class="text-danger"></span>
                                                 <div class="d-flex">
                                                     @if ($desig_position->position == 3)
                                                         <div class=" col-md-6 mt-2">
@@ -239,7 +233,7 @@
 
                                                 <div class="col-md-2">
                                                     @if ($cover_letter)
-                                                        <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                        <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
                                                             style="height: 40px;">Deliver</button>
                                                     @else
                                                         <button class="delivery-btn btn btn-info text-white mt-2"
@@ -282,6 +276,7 @@
                                                 <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                     style="height: 40px; margin-left: 10px;"></textarea>
                                             </div>
+                                            <span id="error_designation" class="text-danger"></span>
                                             <div class="d-flex">
                                                 @if ($desig_position->position == 3)
                                                     <div class=" col-md-6 mt-2">
@@ -301,7 +296,7 @@
                                             <div class="col-md-2">
 
 
-                                                <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
                                                     style="height: 40px;">Deliver</button>
                                             </div>
                                         </div>
@@ -647,7 +642,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.contract.contract_outgoing.outgoing_index_js') --}}
+    @include('backend.contract.contract_outgoing.outgoing_index_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -711,10 +706,10 @@
             });
 
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-
+                disableButton()
 
                 var reciever_desig_id = $('#designations').val()
                 var delivery_date = $('#delivery_date').val()
@@ -727,7 +722,7 @@
                 swal({
                     title: `Are you sure to delivered ${reciever_desig_text}?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -772,12 +767,12 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
-
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+                            error: function(response) {
+                                enableeButton()
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
                             }
                         });
 
