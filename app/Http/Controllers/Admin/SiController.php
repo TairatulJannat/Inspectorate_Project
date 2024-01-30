@@ -247,6 +247,7 @@ class SiController extends Controller
             $data->received_date = $request->received_date;
             $data->supplier_id = $request->supplier_id;
             $data->reference_date = $request->reference_date;
+            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -278,14 +279,31 @@ class SiController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
-        $item_types = Item_type::where('status', 1)
+        $item_types = Item_type::where('id', $si->item_id)->where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
-            ->get();
+            ->first();
+            
+            if ($item_types) {
+                // dd($item_types); 
+                 $itemTypeName = $item_types->name;
+                
+            } else{
+                $itemTypeName = Null;
+            }
+            
         $item = Items::where('id', $si->item_id)->first();
+        
+        if ($item) {
+            $itemName = $item->name;
+            // dd($itemName );  
+        } else{
+            $itemName = Null;
+        }
+        
         $fin_years = FinancialYear::all();
         $contracts = Contract::all();    
-        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts'));
+        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','itemTypeName','itemName'));
     }
 
     public function update(Request $request)
@@ -315,6 +333,7 @@ class SiController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->received_date;
+        $data->provationally_status = $request->provationally_status;
         $data->reference_date = $request->reference_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;

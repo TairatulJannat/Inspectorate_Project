@@ -258,14 +258,30 @@ class FinalSpecController extends Controller
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $dte_managments = Dte_managment::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
+        $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+//  dd($item_types );
+        if ($item_types) {
+            // dd($item_types); 
+             $itemTypeName = $item_types->name;
+            
+        } else{
+            $itemTypeName = Null;
+        }
+        
         $item = Items::where('id', $finalspec->item_id)->first();
+        
+        if ($item) {
+            $itemName = $item->name;
+            // dd($itemName );  
+        } else{
+            $itemName = Null;
+        }
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::all();
-        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers'));
+        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers','itemName','itemTypeName'));
     }
 
     public function update(Request $request)

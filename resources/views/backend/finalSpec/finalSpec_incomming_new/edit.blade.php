@@ -143,11 +143,14 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
-                                <select class="form-control " id="item_type_id" name="item_type_id">
+                                {{-- <select class="form-control " id="item_type_id" name="item_type_id">
 
                                     <option selected disabled value="">Please Select</option>
 
-                                </select>
+                                </select> --}}
+                                <input type="text" id="item_type_id" class="form-control"
+                                name="item_type_id"
+                                value="{{ $itemTypeName ? $itemTypeName : '' }}">
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -157,10 +160,14 @@
                                 <label for="item_id">Item</label>
 
 
-                                <select class="form-control" id="item_id" name="item_id">
+                                {{-- <select class="form-control" id="item_id" name="item_id">
 
-                                    <option value="">Please Select </option>
-                                </select>
+                                    <option value="{{ $itemName ? $itemName : '' }}">Please Select </option>
+                                </select> --}}
+
+                                <input type="text" id="item_id" class="form-control"
+                                name="item_id"
+                                value="{{ $itemName ? $itemName : '' }}">
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
