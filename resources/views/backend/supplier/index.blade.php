@@ -39,7 +39,7 @@
                                 <th>Address of Local Agent</th>
                                 <th>Contact No</th>
                                 <th>Email</th>
-                                {{-- <th>Action</th> --}}
+                                <th class="col-2">Action</th>
                             </tr>
 
 
@@ -48,14 +48,21 @@
 
                             @foreach ($suppliers as $supplier)
                                 <tr>
-                                    <td>{{$i++}}</td>
+                                    <td>{{ $i++ }}</td>
                                     <td>{{ $supplier->firm_name }}</td>
                                     <td>{{ $supplier->principal_name }}</td>
                                     <td>{{ $supplier->address_of_principal }}</td>
                                     <td>{{ $supplier->address_of_local_agent }}</td>
                                     <td>{{ $supplier->contact_no }}</td>
                                     <td>{{ $supplier->email }}</td>
-                                    
+                                    <td>
+                                        <button class="btn btn-danger"  data-supplier-id="{{ $supplier->id }}" id="delete_supplier">Delete</button>
+                                        <button class="btn btn-danger"  data-supplier-id="{{ $supplier->id }}" id="delete_supplier">Delete</button>
+
+
+                                        {{-- <a class="btn btn-info"
+                                            href="{{ url('admin.supplier/edit', ['id' => $supplier->id]) }}">Edit</a> --}}
+                                    </td>
                                 </tr>
                             @endforeach
 

@@ -263,9 +263,11 @@ class OfferController extends Controller
 
     public function edit($id)
     {
-        $offer = Offer::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $offer = Offer::find($id);
+
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
@@ -273,12 +275,13 @@ class OfferController extends Controller
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
-        $indent_reference_numbers = Indent::all();
+        $indent_reference_numbers = Indent::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->get();
         return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers'));
     }
 
     public function update(Request $request)
     {
+
         $data = Offer::findOrFail($request->editId);
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
@@ -493,6 +496,8 @@ class OfferController extends Controller
         $item = Items::where('id', $indent->item_id)->first();
         $item_type = Item_type::where('id', $indent->item_type_id)->first();
 
+
+dd(   $indent);
 
         return response()->json(['item' => $item, 'itemType' => $item_type]);
     }

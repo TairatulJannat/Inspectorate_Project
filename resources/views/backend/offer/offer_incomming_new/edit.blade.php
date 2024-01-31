@@ -285,7 +285,7 @@
 
                     </div>
                 </div>
-                <div  class="card-body">
+                <div class="card-body">
                     <h1 class="mb-4">Upload Document</h1>
 
                     <div class="file-container">
@@ -325,10 +325,13 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
-        
         let fileCount = 1;
         $("#addFile").click(function() {
-            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            var newFileInput =
+                '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' +
+                fileCount +
+                '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' +
+                fileCount + '"></div></div></div>';
             $(".file-container").append(newFileInput);
 
             // Increment the fileCount for the next set of inputs
@@ -466,19 +469,23 @@
                 if (indentReferenceNo) {
                     $.ajax({
                         url: "{{ url('admin/offer/get_indent_details') }}" + '/' +
-                        indentReferenceNo,
+                            indentReferenceNo,
                         type: 'GET',
                         success: function(response) {
-                            var item_html = '<option value="' + response.item.id + '">' +
-                                response.item.name + '</option>';
-                            var itemType_html = '<option value="' + response.itemType.id +
-                                '">' + response.itemType.name + '</option>';
+                            if (response.item) {
+                                var item_html = '<option value="' + response.item.id + '">' +
+                                    response.item.name + '</option>';
+                                $('#item_id').html(item_html);
+                            }
+
+                            if (response.itemType) {
+                                var itemType_html = '<option value="' + response.itemType.id +
+                                    '">' + response.itemType.name + '</option>';
 
 
+                                $('#item_type_id').html(itemType_html);
+                            }
 
-
-                            $('#item_id').html(item_html);
-                            $('#item_type_id').html(itemType_html);
 
 
 

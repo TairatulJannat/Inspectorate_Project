@@ -52,28 +52,28 @@
         });
 
 
-        // Edit Item Type
-        // $(document).on('click', '.edit_item_type', function(e) {
-        //     e.preventDefault();
-        //     let id = $(this).attr('id');
-        //     $.ajax({
-        //         url: '{{ url('admin/item_types/edit') }}',
-        //         method: 'post',
-        //         data: {
-        //             id: id,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             $("#edit_item_type_id").val(id);
-        //             $("#editItemTypeName").val(response.name);
-        //             $("#editItemTypeSection option[value='" + response.section_id + "']")
-        //                 .prop('selected', true);
-        //             $("#editItemTypeStatus").prop('checked', response.status == 1);
 
-        //             $('#editItemTypeModal').modal('show');
-        //         }
-        //     });
-        // });
+        $(document).on('click', '.edit_supplier', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('id');
+            $.ajax({
+                url: '{{ url('admin/supplier/edit') }}',
+                method: 'post',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $("#edit_item_type_id").val(id);
+                    $("#editItemTypeName").val(response.name);
+                    $("#editItemTypeSection option[value='" + response.section_id + "']")
+                        .prop('selected', true);
+                    $("#editItemTypeStatus").prop('checked', response.status == 1);
+
+                    $('#editItemTypeModal').modal('show');
+                }
+            });
+        });
 
         // // Update Item Type
         // $("#editItemTypeForm").on("submit", function(e) {
@@ -123,61 +123,61 @@
         //     });
         // });
 
-        // // Delete Item Type ajax request
-        // $(document).on('click', '.delete_item_type', function(e) {
-        //     e.preventDefault();
-        //     let id = $(this).attr('id');
-        //     let csrf = '{{ csrf_token() }}';
-        //     Swal.fire({
-        //         title: "Are you sure?",
-        //         text: "You won't be able to revert this!",
-        //         type: "warning",
-        //         showCancelButton: true,
-        //         confirmButtonColor: "#d33",
-        //         cancelButtonColor: "#34C38F",
-        //         confirmButtonText: "Yes, delete it!"
-        //     }).then((result) => {
-        //         if (result.value) {
-        //             $.ajax({
-        //                 url: '{{ url('admin/item_types/destroy') }}',
-        //                 method: 'post',
-        //                 data: {
-        //                     id: id,
-        //                     _token: csrf
-        //                 },
-        //                 success: function(response) {
-        //                     if (response.isSuccess === true) {
-        //                         Swal.fire(
-        //                             'Deleted!',
-        //                             'Item Type has been deleted.',
-        //                             'success'
-        //                         );
-        //                         toastr.success(response.Message);
+        // Delete Item Type ajax request
+        $(document).on('click', '#delete_supplier', function(e) {
+            e.preventDefault();
 
-        //                         // Reload the DataTable
-        //                         $('.yajra-datatable').DataTable().ajax.reload();
-        //                     } else if (response.isSuccess === false) {
-        //                         Swal.fire(
-        //                             'Caution!',
-        //                             'Something went wrong!',
-        //                             'error'
-        //                         );
-        //                         toastr.error(response.Message);
-        //                     }
-        //                 },
-        //                 error: function(error) {
-        //                     // Handle AJAX request error
-        //                     console.error(error);
-        //                     Swal.fire(
-        //                         'Error!',
-        //                         'Failed to delete Item Type.',
-        //                         'error'
-        //                     );
-        //                 }
-        //             });
-        //         }
-        //     });
-        // });
+            var supplierId = $(this).data('supplier-id');
+
+            alert(supplierId);
+            let csrf = '{{ csrf_token() }}';
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#34C38F",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '{{ url('admin/supplier/destroy') }}/' + supplierId,
+                        method: 'get',
+
+                        success: function(response) {
+                            if (response.isSuccess === true) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Supplier has been deleted.',
+                                    'success'
+                                );
+                                toastr.success(response.Message);
+
+                                // Reload the DataTable
+                                setTimeout(window.location.href = "{{ route('admin.supplier/index') }}", 10000);
+                            } else if (response.isSuccess === false) {
+                                Swal.fire(
+                                    'Caution!',
+                                    'Something went wrong!',
+                                    'error'
+                                );
+                                toastr.error(response.Message);
+                            }
+                        },
+                        error: function(error) {
+                            // Handle AJAX request error
+                            console.error(error);
+                            Swal.fire(
+                                'Error!',
+                                'Failed to delete Item Type.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
 
         // Show Item Type
         // Start:: delete user
