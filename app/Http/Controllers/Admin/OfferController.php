@@ -497,7 +497,7 @@ class OfferController extends Controller
         $item_type = Item_type::where('id', $indent->item_type_id)->first();
 
 
-dd(   $indent);
+
 
         return response()->json(['item' => $item, 'itemType' => $item_type]);
     }
