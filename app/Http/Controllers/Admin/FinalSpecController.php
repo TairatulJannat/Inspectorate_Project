@@ -19,7 +19,9 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use App\Models\AssignParameterValue;
 use App\Models\File;
+use App\Models\SupplierSpecData;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -124,7 +126,7 @@ class FinalSpecController extends Controller
                 $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
-                    ->select('final_specs.*','items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*', 'items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('final_specs.id', $FinalSpecs)
                     ->where('final_specs.status', 0)
                     ->get();
@@ -265,21 +267,20 @@ class FinalSpecController extends Controller
         $inspectorate_id = Auth::user()->inspectorate_id;
         $dte_managments = Dte_managment::where('status', 1)->get();
         $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
-//  dd($item_types );
+        //  dd($item_types );
         if ($item_types) {
             // dd($item_types); 
-             $itemTypeName = $item_types->name;
-            
-        } else{
+            $itemTypeName = $item_types->name;
+        } else {
             $itemTypeName = Null;
         }
-        
+
         $item = Items::where('id', $finalspec->item_id)->first();
-        
+
         if ($item) {
             $itemName = $item->name;
             // dd($itemName );  
-        } else{
+        } else {
             $itemName = Null;
         }
         $fin_years = FinancialYear::all();
@@ -287,7 +288,7 @@ class FinalSpecController extends Controller
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::all();
-        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers','itemName','itemTypeName'));
+        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers', 'itemName', 'itemTypeName'));
     }
 
     public function update(Request $request)
@@ -459,5 +460,21 @@ class FinalSpecController extends Controller
         $suppliers = Supplier::whereIn('id',  $offer->suppliers)->get();
 
         return response()->json(['item' => $item, 'itemType' => $item_type, 'tenderReferenceNo' => $tender_reference_no, 'indentReferenceNo' => $indent_reference_no, 'suppliernames' => $suppliers]);
+    }
+    public function parameter($reference_number)
+    {
+        $reference_number = $reference_number;
+        $finalspec = FinalSpec::where('reference_no', $reference_number)->first();
+
+        $supplierAssignValue = SupplierSpecData::where('offer_reference_no', $finalspec->offer_reference_no)
+            ->where('supplier_id', $finalspec->supplier_id)
+            // ->where('item_id', $offer->item_id)
+            ->get();
+
+        $groupedData = $supplierAssignValue->groupBy('parameter_group_id');
+
+        // dd($groupedData);
+
+        return view('backend/finalspec/parameter', compact('supplierAssignValue','groupedData'));
     }
 }
