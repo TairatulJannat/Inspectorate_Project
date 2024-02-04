@@ -28,7 +28,7 @@
                     <div class="mb-3">
                         <label for="editaddress_of_local_agent" class="form-label">Address of Local Agent</label>
                         <input type="text" class="form-control" id="editaddress_of_local_agent" name="editaddress_of_local_agent">
-                        <span class="text-danger error-text editaddress_of_local_agenterror"></span>
+                        <span class="text-danger error-text editaddress_of_local_agent_error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="editcontact_no" class="form-label">Contact No</label>
@@ -46,6 +46,7 @@
                     <button type="submit" class="btn btn-primary" id="editButton">Update</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
+                
             </form>
         </div>
     </div>

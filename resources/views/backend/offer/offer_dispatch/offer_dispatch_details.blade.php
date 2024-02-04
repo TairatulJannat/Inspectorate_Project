@@ -171,8 +171,8 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{url('admin/csr/index') }}">CSR</a>
+                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{ url('admin/csr/index') }}">CSR</a>
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a> --}}
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                             class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
@@ -273,7 +273,7 @@
                                         <tbody>
                                             @if ($document_tracks !== null)
                                                 @foreach ($document_tracks as $document_track)
-                                                @if ($document_track->track_status == 2)
+                                                    @if ($document_track->track_status == 2)
                                                         <tr style="background-color: #c8fff528">
                                                             <td>{{ $document_track->sender_designation_name }}</td>
                                                             <td><i class="fa fa-arrow-right text-success"></i></td>
@@ -290,7 +290,6 @@
                                                             <td>{{ $document_track->remarks }}</td>
                                                         </tr>
                                                     @endif
-
                                                 @endforeach
                                             @else
                                                 <tr>
@@ -420,7 +419,16 @@
 
             });
 
+            $('#csrBtn').on('click', function(event) {
+                event.preventDefault();
 
+                var url = $(this).attr('href');
+                var tenderRefNo = $('#tenderRefNo').text();
+
+                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
+
+                window.location.href = redirectUrl;
+            });
         });
     </script>
 @endpush

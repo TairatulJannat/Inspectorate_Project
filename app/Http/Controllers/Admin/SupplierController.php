@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminSection;
 use Illuminate\Http\Request;
-
-
-use App\Models\Section;
+use Illuminate\Validation\ValidationException;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use DataTables;
@@ -90,16 +88,22 @@ class SupplierController extends Controller
     {
 
         // Validate the request data
-        $request->validate([
-            'update_id' => 'required|exists:suppliers,id',
-            'editfirm_name' => 'required|string',
-            'editprincipal_name' => 'required|string',
-            'editaddress_of_local_agent' => 'required|string',
-            'editaddress_of_principal' => 'required|string',
-            'editcontact_no' => 'required|string',
-            'editemail' => 'required|email',
-            // Add other validation rules for your fields
-        ]);
+        try {
+            // Validate the request data
+            $request->validate([
+                'update_id' => 'required|exists:suppliers,id',
+                'editfirm_name' => 'required|string',
+                'editprincipal_name' => 'required|string',
+                'editaddress_of_local_agent' => 'required|string',
+                'editaddress_of_principal' => 'required|string',
+                'editcontact_no' => 'required|string',
+                'editemail' => 'required|email',
+                // Add other validation rules for your fields
+            ]);
+        } catch (ValidationException $e) {
+            // Return validation errors if validation fails
+            return response()->json(['errors' => $e->errors()], 422);
+        }
 
         // Find the supplier by ID
         $supplier = Supplier::find($request->update_id);

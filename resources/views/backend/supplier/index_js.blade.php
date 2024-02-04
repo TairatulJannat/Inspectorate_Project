@@ -108,6 +108,17 @@
                     enableeButton()
                     clear_error_field();
                     error_notification('Please fill up the form correctly and try again')
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        // Iterate over the validation errors and display them
+                        $.each(response.responseJSON.errors, function(key, value) {
+
+                            var errorSpanId =  key + '_error';
+                            alert(errorSpanId);
+                            $('.' + errorSpanId).text(value[
+                            0]); // Assuming you want to display only the first error
+                        });
+                    }
+
 
                 }
             });

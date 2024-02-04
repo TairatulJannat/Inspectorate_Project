@@ -17,16 +17,9 @@
 
             @foreach ($groupedData as $parameterGroupId => $groupedCollection)
                 <div class="container mt-4">
-                    <h2>Parameter Group ID: {{ $parameterGroupId }}</h2>
+                    <h2>Parameter Group ID: {{ $parameterGroupId }} {{ $groupedCollection->first()->group_name }}</h2>
                     <table class="table table-bordered">
-                        {{-- Uncomment the thead section if you want to include table headers --}}
-                        {{-- <thead>
-                        <tr>
-                            <th>Parameter Name</th>
-                            <th>Parameter Value</th>
-                            <!-- Add other columns as needed -->
-                        </tr>
-                    </thead> --}}
+
                         <tbody>
                             @foreach ($groupedCollection as $item)
                                 <tr>

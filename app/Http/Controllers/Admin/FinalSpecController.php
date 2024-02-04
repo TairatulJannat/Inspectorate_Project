@@ -269,7 +269,7 @@ class FinalSpecController extends Controller
         $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
         //  dd($item_types );
         if ($item_types) {
-            // dd($item_types); 
+            // dd($item_types);
             $itemTypeName = $item_types->name;
         } else {
             $itemTypeName = Null;
@@ -279,7 +279,7 @@ class FinalSpecController extends Controller
 
         if ($item) {
             $itemName = $item->name;
-            // dd($itemName );  
+            // dd($itemName );
         } else {
             $itemName = Null;
         }
@@ -467,13 +467,16 @@ class FinalSpecController extends Controller
         $finalspec = FinalSpec::where('reference_no', $reference_number)->first();
 
         $supplierAssignValue = SupplierSpecData::where('offer_reference_no', $finalspec->offer_reference_no)
+
+            ->leftJoin('parameter_groups', 'supplier_spec_data.parameter_group_id', '=', 'parameter_groups.id')
             ->where('supplier_id', $finalspec->supplier_id)
             // ->where('item_id', $offer->item_id)
+            ->select('supplier_spec_data.*', 'parameter_groups.name as group_name')
             ->get();
 
         $groupedData = $supplierAssignValue->groupBy('parameter_group_id');
 
-        // dd($groupedData);
+
 
         return view('backend/finalspec/parameter', compact('supplierAssignValue','groupedData'));
     }
