@@ -57,7 +57,7 @@
                                     <td>{{ $supplier->email }}</td>
                                     <td>
                                         <button class="btn btn-danger"  data-supplier-id="{{ $supplier->id }}" id="delete_supplier">Delete</button>
-                                        <button class="btn btn-danger"  data-supplier-id="{{ $supplier->id }}" id="delete_supplier">Delete</button>
+                                        <button class="btn btn-info"  data-supplier-id="{{ $supplier->id }}" id="edit_supplier_btn">Edit</button>
 
 
                                         {{-- <a class="btn btn-info"
@@ -76,7 +76,7 @@
     {{-- Create Item Type Modal --}}
     @include('backend.supplier.create')
     {{-- Edit Item Type --}}
-    {{-- @include('backend.supplier.edit') --}}
+    @include('backend.supplier.edit')
     {{-- Show Item Type --}}
     {{-- @include('backend.supplier.show') --}}
 @endsection

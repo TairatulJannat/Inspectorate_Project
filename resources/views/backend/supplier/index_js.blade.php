@@ -53,76 +53,65 @@
 
 
 
-        $(document).on('click', '.edit_supplier', function(e) {
+        $(document).on('click', '#edit_supplier_btn', function(e) {
             e.preventDefault();
-            let id = $(this).attr('id');
-            $.ajax({
-                url: '{{ url('admin/supplier/edit') }}',
-                method: 'post',
-                data: {
-                    id: id,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    $("#edit_item_type_id").val(id);
-                    $("#editItemTypeName").val(response.name);
-                    $("#editItemTypeSection option[value='" + response.section_id + "']")
-                        .prop('selected', true);
-                    $("#editItemTypeStatus").prop('checked', response.status == 1);
+            let id = $(this).data('supplier-id');
 
-                    $('#editItemTypeModal').modal('show');
+            $.ajax({
+                url: '{{ url('admin/supplier/edit') }}/' + id,
+                method: 'get',
+
+                success: function(response) {
+
+                    $("#update_id").val(response.supplier.id);
+                    $("#editfirm_name").val(response.supplier.firm_name);
+                    $("#editprincipal_name").val(response.supplier.principal_name);
+                    $("#editaddress_of_principal").val(response.supplier
+                        .address_of_principal);
+                    $("#editaddress_of_local_agent").val(response.supplier
+                        .address_of_local_agent);
+                    $("#editcontact_no").val(response.supplier.contact_no);
+                    $("#editemail").val(response.supplier.email);
+
+                    $('#edit_supplier').modal('show');
                 }
             });
         });
 
-        // // Update Item Type
-        // $("#editItemTypeForm").on("submit", function(e) {
-        //     e.preventDefault();
-        //     var form = this;
-        //     var editButton = $("#editButton");
-        //     editButton.prop('disabled', true).text('Updating...');
-        //     $.ajax({
-        //         url: $(form).attr('action'),
-        //         method: $(form).attr('method'),
-        //         data: new FormData(form),
-        //         processData: false,
-        //         dataType: "JSON",
-        //         contentType: false,
-        //         cache: false,
-        //         beforeSend: function() {
-        //             $(form).find("span.error-text").text("");
-        //         },
-        //         success: function(response) {
-        //             if (response.isSuccess === false) {
-        //                 $.each(response.error, function(prefix, val) {
-        //                     $(form).find("span." + prefix + "_error").text(val[0]
-        //                         .replace("edit ", ""));
-        //                 });
-        //                 toastr.error(response.Message);
-        //                 editButton.prop('disabled', false).text('Update');
-        //             } else if (response.isSuccess === true) {
-        //                 $(form)[0].reset();
-        //                 $("#editItemTypeModal").modal("hide");
-        //                 Swal.fire(
-        //                     'Updated!',
-        //                     'Item Type Edited Successfully!',
-        //                     'success'
-        //                 )
-        //                 toastr.success(response.Message);
-        //                 editButton.prop('disabled', false).text('Update');
+        $('#update_form').off().on('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData($('#update_form')[0]);
+            disableButton()
+            $.ajax({
+                url: "{{ url('admin/supplier/update') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.error) {
+                        error_notification(response.error)
+                        enableeButton()
+                    }
+                    if (response.success) {
+                        // enableeButton()
+                        toastr.success('Information Updated', 'Saved');
+                        $('#edit_supplier').modal('hide');
+                    }
+                    setTimeout(window.location.href = "{{ route('admin.supplier/index') }}",
+                        2000);
+                },
+                error: function(response) {
+                    enableeButton()
+                    clear_error_field();
+                    error_notification('Please fill up the form correctly and try again')
 
-        //                 // Reload the DataTable
-        //                 $('.yajra-datatable').DataTable().ajax.reload();
-        //             }
-        //         },
-        //         error: function(error) {
-        //             console.log('Error:', error);
-        //             toastr.error('An error occurred while processing the request.');
-        //             editButton.prop('disabled', false).text('Update');
-        //         },
-        //     });
-        // });
-
+                }
+            });
+        })
         // Delete Item Type ajax request
         $(document).on('click', '#delete_supplier', function(e) {
             e.preventDefault();
@@ -155,7 +144,9 @@
                                 toastr.success(response.Message);
 
                                 // Reload the DataTable
-                                setTimeout(window.location.href = "{{ route('admin.supplier/index') }}", 10000);
+                                setTimeout(window.location.href =
+                                    "{{ route('admin.supplier/index') }}", 10000
+                                );
                             } else if (response.isSuccess === false) {
                                 Swal.fire(
                                     'Caution!',
