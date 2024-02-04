@@ -215,6 +215,7 @@
                                                             <option value={{ $d->id }}>{{ $d->name }}</option>
                                                         @endforeach
                                                     </select>
+                                                    <span id="error_designation" class="text-danger"></span>
 
                                                     <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                         style="height: 40px; margin-left: 10px;"></textarea>
@@ -791,12 +792,16 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                clear_error_field();
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+
                             }
                         });
 

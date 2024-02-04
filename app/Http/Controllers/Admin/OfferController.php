@@ -18,6 +18,7 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -401,6 +402,19 @@ class OfferController extends Controller
 
     public function offerTracking(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -412,6 +426,12 @@ class OfferController extends Controller
         $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;

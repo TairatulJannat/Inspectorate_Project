@@ -378,11 +378,13 @@
                             },
                             error: function(response) {
                                 enableeButton()
+                                clear_error_field();
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
                                 $('#error_designation').text(response.responseJSON.error
                                     .reciever_desig_id);
+
 
                             }
                         });
