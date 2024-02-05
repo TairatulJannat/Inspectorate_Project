@@ -93,7 +93,7 @@ class QacApprovedController extends Controller
                 $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
-                    ->select('qacs.*', 'item_types.name as item_type_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('qacs.status', 3)
                     ->get();
             } else {
@@ -189,11 +189,13 @@ class QacApprovedController extends Controller
     {
 
         $details = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'qacs.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'qacs.fin_year_id', '=', 'fin_years.id')
             ->select(
                 'qacs.*',
                 'item_types.name as item_type_name',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name'
             )
@@ -242,7 +244,7 @@ class QacApprovedController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  7)->latest()->first();
+            ->where('doc_type_id',  7)->latest()->first();
 
         //End blade forward on off section....
 

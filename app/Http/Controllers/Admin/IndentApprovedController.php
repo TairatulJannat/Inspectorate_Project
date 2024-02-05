@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -16,6 +17,7 @@ use App\Models\Section;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class IndentApprovedController extends Controller
@@ -195,12 +197,14 @@ class IndentApprovedController extends Controller
     {
 
         $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'indents.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
             ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
             ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
             ->select(
                 'indents.*',
                 'item_types.name as item_type_name',
+                'items.name as item_name',
                 'indents.*',
                 'dte_managments.name as dte_managment_name',
                 'additional_documents.name as additional_documents_name',
@@ -208,7 +212,9 @@ class IndentApprovedController extends Controller
             )
             ->where('indents.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 3)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
 
@@ -275,29 +281,44 @@ class IndentApprovedController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 3)->latest()->first();
+            ->where('doc_type_id', 3)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.indent.indent_incomming_approved.indent_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','files'));
     }
 
     public function indentTracking(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
         $doc_reference_number = $request->doc_reference_number;
         $reciever_desig_id = $request->reciever_desig_id;
-        $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-
+        $section_id = Indent::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;

@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\FinalSpec;
 use App\Models\Indent;
 use App\Models\Offer;
@@ -75,8 +76,8 @@ class OutgoingFinalSpecController extends Controller
                 ->count();
         }
 
-        
-        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing', compact('finalSpecNew','finalSpecOnProcess','finalSpecCompleted','finalSpecDispatch'));
+
+        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing', compact('finalSpecNew', 'finalSpecOnProcess', 'finalSpecCompleted', 'finalSpecDispatch'));
     }
 
     public function all_data(Request $request)
@@ -204,23 +205,9 @@ class OutgoingFinalSpecController extends Controller
             ->where('final_specs.id', $id)
             ->first();
 
-        //         $details->additional_documents = json_decode($details->additional_documents, true);
-        //         $additional_documents_names = [];
-
-        //         foreach ($details->additional_documents as $document_id) {
-        //             $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-        //             array_push($additional_documents_names, $additional_names);
-        //         }
-        //         $details->suppliers = json_decode($details->supplier_id, true);
-
-        //         $supplier_names_names = [];
-
-        //         foreach ($details->suppliers as $Supplier_id) {
-        //             $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-        // //    dd($supplier_names);
-        //             array_push($supplier_names_names, $supplier_names);
-        //         }
+        // Attached File
+        $files = File::where('doc_type_id', 6)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -269,7 +256,7 @@ class OutgoingFinalSpecController extends Controller
         // end cover letter start
 
 
-        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.finalSpec.finalSpec_outgoing.finalspec_outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
     }
 
     public function OutgoingFinalSpecTracking(Request $request)

@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinalSpec;
 use App\Models\FinancialYear;
 
@@ -80,7 +81,7 @@ class FinalSpecApprovedController extends Controller
                 ->count();
         }
 
-        return view('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_index', compact('finalSpecNew','finalSpecOnProcess','finalSpecCompleted','finalSpecDispatch'));
+        return view('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_index', compact('finalSpecNew', 'finalSpecOnProcess', 'finalSpecCompleted', 'finalSpecDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -157,7 +158,7 @@ class FinalSpecApprovedController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',6)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 6)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -211,24 +212,9 @@ class FinalSpecApprovedController extends Controller
             ->where('final_specs.id', $id)
             ->first();
 
-        // $details->additional_documents = json_decode($details->additional_documents, true);
-        // $additional_documents_names = [];
-
-        // foreach ($details->additional_documents as $document_id) {
-        //     $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-        //     array_push($additional_documents_names, $additional_names);
-        // }
-
-        // $details->suppliers = json_decode($details->supplier_id, true);
-
-        // $supplier_names_names = [];
-
-        // foreach ($details->suppliers as $Supplier_id) {
-        //     $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-
-        //     array_push($supplier_names_names, $supplier_names);
-        // }
+        // Attached File
+        $files = File::where('doc_type_id', 6)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -238,7 +224,7 @@ class FinalSpecApprovedController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->whereIn('track_status', [1, 3])
-            ->where('doc_type_id',6)
+            ->where('doc_type_id', 6)
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 5)
@@ -266,20 +252,14 @@ class FinalSpecApprovedController extends Controller
                 break;
             }
         }
-
         //End close forward Status...
 
-
-     
-
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',6)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 6)->latest()->first();
 
         //End blade forward on off section....
 
-
-
-        return view('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden'));
+        return view('backend.finalSpec.finalSpec_incomming_approved.finalspec_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'files'));
     }
 
     public function FinalSpecApprovedTracking(Request $request)
@@ -340,6 +320,4 @@ class FinalSpecApprovedController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-
-    
 }

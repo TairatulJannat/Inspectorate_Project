@@ -97,21 +97,21 @@ class QacController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+                $query = Qac::leftJoin('items', 'qacs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
+                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id') 
                     ->where('qacs.status', 0)
-                    ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('qacs.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+                $query = Qac::leftJoin('items', 'qacs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
                     ->where('qacs.inspectorate_id', $insp_id)
                     ->where('qacs.status', 0)
                     ->whereIn('qacs.section_id', $section_ids)
-                    ->select('qacs.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('qacs.*','items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -123,10 +123,10 @@ class QacController extends Controller
                     ->where('qacs.status', 0)
                     ->whereIn('qacs.section_id', $section_ids)->pluck('qacs.id')->toArray();
 
-                $query = Qac::leftJoin('item_types', 'qacs.item_type_id', '=', 'item_types.id')
+                $query = Qac::leftJoin('items', 'qacs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
-                    ->select('qacs.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('qacs.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('qacs.id', $qacIds)
                     ->where('qacs.status', 0)
                     ->get();
@@ -247,7 +247,7 @@ class QacController extends Controller
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
             $data->received_date = $request->qac_received_date;
-            $data->reference_date = $request->qac_reference_date;
+            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -317,7 +317,7 @@ class QacController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->qac_received_date;
-        $data->reference_date = $request->qac_reference_date;
+        $data->provationally_status = $request->provationally_status;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;

@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Psi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -70,7 +71,7 @@ class PsiOutgoingController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.psi.psi_outgoing.outgoing', compact('psiNew','psiOnProcess','psiCompleted','psiDispatch'));
+        return view('backend.psi.psi_outgoing.outgoing', compact('psiNew', 'psiOnProcess', 'psiCompleted', 'psiDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -186,14 +187,15 @@ class PsiOutgoingController extends Controller
     {
 
         $details = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'psies.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
-            ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name')
+            ->select('psies.*', 'item_types.name as item_type_name', 'items.name as item_name','dte_managments.name as dte_managment_name')
             ->where('psies.id', $id)
             ->where('psies.status', 1)
             ->first();
-
-
-
+        // Attached File
+        $files = File::where('doc_type_id', 8)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -230,7 +232,7 @@ class PsiOutgoingController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  8)->latest()->first();
+            ->where('doc_type_id',  8)->latest()->first();
 
         //End blade forward on off section....
 
@@ -241,7 +243,7 @@ class PsiOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.psi.psi_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.psi.psi_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
     }
 
     public function OutgoingpsiTracking(Request $request)

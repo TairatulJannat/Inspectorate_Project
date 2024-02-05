@@ -16,13 +16,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
-
             margin: 30px 15px 30px 0
         }
 
@@ -90,13 +88,13 @@
         }
     </style>
 @endpush
-@section('main_menu', 'Final Spec  (Outgoing)')
+@section('main_menu', 'Final Spec (Outgoing)')
 @section('active_menu', 'Outgoing Details')
 @section('content')
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Final Spec </h2>
+                <h2> <b>Details of Final Spec</b> </h2>
             </div>
             <div style="display: flex">
 
@@ -108,7 +106,7 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
-                              <tr>
+                            <tr>
                                 <th>Final Spec Referance Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
@@ -116,7 +114,7 @@
                                 <th>Offer Reference No</td>
                                 <td>{{ $details->offer_reference_no }}</td>
                             </tr>
-                            
+
                             <tr>
                                 <th>Tender Reference No</td>
                                 <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
@@ -131,17 +129,17 @@
                             </tr>
                             <tr>
                                 <th>Final Spec Receive Letter Date</td>
-                                <td>{{ $details->final_spec_receive_Ltr_dt  }}</td>
+                                <td>{{ $details->final_spec_receive_Ltr_dt }}</td>
                             </tr>
 
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-                         
+
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{$details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
@@ -158,13 +156,16 @@
                                 </td>
                             </tr>
                         </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
                         <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
+                    
 
-                            @if ($cover_letter)
+                        @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
-                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover Letter</a>
+                                class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
+                                Letter</a>
                             <button class="btn btn-warning text-light ml-2 mt-2" type="button" data-bs-toggle="modal"
                                 data-bs-target=".edit-modal-lg">Edit Cover
                                 Letter</button>
@@ -242,15 +243,14 @@
                                                 <div class="col-md-2">
 
                                                     @if ($cover_letter)
-                                                    <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
-                                                        style="height: 40px;">Deliver</button>
-                                                @else
-                                                <button class="delivery-btn btn btn-info text-white mt-2"
-                                                id="disabledSubmitBtn"
-                                                title="To Enable Button Create Cover Letter"
-                                                style="height: 40px;" disabled>Deliver</button>
-                                        
-                                                @endif
+                                                        <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
+                                                            style="height: 40px;">Deliver</button>
+                                                    @else
+                                                        <button class="delivery-btn btn btn-info text-white mt-2"
+                                                            id="disabledSubmitBtn"
+                                                            title="To Enable Button Create Cover Letter"
+                                                            style="height: 40px;" disabled>Deliver</button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </form>
@@ -298,7 +298,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                           <div class="col-md-2">
+                                            <div class="col-md-2">
 
 
                                                 <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
@@ -401,6 +401,7 @@
                             <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                             <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                            <input type="hidden" id="doc_type_id" value="6">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">
                                     <div class="input-group ">
@@ -514,6 +515,7 @@
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                                 <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <input type="hidden" id="doc_type_id" value="6">
                                 <div class="row text-center">
                                     <div class="col-6 align-self-end">
                                         <div class="input-group ">
@@ -556,24 +558,23 @@
                                     <label for="body_1">Refs: </label>
                                     <textarea class="form-control body_1" name="bodyEdit_1" id="bodyEdit_1">
                               {!! $cover_letter->body_1 !!}
-                  </textarea>
+                              </textarea>
                                 </div>
                                 <div class="mt-2">
                                     <label for="body_2">Body </label>
                                     <textarea class="form-control body_2" name="bodyEdit_2" id="bodyEdit_2">
                               {!! $cover_letter->body_2 !!}
-                  </textarea>
+                              </textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-4"></div>
                                     <div class="col-4"></div>
                                     <div class="col-4 mt-5">
 
-                                        <input type="text" class="form-control" id="name" placeholder="Name"
-                                            value="{{ $cover_letter->name }}">
-
-                                        <input type="text" class="form-control" id="designation"
-                                            placeholder="Designation" value="{{ $cover_letter->designation }}">
+                                        <div class="mt-2">
+                                            <label for="signatureEdit">Signature Details </label>
+                                            <textarea class="form-control " name="signatureEdit" id="signatureEdit"> {!! $cover_letter->signature !!}</textarea>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -628,45 +629,55 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
-    integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    // ClassicEditor
-    //     .create(document.querySelector(''))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-    ClassicEditor
-        .create(document.querySelector('#body_1'))
-        .catch(error => {
-            console.error(error);
-        });
-    ClassicEditor
-        .create(document.querySelector('#body_2'))
-        .catch(error => {
-            console.error(error);
-        });
-    ClassicEditor
-        .create(document.querySelector('#anxs'))
-        .catch(error => {
-            console.error(error);
-        });
-    // ClassicEditor
-    //     .create(document.querySelector('#bodyEdit_1'))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-    // ClassicEditor
-    //     .create(document.querySelector('#bodyEdit_2'))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-    // ClassicEditor
-    //     .create(document.querySelector('#anxsEdit'))
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-</script>
+        integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // ClassicEditor
+        //     .create(document.querySelector(''))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        ClassicEditor
+            .create(document.querySelector('#body_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxs'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signature'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxsEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signatureEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
     <script>
         $(document).ready(function() {

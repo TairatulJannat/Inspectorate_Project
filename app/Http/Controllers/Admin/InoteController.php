@@ -10,11 +10,13 @@ use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\inote;
+use App\Models\InoteLetter;
 use App\Models\Section;
 use App\Models\Supplier;
 use Carbon\Carbon;
@@ -25,6 +27,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class InoteController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
 
@@ -274,7 +281,7 @@ class InoteController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
-        $contracts=Contract::all();
+        $contracts = Contract::all();
         // $selected_document =$indent->additional_documents;
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
@@ -283,7 +290,7 @@ class InoteController extends Controller
         $item = Items::where('id', $inote->item_id)->first();
         $supplier = Supplier::where('id', $inote->supplier_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.inote.inote_incomming_new.edit', compact('inote', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','supplier'));
+        return view('backend.inote.inote_incomming_new.edit', compact('inote', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts', 'supplier'));
     }
 
     public function update(Request $request)
@@ -319,15 +326,12 @@ class InoteController extends Controller
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
-
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->attached_file = $path ? $path : $data->attached_file;
-
         $data->save();
-
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 13, $request->reference_no);
+        }
         return response()->json(['success' => 'Done']);
     }
 
@@ -350,7 +354,9 @@ class InoteController extends Controller
             )
             ->where('inotes.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 13)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -390,7 +396,7 @@ class InoteController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.inote.inote_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.inote.inote_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function Tracking(Request $request)
@@ -404,7 +410,6 @@ class InoteController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
-
 
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
@@ -464,8 +469,63 @@ class InoteController extends Controller
         return response()->json($items);
     }
 
-    public function InoteIssu ($id){
+    public function InoteIssu($id)
+    {
+        $inote = Inote::find($id);
+        $supplier = Supplier::find($inote->supplier_id);
+        $supplier_details = '';
+        if ($supplier) {
+            $supplier_details = $supplier->firm_name . ', ' . $supplier->address_of_local_agent;
+        }
+        return view('backend.inote.inoteHtml', compact('inote', 'supplier_details'));
+    }
+    public function InoteLetterStore(Request $request)
+    {
 
-        return view('backend.inote.inoteHtml');
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
+
+        $inote_reference_no = $request->inote_reference_no;
+        $reciever_desig_id = $request->reciever_desig_id;
+        $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
+
+        $inote = new InoteLetter();
+
+        $inote->inspectorate_id = $ins_id;
+        $inote->section_id = $section_id;
+        $inote->book_no = $request->book_no;
+        $inote->book_no = $request->book_no;
+        $inote->set_no = $request->set_no;
+        $inote->copy_number = $request->copy_number;
+        $inote->copy_no = $request->copy_no;
+        $inote->visiting_letter_no = $request->visiting_letter_no;
+        $inote->contract_reference_no = $request->contract_reference_no;
+        $inote->inote_reference_no = $request->inote_reference_no;
+        $inote->indent_reference_no = $request->indent_reference_no;
+        $inote->supplier_info = $request->supplier_info;
+        $inote->sender_id = $request->sender_id;
+        $inote->cahidakari = $request->cahidakari;
+        $inote->visiting_process = $request->visiting_process;
+        $inote->status = $request->status;
+        $inote->punishment = $request->punishment;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->serial_1 = $request->serial_1;
+        $inote->serial_2to4 = $request->serial_2to4;
+        $inote->serial_5 = $request->serial_5;
+        $inote->serial_6 = $request->serial_6;
+        $inote->serial_7 = $request->serial_7;
+        $inote->serial_8 = $request->serial_8;
+        $inote->serial_9 = $request->serial_9;
+        $inote->serial_10 = $request->serial_10;
+        $inote->serial_11 = $request->serial_11;
+        $inote->serial_12 = $request->serial_12;
+        $inote->serial_13 = $request->serial_13;
+        $inote->body_info = $request->body_info;
+        $inote->save();
+        return response()->json(['success' => 'Done']);
     }
 }

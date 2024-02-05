@@ -1,7 +1,7 @@
 @extends('backend.app')
 @section('title', 'All Users')
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/backend/plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/backend/plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}"> --}}
 @endpush
 @section('main_menu', 'HOME')
 @section('active_menu', 'All Users')
@@ -42,8 +42,7 @@
                                 <td>{{ $data->support_asst }}</td>
                                 <td>{{ $data->role ? $data->role->name : '' }}</td>
                                 <td>
-                                    <a href="{{ url('admin/assign_section/' . $data->id) }}"
-                                        class="btn btn-info btn-sm">Assign Section</a>
+                                   
                                     <a href="#" onclick="edit_user({{ $data->id }})"
                                         class="btn btn-success btn-sm">Edit</a>
 

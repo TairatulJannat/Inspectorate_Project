@@ -27,6 +27,7 @@
 @section('main_menu', 'Indent')
 @section('active_menu', 'Add Indent')
 @section('content')
+
     <div class="col-sm-12 col-xl-12">
 
         <div class="card">
@@ -39,6 +40,7 @@
                             <div class="form-group d-flex">
                                 <label class="col-6 pt-2" for="">Select Section:</label>
                                 <select class="form-control" id="admin_section" name="admin_section">
+                                    <Option>Select Section</Option>
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
@@ -47,7 +49,7 @@
                                 <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
                         </div>
-                      
+
                     </div>
                     <div class="row mt-4">
 
@@ -59,6 +61,7 @@
                                     <option value="">Please Select</option>
 
                                     @foreach ($dte_managments as $dte)
+                                    
                                         <option value="{{ $dte->id }}">{{ $dte->name }}</option>
                                     @endforeach
 
@@ -315,30 +318,30 @@
             $('.select2').select2();
 
 
-            $("#item_type_id").off('change').on('change', function() {
+            // $("#item_type_id").off('change').on('change', function() {
 
-                //  alert('123');
-                var itemtype_id = $('#item_type_id').val();
+            //     //  alert('123');
+            //     var itemtype_id = $('#item_type_id').val();
 
-                if (itemtype_id > 0) {
-                    $.ajax({
-                        url: "{{ url('admin/prelimgeneral/item_name') }}" +
-                            '/' + itemtype_id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(res) {
-                            console.log(res);
+            //     if (itemtype_id > 0) {
+            //         $.ajax({
+            //             url: "{{ url('admin/prelimgeneral/item_name') }}" +
+            //                 '/' + itemtype_id,
+            //             type: 'GET',
+            //             dataType: 'json',
+            //             success: function(res) {
+            //                 console.log(res);
 
-                            var _html = '<option value="">Select an item</option>';
-                            $.each(res, function(index, item) {
-                                _html += '<option value="' + item.id + '">' + item
-                                    .name + '</option>';
-                            });
-                            $('#item_id').html(_html);
-                        }
-                    });
-                }
-            });
+            //                 var _html = '<option value="">Select an item</option>';
+            //                 $.each(res, function(index, item) {
+            //                     _html += '<option value="' + item.id + '">' + item
+            //                         .name + '</option>';
+            //                 });
+            //                 $('#item_id').html(_html);
+            //             }
+            //         });
+            //     }
+            // });
         });
     </script>
 @endpush

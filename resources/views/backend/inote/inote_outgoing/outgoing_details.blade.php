@@ -14,9 +14,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -106,9 +105,13 @@
                                 <th>Referance No</td>
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
+                            <tr>
+                                <th>Contract Referance No</td>
+                                <td>{{ $details->contract_reference_no }}</td>
+                            </tr>
 
                             <tr>
-                                <th>User Directorate</td>
+                                <th>User Dte</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
                             <tr>
@@ -133,7 +136,7 @@
                                 <td>{{ $details->contract_reference_no }}</td>
                             </tr>
                             <tr>
-                                <th>Name of Eqpt</td>
+                                <th>Nomenclature</td>
                                 <td>{{ $details->item_name }}</td>
                             </tr>
 
@@ -143,12 +146,9 @@
                             </tr>
 
                         </table>
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a> --}}
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Pdf Document</a>
+                        {{-- additional file design start here --}}
+                        @include('backend.files.file')
+                        {{-- additional file design end here --}}
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -160,7 +160,10 @@
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
                                 Letter</a> --}}
                         @endif
-                        <a class="btn btn-success text-light ml-2 mt-2"  href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Genarate I-Note</a>
+
+                        @if($inote_letter)
+                        <a class="btn btn-success text-light ml-2 mt-2"  href="{{ url('admin/inote/generateinote') }}/{{ $inote_letter->id }}">Genarate I-Note</a>
+                        @endif
                     </div>
                 </div>
 
@@ -206,14 +209,16 @@
                                                 </div>
                                                 <div class="d-flex">
 
-
-                                                    <div
+                                                    @if (!$inote_letter)
+                                                        <div
                                                         class="col-md-6 m-2 d-flex justify-content-center align-items-center">
 
                                                         <a class="btn btn-success text-light ml-2 pt-3" style='height: 60px'
                                                             href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Approve
                                                             I-Note</a>
-                                                    </div>
+                                                        </div>
+                                                    @endif
+
                                                     @if (!$cover_letter)
                                                         <div
                                                             class="col-md-6 m-2 d-flex justify-content-center align-items-center">
@@ -387,6 +392,7 @@
                             <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                             <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                            <input type="hidden" id="doc_type_id" value="13">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">
                                     <div class="input-group ">
@@ -514,6 +520,7 @@
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                                 <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <input type="hidden" id="doc_type_id" value="13">
                                 <div class="row text-center">
                                     <div class="col-6 align-self-end">
                                         <div class="input-group ">

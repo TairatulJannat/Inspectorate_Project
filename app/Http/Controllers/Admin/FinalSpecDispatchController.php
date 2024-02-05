@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinalSpec;
 use App\Models\FinancialYear;
 use App\Models\Item_type;
@@ -80,10 +81,10 @@ class FinalSpecDispatchController extends Controller
         }
 
 
-        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_index', compact('finalSpecNew','finalSpecOnProcess','finalSpecCompleted','finalSpecDispatch'));
+        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_index', compact('finalSpecNew', 'finalSpecOnProcess', 'finalSpecCompleted', 'finalSpecDispatch'));
     }
 
-    
+
     public function all_data(Request $request)
     {
 
@@ -146,14 +147,14 @@ class FinalSpecDispatchController extends Controller
                 ->addColumn('status', function ($data) {
                     if ($data->status == '4') {
                         return '<button class="btn btn-danger btn-sm">Dispatched</button>';
-                    }else {
+                    } else {
                         return '<button class="btn btn-danger btn-sm">None</button>';
                     }
                 })
                 ->addColumn('action', function ($data) {
 
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',6)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 6)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
                     if ($DocumentTrack) {
@@ -206,15 +207,10 @@ class FinalSpecDispatchController extends Controller
             )
             ->where('final_specs.id', $id)
             ->first();
-        
-        // $details->suppliers = json_decode($details->supplier_id, true);
+        // Attached File
+        $files = File::where('doc_type_id', 6)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
-        // $supplier_names_names = [];
-
-        // foreach ($details->suppliers as $Supplier_id) {
-        //     $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-        //     array_push($supplier_names_names, $supplier_names);
-        // }
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -223,8 +219,8 @@ class FinalSpecDispatchController extends Controller
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
-            ->whereIn('track_status',[2,4])
-            ->where('doc_type_id',6)
+            ->whereIn('track_status', [2, 4])
+            ->where('doc_type_id', 6)
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 3)
@@ -264,15 +260,12 @@ class FinalSpecDispatchController extends Controller
 
         //End close forward Status...
 
-
-       
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',6)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 6)->latest()->first();
 
         //End blade forward on off section....
 
-
-        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'DocumentTrack_hidden'));
+        return view('backend.finalSpec.finalSpec_dispatch.finalSpec_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'desig_position', 'DocumentTrack_hidden', 'files'));
     }
 
     public function FinalSpecDispatchTracking(Request $request)
@@ -333,5 +326,4 @@ class FinalSpecDispatchController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-
 }

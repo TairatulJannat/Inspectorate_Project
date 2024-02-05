@@ -11,6 +11,7 @@ use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\DraftContract;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -29,7 +30,11 @@ use Yajra\DataTables\Facades\DataTables;
 class SiController extends Controller
 {
     //
-
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -98,21 +103,21 @@ class SiController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                $query = Si::leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
                     ->where('stage_inspections.status', 0)
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                $query = Si::leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
                     ->where('stage_inspections.inspectorate_id', $insp_id)
                     ->where('stage_inspections.status', 0)
                     ->whereIn('stage_inspections.section_id', $section_ids)
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*','items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -123,10 +128,10 @@ class SiController extends Controller
                     ->where('stage_inspections.status', 0)
                     ->whereIn('stage_inspections.section_id', $section_ids)->pluck('stage_inspections.id')->toArray();
 
-                $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                $query = Si::leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*', 'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('stage_inspections.id', $siIds)
                     ->where('stage_inspections.status', 0)
                     ->get();
@@ -166,7 +171,7 @@ class SiController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',11)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 11)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -245,7 +250,9 @@ class SiController extends Controller
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
             $data->received_date = $request->received_date;
+            $data->supplier_id = $request->supplier_id;
             $data->reference_date = $request->reference_date;
+            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -254,7 +261,7 @@ class SiController extends Controller
             $data->created_at = Carbon::now()->format('Y-m-d');
             $data->updated_at = Carbon::now()->format('Y-m-d');
 
-         
+
 
             $data->save();
 
@@ -277,14 +284,35 @@ class SiController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
-        $item_types = Item_type::where('status', 1)
+        $item_types = Item_type::where('id', $si->item_id)->where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
-            ->get();
+            ->first();
+
+            if ($item_types) {
+                // dd($item_types);
+                 $itemTypeName = $item_types->name;
+
+            } else{
+                $itemTypeName = Null;
+            }
+
         $item = Items::where('id', $si->item_id)->first();
+
+        if ($item) {
+            $itemName = $item->name;
+            // dd($itemName );
+        } else{
+            $itemName = Null;
+        }
+
         $fin_years = FinancialYear::all();
-        $contracts = Contract::all();    
-        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts'));
+
+        $contracts = Contract::all();
+        $supplier=Supplier::where('id', $si->supplier_id)->first();
+
+        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','itemTypeName','itemName', 'supplier'));
+
     }
 
     public function update(Request $request)
@@ -311,22 +339,29 @@ class SiController extends Controller
         $data->offer_reference_no = $request->offer_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->item_id = $request->item_id;
+        $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->received_date;
+        $data->provationally_status = $request->provationally_status;
         $data->reference_date = $request->reference_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
+        // $path = '';
+        // if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->doc_file = $path ? $path : $data->doc_file;
+        //     $path = $request->file('doc_file')->store('uploads', 'public');
+        // }
+        // $data->doc_file = $path ? $path : $data->doc_file;
 
         $data->save();
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 11, $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -341,16 +376,20 @@ class SiController extends Controller
             ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
             ->leftJoin('fin_years', 'stage_inspections.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('suppliers', 'stage_inspections.supplier_id', '=', 'suppliers.id')
             ->select(
                 'stage_inspections.*',
                 'item_types.name as item_type_name',
                 'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
-                'fin_years.year as fin_year_name'
+                'fin_years.year as fin_year_name',
+                'suppliers.firm_name as firm_name_name'
             )
             ->where('stage_inspections.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 11)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -390,7 +429,7 @@ class SiController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.si.si_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.si.si_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function SiTracking(Request $request)
@@ -461,18 +500,16 @@ class SiController extends Controller
 
     public function get_contract_details($contractReferenceNo)
     {
-        $contract = Contract::where('reference_no' ,$contractReferenceNo)->first();
+        $contract = Contract::where('reference_no', $contractReferenceNo)->first();
         // dd($contract);
-        $item=Items::where('id' , $contract->item_id)->first();
-        $item_type=Item_type::where('id' , $contract->item_type_id)->first();
+        $item = Items::where('id', $contract->item_id)->first();
+        $item_type = Item_type::where('id', $contract->item_type_id)->first();
         $offer_reference_no = $contract->offer_reference_no;
-       
+
         $indent_reference_no = $contract->indent_reference_no;
 
-        $supplier = Supplier::where('id',$contract->supplier_id)->first();
-             
-        return response()->json(['item' =>$item, 'itemType' =>$item_type,'offerReferenceNo'=>$offer_reference_no,'indentReferenceNo'=> $indent_reference_no, 'supplier'=>$supplier]);
+        $supplier = Supplier::where('id', $contract->supplier_id)->first();
 
+        return response()->json(['item' => $item, 'itemType' => $item_type, 'offerReferenceNo' => $offer_reference_no, 'indentReferenceNo' => $indent_reference_no, 'supplier' => $supplier]);
     }
-
 }

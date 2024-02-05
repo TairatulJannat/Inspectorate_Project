@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Si;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -188,13 +189,16 @@ class SiOutgoingController extends Controller
 
         $details = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
-            ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name')
+            ->leftJoin('fin_years', 'stage_inspections.fin_year_id', '=', 'fin_years.id')
+            ->leftJoin('suppliers', 'stage_inspections.supplier_id', '=', 'suppliers.id')
+            ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'fin_years.year as fin_year_name', 'suppliers.firm_name as firm_name_name')
             ->where('stage_inspections.id', $id)
             ->where('stage_inspections.status', 1)
             ->first();
 
-
-
+        // Attached File
+        $files = File::where('doc_type_id', 11)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -228,21 +232,19 @@ class SiOutgoingController extends Controller
 
         // delay cause for sec IC start
 
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  11)->latest()->first();
+            ->where('doc_type_id',  11)->latest()->first();
 
         //End blade forward on off section....
 
         // start cover letter start
-
         $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
 
         // end cover letter start
 
 
-        return view('backend.si.si_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.si.si_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter' ,'files'));
     }
 
     public function OutgoingsiTracking(Request $request)

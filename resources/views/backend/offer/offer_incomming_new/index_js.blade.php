@@ -55,52 +55,51 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    searchable: false
+                    
                 },
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-                    orderable: false
+                    
                 },
                 {
                     data: 'tender_reference_no',
                     name: 'tender_reference_no',
-                    orderable: false
                 },
                 {
-                    data: 'item_type_name',
-                    name: 'item_type_id',
-                    orderable: false
+                    data: 'item_name',
+                    name: 'item_id',
+                    
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                    orderable: false
+                   
                 },
                 {
                     data: 'offer_rcv_ltr_dt',
                     name: 'offer_rcv_ltr_dt',
-                    orderable: false
+                    
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                    orderable: false
+                   
                 },
                 {
                     data: 'qty',
                     name: 'qty',
-                    orderable: false
+                   
                 },
                 {
                     data: 'status',
                     name: 'status',
-                    orderable: false
+                    
                 },
                 {
                     data: 'action',
                     name: 'action',
-                    orderable: true
+                    
                 },
             ],
             dom: 'lBfrtip',

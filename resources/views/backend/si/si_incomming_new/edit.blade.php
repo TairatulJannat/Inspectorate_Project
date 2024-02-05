@@ -94,7 +94,8 @@
                                 <label for="item_type_id">Item Type</label>
                                 <select class="form-control" id="item_type_id" name="item_type_id" required>
 
-                                    <option selected disabled value="">Please Select</option>
+                                    <option selected disabled value="{{ $itemTypeName ? $itemTypeName : '' }}">Please
+                                        Select</option>
 
 
                                 </select>
@@ -104,10 +105,10 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_id">Item</label>
+                                <label for="item_id">Nomenclature</label>
 
                                 <select class="form-control" id="item_id" name="item_id" required>
-                                    <option value="">Please Select</option>
+                                    <option value="{{ $itemName ? $itemName : '' }}">Please Select</option>
 
                                 </select>
 
@@ -119,24 +120,28 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference Number</label>
-                                <select class="form-control " id="offer_reference_no" name="offer_reference_no">
+                                {{-- <select class="form-control " id="offer_reference_no" name="offer_reference_no">
 
                                     <option value="">Please Select</option>
 
+                                </select> --}}
 
-                                </select>
+                                <input type="text" id="offer_reference_no" class="form-control" name="offer_reference_no"
+                                    value="{{ $si->offer_reference_no ? $si->offer_reference_no : '' }}">
+
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference Number</label>
-                                <select class="form-control " id="indent_reference_no" name="indent_reference_no">
-
+                                {{-- <select class="form-control " id="indent_reference_no" name="indent_reference_no">
                                     <option value="">Please Select</option>
+                                </select> --}}
 
-
-                                </select>
+                                <input type="text" id="indent_reference_no" class="form-control"
+                                    name="indent_reference_no"
+                                    value="{{ $si->indent_reference_no ? $si->indent_reference_no : '' }}">
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
 
@@ -148,9 +153,15 @@
                                 <label for="supplier_id">Suppiler</label>
 
                                 <select class="form-control" id="supplier_id" name="supplier_id">
-                                    <option value="">Please Select </option>
+                                    @if ($supplier)
+                                    <option value="{{ $supplier->id == $si->supplier_id ? $supplier->id : '' }}">{{$supplier->firm_name}} </option>
+                                    @endif
+
 
                                 </select>
+                                {{-- <input type="text" id="supplier_id" class="form-control" name="supplier_id"
+                                    value="{{ $si->supplier_id ? $si->supplier_id : '' }}"> --}}
+
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -176,6 +187,26 @@
                             </div>
                         </div>
 
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="checked_standard">Provationally status </label>
+                                <select class="form-control" name="provationally_status" id="provationally_status">
+                                    <option value="">Please Select</option>
+                                    <option value="0"{{ $si->provationally_status == '0' ? 'selected' : '' }}>
+                                        Provationally Accepted
+                                    </option>
+                                    <option value="1" {{ $si->provationally_status == '1' ? 'selected' : '' }}>Provationally Rejected</option>
+                                </select>
+
+                                {{-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="checked_standard"
+                                        name="checked_standard">
+                                </div> --}}
+
+                                <span id="error_checked_standard" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
 
 
                         <div class="col-md-4">
@@ -194,13 +225,29 @@
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="doc_file">Upload Document</label>
-                                <input class="form-control" type="file" id="doc_file" name='doc_file'>
-                                <span id="doc_file" class="text-danger error_field"></span>
+
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
+
+                    <div class="file-container">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control file-name" name="file_name[]"
+                                    placeholder="File Name" id="file_name_0">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input file" name="file[]" id="file_0">
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <a class="btn btn-primary" id="addFile">Add More File</a>
 
                     </div>
                 </div>
@@ -222,6 +269,18 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
+        let fileCount = 1;
+        $("#addFile").click(function() {
+            var newFileInput =
+                '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' +
+                fileCount +
+                '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' +
+                fileCount + '"></div></div></div>';
+            $(".file-container").append(newFileInput);
+
+            // Increment the fileCount for the next set of inputs
+            fileCount++;
+        });
         $(document).ready(function() {
             $('.select2').select2();
         });
@@ -316,20 +375,23 @@
                                 response.item.name + '</option>';
                             var itemType_html = '<option value="' + response.itemType.id +
                                 '">' + response.itemType.name + '</option>';
-                            var offerReferenceNo_html = '<option value="' + response
-                                .offerReferenceNo + '">' + response
-                                .offerReferenceNo +
-                                '</option>';
-                            var indentReferenceNo_html = '<option value="' + response.indentReferenceNo + '">' + response.indentReferenceNo +
-                                '</option>';
+                            // var offerReferenceNo_html = '<option value="' + response
+                            //     .offerReferenceNo + '">' + response
+                            //     .offerReferenceNo +
+                            //     '</option>';
+                            // var indentReferenceNo_html = '<option value="' + response
+                            //     .indentReferenceNo + '">' + response.indentReferenceNo +
+                            //     '</option>';
                             var supplier_html = '<option value="' + response.supplier.id +
                                 '">' + response.supplier.firm_name + '</option>';
 
 
                             $('#item_id').html(item_html);
                             $('#item_type_id').html(itemType_html);
-                            $('#offer_reference_no').html(offerReferenceNo_html);
-                            $('#indent_reference_no').html(indentReferenceNo_html);
+                            $('#offer_reference_no').val(response
+                                .offerReferenceNo);
+                            $('#indent_reference_no').val(response
+                                .indentReferenceNo);
                             $('#supplier_id').html(supplier_html);
 
 

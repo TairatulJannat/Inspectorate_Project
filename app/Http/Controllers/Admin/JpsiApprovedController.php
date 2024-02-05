@@ -7,6 +7,7 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Jpsi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -93,14 +94,14 @@ class jpsiApprovedController extends Controller
                 $query = jpsi::leftJoin('items', 'jpsies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'jpsies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'jpsies.section_id', '=', 'sections.id')
-                    ->select('jpsies.*', 'items.name as item_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('jpsies.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('jpsies.status', 3)
                     ->get();
             } else {
 
                 $jpsiIds = jpsi::leftJoin('document_tracks', 'jpsies.id', '=', 'document_tracks.doc_ref_id')
                     ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('document_tracks.doc_type_id',12)
+                    ->where('document_tracks.doc_type_id', 12)
                     ->where('jpsies.inspectorate_id', $insp_id)
                     ->where('jpsies.status', 3)
                     ->whereIn('jpsies.section_id', $section_ids)->pluck('jpsies.id', 'jpsies.id')->toArray();
@@ -201,11 +202,7 @@ class jpsiApprovedController extends Controller
             )
             ->where('jpsies.id', $id)
             ->first();
-
-
-
-
-
+        $files = File::where('doc_type_id', 12)->where('reference_no', $details->reference_no)->get();
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -245,16 +242,13 @@ class jpsiApprovedController extends Controller
 
         //End close forward Status...
 
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 12)->latest()->first();
+            ->where('doc_type_id', 12)->latest()->first();
 
         //End blade forward on off section....
 
-
-        return view('backend.jpsi.jpsi_incomming_approved.jpsi_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.jpsi.jpsi_incomming_approved.jpsi_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function Tracking(Request $request)

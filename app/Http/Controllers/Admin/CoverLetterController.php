@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CoverLetter;
+use App\Models\InoteLetter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
@@ -18,6 +19,7 @@ class CoverLetterController extends Controller
 
         $data = new CoverLetter();
         $data->inspectorate_id = $request->insp_id;
+        $data->doc_type_id = $request->doc_type_id;
         $data->section_id = $request->sec_id;
         $data->doc_reference_id = $request->doc_reference_no;
         $data->letter_reference_no = '23.01.901.051.' . $request->letter_reference_no . '.' . Carbon::now()->format('d.m.y');
@@ -46,7 +48,7 @@ class CoverLetterController extends Controller
     }
     public function coverLetterGeneratePdf($doc_reference_id)
     {
-         $cover_letter = CoverLetter::where('doc_reference_id', $doc_reference_id)->first();
+        $cover_letter = CoverLetter::where('doc_reference_id', $doc_reference_id)->first();
         if ($cover_letter) {
             $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
             return $pdf->stream('cover_letter.pdf');
@@ -74,8 +76,9 @@ class CoverLetterController extends Controller
     public function edit(Request $request)
     {
 
-        $data=CoverLetter::find($request->editId);
+        $data = CoverLetter::find($request->editId);
         // dd( $request->all());
+        $data->doc_type_id = $request->doc_type_id;
         $data->letter_reference_no = $request->letter_reference_no;
         $data->inspectorate_name = $request->inspectorate_name;
         $data->inspectorate_place = $request->place;
@@ -103,4 +106,11 @@ class CoverLetterController extends Controller
     }
 
 
+    public function GenerateINotePdf($id)
+    {
+        $inote_letter=InoteLetter::find($id);
+        // $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
+        // return $pdf->stream('cover_letter.pdf');
+        return view('backend.pdf.inote', compact('inote_letter'));
+    }
 }

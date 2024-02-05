@@ -6,15 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\Psi;
 use App\Models\Section;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -24,9 +27,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PsiController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
+
     public function index()
     {
-
 
         $insp_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
@@ -95,21 +103,21 @@ class PsiController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                $query = Psi::leftJoin('items', 'psies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
                     ->where('psies.status', 0)
-                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                $query = Psi::leftJoin('items', 'psies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
                     ->where('psies.inspectorate_id', $insp_id)
                     ->where('psies.status', 0)
                     ->whereIn('psies.section_id', $section_ids)
-                    ->select('psies.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*',  'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -121,10 +129,10 @@ class PsiController extends Controller
                     ->where('psies.status', 0)
                     ->whereIn('psies.section_id', $section_ids)->pluck('psies.id')->toArray();
 
-                $query = Psi::leftJoin('item_types', 'psies.item_type_id', '=', 'item_types.id')
+                $query = Psi::leftJoin('items', 'psies.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'psies.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'psies.section_id', '=', 'sections.id')
-                    ->select('psies.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('psies.*',  'items.name as item_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('psies.id', $psiIds)
                     ->where('psies.status', 0)
                     ->get();
@@ -245,7 +253,7 @@ class PsiController extends Controller
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
             $data->received_date = $request->psi_received_date;
-            $data->reference_date = $request->psi_reference_date;
+            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;
@@ -279,13 +287,15 @@ class PsiController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
+        $contracts = Contract::all();
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->get();
         $item = Items::where('id', $psi->item_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.psi.psi_incomming_new.edit', compact('psi', 'item', 'dte_managments', 'item_types', 'fin_years'));
+        $supplier = Supplier::where('id', $psi->supplier_id)->first();
+        return view('backend.psi.psi_incomming_new.edit', compact('psi', 'supplier', 'contracts', 'item', 'dte_managments', 'item_types', 'fin_years'));
     }
 
     public function update(Request $request)
@@ -309,23 +319,32 @@ class PsiController extends Controller
         $data->sender_id = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->contract_reference_no = $request->contract_reference_no;
+        $data->indent_reference_no = $request->indent_reference_no;
+        $data->offer_reference_no = $request->offer_reference_no;
+        $data->supplier_id = $request->supplier_id;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->psi_received_date;
-        $data->reference_date = $request->psi_reference_date;
+        $data->provationally_status = $request->provationally_status;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $path = '';
-        if ($request->hasFile('doc_file')) {
+        // $path = '';
+        // if ($request->hasFile('doc_file')) {
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-        }
-        $data->attached_file = $path ? $path : $data->attached_file;
+        //     $path = $request->file('doc_file')->store('uploads', 'public');
+        // }
+        // $data->attached_file = $path ? $path : $data->attached_file;
 
         $data->save();
+
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 8,  $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -349,7 +368,9 @@ class PsiController extends Controller
             )
             ->where('psies.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 8)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -377,10 +398,7 @@ class PsiController extends Controller
                 break;
             }
         }
-
         //End close forward Status...
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
             ->where('doc_type_id',  8)
@@ -388,8 +406,7 @@ class PsiController extends Controller
 
         //End blade forward on off section....
 
-
-        return view('backend.psi.psi_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.psi.psi_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden','files'));
     }
 
     public function psiTracking(Request $request)
@@ -457,9 +474,5 @@ class PsiController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function item_name($id)
-    {
-        $items = Items::where('item_type_id', $id)->get();
-        return response()->json($items);
-    }
+
 }

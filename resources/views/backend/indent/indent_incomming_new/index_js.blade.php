@@ -42,45 +42,45 @@
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-                   
+
                 },
                 {
                     data: 'indent_number',
                     name: 'indent_number',
-                   
+
                 },
                 {
                     data: 'item_name',
                     name: 'item_name',
-                   
+
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                   
+
                 },
 
 
                 {
                     data: 'indent_received_date',
                     name: 'indent_received_date',
-                   
+
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                   
+
                 },
                 {
                     data: 'qty',
                     name: 'qty',
-                   
+
                 },
 
                 {
                     data: 'status',
                     name: 'status',
-                   
+
                 },
 
                 {
@@ -107,7 +107,6 @@
         event.preventDefault();
 
         var formData = new FormData($('#save_info')[0]);
-
 
         disableButton()
         $.ajax({
@@ -136,20 +135,10 @@
                 enableeButton()
                 clear_error_field();
                 error_notification('Please fill up the form correctly and try again')
-                $('#error_sender').text(response.responseJSON.errors.sender);
-                $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                $('#error_spec_type').text(response.responseJSON.errors.spec_type);
-                $('#error_additional_documents').text(response.responseJSON.errors
-                    .additional_documents);
-                $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
-                $('#error_spec_received_date').text(response.responseJSON.errors
-                    .spec_received_date);
-                $('#error_estimated_value').text(response.responseJSON.errors
-                    .estimated_value);
-                $('#error_qty').text(response.responseJSON.errors
-                    .qty);
-                $('#error_indent_received_date').text(response.responseJSON.errors
-                    .indent_received_date);
+                // $('#error_sender').text(response.responseJSON.errors.sender);
+                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                // $('#admin_section').text(response.responseJSON.errors.admin_section);
+                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
 
             }
         });
@@ -261,13 +250,7 @@
     function clear_error_field() {
         $('#error_sender').text("");
         $('#error_reference_no').text("");
-        $('#error_spec_type').text("");
-        $('#error_additional_documents').text("");
-        $('#error_item_type_id').text("");
-        $('#error_spec_received_date').text("");
-        $('#error_estimated_value').text("");
-        $('#error_qty').text("");
-        $('#error_qty').text("");
+
     }
 
     function disableButton() {

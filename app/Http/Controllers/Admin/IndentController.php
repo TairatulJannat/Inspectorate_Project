@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Item_type;
@@ -23,6 +24,11 @@ use PDF;
 
 class IndentController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
 
@@ -235,6 +241,7 @@ class IndentController extends Controller
             'indent_received_date' => 'required',
             'indent_reference_date' => 'required',
         ]);
+
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = $request->admin_section;
 
@@ -256,7 +263,7 @@ class IndentController extends Controller
         $data->attribute = $request->attribute;
         $data->spare = $request->spare;
         $data->checked_standard = $request->checked_standard;
-        $data->nomenclature = $request->nomenclature;
+        // $data->nomenclature = $request->nomenclature;
         $data->make = $request->make;
         $data->model = $request->model;
         $data->country_of_origin = $request->country_of_origin;
@@ -273,8 +280,10 @@ class IndentController extends Controller
             $path = $request->file('doc_file')->store('uploads', 'public');
             $data->doc_file = $path;
         }
-
         $data->save();
+
+        // save aditional file
+
 
         return response()->json(['success' => 'Done']);
     }
@@ -301,6 +310,7 @@ class IndentController extends Controller
 
     public function update(Request $request)
     {
+
         $data = Indent::findOrFail($request->editId);
 
         $data->sender = $request->sender;
@@ -317,23 +327,24 @@ class IndentController extends Controller
         $data->attribute = $request->attribute;
         $data->spare = $request->spare;
         $data->checked_standard = $request->checked_standard;
-        $data->nomenclature = $request->nomenclature;
+        // $data->nomenclature = $request->nomenclature;
         $data->make = $request->make;
         $data->model = $request->model;
         $data->country_of_origin = $request->country_of_origin;
         $data->country_of_assembly = $request->country_of_assembly;
         $data->remark = $request->remark;
         $data->updated_by = Auth::user()->id;
-
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        if ($request->hasFile('doc_file')) {
+        $data->save();
 
-            $path = $request->file('doc_file')->store('uploads', 'public');
-            $data->doc_file = $path;
+
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 3, $request->reference_no);
         }
 
-        $data->save();
 
         return response()->json(['success' => 'Done']);
     }
@@ -356,7 +367,9 @@ class IndentController extends Controller
             )
             ->where('indents.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 3)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $details->additional_documents = json_decode($details->additional_documents, true);
         $details->additional_documents =  $details->additional_documents ?  $details->additional_documents : [];
         $additional_documents_names = [];
@@ -401,10 +414,10 @@ class IndentController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  3)->latest()->first();
+            ->where('doc_type_id',  3)->latest()->first();
         //End blade forward on off section....
 
-        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden'));
+        return view('backend.indent.indent_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'files'));
     }
 
     public function indentTracking(Request $request)
@@ -414,7 +427,8 @@ class IndentController extends Controller
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
-
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
@@ -422,21 +436,25 @@ class IndentController extends Controller
         }
 
 
+
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-
         $doc_type_id = 3; //...... 3 for indent from indents table doc_serial.
-
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
-        // $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-
         $desig_position = Designation::where('id', $sender_designation_id)->first();
         $section_id = Indent::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
 
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
+        
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
@@ -511,7 +529,7 @@ class IndentController extends Controller
         $parameterGroups = ParameterGroup::with('assignParameterValues')
             ->where('item_id', $item_id)
             ->get();
-        dd($parameterGroups);
+        // dd($parameterGroups);
 
         // if ( $item_id ) {
         //     $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');

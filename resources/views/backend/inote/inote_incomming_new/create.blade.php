@@ -40,6 +40,7 @@
                                 <label class="col-6 pt-2" for="">Select Section:</label>
                                 <select class="form-control" id="admin_section" name="admin_section">
                                     @foreach ($sections as $section)
+                                        <option value="">Please Select</option>
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
 

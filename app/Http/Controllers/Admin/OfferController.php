@@ -18,12 +18,18 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class OfferController extends Controller
 {
     //
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -91,17 +97,17 @@ class OfferController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+                $query = Offer::leftJoin('items', 'offers.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
                     ->where('offers.status', 0)
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('offers.*', 'items.name as item_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+                $query = Offer::leftJoin('items', 'offers.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('offers.*', 'items.name as item_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('offers.status', 0)
                     ->get();
             } else {
@@ -111,10 +117,10 @@ class OfferController extends Controller
                     ->where('offers.status', 0)
                     ->whereIn('offers.sec_id', $section_ids)->pluck('offers.id', 'offers.id')->toArray();
 
-                $query = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+                $query = Offer::leftJoin('items', 'offers.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'offers.sec_id', '=', 'sections.id')
-                    ->select('offers.*', 'item_types.name as item_type_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('offers.*', 'items.name as item_name', 'offers.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('offers.id', $offerIds)
                     ->where('offers.status', 0)
                     ->get();
@@ -151,6 +157,7 @@ class OfferController extends Controller
                 ->addColumn('action', function ($data) {
 
                     $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 5)->latest()->first();
+
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -161,7 +168,8 @@ class OfferController extends Controller
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
 
-                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
+                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit ">Forward</a>
+
                             </div>';
                         } else {
                             $actionBtn = '<div class="btn-group" role="group">';
@@ -170,7 +178,8 @@ class OfferController extends Controller
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
 
-                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+
                             </div>';
                         }
 
@@ -181,7 +190,8 @@ class OfferController extends Controller
                                 $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
 
-                            $actionBtn .= '<a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+                            $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="update">Forwarded</a>
+
                             </div>';
                         }
                     } else {
@@ -191,7 +201,8 @@ class OfferController extends Controller
                             $actionBtn .= '<a href="' . url('admin/offer/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                         }
 
-                        $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit">Forward</a>
+                        $actionBtn .= ' <a href="' . url('admin/offfer/details/' . $data->id) . '" class="edit ">Forward</a>
+
                         </div>';
                     }
                     return $actionBtn;
@@ -236,7 +247,6 @@ class OfferController extends Controller
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
         $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
         $data->fin_year_id = $request->fin_year_id;
 
 
@@ -253,9 +263,11 @@ class OfferController extends Controller
 
     public function edit($id)
     {
-        $offer = Offer::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $offer = Offer::find($id);
+
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
@@ -263,13 +275,12 @@ class OfferController extends Controller
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
-        $indent_reference_numbers = Indent::all();
+        $indent_reference_numbers = Indent::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->get();
         return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers'));
     }
 
     public function update(Request $request)
     {
-
 
         $data = Offer::findOrFail($request->editId);
         $data->sender = $request->sender;
@@ -283,18 +294,10 @@ class OfferController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
-        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        $data->offer_rcv_ltr_no = $request->offer_rcv_ltr_no;
+        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->fin_year_id = $request->fin_year_id;
 
         // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
-
-        if ($request->hasFile('pdf_file')) {
-
-            $path = $request->file('pdf_file')->store('uploads', 'public');
-            $data->pdf_file = $path;
-        }
-      
 
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
@@ -304,12 +307,19 @@ class OfferController extends Controller
 
         $data->save();
 
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 5,  $request->reference_no);
+        }
+
         return response()->json(['success' => 'Done']);
     }
 
     public function details($id)
     {
         $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'offers.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
             ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
             ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
@@ -317,6 +327,7 @@ class OfferController extends Controller
             ->select(
                 'offers.*',
                 'item_types.name as item_type_name',
+                'items.name as item_name',
                 'offers.*',
                 'dte_managments.name as dte_managment_name',
                 'additional_documents.name as additional_documents_name',
@@ -325,7 +336,9 @@ class OfferController extends Controller
             )
             ->where('offers.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 5)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
 
@@ -385,7 +398,7 @@ class OfferController extends Controller
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 5)->latest()->first();
 
         //End blade forward on off section....
-        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'additional_documents_names', 'supplier_names_names'));
+        return view('backend.offer.offer_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'additional_documents_names', 'supplier_names_names', 'files'));
     }
 
     public function offerTracking(Request $request)
@@ -476,12 +489,16 @@ class OfferController extends Controller
         }
     }
 
-    // public function offerViewPdf($id)
-    // {
-    //     $pdf = Offer::findOrFail($id);
-    //     $path = storage_path("app/public/{$pdf->pdf_path}");
-    //     dd($path);
-    //     // Return the PDF file as a response
-    //     return response()->file($path);
-    // }
+    public function get_indent_details($indentReferenceNo)
+    {
+
+        $indent = Indent::where('reference_no', $indentReferenceNo)->first();
+        $item = Items::where('id', $indent->item_id)->first();
+        $item_type = Item_type::where('id', $indent->item_type_id)->first();
+
+
+
+
+        return response()->json(['item' => $item, 'itemType' => $item_type]);
+    }
 }

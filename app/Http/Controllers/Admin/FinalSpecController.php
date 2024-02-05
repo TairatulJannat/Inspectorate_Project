@@ -19,11 +19,19 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use App\Models\AssignParameterValue;
+use App\Models\File;
+use App\Models\SupplierSpecData;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class FinalSpecController extends Controller
 {
+    protected $fileController;
+    public function __construct(FileController $fileController)
+    {
+        $this->fileController = $fileController;
+    }
     public function index()
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -93,18 +101,18 @@ class FinalSpecController extends Controller
             $desig_position = Designation::where('id', $designation_id)->first();
 
             if (Auth::user()->id == 92) {
-                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
                     ->where('final_specs.status', 0)
-                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*', 'items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } elseif ($desig_position->id == 1) {
 
-                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
-                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*', 'items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->where('final_specs.status', 0)
                     ->get();
             } else {
@@ -115,10 +123,10 @@ class FinalSpecController extends Controller
                     ->where('final_specs.status', 0)
                     ->whereIn('final_specs.sec_id', $section_ids)->pluck('final_specs.id', 'final_specs.id')->toArray();
 
-                $query = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+                $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
-                    ->select('final_specs.*', 'item_types.name as item_type_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*', 'items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('final_specs.id', $FinalSpecs)
                     ->where('final_specs.status', 0)
                     ->get();
@@ -258,14 +266,29 @@ class FinalSpecController extends Controller
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $dte_managments = Dte_managment::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
+        $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+        //  dd($item_types );
+        if ($item_types) {
+            // dd($item_types);
+            $itemTypeName = $item_types->name;
+        } else {
+            $itemTypeName = Null;
+        }
+
         $item = Items::where('id', $finalspec->item_id)->first();
+
+        if ($item) {
+            $itemName = $item->name;
+            // dd($itemName );
+        } else {
+            $itemName = Null;
+        }
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::all();
-        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers'));
+        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers', 'itemName', 'itemTypeName'));
     }
 
     public function update(Request $request)
@@ -285,21 +308,20 @@ class FinalSpecController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->supplier_id = $request->supplier_id;
         $data->fin_year_id = $request->fin_year_id;
-        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
 
-        if ($request->hasFile('pdf_file')) {
-
-            $path = $request->file('pdf_file')->store('uploads', 'public');
-            $data->pdf_file = $path;
-        }
 
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;
         $data->created_at = Carbon::now()->format('Y-m-d');
         $data->updated_at = Carbon::now()->format('Y-m-d');
-
         $data->save();
+
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 6,  $request->reference_no);
+        }
 
         return response()->json(['success' => 'Done']);
     }
@@ -321,30 +343,9 @@ class FinalSpecController extends Controller
             ->where('final_specs.id', $id)
             ->first();
 
-
-        //     $details->additional_documents = json_decode($details->additional_documents, true);
-        //         $additional_documents_names = [];
-
-        // if($details->additional_documents){
-        //     foreach ($details->additional_documents as $document_id) {
-        //         $additional_names = Additional_document::where('id', $document_id)->pluck('name')->first();
-
-        //         array_push($additional_documents_names, $additional_names);
-        //     }
-
-        // }
-
-//         $details->suppliers = json_decode($details->supplier_id, true);
-
-//         $supplier_names_names = [];
-//         if ($details->suppliers) {
-//             foreach ($details->suppliers as $Supplier_id) {
-//                 $supplier_names = Supplier::where('id', $Supplier_id)->pluck('firm_name')->first();
-
-//                 array_push($supplier_names_names, $supplier_names);
-//             }
-//         }
-
+        // Attached File
+        $files = File::where('doc_type_id', 6)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -386,8 +387,7 @@ class FinalSpecController extends Controller
 
 
 
-        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden'));
-
+        return view('backend.finalSpec.finalSpec_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'files'));
     }
 
     public function finalSpecTracking(Request $request)
@@ -448,17 +448,36 @@ class FinalSpecController extends Controller
     public function get_offer_details($offerReferenceNo)
     {
 
-        $offer = Offer::where('reference_no' ,$offerReferenceNo)->first();
-        $item=Items::where('id' , $offer->item_id)->first();
-        $item_type=Item_type::where('id' , $offer->item_type_id)->first();
-        $tender_reference_no = Tender::where('reference_no',$offer->tender_reference_no)->first();
-        
-        $indent_reference_no = Indent::where('reference_no',$offer->indent_reference_no)->first();
+        $offer = Offer::where('reference_no', $offerReferenceNo)->first();
+        $item = Items::where('id', $offer->item_id)->first();
+        $item_type = Item_type::where('id', $offer->item_type_id)->first();
+        $tender_reference_no = Tender::where('reference_no', $offer->tender_reference_no)->first();
+
+        $indent_reference_no = Indent::where('reference_no', $offer->indent_reference_no)->first();
 
         $offer->suppliers = json_decode($offer->supplier_id, true);
 
         $suppliers = Supplier::whereIn('id',  $offer->suppliers)->get();
 
         return response()->json(['item' => $item, 'itemType' => $item_type, 'tenderReferenceNo' => $tender_reference_no, 'indentReferenceNo' => $indent_reference_no, 'suppliernames' => $suppliers]);
+    }
+    public function parameter($reference_number)
+    {
+        $reference_number = $reference_number;
+        $finalspec = FinalSpec::where('reference_no', $reference_number)->first();
+
+        $supplierAssignValue = SupplierSpecData::where('offer_reference_no', $finalspec->offer_reference_no)
+
+            ->leftJoin('parameter_groups', 'supplier_spec_data.parameter_group_id', '=', 'parameter_groups.id')
+            ->where('supplier_id', $finalspec->supplier_id)
+            // ->where('item_id', $offer->item_id)
+            ->select('supplier_spec_data.*', 'parameter_groups.name as group_name')
+            ->get();
+
+        $groupedData = $supplierAssignValue->groupBy('parameter_group_id');
+
+
+
+        return view('backend/finalspec/parameter', compact('supplierAssignValue','groupedData'));
     }
 }

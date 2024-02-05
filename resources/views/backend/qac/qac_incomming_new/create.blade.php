@@ -39,6 +39,7 @@
                             <div class="form-group d-flex">
                                 <label class="col-6 pt-2" for="">Select Section:</label>
                                 <select class="form-control" id="admin_section" name="admin_section">
+                                    <Option>Select Section</Option>
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach

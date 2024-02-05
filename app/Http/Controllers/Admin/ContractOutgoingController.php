@@ -9,9 +9,11 @@ use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Contract;
+use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -70,7 +72,7 @@ class ContractOutgoingController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.contract.contract_outgoing.outgoing', compact('contractNew','contractOnProcess','contractCompleted','contractDispatch'));
+        return view('backend.contract.contract_outgoing.outgoing', compact('contractNew', 'contractOnProcess', 'contractCompleted', 'contractDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -188,13 +190,13 @@ class ContractOutgoingController extends Controller
         $details = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'contracts.item_id', '=', 'items.id')
-            ->select('contracts.*', 'item_types.name as item_type_name','items.name as item_name', 'dte_managments.name as dte_managment_name')
+            ->select('contracts.*', 'item_types.name as item_type_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
             ->where('contracts.id', $id)
             ->where('contracts.status', 1)
             ->first();
-
-
-
+        // Attached File
+        $files = File::where('doc_type_id', 10)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -231,7 +233,7 @@ class ContractOutgoingController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id', 10)->latest()->first();
+            ->where('doc_type_id', 10)->latest()->first();
 
         //End blade forward on off section....
 
@@ -242,14 +244,24 @@ class ContractOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.contract.contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.contract.contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
     }
 
-    public function ContractTracking (Request $request)
+    public function ContractTracking(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
-        // $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 10; // 10 for contract from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number = $request->doc_reference_number;
@@ -259,7 +271,12 @@ class ContractOutgoingController extends Controller
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-        // dd( $desig_position);
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

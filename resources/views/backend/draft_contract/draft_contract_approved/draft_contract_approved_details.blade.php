@@ -16,9 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -100,7 +99,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of Draft Contract</h2>
+                <h2><b>Details of Draft Contract</b></h2>
             </div>
             <div style="display: flex">
 
@@ -114,6 +113,18 @@
                             </tr>
 
                             <tr>
+                                <th>Indent Reference No</td>
+                                <td>{{ $details->indent_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Offer Reference No</td>
+                                <td>{{ $details->offer_reference_no }}</td>
+                            </tr>
+                            <tr>
+                                <th>Final Spec Reference No</td>
+                                <td>{{ $details->final_spec_reference_no }}</td>
+                            </tr>
+                            <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
                             </tr>
@@ -122,14 +133,15 @@
                                 <td>{{ $details->received_date }}</td>
                             </tr>
                             <tr>
-                                <th>Referance Date</td>
+                                <th>Reference Date</td>
                                 <td>{{ $details->reference_date }}</td>
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
+
 
                             <tr>
                                 <th>Financial Year</td>
@@ -137,10 +149,14 @@
                             </tr>
 
 
-                        </table>
 
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}"
-                            target="_blank">Pdf Document</a>
+                        </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
+                        
+                        {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Pdf Document</a> --}}
                     </div>
                 </div>
 
@@ -167,12 +183,13 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <button class="btn btn-success" id="submitBtn"
+                                                    <button class="btn btn-success" id="form_submission_button"
                                                         style="height: 40px;">Forward</button>
                                                 </div>
                                             </div>
@@ -201,12 +218,13 @@
                                                         <option value="{{ $d->id }}">{{ $d->name }}</option>
                                                     @endforeach
                                                 </select>
+                                                <span id="error_designation" class="text-danger"></span>
                                             </div>
                                             <div class="col-md-4 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
-                                                <button class="btn btn-success" id="submitBtn"
+                                                <button class="btn btn-success" id="form_submission_button"
                                                     style="height: 40px;">Forward</button>
                                             </div>
                                         </div>
@@ -284,7 +302,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.draft_contract.draft_contract_approved.draft_contract_approved_index_js') --}}
+    @include('backend.draft_contract.draft_contract_approved.draft_contract_approved_index_js')
 
     <script>
         $(document).ready(function() {
@@ -296,10 +314,10 @@
             });
 
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-
+                disableButton()
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
@@ -307,7 +325,7 @@
                 swal({
                     title: `Are you sure to forward to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>?`,
                     text: "",
-                    type: 'warning',
+                    type: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -349,12 +367,14 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
-
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+                            error: function(response) {
+                                enableeButton()
+                                clear_error_field();
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
                             }
                         });
 

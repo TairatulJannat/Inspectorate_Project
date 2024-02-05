@@ -126,8 +126,8 @@
                             </tr>
 
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
                             <tr>
                                 <th>Attribute</td>
@@ -158,13 +158,13 @@
                                 <th>Nomenclature</td>
                                 <td>{{ $details->nomenclature }}</td>
                             </tr>
-                           
+
                             <tr>
                                 <th>Model</td>
                                 <td>{{ $details->model }}</td>
                             </tr>
                             <tr>
-                                
+
                                 <th>Country of Origin</td>
                                 <td>{{ $details->country_of_origin }}</td>
                             </tr>
@@ -174,10 +174,14 @@
                             </tr>
 
                         </table>
+                        {{-- Attached File start --}}
+                        @include('backend.files.file')
+                        {{-- Attached File end --}}
+                        
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
-                            target="_blank">Pdf Document</a>
+                        {{-- <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
+                            target="_blank">Pdf Document</a> --}}
                     </div>
                 </div>
 
@@ -204,12 +208,13 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <button class="btn btn-success" id="submitBtn"
+                                                    <button class="btn btn-success" id="form_submission_button"
                                                         style="height: 40px;">Forward</button>
                                                 </div>
                                             </div>
@@ -238,12 +243,13 @@
                                                         <option value="{{ $d->id }}">{{ $d->name }}</option>
                                                     @endforeach
                                                 </select>
+                                                <span id="error_designation" class="text-danger"></span>
                                             </div>
                                             <div class="col-md-4 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
                                             </div>
                                             <div class="col-md-4">
-                                                <button class="btn btn-success" id="submitBtn"
+                                                <button class="btn btn-success" id="form_submission_button"
                                                     style="height: 40px;">Forward</button>
                                             </div>
                                         </div>
@@ -321,7 +327,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_incomming_approved.indent_approved_index_js') --}}
+    @include('backend.indent.indent_incomming_approved.indent_approved_index_js')
 
     <script>
         $(document).ready(function() {
@@ -333,7 +339,7 @@
             });
 
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
 
@@ -386,12 +392,15 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                clear_error_field();
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
                             }
                         });
 

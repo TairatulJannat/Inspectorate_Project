@@ -16,9 +16,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
+
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
         .card-body {
@@ -96,7 +96,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
-                <h2>Details of PSI</h2>
+                <h2><b>Details of SI</b></h2>
             </div>
             <div style="display: flex">
 
@@ -109,6 +109,10 @@
                                 <td>{{ $details->reference_no }}</td>
                             </tr>
 
+                            <tr>
+                                <th>Contract Reference No</td>
+                                <td>{{ $details->contract_reference_no }}</td>
+                            </tr>
                             <tr>
                                 <th>User Directorate</td>
                                 <td>{{ $details->dte_managment_name }}</td>
@@ -123,19 +127,20 @@
                             </tr>
 
                             <tr>
-                                <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
                             <tr>
-                                <th>Name of Eqpt</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <th>Supplier</td>
+                                <td>{{ $details->firm_name_name }}</td>
                             </tr>
 
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
+
 
 
                         </table>
@@ -143,8 +148,9 @@
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a> --}}
                         {{-- <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                        {{-- additional file design start here --}}
+                        @include('backend.files.file')
+                        {{-- additional file design end here --}}
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -370,6 +376,7 @@
                             <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                             <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                            <input type="hidden" id="doc_type_id" value="11">
                             <div class="row text-center">
                                 <div class="col-6 align-self-end">
                                     <div class="input-group ">
@@ -405,7 +412,7 @@
                                 </div>
                             </div>
                             <div>
-                                <textarea  class="form-control my-2" name="subject" id="subject" placeholder="Subject"></textarea>
+                                <textarea class="form-control my-2" name="subject" id="subject" placeholder="Subject"></textarea>
                                 {{-- <input type="text" id="subject" class="form-control my-2" placeholder="Subject"> --}}
                             </div>
                             <div class="my-2">
@@ -497,6 +504,7 @@
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                                 <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <input type="hidden" id="doc_type_id" value="11">
                                 <div class="row text-center">
                                     <div class="col-6 align-self-end">
                                         <div class="input-group ">

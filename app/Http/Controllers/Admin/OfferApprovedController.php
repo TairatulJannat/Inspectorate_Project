@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
+use App\Models\File;
 use App\Models\FinancialYear;
 
 use App\Models\Item_type;
@@ -79,7 +80,7 @@ class OfferApprovedController extends Controller
                 ->count();
         }
 
-        return view('backend.offer.offer_incomming_approved.offer_approved_index', compact('offerNew','offerOnProcess','offerCompleted','offerDispatch'));
+        return view('backend.offer.offer_incomming_approved.offer_approved_index', compact('offerNew', 'offerOnProcess', 'offerCompleted', 'offerDispatch'));
     }
 
     public function all_data(Request $request)
@@ -157,7 +158,7 @@ class OfferApprovedController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id',5)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -198,6 +199,7 @@ class OfferApprovedController extends Controller
     {
 
         $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'offers.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
             ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
             ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
@@ -205,6 +207,7 @@ class OfferApprovedController extends Controller
             ->select(
                 'offers.*',
                 'item_types.name as item_type_name',
+                'items.name as item_name',
                 'offers.*',
                 'dte_managments.name as dte_managment_name',
                 'additional_documents.name as additional_documents_name',
@@ -213,7 +216,9 @@ class OfferApprovedController extends Controller
             )
             ->where('offers.id', $id)
             ->first();
-
+        // Attached File
+        $files = File::where('doc_type_id', 5)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $details->additional_documents = json_decode($details->additional_documents, true);
         $additional_documents_names = [];
 
@@ -241,7 +246,7 @@ class OfferApprovedController extends Controller
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
             ->whereIn('track_status', [1, 3])
-            ->where('doc_type_id',5)
+            ->where('doc_type_id', 5)
             ->whereNot(function ($query) {
                 $query->where('sender_designation.id', 7)
                     ->where('receiver_designation.id', 5)
@@ -272,17 +277,12 @@ class OfferApprovedController extends Controller
 
         //End close forward Status...
 
-
-     
-
         //Start blade forward on off section....
-        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id) ->where('doc_type_id',5)->latest()->first();
+        $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)->where('doc_type_id', 5)->latest()->first();
 
         //End blade forward on off section....
 
-
-
-        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden','supplier_names_names'));
+        return view('backend.offer.offer_incomming_approved.offer_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'supplier_names_names','files'));
     }
 
     public function offerTracking(Request $request)

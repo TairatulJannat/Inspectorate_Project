@@ -13,17 +13,7 @@
                 @csrf
                 <div class="card-body">
                     <div class=" header">
-                        {{-- <div class="col-md-3">
-                            <div class="form-group d-flex">
-                                <label class="col-6 pt-2" for="">Select Section:</label>
-                                <select class="form-control" id="admin_section" name="admin_section">
-                                    @foreach ($sections as $section)
-                                        <option value="{{ $section->id }}">{{ $section->name }}</option>
-                                    @endforeach
-                                </select>
-                                <span id="error_admin_section" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
+
                         <div class="col-md-2">
                             <div class="form-group">
                                 <a id="importExcelBtn" href="{{ url('admin/import-indent-spec-data-index') }}"
@@ -133,7 +123,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_id">Item</label>
+                                <label for="item_id">Nomenclature</label>
 
                                 <select class="form-control select2" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
@@ -224,7 +214,7 @@
                                 <span id="error_fin_year_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="nomenclature">Nomenclature</label>
                                 <input type="text" class="form-control" id="nomenclature" name="nomenclature"
@@ -232,7 +222,11 @@
 
                                 <span id="error_nomenclature" class="text-danger error_field"></span>
                             </div>
+
                         </div>
+
+
+                        </div> --}}
                         {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="make">Make</label>
@@ -240,6 +234,7 @@
                                 <span id="error_make" class="text-danger error_field"></span>
                             </div>
                         </div> --}}
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="model">Model</label>
@@ -282,13 +277,29 @@
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="doc_file">Upload Document</label>
-                                <input class="form-control" type="file" id="doc_file" name='doc_file'>
-                                <span id="doc_file" class="text-danger error_field"></span>
+
+                    </div>
+                </div>
+                <div  class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
+
+                    <div class="file-container">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control file-name" name="file_name[]"
+                                    placeholder="File Name" id="file_name_0">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input file" name="file[]" id="file_0">
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <a class="btn btn-primary" id="addFile">Add More File</a>
+
                     </div>
                 </div>
 
@@ -332,6 +343,15 @@
 
                 window.location.href = redirectUrl;
             });
+        });
+        let fileCount = 1;
+
+        $("#addFile").click(function() {
+            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            $(".file-container").append(newFileInput);
+
+            // Increment the fileCount for the next set of inputs
+            fileCount++;
         });
 
         //Start:: Update information

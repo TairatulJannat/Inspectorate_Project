@@ -131,7 +131,14 @@
                                 <select class="form-control" id="item_type_id" name="item_type_id">
 
                                     <option selected disabled value="">Please Select</option>
+                                    @if ($item)
+                                    @foreach ($item_types as $i_type)
+                                        <option value="{{ $i_type->id }}"
+                                            {{ $i_type->id == $contract->item_type_id ? 'selected' : '' }}>
+                                            {{ $i_type->name }}</option>
+                                    @endforeach
 
+                                @endif
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
@@ -139,11 +146,18 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_id">Item</label>
+                                <label for="item_id">Nomenclature</label>
 
                                 <select class="form-control select2" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
+                                    @if ($item)
+                                    @foreach ($item as $i)
+                                        <option value="{{ $i->id }}"
+                                            {{ $i->id == $contract->item_id ? 'selected' : '' }}>
+                                            {{ $i->name }}</option>
+                                    @endforeach
 
+                                @endif
                                 </select>
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
@@ -156,7 +170,14 @@
 
                                 <select class="form-control " id="supplier_id" name="supplier_id">
                                     <option value="">Please Select</option>
+                                    @if ($supplier)
+                                    @foreach ($supplier as $s)
+                                        <option value="{{ $s->id }}"
+                                            {{ $s->id == $contract->supplier_id ? 'selected' : '' }}>
+                                            {{ $s->firm_name }}</option>
+                                    @endforeach
 
+                                @endif
                                 </select>
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
@@ -165,7 +186,7 @@
                             <div class="form-group">
                                 <label for="contracted_value">Contracted Value</label>
                                 <input type="text" id="contracted_value" name="contracted_value"
-                                    class="form-control">
+                                    class="form-control" value="{{$contract->contracted_value?$contract->contracted_value:""}}">
 
                                 <span id="error_contracted_value" class="text-danger error_field"></span>
                             </div>
@@ -173,7 +194,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="currency_unit">Currency Unit</label>
-                                <input type="text" id="currency_unit" name="currency_unit" class="form-control">
+                                <input type="text" id="currency_unit" name="currency_unit" class="form-control" value="{{$contract->currency_unit?$contract->currency_unit:""}}">
 
                                 <span id="error_currency_unit" class="text-danger error_field"></span>
                             </div>
@@ -218,13 +239,35 @@
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="doc_file">Upload Document</label>
                                 <input class="form-control" type="file" id="doc_file" name='doc_file'>
                                 <span id="doc_file" class="text-danger error_field"></span>
                             </div>
+                        </div> --}}
+
+                    </div>
+                </div>
+                <div  class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
+
+                    <div class="file-container">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control file-name" name="file_name[]"
+                                    placeholder="File Name" id="file_name_0">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input file" name="file[]" id="file_0">
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <a class="btn btn-primary" id="addFile">Add More File</a>
 
                     </div>
                 </div>
@@ -246,6 +289,15 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
+
+        let fileCount = 1;
+        $("#addFile").click(function() {
+            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            $(".file-container").append(newFileInput);
+
+            // Increment the fileCount for the next set of inputs
+            fileCount++;
+        });
         $(document).ready(function() {
             $('.select2').select2();
         });

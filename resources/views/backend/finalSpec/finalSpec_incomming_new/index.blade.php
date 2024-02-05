@@ -103,15 +103,15 @@
                     <table class="table table-bordered yajra-datatable">
                         <thead>
                             <tr>
-                                <th>SL No</th>
+                                <th>Sl No</th>
                                 <th>Reference No</th>
                                 <th>Offer Reference No</th>
-                                <th>Name of Eqpt</th>
-                                <th>User Directorate</th>
+                                <th>Nomenclature</th>
+                                <th>User Dte</th>
                                 <th>Letter Receive Date</th>
-                                <th>Section Name</th>
-                                <th>Present state of spec</th>
-                                <th>Action</th>
+                                <th>Sec Name</th>
+                                <th>Present State Of Spec</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tfoot>
