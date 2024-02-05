@@ -16,12 +16,12 @@
                 <div class="card-body">
                     <div class=" header">
 
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             <div class="form-group">
                                 <a href="{{ url('admin/import-final-spec-data-index') }}" class="btn btn-success"
                                     id="importExcelBtn">Final Spec Import Excel</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -88,53 +88,19 @@
                             <div class="form-group">
                                 <label for="tender_reference_no">Tender Reference Number</label>
 
-
-                                    {{-- <option value="">Please Select</option> --}}
-
-
-                                     {{-- @foreach ($tender_reference_numbers as $tender_reference_no)
-                                    <option value="{{ $tender_reference_no->id }}"
-                                        {{ $tender_reference_no->id == $offer->tender_reference_no ? 'selected' : '' }}>{{ $tender_reference_no->reference_no }}</option>
-                                    @endforeach  --}}
                                 <input type="text" id="tender_reference_no" class="form-control"
                                 name="tender_reference_no"
                                 value="{{ $finalspec->tender_reference_no ? $finalspec->tender_reference_no : '' }}">
 
 
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
-                            </div> 
+                            </div>
                         </div>
 
-                        {{-- <div class="col-md-4">
+
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference Number</label>
-                                <input type="text" id="indent_reference_no" class="form-control"
-                                name="indent_reference_no"
-                                value="{{ $finalspec->indent_reference_no ? $finalspec->indent_reference_no : '' }}">
-
-
-                                    {{-- <option value="">Please Select</option>
-
-                                    {
-                                @foreach ($indent_reference_numbers as $indent_reference_no)
-                                    <option value="{{ $indent_reference_no->id }}"
-                                    {{ $indent_reference_no->id == $offer->indent_reference_no ? 'selected' : '' }}>{{ $indent_reference_no->reference_no }}</option>
-
-                                @endforeach --}}
-
-                                
-{{-- 
-                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
-                            </div>
-
-                        </div>  --}} 
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_reference_no">Indent Reference Number</label>
-                                {{-- <select class="form-control " id="indent_reference_no" name="indent_reference_no">
-                                    <option value="">Please Select</option>
-                                </select> --}}
 
                                 <input type="text" id="indent_reference_no" class="form-control"
                                     name="indent_reference_no"
@@ -203,8 +169,8 @@
 
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
-                                        <option value={{ $fin_year->id }} {{ $fin_year->id == $finalspec->fin_year_id ? 'selected' : '' }}>{{ $fin_year->year }} 
-                                            
+                                        <option value={{ $fin_year->id }} {{ $fin_year->id == $finalspec->fin_year_id ? 'selected' : '' }}>{{ $fin_year->year }}
+
                                         </option>
                                     @endforeach
 

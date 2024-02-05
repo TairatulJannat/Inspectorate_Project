@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DocType;
 use App\Models\DocumentTrack;
+use App\Models\FinancialYear;
 use App\Models\Indent;
 use App\Models\Offer;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -14,8 +16,45 @@ class SearchController extends Controller
     public function index()
     {
         $doc_types = DocType::all();
-        return view('backend.search.index', compact('doc_types'));
+        $financial_year = FinancialYear::all();
+        return view('backend.search.index', compact('doc_types', 'financial_year'));
     }
+
+
+
+    public function all_data(Request $request)
+    {
+        try {
+
+
+            $reference_no = $request->reference_no ? $request->reference_no : '';
+            $doc_type_id =  $request->doc_type_id ? $request->doc_type_id : '';
+            $fy = $request->fy ? $request->fy : '';
+
+            $data = null;
+            $doc_type = DocType::find($doc_type_id);
+            $modelClass = 'App\\Models\\' . $doc_type->name;
+
+            if (class_exists($modelClass)) {
+                $data = $modelClass::all();
+            } else {
+                throw ValidationException::withMessages(['doc_type' => 'Invalid document type.']);
+            }
+
+            // Process $data further if needed
+
+            // Return or use $data as needed
+            return response()->json(['data' => $data, 'docTypeId' => $doc_type_id]);
+        } catch (ValidationException $e) {
+            // Handle validation errors
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
 
     public function searchView(Request $request)
 
@@ -23,6 +62,8 @@ class SearchController extends Controller
 
         $docTypeId = $request->docTypeId;
         $docReferenceNumber = $request->docReferenceNumber;
+        $doc_type = DocType::find($docTypeId);
+        $modelClass = 'App\\Models\\' . $doc_type->name;
         $Model = "";
         try {
             $data_seen = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number', $docReferenceNumber)
@@ -59,7 +100,7 @@ class SearchController extends Controller
                     'receiver_designation.name as receiver_designation_name'
                 )
                 ->get();
-            
+
             $data_approved = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number',  $docReferenceNumber)
                 ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
                 ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -135,7 +176,5 @@ class SearchController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Document Not Found'], 500);
         }
-       
     }
-    
 }
