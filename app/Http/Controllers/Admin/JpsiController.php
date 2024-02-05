@@ -431,6 +431,12 @@ class jpsiController extends Controller
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Jpsi::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
 
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
+
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

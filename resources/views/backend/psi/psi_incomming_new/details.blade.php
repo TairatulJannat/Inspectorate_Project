@@ -185,7 +185,7 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <span class="error_receiver_designation text-danger"></span>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -354,11 +354,16 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                clear_error_field();
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
 
-                                $('.error_receiver_designation').text(xhr.responseJSON.error);
-                                toastr.error(xhr.responseJSON.error);
                             }
                         });
 
