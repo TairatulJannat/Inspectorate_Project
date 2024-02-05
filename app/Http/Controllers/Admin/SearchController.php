@@ -20,12 +20,9 @@ class SearchController extends Controller
         return view('backend.search.index', compact('doc_types', 'financial_year'));
     }
 
-
-
     public function all_data(Request $request)
     {
         try {
-
 
             $reference_no = $request->reference_no ? $request->reference_no : '';
             $doc_type_id =  $request->doc_type_id ? $request->doc_type_id : '';
@@ -64,7 +61,8 @@ class SearchController extends Controller
         $docReferenceNumber = $request->docReferenceNumber;
         $doc_type = DocType::find($docTypeId);
         $modelClass = 'App\\Models\\' . $doc_type->name;
-        $Model = "";
+        $table= $doc_type->table_name;
+
         try {
             $data_seen = DocumentTrack::where('doc_type_id', $docTypeId)->where('doc_reference_number', $docReferenceNumber)
                 ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
@@ -122,38 +120,38 @@ class SearchController extends Controller
                 )
                 ->get();
 
-            if ($docTypeId == 3) {
-                $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
-                    ->leftJoin('additional_documents', 'indents.additional_documents', '=', 'additional_documents.id')
-                    ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
-                    ->leftJoin('items', 'indents.item_id', '=', 'items.id')
+            if ($docTypeId) {
+                $details =   $modelClass::leftJoin('item_types', '$table.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('dte_managments', '$table.sender', '=', 'dte_managments.id')
+                    ->leftJoin('fin_years', '$table.fin_year_id', '=', 'fin_years.id')
+                    ->leftJoin('items', '$table.item_id', '=', 'items.id')
                     ->select(
-                        'indents.*',
+                        '$table.*',
                         'item_types.name as item_type_name',
                         'dte_managments.name as dte_managment_name',
                         'items.name as item_name',
                         'additional_documents.name as additional_documents_name',
                         'fin_years.year as fin_year_name'
-                    )->where('indents.reference_no', $docReferenceNumber)
+                    )->where('$table.reference_no', $docReferenceNumber)
                     ->first();
-            } elseif ($docTypeId == 5) {
-                $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
-                    ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
-                    ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
-                    ->leftJoin('items', 'offers.item_id', '=', 'items.id')
-                    ->select(
-                        'offers.*',
-                        'item_types.name as item_type_name',
-                        'offers.*',
-                        'dte_managments.name as dte_managment_name',
-                        'items.name as item_name',
-                        'additional_documents.name as additional_documents_name',
-                        'fin_years.year as fin_year_name'
-                    )->where('offers.reference_no', $docReferenceNumber)
-                    ->first();
-            }
+            } 
+            // elseif ($docTypeId == 5) {
+            //     $details = Offer::leftJoin('item_types', 'offers.item_type_id', '=', 'item_types.id')
+            //         ->leftJoin('dte_managments', 'offers.sender', '=', 'dte_managments.id')
+            //         ->leftJoin('additional_documents', 'offers.additional_documents', '=', 'additional_documents.id')
+            //         ->leftJoin('fin_years', 'offers.fin_year_id', '=', 'fin_years.id')
+            //         ->leftJoin('items', 'offers.item_id', '=', 'items.id')
+            //         ->select(
+            //             'offers.*',
+            //             'item_types.name as item_type_name',
+            //             'offers.*',
+            //             'dte_managments.name as dte_managment_name',
+            //             'items.name as item_name',
+            //             'additional_documents.name as additional_documents_name',
+            //             'fin_years.year as fin_year_name'
+            //         )->where('offers.reference_no', $docReferenceNumber)
+            //         ->first();
+            // }
 
 
 

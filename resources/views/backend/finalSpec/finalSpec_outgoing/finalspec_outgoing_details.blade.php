@@ -159,7 +159,8 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
+                        <a  class="btn btn-success mt-3 btn-parameter"
+                        href="{{ url('admin/final_spec/parameter') }}/{{  $details->reference_no }}">Parameter</a>
                     
 
                         @if ($cover_letter)

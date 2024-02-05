@@ -162,7 +162,7 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                        <a  class="btn btn-success mt-3 btn-parameter"
                             href="{{ url('admin/final_spec/parameter') }}/{{  $details->reference_no }}">Parameter</a>
 
                         {{-- @if ($desig_id != 1)

@@ -473,7 +473,7 @@ class FinalSpecController extends Controller
             // ->where('item_id', $offer->item_id)
             ->select('supplier_spec_data.*', 'parameter_groups.name as group_name')
             ->get();
-
+// dd( $supplierAssignValue);
         $groupedData = $supplierAssignValue->groupBy('parameter_group_id');
 
 
