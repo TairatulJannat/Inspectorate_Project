@@ -271,7 +271,7 @@ class FinalSpecApprovedController extends Controller
         $doc_type_id = 6; //...... 6 for Final Spec from finalspecs table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
         $remarks = $request->remarks;
-        $doc_reference_number = $request->doc_reference_number;
+        $doc_reference_number =htmlspecialchars_decode($request->doc_reference_number);
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();

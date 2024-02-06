@@ -102,6 +102,7 @@
                 <form action="" method=" " id="searchItemParametersButton" autocomplete="off">
                     @csrf
                     <div class="row p-3">
+                        
                         <div class="col-md-2 text-center mt-2">
                             <h6>Doc Type: </h6>
                         </div>
@@ -109,7 +110,7 @@
                             <div class="mb-2">
                                 <select class="form-control select2 item-type-id" id="docTypeId" name="doc-type-id"
                                     style="width: 100% !important;">
-                                    <option value="" selected disabled>Select Document Type</option>
+                                    <option value="">Select Document Type</option>
                                     @foreach ($doc_types as $doc_type)
                                         <option value="{{ $doc_type->doc_serial }}">{{ $doc_type->name }}</option>
                                     @endforeach
@@ -152,7 +153,7 @@
                     </div>
                 </form>
             </div>
-            <div id='tableData'>
+            <div id='tableData' class="m-4">
 
             </div>
             <div class="search_body">
@@ -235,7 +236,7 @@
 
         function tableData(data, doc_type_id) {
 
-            html = `<table class="table">
+            html = `<table class="table table-bordered">
                         <thead>
                             <tr>
                             <th scope="col">#</th>
@@ -315,6 +316,8 @@
                                 docDetailsHtml = indent_details(details)
                             } else if (docTypeId == 5) {
                                 docDetailsHtml = offer_details(details)
+                            } else {
+                                docDetailsHtml = doc_details(details)
                             }
 
                             $('#indent_details').html(docDetailsHtml)
@@ -502,6 +505,80 @@
 
         }
 
+        function doc_details(details) {
+            html = '';
+            html += `<div class="current_status">
+                        <div><h5 class="m-0">Current Status :</h5></div>`;
+
+            if (details.status == 0) {
+                html += `<div><h4 class="m-0 bg-success">New Arrival</h4></div>`;
+            } else if (details.status == 1) {
+                html += `<div><h4 class="m-0 bg-info">Vetting On Process</h4></div>`;
+            } else if (details.status == 2) {
+                html += `<div><h4 class="m-0 bg-primary">Completed</h4></div>`;
+            } else if (details.status == 3) {
+                html += `<div><h4 class="m-0 bg-secondary">New Arrival</h4></div>`;
+            } else if (details.status == 4) {
+                html += `<div><h4 class="m-0 bg-danger">Dispatched</h4></div>`;
+            } else {
+                html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
+            }
+
+            html += `</div>`;
+
+
+            html += `<table class="table table-bordered ">
+                            <tr>
+                                <th>Referance No</td>
+                                <td>${details.reference_no }</td>
+                            </tr>`
+
+            if (details.offer_reference_no) {
+                html += ` <tr>
+                                <th>offer Referance No</td>
+                                <td>${details.offer_reference_no }</td>
+                            </tr>`
+            }
+
+            html += `<tr>
+                                <th>User Directorate</td>
+                                <td>${details.dte_management_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Receive Date</td>
+                                <td>${details.received_date }</td>
+                            </tr>
+
+                            <tr>
+                                <th>Item Type</td>
+                                <td>${details.item_type_name}</td>
+                            </tr>
+
+
+                            <tr>
+                                <th>Nomenclature</td>
+                                <td>${details.item_name}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Financial Year</td>
+                                <td>${details.fin_year_name }</td>
+                            </tr>
+
+
+
+                        </table>`
+
+            // html += `<a class="btn btn-success mt-3 btn-parameter"
+        //             href="javascript:void(0)"
+        //             onclick="redirectToParameter(${details.id})">Parameter</a>
+
+        //         `;
+
+
+            return html;
+
+        }
 
         function redirectToParameter(indentId) {
             var url = "{{ route('admin.indent/parameter', ['indent_id' => '']) }}" + indentId;
