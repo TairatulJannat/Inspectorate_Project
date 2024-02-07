@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminSection;
 use Illuminate\Http\Request;
-
-
-use App\Models\Section;
+use Illuminate\Validation\ValidationException;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use DataTables;
@@ -24,41 +22,17 @@ class SupplierController extends Controller
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $suppliers = Supplier::where('insp_id', $inspectorate_id)->get();
         // try {
-           
+
 
         // } catch (\Exception $e) {
         //     return back()->withError('Failed to retrieve Item Type.');
         // }
-        
+
 
         return view('backend.supplier.index', compact('suppliers'));
     }
 
-    // public function getAllData()
-    // {
-    //     $admin_id = Auth::user()->id;
-    //     $inspectorate_id = Auth::user()->inspectorate_id;
-    //     $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
 
-    //     $items = Items::select('id', 'name', 'item_type_id', 'attribute')
-    //         ->with('item_type')
-    //         ->whereIn('section_id', $section_ids)
-    //         ->where('inspectorate_id', $inspectorate_id )
-    //         ->get();
-
-    //     return DataTables::of($items)
-    //         ->addColumn('DT_RowIndex', function ($item) {
-    //             return $item->id; // You can use any unique identifier here
-    //         })
-    //         ->addColumn('item_type_name', function ($item) {
-    //             return $item->item_type ? $item->item_type->name : '';
-    //         })
-    //         ->make(true);
-    // }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
@@ -70,152 +44,104 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
 
-       
-       
+        $item = new Supplier();
+        $item->firm_name = $request->firm_name;
+        $item->principal_name = $request->principal_name;
+        $item->address_of_principal = $request->address_of_principal;
+        $item->address_of_local_agent = $request->address_of_local_agent;
+        $item->insp_id = Auth::user()->inspectorate_id;
 
-            $item = new Supplier();
-            $item->firm_name = $request->firm_name;
-            $item->principal_name = $request->principal_name;
-            $item->address_of_principal = $request->address_of_principal;
-            $item->insp_id = Auth::user()->inspectorate_id;
-            
-            $item->contact_no = $request->contact_no;
-            $item->email = $request->email;
-            $item->created_at = Carbon::now();
-            $item->updated_at = Carbon::now();
-            $item->created_by = Auth::user()->id;
-            if ($item->save()) {
-                return response()->json([
-                    'isSuccess' => true,
-                    'Message' => "Item Saved successfully!"
-                ], 200);
-            } else {
-                return response()->json([
-                    'isSuccess' => false,
-                    'Message' => "Something went wrong!"
-                ], 200);
-            }
-        
+        $item->contact_no = $request->contact_no;
+        $item->email = $request->email;
+        $item->created_at = Carbon::now();
+        $item->updated_at = Carbon::now();
+        $item->created_by = Auth::user()->id;
+        if ($item->save()) {
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => "Item Saved successfully!"
+            ], 200);
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => "Something went wrong!"
+            ], 200);
+        }
+
         return response()->json([
-                    'isSuccess' => false,
-                    'Message' => "Please check the inputs!",
-                     
-                 ], 200);
+            'isSuccess' => false,
+            'Message' => "Please check the inputs!",
+
+        ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(Request $request)
-    // {
-    //     try {
-    //         $id = $request->id;
-    //         $item = Items::findOrFail($id);
+    public function edit($id)
+    {
+        $supplier = Supplier::find($id);
+        if (!$supplier) {
+            return response()->json(['error' => 'Supplier not found'], 404);
+        }
 
-    //         return response()->json([
-    //             'id' => $item->id,
-    //             'inspectorate_id' => $item->inspectorate_id,
-    //             'name' => $item->name,
-    //             'item_type_id' => $item->item_type->name,
-    //             'attribute' => $item->attribute,
-    //             'created_at' => $item->created_at,
-    //             'updated_at' => $item->updated_at,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Item Type not found'], 404);
-    //     }
-    // }
+        return response()->json(['supplier' => $supplier]);
+    }
+    public function update(Request $request)
+    {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(Request $request)
-    // {
-    //     try {
-    //         $id = $request->id;
-    //         $item = Items::findOrFail($id);
-    //         return response()->json($item);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Item not found'], 404);
-    //     }
-    // }
+        // Validate the request data
+        try {
+            // Validate the request data
+            $request->validate([
+                'update_id' => 'required|exists:suppliers,id',
+                'editfirm_name' => 'required|string',
+                'editprincipal_name' => 'required|string',
+                'editaddress_of_local_agent' => 'required|string',
+                'editaddress_of_principal' => 'required|string',
+                'editcontact_no' => 'required|string',
+                'editemail' => 'required|email',
+                // Add other validation rules for your fields
+            ]);
+        } catch (ValidationException $e) {
+            // Return validation errors if validation fails
+            return response()->json(['errors' => $e->errors()], 422);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request)
-    // {
+        // Find the supplier by ID
+        $supplier = Supplier::find($request->update_id);
 
-    //     $validator = Validator::make($request->all(), [
-    //         'edit_name' => ['required', 'string', 'max:255'],
-    //         'edit_item_type_id' => ['required', 'exists:item_types,id'],
-    //         'edit_attribute' => ['required', 'string', 'max:255'],
-    //         'editItemSection' => ['required','max:255'],
-    //     ]);
+        if (!$supplier) {
+            return response()->json(['error' => 'Supplier not found'], 404);
+        }
 
-    //     if ($validator->passes()) {
-    //         try {
-    //             $id = $request->edit_item_id;
-    //             $item = Items::findOrFail($id);
+        // Update the supplier fields based on the request data
+        $supplier->firm_name = $request->editfirm_name;
+        $supplier->principal_name = $request->editprincipal_name;
+        $supplier->address_of_local_agent = $request->editaddress_of_local_agent;
+        $supplier->address_of_principal = $request->editaddress_of_principal;
+        $supplier->contact_no = $request->editcontact_no;
+        $supplier->email = $request->editemail;
 
-    //             $item->name = $request->edit_name;
-    //             $item->item_type_id = $request->edit_item_type_id;
-    //             $item->inspectorate_id = $request->edit_item_inspectorate_id;
-    //             $item->attribute = $request->edit_attribute;
-    //             $item->section_id = $request->editItemSection;
+        // Add other fields as needed
 
-    //             if ($item->save()) {
-    //                 return response()->json([
-    //                     'isSuccess' => true,
-    //                     'Message' => "Item updated successfully!"
-    //                 ], 200);
-    //             } else {
-    //                 return response()->json([
-    //                     'isSuccess' => false,
-    //                     'Message' => "Something went wrong while updating!"
-    //                 ], 200);
-    //             }
-    //         } catch (\Exception $e) {
-    //             return response()->json([
-    //                 'isSuccess' => false,
-    //                 'Message' => "Item not found!"
-    //             ], 404);
-    //         }
-    //     } else {
-    //         return response()->json([
-    //             'isSuccess' => false,
-    //             'Message' => "Please check the inputs!",
-    //             'error' => $validator->errors()->toArray(),
-    //         ], 200);
-    //     }
-    // }
+        // Save the changes
+        $supplier->save();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    // public function destroy(Request $request)
-    // {
-    //     $id = $request->id;
+        // Return a success response
+        return response()->json(['success' => 'Supplier updated successfully']);
+    }
+    public function destroy($id)
+    {
+        $supplier = Supplier::findOrFail($id);
 
-    //     $item = Items::find($id);
-
-    //     if ($item) {
-    //         if ($item->delete()) {
-    //             return response()->json([
-    //                 'isSuccess' => true,
-    //                 'Message' => 'Item deleted successfully!'
-    //             ], 200); // Status code here
-    //         } else {
-    //             return response()->json([
-    //                 'isSuccess' => false,
-    //                 'Message' => 'Failed to delete Item!'
-    //             ], 200); // Status code here
-    //         }
-    //     } else {
-    //         return response()->json([
-    //             'isSuccess' => false,
-    //             'Message' => 'Item not found!'
-    //         ], 200); // Status code here
-    //     }
-    // }
+        if ($supplier->delete()) {
+            return response()->json([
+                'isSuccess' => true,
+                'Message' => 'supplier deleted successfully!',
+            ], 200);
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'Message' => 'Something went wrong!',
+            ], 500);
+        }
+    }
 }

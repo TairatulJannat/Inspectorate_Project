@@ -12,7 +12,7 @@ $currentControllerName = Request::segment(2);
     }
 
     #mainnav {
-        height: 100vh;
+        height: calc(100vh - 78px);
         overflow-y: scroll;
         scrollbar-width: thin;
         scrollbar-color: #333 #e2e2e2;

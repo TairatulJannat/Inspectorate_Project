@@ -20,7 +20,9 @@ use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Models\AssignParameterValue;
 use App\Models\File;
+use App\Models\SupplierSpecData;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -125,7 +127,7 @@ class FinalSpecController extends Controller
                 $query = FinalSpec::leftJoin('items', 'final_specs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'final_specs.sec_id', '=', 'sections.id')
-                    ->select('final_specs.*','items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('final_specs.*', 'items.name as item_name', 'final_specs.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('final_specs.id', $FinalSpecs)
                     ->where('final_specs.status', 0)
                     ->get();
@@ -267,6 +269,7 @@ class FinalSpecController extends Controller
         $dte_managments = Dte_managment::where('status', 1)->get();
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+
 //  dd($item_types );
         // if ($item_types) {
         //     // dd($item_types); 
@@ -280,12 +283,15 @@ class FinalSpecController extends Controller
         $item = Items::where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->first();
+
         $fin_years = FinancialYear::all();
         $supplier=Supplier::where('id', $finalspec->supplier_id)->first();
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::all();
+
         return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'supplier', 'offer_reference_numbers'));
+
     }
 
     public function update(Request $request)
@@ -409,7 +415,7 @@ class FinalSpecController extends Controller
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 6; //...... 5 for indent from offers table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
-        $doc_reference_number = $request->doc_reference_number;
+        $doc_reference_number =htmlspecialchars_decode($request->doc_reference_number);
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
@@ -480,4 +486,25 @@ class FinalSpecController extends Controller
 
         return response()->json(['item' => $item, 'itemType' => $item_type, 'tenderReferenceNo' => $tender_reference_no, 'indentReferenceNo' => $indent_reference_no, 'suppliernames' => $suppliers]);
     }
+
+    public function parameter($reference_number)
+    {
+        $reference_number = $reference_number;
+        $finalspec = FinalSpec::where('reference_no', $reference_number)->first();
+
+        $supplierAssignValue = SupplierSpecData::where('offer_reference_no', $finalspec->offer_reference_no)
+
+            ->leftJoin('parameter_groups', 'supplier_spec_data.parameter_group_id', '=', 'parameter_groups.id')
+            ->where('supplier_id', $finalspec->supplier_id)
+            // ->where('item_id', $offer->item_id)
+            ->select('supplier_spec_data.*', 'parameter_groups.name as group_name')
+            ->get();
+// dd( $supplierAssignValue);
+        $groupedData = $supplierAssignValue->groupBy('parameter_group_id');
+
+
+
+        return view('backend/finalspec/parameter', compact('supplierAssignValue','groupedData'));
+    }
 }
+

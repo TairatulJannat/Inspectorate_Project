@@ -26,7 +26,10 @@
             justify-content: center;
 
         }
-
+        .next_page div p{
+            padding: 0;
+            margin: 0;
+        }
         .header-box .content {
             display: flex;
             justify-content: end;
@@ -107,7 +110,7 @@
 
                             </div>
                             <div>
-                                ৬. দ্রব্যাদি পরিদর্শনের জন্য অর্পন/প্রেরন রেলযোগে করা
+                                *৬. দ্রব্যাদি পরিদর্শনের জন্য অর্পন/প্রেরন রেলযোগে করা
                                 হইল- {{ $inote_letter->visiting_process }}
 
                             </div>
@@ -118,13 +121,13 @@
 
                             </div>
                             <div>
-                                ৮. পূর্ন/অংশ/বাদ বাকি অংশ অর্পন করা হইল- {{ $inote_letter->status }}
+                                *৮. পূর্ন/অংশ/বাদ বাকি অংশ অর্পন করা হইল- {{ $inote_letter->status }}
 
                             </div>
                         </div>
                         <div class="col-6 ">
                             <div>
-                                ৯. দ্রব্যাদি পরিভাষিত সময়ে অথবা যোগ্য কর্তৃপক্ষ কর্তৃক বর্ধিত
+                                *৯. দ্রব্যাদি পরিভাষিত সময়ে অথবা যোগ্য কর্তৃপক্ষ কর্তৃক বর্ধিত
                                 সময়ে সরবরাহ করা হইয়াছে/না হইয়াছে/শাস্তি প্রদানের জন্য ক্রয় অফিসারকে জ্ঞাত করা
                                 হইল- {{ $inote_letter->punishment }}
 
@@ -158,7 +161,7 @@
                                 <td> ক্যাট/পার্ট নং</td>
                                 <td> দ্রব্যাদির বিবরণ</td>
                                 <td> হিসাবের একক</td>
-                                <td> †একক</td>
+                                <td> একক</td>
                                 <td> পরিদর্শনের জন্য অর্পন করা হইল
                                 </td>
                                 <td> গ্রহন করা হইল
@@ -215,10 +218,10 @@
                             <tr class="">
                                 <td colspan="13">
                                     <div class="d-flex justify-content-between p-2">
-                                        <div>উপরোক্ত দ্রব্যাদি পরিদর্শন করিয়া উহার ফলাফল প্রত্যেকটি দ্রব্যের বিগরীত
+                                        <div>উপরোক্ত দ্রব্যাদি পরিদর্শন করিয়া উহার ফলাফল প্রত্যেকটি দ্রব্যের বিরীত
                                             উল্লেখপূবর্ক প্রত্যয়ন করা হইল।
                                             <br>
-                                            স্টেশন- Dhaka Cantonment তারিখ-11 Apr 2023
+                                            স্টেশন-   &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;তারিখ-
                                         </div>
                                         <div><br> ------------------------------<br> পদনামসহ পরিদর্শকের সাক্ষর</div>
                                     </div>
@@ -233,7 +236,7 @@
 
                 <div class="footer-box  ">
                     <div>
-                        *অপ্রয়োজনীয় বিষয় বাদ দিতে হইবে। &nbsp;&nbsp;&nbsp; *পরিসংখ্যান সেকশন কতৃর্ক শুধুমাত্র কপি নং
+                        *অপ্রয়োজনীয় বিষয় বাদ দিতে হইবে। & পরিসংখ্যান সেকশন কতৃর্ক শুধুমাত্র কপি নং
                         ৬ এ
                         পূরণ করিবে।
                         <br>
@@ -253,28 +256,28 @@
     <hr>
 
     <div class="print-container col-sm-12 col-xl-12 ">
-        <div class="  inote_boc">
+        <div class="inote_boc">
             <div class="p-2">
                 <div class="header-box">
-                    <div class="title">
-                        <b> 2 পরিদর্শন পত্র </b>
+                    <div class="title mt-3">
+                        <b class="text-decoration-underline"> ২। সরবরাহকারীর জন্য </b>
                     </div>
-                    <div>
-                        <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    <div class="mt-3">
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ৯০% আগাম অর্থ পাওয়ার জন্য সরবরাহকারীকে পরিদর্শন পত্র কপি নং ২, ৪ এবং ৫ সহ ৯০% আগাম বিল নং ও তাং দিয়া বিল পরিশোধের জন্য পেশ করিতে হইবে।</p>
                     </div>
 
                 </div>
-                <div class="header-box">
-                    <div class="title">
-                        <b> 3 পরিদর্শন পত্র </b>
+                <div class="header-box next_page">
+                    <div class="title mt-3">
+                        <b class="text-decoration-underline"> ৩। প্রাপ্তি প্রত্যয়ন </b>
                     </div>
-                    <div>
-                        <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    <div class="mt-3">
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ১০০% পুরা অর্থ পরিশোধের জন্য গ্রাহক অফিস কর্তৃক পরিদর্শন পত্র কপি নং ১, ২, ৪ এবং ৫; কপি নং ২ এবং ৫ ৯০% আগাম এবং বাকি ১০% অর্থ পরিশোধের জন্য পূরন করিতে হইবে।</p>
                     </div>
-                    <div>
-                        <p> 1. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-                        <p> 2. bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</p>
-                        <p> 3. ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc</p>
+                    <div class="mt-3">
+                        <p> ১। &nbsp; &nbsp; &nbsp; &nbsp; প্রত্যয়ন করা হইতেছে যে, পশ্চাৎভাগে গ্রহনকৃত দ্রব্যাদি নিম্নলিখিত ব্যতিক্রম ছাড়া ভাল অবস্থায় পাওয়া গিয়াছে।</p>
+                        <p> ২। &nbsp; &nbsp; &nbsp; &nbsp; দ্রব্যাদি হিসাবভুক্ত করা হইল গ্রহন রশিদ নং ................................................... আমার পরিবহন/মজুদ ইত্যাদি (পুরন করিতে হইবে) .......................................................................... <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;মাস হিসাবে সময়কাল .........................................</p>
+                        <p> ৩। চুক্তিপত্রের শর্তানুযায়ী ঘাটতি/ভাংগা/অথবা ভাড়ার জন্য ক্ষতি সরবরাহকারীর নিকট হইতে আদায়কল্পে গ্রাহক অফিস কর্তৃক প্রস্তাবের বিবরণী।</p>
 
                     </div>
 
@@ -288,11 +291,11 @@
                             <tr>
                                 <td class="col-1">
                                     আইটেম</td>
-                                <td class="col-3"> দ্রব্যাদি (আর্মির জন্য)</td>
-                                <td class="col-2"> ক্যাট/পার্ট নং</td>
-                                <td class="col-1"> দ্রব্যাদির বিবরণ</td>
-                                <td class="col-3"> হিসাবের একক</td>
-                                <td class="col-2"> †একক</td>
+                                <td class="col-3"> কারনসমুহ</td>
+                                <td class="col-2"> পরিমান</td>
+                                <td class="col-1"> আইটেম</td>
+                                <td class="col-3"> কারনসমুহ</td>
+                                <td class="col-2"> পরিমান</td>
 
                             </tr>
                             <tr>
@@ -309,30 +312,44 @@
                     </table>
                 </div>
 
-                <div class="footer-box  ">
-                    <div>
-                        Station .....................Date................
+                <div class="footer-box  d-flex">
+                    <div class="col-6">
+                        ষ্টেশন ........................................................... তাং .............................................................
                         <br>
-                        Aria Circel......................................
+                        এরিয়া সার্কেল....................................................................................................................
+                    </div>
+                    <div class="col-6 mt-4 mb-4">
+                        স্বাক্ষর ..........................................
+                        <br>
+                        পদনাম .........................................
                     </div>
 
                 </div>
                 <div class="header-box">
                     <div class="title">
-                        <b> 4 পরিদর্শন পত্র </b>
+                        <b class="text-decoration-underline"> ৪। কপিসমূহ বিতরণ </b>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <p>1.mmmmmmmmmmmmmmmmmm</p>
-                            <p>2.cccccccccccccccccc</p>
-                            <p>3.fffffffffffffffffff</p>
+                    <div class="row next_page mt-3">
+                        <div class="col-1"></div>
+                        <div class="col-5">
+                            <p class="mb-3"><strong>কপি নং</strong></p>
+                            <p>১। "এ্যাকাউন্ট অফিস কপি নং ১"</p>
+                            <p>২। "এ্যাকাউন্ট অফিস কপি নং ২"</p>
+                            <p>*৩। "সরবরাহকারীর অফিস কপি"</p>
+                            <p>৪। গ্রাহকের কপি যখন সরবরাহকারীর দ্রব্যাদি প্রেরন করিবে শুধুমাত্র তাহাকে দিতে হইবে</p>
+                            <p>৫। এ্যাকাউন্ট অফিসারের জন্য অতিরিক্ত কপি সরবরাহকারীকে দিতে হইবে।</p>
+                            <p>*এইরুপ চিহ্নিত কপিসহ দ্রব্যাদি বাতিল হইলে প্রদান করা উচিত।</p>
+                            <p>পিপিডি শাখা-৩১১৩৯/৮৯-৯০/(এম)-০৩-০৬-১৯৯০-২,৫০০ প্যাড।</p>
                         </div>
                         <div class="col-6">
-                            <p>1.mmmmmmmmmmmmmmmmmm</p>
-                            <p>2.cccccccccccccccccc</p>
-                            <p>3.fffffffffffffffffff</p>
+                            <p class="mb-3"><strong>কপি নং</strong></p>
+                            <p>*৬। ক্রয় অফিসারের কপি (পরিদর্শক পাঠাইবে যখন সে পরিদর্শন করে।</p>
+                            <p>*৭। পরিদর্শকের অফিস কপি।</p>
+                            <p>৮। গ্রাহকের অগ্রিম কপি (পরিদর্শক পাঠাইবে)।</p>
+                            <p>৯। গ্রাহকের কপি।</p>
+                            <p>*১০। পরিদর্শক কর্তৃপক্ষের কপি (যখন পরিদর্শন পরিদর্শক কর্তৃপক্ষের দ্বারা করা হয় না</p>
                         </div>
-
+                        <div class="col-1"></div>
                     </div>
 
                 </div>

@@ -281,7 +281,7 @@ class OutgoingFinalSpecController extends Controller
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 6; // 6 for doc type Final Spec from doctype table column doc_serial
         $doc_ref_id = $request->doc_ref_id;
-        $doc_reference_number = $request->doc_reference_number;
+        $doc_reference_number = htmlspecialchars_decode($request->doc_reference_number);
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
