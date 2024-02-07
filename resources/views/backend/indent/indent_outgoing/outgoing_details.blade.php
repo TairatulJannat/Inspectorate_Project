@@ -16,16 +16,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
-
-        .card-body {
-
-            margin: 30px 15px 30px 0
-        }
-
         .table thead {
             background-color: #1B4C43 !important;
             border-radius: 10px !important;
@@ -183,7 +176,7 @@
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                         {{-- <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
-                        
+
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"

@@ -43,40 +43,45 @@
                     data: 'reference_no',
                     name: 'reference_no',
 
-                   
+
+                },
+                {
+                    data: 'indent_number',
+                    name: 'indent_number',
+
                 },
                 {
                     data: 'item_name',
                     name: 'item_name',
-                   
+
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                   
+
                 },
 
 
                 {
                     data: 'indent_received_date',
                     name: 'indent_received_date',
-                   
+
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                   
+
                 },
                 {
                     data: 'qty',
                     name: 'qty',
-                   
+
                 },
 
                 {
                     data: 'status',
                     name: 'status',
-                   
+
                 },
 
                 {

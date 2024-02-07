@@ -42,8 +42,8 @@ class SearchController extends Controller
 
             if (class_exists($modelClass)) {
 
-                $data = $modelClass::leftjoin('items',  $table . 'item_id', 'items.id')
-                    ->leftJoin('fin_years',  $table . 'fin_year_id', '=', 'fin_years.id')
+                $data = $modelClass::leftjoin('items',  $table . '.item_id', 'items.id')
+                    ->leftJoin('fin_years',  $table . '.fin_year_id', '=', 'fin_years.id')
                     ->select(
                         $table . '.*',
                         'items.name as item_name',

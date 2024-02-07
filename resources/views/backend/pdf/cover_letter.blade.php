@@ -27,7 +27,6 @@
             top: -80px;
             left: 0;
             right: 0;
-            height: 50px;
             text-align: center;
             padding: 10px;
         }
@@ -56,16 +55,19 @@
 
         .refs_body_1 {
             margin-top: 4px;
+
         }
 
         .refs_body_1 p {
             padding: 0px;
             margin: 0px;
+
         }
 
         .signature p {
             padding: 0px;
             margin: 0px;
+
         }
     </style>
 </head>
@@ -77,7 +79,7 @@
         </header>
 
         <div style="overflow: auto;">
-            <div style="float: left; width: 40%; position:fixed; top:100px;">{{ $cover_letter->letter_reference_no }}
+            <div style="float: left; width: 40%; position:fixed; top:105px; ">{{ $cover_letter->letter_reference_no }}
             </div>
             <div class="header" style="float: right; width: 30%;">
                 <p>{{ $cover_letter->inspectorate_name }}</p>
@@ -89,12 +91,12 @@
             </div>
 
             <div style="clear: both; text-decoration: underline;">
-                <h4 style="padding:0px; margin-top:5px">{{ $cover_letter->subject }}</h4>
+                <h4 style="padding:0px; margin-top:8px ; text-align: justify;">{{ $cover_letter->subject }}</h4>
             </div>
             <div style="padding:0px; margin:0px">
                 <p style="padding:0px; margin:0px">Refs:</p>
-                <div class='refs_body_1'>{!! $cover_letter->body_1 !!}</div>
-                <div>
+                <div class='refs_body_1' style="text-align: justify;">{!! $cover_letter->body_1 !!}</div>
+                <div style="text-align: justify;">
                     {!! $cover_letter->body_2 !!}
                 </div>
             </div>
