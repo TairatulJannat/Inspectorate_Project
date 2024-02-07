@@ -317,6 +317,8 @@ class QacController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->qac_received_date;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->provationally_status = $request->provationally_status;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;

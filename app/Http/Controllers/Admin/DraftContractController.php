@@ -323,6 +323,8 @@ class DraftContractController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->draft_contract_received_date;
         $data->reference_date = $request->draft_contract_reference_date;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->supplier_id = $request->supplier_id;
         $data->final_spec_reference_no = $request->final_spec_reference_no;

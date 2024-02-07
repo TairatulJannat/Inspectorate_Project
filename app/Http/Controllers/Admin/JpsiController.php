@@ -320,6 +320,8 @@ class jpsiController extends Controller
         $data->contract_reference_no = $request->contract_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->offer_reference_no = $request->offer_reference_no;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->item_id = $request->item_id;
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;

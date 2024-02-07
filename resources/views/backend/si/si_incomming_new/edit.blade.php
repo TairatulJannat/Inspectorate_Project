@@ -69,10 +69,29 @@
                                 <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_no">Contract Number</label>
+                                <input type="text" class="form-control" id="contract_no" name="contract_no"
+                                    value="{{ $si->contract_no ? $si->contract_no : '' }}">
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_date">Contract Date</label>
+                                <input type="date" class="form-control" id="contract_date" name="contract_date"
+                                    value="{{ $si->contract_date ? $si->contract_date : '' }}">
+                                <span id="error_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
 
-                                <label for="contract_reference_no">Contract Reference No.</label>
+                                <label for="contract_reference_no"> Contract Reference No.</label>
                                 <select class="form-control " id="contract_reference_no" name="contract_reference_no">
 
                                     <option value="">Please Select</option>
@@ -89,7 +108,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
                                 <select class="form-control" id="item_type_id" name="item_type_id" required>
@@ -101,9 +120,28 @@
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_type_id">Item Type</label>
+                                <select class="form-control" id="item_type_id" name="item_type_id">
+
+                                    <option selected disabled value="">Please Select</option>
+                                    @if ($item_types)
+                                    
+                                        <option value="{{ $item_types->id }}"
+                                            {{ $item_types->id == $si->item_type_id ? 'selected' : '' }}>
+                                            {{ $item_types->name }}</option>
+
+                                @endif
+                                </select>
+                                <span id="error_item_type_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_id">Nomenclature</label>
 
@@ -115,9 +153,29 @@
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_id">Nomenclature</label>
+
+                                <select class="form-control" id="item_id" name="item_id">
+                                    {{-- <option value="">Please Select</option> --}}
+                                    @if ($item)
+                                    
+                                         <option value="{{ $item->id }}"
+                                        {{ $item->id == $si->item_id ? 'selected' : '' }}>
+                                        {{ $item->name }}</option>
+                                     @endif
+                                </select>
+
+                                <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference Number</label>
                                 {{-- <select class="form-control " id="offer_reference_no" name="offer_reference_no">
@@ -132,7 +190,7 @@
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference Number</label>
                                 {{-- <select class="form-control " id="indent_reference_no" name="indent_reference_no">

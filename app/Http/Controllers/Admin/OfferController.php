@@ -285,6 +285,8 @@ class OfferController extends Controller
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->offer_reference_date = $request->offer_reference_date;
+        $data->contract_date = $request->contract_date;
+        $data->contract_no = $request->contract_no;
         $data->tender_reference_no = $request->tender_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->attribute = $request->attribute;
