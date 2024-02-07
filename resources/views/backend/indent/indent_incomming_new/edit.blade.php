@@ -83,6 +83,28 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="contract_no">Contract Number</label>
+                                <input type="text" class="form-control" id="contract_no"
+                                    name="contract_no"
+                                    value="{{ $indent->contract_no ? $indent->contract_no : '' }}">
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_date">Contract Date</label>
+                                <input type="date" class="form-control" id="contract_date"
+                                    name="contract_date"
+                                    value="{{ $indent->contract_date ? $indent->contract_date : '' }}">
+                                <span id="error_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <label for="additional_documents">Additional Documents</label>
                                 <select class="form-control select2" id="additional_documents" name="additional_documents[]"
                                     multiple>

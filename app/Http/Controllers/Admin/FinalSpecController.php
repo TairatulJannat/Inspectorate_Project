@@ -19,6 +19,7 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\Models\AssignParameterValue;
 use App\Models\File;
 use App\Models\SupplierSpecData;
@@ -266,29 +267,31 @@ class FinalSpecController extends Controller
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $dte_managments = Dte_managment::where('status', 1)->get();
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
-        //  dd($item_types );
-        if ($item_types) {
-            // dd($item_types);
-            $itemTypeName = $item_types->name;
-        } else {
-            $itemTypeName = Null;
-        }
 
-        $item = Items::where('id', $finalspec->item_id)->first();
+//  dd($item_types );
+        // if ($item_types) {
+        //     // dd($item_types); 
+        //      $itemTypeName = $item_types->name;
+            
+        // } else{
+        //     $itemTypeName = Null;
+        // }
+        
+        // $item = Items::where('id', $finalspec->item_id)->first();
+        $item = Items::where('inspectorate_id', $inspectorate_id)
+            ->whereIn('section_id', $section_ids)
+            ->first();
 
-        if ($item) {
-            $itemName = $item->name;
-            // dd($itemName );
-        } else {
-            $itemName = Null;
-        }
         $fin_years = FinancialYear::all();
-        $suppliers = Supplier::all();
+        $supplier=Supplier::where('id', $finalspec->supplier_id)->first();
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::all();
-        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers', 'itemName', 'itemTypeName'));
+
+        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'supplier', 'offer_reference_numbers'));
+
     }
 
     public function update(Request $request)
@@ -304,6 +307,8 @@ class FinalSpecController extends Controller
         $data->offer_reference_no = $request->offer_reference_no;
         $data->tender_reference_no = $request->tender_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->supplier_id = $request->supplier_id;
@@ -392,6 +397,19 @@ class FinalSpecController extends Controller
 
     public function finalSpecTracking(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -402,6 +420,12 @@ class FinalSpecController extends Controller
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
@@ -451,6 +475,7 @@ class FinalSpecController extends Controller
         $offer = Offer::where('reference_no', $offerReferenceNo)->first();
         $item = Items::where('id', $offer->item_id)->first();
         $item_type = Item_type::where('id', $offer->item_type_id)->first();
+        // dd($item);
         $tender_reference_no = Tender::where('reference_no', $offer->tender_reference_no)->first();
 
         $indent_reference_no = Indent::where('reference_no', $offer->indent_reference_no)->first();
@@ -461,6 +486,7 @@ class FinalSpecController extends Controller
 
         return response()->json(['item' => $item, 'itemType' => $item_type, 'tenderReferenceNo' => $tender_reference_no, 'indentReferenceNo' => $indent_reference_no, 'suppliernames' => $suppliers]);
     }
+
     public function parameter($reference_number)
     {
         $reference_number = $reference_number;
@@ -481,3 +507,4 @@ class FinalSpecController extends Controller
         return view('backend/finalspec/parameter', compact('supplierAssignValue','groupedData'));
     }
 }
+

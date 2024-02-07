@@ -66,13 +66,34 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="draft_contract_reference_date">Draft Contract Reference Date</label>
-                                <input type="date" class="form-control" id="draft_contract_reference_date"
-                                    name="draft_contract_reference_date"
+                                <label for="reference_date">Draft Reference Date</label>
+                                <input type="date" class="form-control" id="reference_date"
+                                    name="reference_date"
                                     value="{{ $draft_contract->reference_date ? $draft_contract->reference_date : '' }}">
-                                <span id="error_draft_contract_reference_date" class="text-danger error_field"></span>
+                                <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_no">Contract Number</label>
+                                <input type="text" class="form-control" id="contract_no"
+                                    name="contract_no"
+                                    value="{{ $draft_contract->contract_no ? $draft_contract->contract_no : '' }}">
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_date">Contract Date</label>
+                                <input type="date" class="form-control" id="contract_date"
+                                    name="contract_date"
+                                    value="{{ $draft_contract->contract_date ? $draft_contract->contract_date : '' }}">
+                                <span id="error_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="final_spec_reference_no">Final Spec Reference No.</label>
