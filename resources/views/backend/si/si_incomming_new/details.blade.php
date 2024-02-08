@@ -181,7 +181,7 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <span class="error_receiver_designation text-danger"></span>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -285,7 +285,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
+    @include('backend.si.si_incomming_new.index_js')
 
     <script>
         $(document).ready(function() {
@@ -350,11 +350,16 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                enableeButton()
+                                clear_error_field();
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
 
-                                $('.error_receiver_designation').text(xhr.responseJSON.error);
-                                toastr.error(xhr.responseJSON.error);
                             }
                         });
 

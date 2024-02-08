@@ -85,6 +85,24 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="contract_no">Contract Number</label>
+                                <input type="text" class="form-control" id="contract_no"
+                                    name="contract_no"
+                                    value="{{ $jpsi->contract_no ? $jpsi->contract_no : '' }}">
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_date">Contract Date</label>
+                                <input type="date" class="form-control" id="contract_date"
+                                    name="contract_date"
+                                    value="{{ $jpsi->contract_date ? $jpsi->contract_date : '' }}">
+                                <span id="error_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
 
 
@@ -127,7 +145,7 @@
                             <div class="form-group">
                                 <label for="supplier_id">Supplier</label>
                                 <select name="supplier_id" id="supplier_id" class="form-control">
-                                    <option value="">Selete Supplier</option>
+                                    <option value="">Select Supplier</option>
                                     @if ($supplier)
                                         <option value="{{ $supplier->id }}"
                                             {{ $supplier->id == $jpsi->supplier_id ? 'selected' : '' }}>

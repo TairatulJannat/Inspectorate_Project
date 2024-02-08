@@ -53,7 +53,7 @@ class CoverLetterController extends Controller
             $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
             return $pdf->stream('cover_letter.pdf');
         }
-        // $fontPath = public_path('fonts');
+        $fontPath = public_path('fonts');
 
         // // Create an mPDF object
         // $mpdf = new Mpdf([
@@ -69,8 +69,8 @@ class CoverLetterController extends Controller
         // $html = view('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->render();
         // $mpdf->WriteHTML($html);
 
-        // // Output or download the PDF
-        // $mpdf->Output('sample.pdf', 'D');
+        // Output or download the PDF
+        $mpdf->Output('sample.pdf', 'D');
     }
 
     public function edit(Request $request)

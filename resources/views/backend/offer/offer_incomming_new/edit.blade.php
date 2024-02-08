@@ -71,6 +71,28 @@
                                 <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_no">Contract Number</label>
+
+                                <input type="text" class="form-control" id="contract_no"
+                                name="contract_no"
+                                value="{{ $offer->contract_no ? $offer->contract_no : '' }}">
+
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_date">Contract  Date</label>
+
+                                <input type="date" class="form-control" id="contract_date"
+                                    name="contract_date"
+                                    value="{{ $offer->contract_date ? $offer->contract_date : '' }}">
+
+                                <span id="error_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -177,10 +199,17 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
-                                <select class="form-control" id="item_type_id" name="item_type_id">
+                                {{-- <select class="form-control" id="item_type_id" name="item_type_id">
 
                                     <option selected disabled value="">Please Select</option>
 
+                                </select> --}}
+                                <select class="form-control" id="item_type_id" name="item_type_id">
+                                    @if ($item_types)
+                                    @foreach ($item_types as $item_type )
+                                        <option value="{{ $item_type->id == $offer->item_type_id ? $item_type->id : '' }}">{{$item_type->name}} </option>   
+                                    @endforeach
+                                    @endif
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
@@ -189,10 +218,16 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_id">Nomenclature</label>
-
-
-                                <select class="form-control" id="item_id" name="item_id">
+{{-- 
+                                 <select class="form-control" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
+                                </select> --}}
+                                <select class="form-control" id="item_id" name="item_id">
+                                    @if ($items)
+                                    @foreach ($items as $item )
+                                        <option value="{{ $item->id == $offer->item_id ? $item->id : '' }}">{{$item->name}} </option>   
+                                    @endforeach
+                                    @endif
                                 </select>
 
                                 <span id="error_item_id" class="text-danger error_field"></span>

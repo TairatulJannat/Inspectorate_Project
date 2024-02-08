@@ -325,6 +325,8 @@ class IndentController extends Controller
         $data->estimated_value = $request->estimated_value;
         $data->indent_received_date = $request->indent_received_date;
         $data->indent_reference_date = $request->indent_reference_date;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->attribute = $request->attribute;
         $data->spare = $request->spare;

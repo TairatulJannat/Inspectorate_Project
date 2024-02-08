@@ -18,6 +18,7 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -272,12 +273,15 @@ class OfferController extends Controller
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
-        $item = Items::where('id', $offer->item_id)->first();
+        // dd($item_types);
+        $items = Items::where('id', $offer->item_id)->get();
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
+
         $indent_reference_numbers = Indent::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->get();
         return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers'));
+
     }
 
     public function update(Request $request)
@@ -287,6 +291,8 @@ class OfferController extends Controller
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->offer_reference_date = $request->offer_reference_date;
+        $data->contract_date = $request->contract_date;
+        $data->contract_no = $request->contract_no;
         $data->tender_reference_no = $request->tender_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->attribute = $request->attribute;
@@ -404,6 +410,19 @@ class OfferController extends Controller
 
     public function offerTracking(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -415,6 +434,12 @@ class OfferController extends Controller
         $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;

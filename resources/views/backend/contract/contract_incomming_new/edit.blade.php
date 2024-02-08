@@ -73,6 +73,26 @@
                                 <span id="error_contract_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_no">Contract Number</label>
+                                <input type="text" class="form-control" id="contract_no"
+                                    name="contract_no"
+                                    value="{{ $contract->contract_no ? $contract->contract_no : '' }}">
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contract_date">Contract Date</label>
+                                <input type="date" class="form-control" id="contract_date"
+                                    name="contract_date"
+                                    value="{{ $contract->contract_date ? $contract->contract_date : '' }}">
+                                <span id="error_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="draft_contract_reference_no">Draft Contract Reference No.</label>

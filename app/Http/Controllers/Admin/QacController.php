@@ -317,6 +317,8 @@ class QacController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->qac_received_date;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->provationally_status = $request->provationally_status;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
@@ -403,10 +405,12 @@ class QacController extends Controller
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
+            return response()->json(['error' => $validator->errors()], 422);
         }
 
 
@@ -421,6 +425,12 @@ class QacController extends Controller
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Qac::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
