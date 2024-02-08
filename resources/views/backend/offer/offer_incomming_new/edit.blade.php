@@ -224,9 +224,9 @@
                                 </select> --}}
                                 <select class="form-control" id="item_id" name="item_id">
                                     @if ($items)
-                                    @foreach ($items as $item )
-                                        <option value="{{ $item->id == $offer->item_id ? $item->id : '' }}">{{$item->name}} </option>   
-                                    @endforeach
+                                    
+                                        <option value="{{ $items->id == $offer->item_id ? $items->id : '' }}">{{$items->name}} </option>   
+                           
                                     @endif
                                 </select>
 
