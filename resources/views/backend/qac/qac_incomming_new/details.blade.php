@@ -15,17 +15,11 @@
         .card-header {
             display: flex;
             justify-content: center;
-            align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
-        .card-body {
-
-            margin: 30px 15px 30px 0
-        }
-
+       
         .table thead {
             background-color: #1B4C43 !important;
             border-radius: 10px !important;
@@ -128,30 +122,27 @@
 
                             <tr>
                                 <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
+                                <td>{{ $details->item_type_name }}</td>
                             </tr>
                             <tr>
                                 <th>Nomenclature</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
 
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
-
-
 
                         </table>
 
-                         @if ($desig_id != 1)
+                        {{-- @if ($desig_id != 1)
                              <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
-                         @endif
-
-
-
-
+                         @endif --}}
+                        {{-- additional file design start here --}}
+                        @include('backend.files.file')
+                        {{-- additional file design end here --}}
 
                     </div>
                 </div>

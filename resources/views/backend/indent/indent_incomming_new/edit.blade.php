@@ -50,7 +50,15 @@
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_date">Reference Date</label>
+                                <input type="date" class="form-control" id="indent_reference_date"
+                                    name="indent_reference_date"
+                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date : '' }}">
+                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="indent_number">Indent Number</label>
@@ -59,6 +67,15 @@
                                     value="{{ $indent->indent_number ? $indent->indent_number : '' }}">
 
                                 <span id="error_indent_number" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_date">Indent Date</label>
+                                <input type="date" class="form-control" id="indent_date"
+                                    name="indent_date"
+                                    value="{{ $indent->indent_date ? $indent->indent_date : '' }}">
+                                <span id="error_indent_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -71,17 +88,9 @@
                                 <span id="error_indent_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_reference_date">Indent Reference Date</label>
-                                <input type="date" class="form-control" id="indent_reference_date"
-                                    name="indent_reference_date"
-                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date : '' }}">
-                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
 
-                        <div class="col-md-4">
+
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_no">Contract Number</label>
                                 <input type="text" class="form-control" id="contract_no"
@@ -89,17 +98,9 @@
                                     value="{{ $indent->contract_no ? $indent->contract_no : '' }}">
                                 <span id="error_contract_no" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="contract_date">Contract Date</label>
-                                <input type="date" class="form-control" id="contract_date"
-                                    name="contract_date"
-                                    value="{{ $indent->contract_date ? $indent->contract_date : '' }}">
-                                <span id="error_contract_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
+
 
 
 

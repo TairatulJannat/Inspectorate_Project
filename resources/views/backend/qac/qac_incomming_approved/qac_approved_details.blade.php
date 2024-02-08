@@ -16,14 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
-        }
-
-        .card-body {
-
-            margin: 30px 15px 30px 0
+            color: #1B4C43;
         }
 
         .table thead {
@@ -47,7 +41,6 @@
             border-radius: 6px;
             padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
-
         }
 
         h4 {
@@ -96,7 +89,6 @@
 @section('active_menu', 'Details')
 @section('content')
 
-
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
             <div class="card-header">
@@ -139,8 +131,9 @@
 
                         </table>
 
-                        <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}"
-                            target="_blank">Pdf Document</a>
+                       {{-- additional file design start here --}}
+                       @include('backend.files.file')
+                       {{-- additional file design end here --}}
                     </div>
                 </div>
 
