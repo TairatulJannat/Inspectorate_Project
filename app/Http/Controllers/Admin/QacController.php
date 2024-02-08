@@ -99,7 +99,7 @@ class QacController extends Controller
             if (Auth::user()->id == 92) {
                 $query = Qac::leftJoin('items', 'qacs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id') 
+                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
                     ->where('qacs.status', 0)
                     ->select('qacs.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
@@ -150,7 +150,7 @@ class QacController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            // $query->orderBy('id', 'asc');
+            $query=$query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())

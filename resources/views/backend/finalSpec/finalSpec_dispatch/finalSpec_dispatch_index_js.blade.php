@@ -8,9 +8,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            "order": [
-                [1, 'desc']
-            ],
+           
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -37,51 +35,51 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                   
+
                 },
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-                   
+
                 },
                 {
                     data: 'offer_reference_no',
                     name: 'offer_reference_no',
-                   
+
                 },
                 {
                     data: 'item_type_name',
                     name: 'item_type_id',
-                   
+
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                    
+
                 },
 
 
                 {
                     data: 'final_spec_receive_Ltr_dt',
                     name: 'final_spec_receive_Ltr_dt',
-                    
+
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                    
+
                 },
 
                 {
                     data: 'status',
                     name: 'status',
-                   
+
                 },
 
                 {
                     data: 'action',
                     name: 'action',
-                   
+
                 },
 
             ],
@@ -98,7 +96,7 @@
     // End:: All Data
 
     // Start:: save information
-   
+
     // End:: save information
 
     //Start:: Update information
@@ -149,7 +147,7 @@
     //         }
     //     });
     // })
-    
+
 
     function form_reset() {
         document.getElementById("search_form").reset();
