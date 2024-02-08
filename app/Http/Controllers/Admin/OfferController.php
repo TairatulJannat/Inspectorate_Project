@@ -274,13 +274,13 @@ class OfferController extends Controller
         $additional_documnets = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
         // dd($item_types);
-        $items = Items::where('id', $offer->item_id)->get();
+        $items = Items::where('id', $offer->item_id)->first();
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
 
         $indent_reference_numbers = Indent::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->get();
-        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers'));
+        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers','items'));
 
     }
 
