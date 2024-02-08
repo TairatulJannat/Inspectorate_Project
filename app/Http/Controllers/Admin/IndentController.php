@@ -153,6 +153,8 @@ class IndentController extends Controller
                 //......End for showing data for receiver designation
             }
 
+            $query=$query->sortByDesc('id');
+
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -338,7 +340,6 @@ class IndentController extends Controller
 
         $data->save();
 
-
         //Multipule File Upload in files table
         $save_id = $data->id;
         if ($save_id) {
@@ -454,7 +455,7 @@ class IndentController extends Controller
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
         }
-        
+
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
