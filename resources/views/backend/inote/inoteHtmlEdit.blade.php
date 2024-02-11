@@ -1,5 +1,5 @@
 @extends('backend.app')
-@section('title', 'I-Note')
+@section('title', 'Edit I-Note')
 @push('css')
     <style>
         .inote_boc {
@@ -27,7 +27,7 @@
         }
     </style>
 @endpush
-@section('main_menu', 'I-Note')
+@section('main_menu', 'Edit I-Note')
 @section('active_menu', 'Layout')
 @section('content')
     <div class="col-sm-12 col-xl-12">
