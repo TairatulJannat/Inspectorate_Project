@@ -7,6 +7,7 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Qac;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -197,6 +198,9 @@ class QacDispatchController extends Controller
             )
             ->where('qacs.id', $id)
             ->first();
+            // Attached File
+        $files = File::where('doc_type_id', 7)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
 
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
@@ -259,7 +263,7 @@ class QacDispatchController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.qac.qac_dispatch.qac_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden'));
+        return view('backend.qac.qac_dispatch.qac_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden', 'files'));
     }
 
     public function QacDispatchTracking (Request $request)
@@ -276,7 +280,7 @@ class QacDispatchController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-        
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();

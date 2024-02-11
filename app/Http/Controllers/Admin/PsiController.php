@@ -285,7 +285,6 @@ class PsiController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
-
         // $selected_document =$indent->additional_documents;
         $contracts = Contract::all();
         $item_types = Item_type::where('status', 1)

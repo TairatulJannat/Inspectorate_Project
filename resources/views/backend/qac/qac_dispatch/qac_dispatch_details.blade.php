@@ -20,10 +20,6 @@
             color: #1B4C43;
         }
 
-        .card-body {
-
-            margin: 30px 15px 30px 0
-        }
 
         .table thead {
             background-color: #1B4C43 !important;
@@ -137,8 +133,9 @@
 
                         </table>
 
-                        <a class="btn btn-info mt-3 btn-parameter text-light"
-                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
+                        {{-- additional file design start here --}}
+                        @include('backend.files.file')
+                        {{-- additional file design end here --}}
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                             class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                             Letter</a>

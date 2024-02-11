@@ -144,7 +144,7 @@ class OfferController extends Controller
                 //......End for showing data for receiver designation
             }
             $query=$query->sortByDesc('id');
-            
+
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -291,8 +291,6 @@ class OfferController extends Controller
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->offer_reference_date = $request->offer_reference_date;
-        $data->contract_date = $request->contract_date;
-        $data->contract_no = $request->contract_no;
         $data->tender_reference_no = $request->tender_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->attribute = $request->attribute;
@@ -301,7 +299,6 @@ class OfferController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
-        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->fin_year_id = $request->fin_year_id;
 
         // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');

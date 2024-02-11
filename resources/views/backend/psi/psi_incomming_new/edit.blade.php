@@ -70,7 +70,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="contract_no">Contract Number</label>
                                 <input type="text" class="form-control" id="contract_no" name="contract_no"
@@ -79,8 +79,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
+                        <div class="col-md-4 d-none">
+                            <div class="form-group ">
                                 <label for="contract_date">Contract Date</label>
                                 <input type="date" class="form-control" id="contract_date" name="contract_date"
                                     value="{{ $psi->contract_date ? $psi->contract_date : '' }}">
