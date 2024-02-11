@@ -343,7 +343,7 @@
             $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-                disableButton()
+                // disableButton()
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
@@ -406,10 +406,7 @@
                             }
                         });
 
-                    } else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    } {
+                    }else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

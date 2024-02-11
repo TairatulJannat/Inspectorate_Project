@@ -165,7 +165,7 @@ class FinalSpecController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 6)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 6)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -273,13 +273,13 @@ class FinalSpecController extends Controller
 
 //  dd($item_types );
         // if ($item_types) {
-        //     // dd($item_types); 
+        //     // dd($item_types);
         //      $itemTypeName = $item_types->name;
-            
+
         // } else{
         //     $itemTypeName = Null;
         // }
-        
+
         // $item = Items::where('id', $finalspec->item_id)->first();
         $item = Items::where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)

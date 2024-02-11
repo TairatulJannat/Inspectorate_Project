@@ -39,7 +39,7 @@
                         <div class="col-md-3">
                             <div class="form-group d-flex">
                                 <label class="col-6 pt-2" for="">Select Section:</label>
-                                <select class="form-control" id="admin_section" name="admin_section">
+                                <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
                                     <Option>Select Section</Option>
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
@@ -61,7 +61,7 @@
                                     <option value="">Please Select</option>
 
                                     @foreach ($dte_managments as $dte)
-                                    
+
                                         <option value="{{ $dte->id }}">{{ $dte->name }}</option>
                                     @endforeach
 

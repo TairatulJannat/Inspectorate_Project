@@ -507,7 +507,7 @@
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                                 <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
-                                
+
                                 <div class="row text-center">
                                     <div class="col-6 align-self-end">
                                         <div class="input-group ">
@@ -771,10 +771,7 @@
                             }
                         });
 
-                    }else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    } {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',
