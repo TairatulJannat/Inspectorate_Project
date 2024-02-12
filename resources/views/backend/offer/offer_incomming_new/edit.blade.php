@@ -178,16 +178,11 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>
-                                {{-- <select class="form-control" id="item_type_id" name="item_type_id">
-
-                                    <option selected disabled value="">Please Select</option>
-
-                                </select> --}}
                                 <select class="form-control" id="item_type_id" name="item_type_id">
                                     @if ($item_types)
-                                    @foreach ($item_types as $item_type )
-                                        <option value="{{ $item_type->id == $offer->item_type_id ? $item_type->id : '' }}">{{$item_type->name}} </option>
-                                    @endforeach
+                                 
+                                        <option value="{{ $item_types->id == $offer->item_type_id ? $item_types->id : '' }}">{{$item_types->name}} </option>   
+                                    
                                     @endif
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
@@ -197,10 +192,6 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_id">Nomenclature</label>
-{{--
-                                 <select class="form-control" id="item_id" name="item_id">
-                                    <option value="">Please Select</option>
-                                </select> --}}
                                 <select class="form-control" id="item_id" name="item_id">
                                     @if ($items)
 
