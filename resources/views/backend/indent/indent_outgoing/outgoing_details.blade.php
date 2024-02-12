@@ -416,7 +416,22 @@
                     <div class="row">
                         <form action="" id="myForm">
                             @csrf
-                            <div class="col-12 text-center">RESTRICTED</div>
+                            <div class="col-4 text-center">
+                                <div class="col-12 d-flex justify-content-center">
+                                    <div class="col-2">
+                                        <select name="page_size" class="form-control bg-success text-light" id="page_size">
+                                            <option value="A4">Select Page Size</option>
+                                            <option value="A4">A4</option>
+                                            <option value="Legal">Legal</option>
+                                            <option value="Letter">Letter</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" id="header_footer" class="form-control "
+                                             placeholder="Header Here">
+                                    </div>
+                                </div>
+                            </div>
                             <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                             <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
@@ -536,7 +551,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-12 text-center">RESTRICTED</div>
+                            {{-- <div class="col-12 text-center">RESTRICTED</div> --}}
 
                             <div>
                                 <button type="submit" class="btn btn-success"> Save </button>
@@ -566,7 +581,21 @@
                         <div class="row">
                             <form action="" id="editForm">
                                 @csrf
-                                <div class="col-12 text-center">RESTRICTED</div>
+
+                                <div class="col-12 d-flex justify-content-center">
+                                    <div class="col-2">
+                                        <select name="page_size" class="form-control bg-success text-light" id="page_size">
+                                            <option value="A4" >Select Page Size</option>
+                                            <option value="A4" {{$cover_letter->header_footer=='A4'?'selected':''}}>A4</option>
+                                            <option value="Legal" {{$cover_letter->header_footer=='Legal'?'selected':''}}>Legal</option>
+                                            <option value="Letter" {{$cover_letter->header_footer=='Letter'?'selected':''}}>Letter</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" id="header_footer" class="form-control "
+                                            value="{{ $cover_letter->header_footer }}" placeholder="Header Here">
+                                    </div>
+                                </div>
                                 <input type="hidden" id="editId" value="{{ $cover_letter->id }}">
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
@@ -682,7 +711,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 text-center">RESTRICTED</div>
+                                {{-- <div class="col-12 text-center">RESTRICTED</div> --}}
 
                                 <div>
                                     <button type="submit" class="btn btn-primary"> Update </button>
