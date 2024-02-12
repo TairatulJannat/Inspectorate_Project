@@ -16,15 +16,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #ffff;
+            color: #1B4C43;
         }
 
-        .card-body {
 
-            margin: 30px 15px 30px 0
-        }
 
         .table thead {
             background-color: #1B4C43 !important;

@@ -64,31 +64,22 @@
 
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="contract_no">Contract Number</label>
-                                <input type="text" class="form-control" id="contract_no" name="contract_no"
-                                    value="{{ $finalspec->contract_no ? $finalspec->contract_no : '' }} ">
-                                <span id="error_contract_no" class="text-danger error_field"></span>
-                            </div>
 
-                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="contract_date">Contract Date</label>
-                                <input type="date" class="form-control" id="contract_date"
-                                    name="contract_date"
-                                    value="{{ $finalspec->contract_date ? $finalspec->contract_date : '' }}">
-                                <span id="error_contract_date" class="text-danger error_field"></span>
+                                <label for="final_spec_receive_Ltr_dt">Final Spec Receive Date</label>
+                                <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
+                                    name="final_spec_receive_Ltr_dt" value="{{ $finalspec->final_spec_receive_Ltr_dt ? $finalspec->final_spec_receive_Ltr_dt : '' }} ">
+                                <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
 
-                                <label for="offer_reference_no">Offer Reference Number</label>
-                                <select class="form-control " id="offer_reference_no" name="offer_reference_no">
+                                <label for="offer_reference_no">Offer Reference No</label>
+                                <select class="form-control select2" id="offer_reference_no" name="offer_reference_no">
 
                                     <option value="">Please Select</option>
 
@@ -106,13 +97,10 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="tender_reference_no">Tender Reference Number</label>
-
+                                <label for="tender_reference_no">Tender Reference No</label>
                                 <input type="text" id="tender_reference_no" class="form-control"
                                 name="tender_reference_no"
                                 value="{{ $finalspec->tender_reference_no ? $finalspec->tender_reference_no : '' }}">
-
-
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -138,11 +126,7 @@
                                     @if ($supplier)
                                     <option value="{{ $supplier->id == $finalspec->supplier_id ? $supplier->id : '' }}">{{$supplier->firm_name}} </option>
                                     @endif
-
-
                                 </select>
-                                {{-- <input type="text" id="supplier_id" class="form-control" name="supplier_id"
-                                    value="{{ $si->supplier_id ? $si->supplier_id : '' }}"> --}}
 
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
@@ -156,7 +140,7 @@
 
                                     <option selected disabled value="">Please Select</option>
                                     @if ($item_types)
-                                    
+
                                         <option value="{{ $item_types->id }}"
                                             {{ $item_types->id == $finalspec->item_type_id ? 'selected' : '' }}>
                                             {{ $item_types->name }}</option>
@@ -167,7 +151,7 @@
                             </div>
                         </div>
 
-                        
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -176,7 +160,7 @@
                                 <select class="form-control" id="item_id" name="item_id">
                                     {{-- <option value="">Please Select</option> --}}
                                     @if ($item)
-                                    
+
                                          <option value="{{ $item->id }}"
                                         {{ $item->id == $finalspec->item_id ? 'selected' : '' }}>
                                         {{ $item->name }}</option>

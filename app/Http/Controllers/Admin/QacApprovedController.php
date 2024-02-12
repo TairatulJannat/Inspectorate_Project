@@ -7,6 +7,7 @@ use App\Models\Additional_document;
 use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Qac;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -133,7 +134,7 @@ class QacApprovedController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -203,6 +204,10 @@ class QacApprovedController extends Controller
             ->where('qacs.id', $id)
             ->first();
 
+        // Attached File
+        $files = File::where('doc_type_id', 7)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
+
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -250,7 +255,7 @@ class QacApprovedController extends Controller
         //End blade forward on off section....
 
 
-        return view('backend.qac.qac_incomming_approved.qac_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
+        return view('backend.qac.qac_incomming_approved.qac_approved_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
     }
 
     public function qacTracking(Request $request)
@@ -266,7 +271,7 @@ class QacApprovedController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-        
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -277,7 +282,7 @@ class QacApprovedController extends Controller
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Qac::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-        
+
         if ($validator) {
             if ($reciever_desig_id == $sender_designation_id) {
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);

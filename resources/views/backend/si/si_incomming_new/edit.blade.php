@@ -53,14 +53,7 @@
 
 
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="received_date">Si Received Date</label>
-                                <input type="date" class="form-control" id="received_date" name="received_date"
-                                    value="{{ $si->received_date ? $si->received_date : '' }}">
-                                <span id="error_received_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="reference_date">Si Reference Date</label>
@@ -69,8 +62,16 @@
                                 <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="received_date">Si Received Date</label>
+                                <input type="date" class="form-control" id="received_date" name="received_date"
+                                    value="{{ $si->received_date ? $si->received_date : '' }}">
+                                <span id="error_received_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="contract_no">Contract Number</label>
                                 <input type="text" class="form-control" id="contract_no" name="contract_no"
@@ -79,8 +80,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
+                        <div class="col-md-4 d-none">
+                            <div class="form-group ">
                                 <label for="contract_date">Contract Date</label>
                                 <input type="date" class="form-control" id="contract_date" name="contract_date"
                                     value="{{ $si->contract_date ? $si->contract_date : '' }}">
@@ -129,7 +130,7 @@
 
                                     <option selected disabled value="">Please Select</option>
                                     @if ($item_types)
-                                    
+
                                         <option value="{{ $item_types->id }}"
                                             {{ $item_types->id == $si->item_type_id ? 'selected' : '' }}>
                                             {{ $item_types->name }}</option>
@@ -162,7 +163,7 @@
                                 <select class="form-control" id="item_id" name="item_id">
                                     {{-- <option value="">Please Select</option> --}}
                                     @if ($item)
-                                    
+
                                          <option value="{{ $item->id }}"
                                         {{ $item->id == $si->item_id ? 'selected' : '' }}>
                                         {{ $item->name }}</option>
@@ -173,7 +174,7 @@
                             </div>
                         </div>
 
-                        
+
 
                         <div class="col-md-4 d-none">
                             <div class="form-group">

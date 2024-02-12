@@ -8,6 +8,7 @@ use App\Models\AdminSection;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
+use App\Models\File;
 use App\Models\Qac;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -71,7 +72,7 @@ class QacOutgoingController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.qac.qac_outgoing.outgoing', compact('qacNew','qacOnProcess','qacCompleted','qacDispatch'));
+        return view('backend.qac.qac_outgoing.outgoing', compact('qacNew', 'qacOnProcess', 'qacCompleted', 'qacDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -129,7 +130,7 @@ class QacOutgoingController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -194,7 +195,9 @@ class QacOutgoingController extends Controller
             ->first();
 
 
-
+        // Attached File
+        $files = File::where('doc_type_id', 7)->where('reference_no', $details->reference_no)->get();
+        // Attached File End
         $designations = Designation::all();
         $admin_id = Auth::user()->id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -231,7 +234,7 @@ class QacOutgoingController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-        ->where('doc_type_id',  7)->latest()->first();
+            ->where('doc_type_id',  7)->latest()->first();
 
         //End blade forward on off section....
 
@@ -242,7 +245,7 @@ class QacOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.qac.qac_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter'));
+        return view('backend.qac.qac_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
     }
 
     public function OutgoingqacTracking(Request $request)
@@ -260,7 +263,7 @@ class QacOutgoingController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-        
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();

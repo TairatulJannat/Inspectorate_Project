@@ -14,24 +14,7 @@
                 <div class="card-body">
 
                     <div class=" header">
-                        {{-- <div class="col-md-3">
-                            <div class="form-group d-flex">
-                                <label class="col-6 pt-2" for="">Select Section:</label>
-                                <select class="form-control" id="admin_section" name="admin_section">
-                                    @foreach ($sections as $section)
-                                        <option value="{{ $section->id }}">{{ $section->name }}</option>
-                                    @endforeach
 
-                                </select>
-                                <span id="error_admin_section" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
-                        {{-- <div class="col-md-2">
-                            <div class="form-group">
-                                <a href="{{ url('admin/import-indent-spec-data-index') }}" class="btn btn-success">Import
-                                    Indent Spec</a>
-                            </div>
-                        </div> --}}
                     </div>
 
                     <div class="row mt-4">
@@ -83,7 +66,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="contract_no">Contract Number</label>
                                 <input type="text" class="form-control" id="contract_no" name="contract_no"
@@ -92,7 +75,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="contract_date">Contract Date</label>
                                 <input type="date" class="form-control" id="contract_date" name="contract_date"
@@ -104,18 +87,18 @@
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
 
-                             
-                                    <select class="form-control select2" id="contract_reference_no"
-                                        name="contract_reference_no">
-                                        <option value="">Select a Contract No</option>
-                                        @foreach ($contracts as $contract)
+
+                                <select class="form-control select2" id="contract_reference_no"
+                                    name="contract_reference_no">
+                                    <option value="">Select a Contract No</option>
+                                    @foreach ($contracts as $contract)
                                         <option value="{{ $contract->reference_no }}"
                                             {{ $contract->reference_no == $qac->contract_reference_no ? 'selected' : '' }}>
                                             {{ $contract->reference_no }}
                                         </option>
-                                        @endforeach
-                                    </select>
-                            
+                                    @endforeach
+                                </select>
+
 
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>
@@ -134,7 +117,8 @@
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference No.</label>
 
-                                <input type="text" class="form-control" id="offer_reference_no" name="offer_reference_no"
+                                <input type="text" class="form-control" id="offer_reference_no"
+                                    name="offer_reference_no"
                                     value="{{ $qac->offer_reference_no ? $qac->offer_reference_no : '' }} ">
                                 <span id="error_offer_reference_no" class="text-danger error_field"></span>
                             </div>
@@ -211,7 +195,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="checked_standard">Provationally status </label>
@@ -220,7 +204,8 @@
                                     <option value="0"{{ $qac->provationally_status == '0' ? 'selected' : '' }}>
                                         Provationally Accepted
                                     </option>
-                                    <option value="1" {{ $qac->provationally_status == '1' ? 'selected' : '' }}>Provationally Rejected</option>
+                                    <option value="1" {{ $qac->provationally_status == '1' ? 'selected' : '' }}>
+                                        Provationally Rejected</option>
                                 </select>
 
                                 {{-- <div class="form-check form-switch">
@@ -250,13 +235,35 @@
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="doc_file">Upload Document</label>
                                 <input class="form-control" type="file" id="doc_file" name='doc_file'>
                                 <span id="doc_file" class="text-danger error_field"></span>
                             </div>
+                        </div> --}}
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h1 class="mb-4">Upload Document</h1>
+
+                    <div class="file-container">
+                        <div class="form-row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control file-name" name="file_name[]"
+                                    placeholder="File Name" id="file_name_0">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input file" name="file[]" id="file_0">
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <a class="btn btn-primary" id="addFile">Add More File</a>
 
                     </div>
                 </div>
@@ -278,6 +285,19 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
+        let fileCount = 1;
+
+        $("#addFile").click(function() {
+            var newFileInput =
+                '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' +
+                fileCount +
+                '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' +
+                fileCount + '"></div></div></div>';
+            $(".file-container").append(newFileInput);
+
+            // Increment the fileCount for the next set of inputs
+            fileCount++;
+        });
         $(document).ready(function() {
             $('.select2').select2();
         });

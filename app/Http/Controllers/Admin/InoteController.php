@@ -496,7 +496,6 @@ class InoteController extends Controller
         $admin_id = Auth::user()->id;
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-
         $inote_reference_no = $request->inote_reference_no;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
@@ -535,7 +534,19 @@ class InoteController extends Controller
         $inote->serial_12 = $request->serial_12;
         $inote->serial_13 = $request->serial_13;
         $inote->body_info = $request->body_info;
+        $inote->station = $request->station;
+        $inote->date = $request->date;
         $inote->save();
         return response()->json(['success' => 'Done']);
+    }
+    public function EditInoteLetter($id)
+    {
+        $inoteLetter = InoteLetter::find($id);
+        // $supplier = Supplier::find($inoteLetter->supplier_id);
+        // $supplier_details = '';
+        // if ($supplier) {
+        //     $supplier_details = $supplier->firm_name . ', ' . $supplier->address_of_local_agent;
+        // }
+        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter'));
     }
 }
