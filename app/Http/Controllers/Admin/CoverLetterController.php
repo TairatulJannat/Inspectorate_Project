@@ -40,7 +40,8 @@ class CoverLetterController extends Controller
         $data->info = $request->info;
         $data->internal = $request->internal;
         $data->internal_act = $request->internal_act;
-        $data->internal_info = $request->internal_info;
+        $data->page_size = $request->page_size;
+        $data->header_footer = $request->header_footer;
 
         $data->save();
 
@@ -98,8 +99,8 @@ class CoverLetterController extends Controller
         $data->internal = $request->internal;
         $data->internal_act = $request->internal_act;
         $data->internal_info = $request->internal_info;
-
-
+        $data->page_size = $request->page_size;
+        $data->header_footer = $request->header_footer;
         $data->save();
 
         return response()->json(['success' => "Letter information updated"]);

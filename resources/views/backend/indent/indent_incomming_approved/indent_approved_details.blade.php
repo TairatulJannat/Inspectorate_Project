@@ -148,7 +148,7 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-                            
+
 
                             <tr>
                                 <th>Model</td>
@@ -395,10 +395,7 @@
                             }
                         });
 
-                    } else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    } {
+                    }  else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

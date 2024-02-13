@@ -19,6 +19,7 @@
             border-radius: 8px 8px 0 0 !important;
             color: #1B4C43;
         }
+
         .table thead {
             background-color: #1B4C43 !important;
             border-radius: 10px !important;
@@ -257,7 +258,8 @@
 
                                                 <div class="col-md-2">
                                                     @if ($cover_letter)
-                                                        <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
+                                                        <button class="delivery-btn btn btn-success mt-2"
+                                                            id="form_submission_button"
                                                             style="height: 40px;">Deliver</button>
                                                     @else
                                                         <button class="delivery-btn btn btn-info text-white mt-2"
@@ -319,8 +321,8 @@
                                             <div class="col-md-2">
 
 
-                                                <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
-                                                    style="height: 40px;">Deliver</button>
+                                                <button class="delivery-btn btn btn-success mt-2"
+                                                    id="form_submission_button" style="height: 40px;">Deliver</button>
                                             </div>
                                         </div>
                                     </form>
@@ -414,7 +416,22 @@
                     <div class="row">
                         <form action="" id="myForm">
                             @csrf
-                            <div class="col-12 text-center">RESTRICTED</div>
+                            <div class="col-4 text-center">
+                                <div class="col-12 d-flex justify-content-center">
+                                    <div class="col-2">
+                                        <select name="page_size" class="form-control bg-success text-light" id="page_size">
+                                            <option value="A4">Select Page Size</option>
+                                            <option value="A4">A4</option>
+                                            <option value="Legal">Legal</option>
+                                            <option value="Letter">Letter</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" id="header_footer" class="form-control "
+                                             placeholder="Header Here">
+                                    </div>
+                                </div>
+                            </div>
                             <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                             <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
                             <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
@@ -485,12 +502,27 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-4 mt-2">
-
-                                    <input type="text" class="form-control" id="distr" placeholder="Distr">
+                                <div class="col-12 mt-2">
+                                    <div>
+                                        <label for="distr">Distr: </label>
+                                        <textarea class="form-control" name="distr" id="distr"></textarea>
+                                    </div>
+                                    <div>
+                                        <label for="extl">Extl: </label>
+                                        <textarea class="form-control" name="extl" id="extl"></textarea>
+                                    </div>
+                                    <div>
+                                        <label for="act">Act: </label>
+                                        <textarea class="form-control" name="act" id="act"></textarea>
+                                    </div>
+                                    <div>
+                                        <label for="info">info: </label>
+                                        <textarea class="form-control" name="info" id="info"></textarea>
+                                    </div>
+                                    {{-- <input type="text" class="form-control" id="distr" placeholder="Distr">
                                     <input type="text" class="form-control" id="extl" placeholder="Extl">
                                     <input type="text" class="form-control" id="act" placeholder="Act">
-                                    <input type="text" class="form-control" id="info" placeholder="info">
+                                    <input type="text" class="form-control" id="info" placeholder="info"> --}}
 
                                 </div>
                             </div>
@@ -503,14 +535,23 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-4 mt-2">
-
-                                    <input type="text" class="form-control" id="internal_act" placeholder="Act">
-                                    <input type="text" class="form-control" id="internal_info" placeholder="Info">
+                                <div class="col-12 mt-2">
+                                    <div>
+                                        <label for="anxs">Act: </label>
+                                        <textarea class="form-control" name="internal_act" id="internal_act">
+                                        </textarea>
+                                    </div>
+                                    <div>
+                                        <label for="anxs">Info: </label>
+                                        <textarea class="form-control" name="internal_info" id="internal_info">
+                                        </textarea>
+                                    </div>
+                                    {{-- <input type="text" class="form-control" id="internal_act" placeholder="Act">
+                                    <input type="text" class="form-control" id="internal_info" placeholder="Info"> --}}
 
                                 </div>
                             </div>
-                            <div class="col-12 text-center">RESTRICTED</div>
+                            {{-- <div class="col-12 text-center">RESTRICTED</div> --}}
 
                             <div>
                                 <button type="submit" class="btn btn-success"> Save </button>
@@ -540,7 +581,21 @@
                         <div class="row">
                             <form action="" id="editForm">
                                 @csrf
-                                <div class="col-12 text-center">RESTRICTED</div>
+
+                                <div class="col-12 d-flex justify-content-center">
+                                    <div class="col-2">
+                                        <select name="page_size" class="form-control bg-success text-light" id="page_size">
+                                            <option value="A4" >Select Page Size</option>
+                                            <option value="A4" {{$cover_letter->header_footer=='A4'?'selected':''}}>A4</option>
+                                            <option value="Legal" {{$cover_letter->header_footer=='Legal'?'selected':''}}>Legal</option>
+                                            <option value="Letter" {{$cover_letter->header_footer=='Letter'?'selected':''}}>Letter</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" id="header_footer" class="form-control "
+                                            value="{{ $cover_letter->header_footer }}" placeholder="Header Here">
+                                    </div>
+                                </div>
                                 <input type="hidden" id="editId" value="{{ $cover_letter->id }}">
                                 <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
                                 <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
@@ -621,6 +676,13 @@
 
                                         <input type="text" class="form-control" id="distr" placeholder="Distr"
                                             value="{{ $cover_letter->distr }}">
+                                        <div>
+                                            <div>
+                                                <label for="distr">Distr: </label>
+                                                <textarea class="form-control" name="distr" id="anxsEdit">
+                                                    {!! $cover_letter->distr !!}</textarea>
+                                            </div>
+                                        </div>
                                         <input type="text" class="form-control" id="extl" placeholder="Extl"
                                             value="{{ $cover_letter->extl }}">
                                         <input type="text" class="form-control" id="act" placeholder="Act"
@@ -649,7 +711,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 text-center">RESTRICTED</div>
+                                {{-- <div class="col-12 text-center">RESTRICTED</div> --}}
 
                                 <div>
                                     <button type="submit" class="btn btn-primary"> Update </button>
@@ -698,6 +760,26 @@
                 console.error(error);
             });
         ClassicEditor
+            .create(document.querySelector('#distr'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#extl'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#act'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#info'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
             .create(document.querySelector('#signature'))
             .catch(error => {
                 console.error(error);
@@ -724,6 +806,21 @@
             });
         ClassicEditor
             .create(document.querySelector('.infoedit'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#internal'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#internal_info'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#internal_act'))
             .catch(error => {
                 console.error(error);
             });
@@ -805,15 +902,13 @@
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
-                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
                             }
                         });
 
-                    }else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    } {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

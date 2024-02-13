@@ -131,17 +131,17 @@
 
                             <tr>
                                 <th>Eqpt Type</td>
-                                <td>{{ $details->item_type_name  }}</td>
+                                <td>{{ $details->item_type_name }}</td>
                             </tr>
                             <tr>
                                 <th>Nomenclature</td>
-                                <td>{{ $details->item_name  }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
 
 
                             <tr>
                                 <th>Financial Year</td>
-                                <td>{{ $details->fin_year_name  }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
                             </tr>
 
 
@@ -151,7 +151,7 @@
                         @include('backend.files.file')
                         {{-- additional file design end here --}}
 
-                         {{-- @if ($desig_id != 1)
+                        {{-- @if ($desig_id != 1)
                              <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Check Documents</a>
                          @endif --}}
 

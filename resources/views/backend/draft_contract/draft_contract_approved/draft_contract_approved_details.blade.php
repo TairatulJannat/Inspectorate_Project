@@ -154,7 +154,7 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        
+
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
                             href="{{ asset('storage/' . $details->attached_file) }}" target="_blank">Pdf Document</a> --}}
                     </div>
@@ -378,10 +378,7 @@
                             }
                         });
 
-                    }else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    } {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

@@ -162,7 +162,7 @@
                         {{-- Attached File end --}}
                         <a  class="btn btn-success mt-3 btn-parameter"
                             href="{{ url('admin/final_spec/parameter') }}/{{  $details->reference_no }}">Parameter</a>
-                        
+
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                             class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                             Letter</a>
@@ -399,9 +399,7 @@
                             }
                         });
 
-                    } else if (
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
+                    }else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

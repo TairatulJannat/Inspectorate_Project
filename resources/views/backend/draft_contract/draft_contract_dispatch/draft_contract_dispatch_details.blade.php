@@ -149,7 +149,7 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        
+
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
                             href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a> --}}
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -389,10 +389,7 @@
                             }
                         });
 
-                    }else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    } {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

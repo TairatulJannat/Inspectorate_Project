@@ -65,7 +65,19 @@ class PdfController extends Controller
 
     private function generatePdfView($data)
     {
-        $pdf = PDF::loadView('backend.csr.csr-pdf', $data)->setPaper('a4');
+        $pdf = PDF::loadView('backend.csr.csr-pdf', $data)->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isPhpEnabled' => true,
+            'isRemoteEnabled' => true,
+            'isCssFloatEnabled' => true,
+            'defaultFont' => 'Arial',
+            'enable_html5_parser' => true,
+            'enable_remote' => true,
+            'enable_css_float' => true,
+            'isPhpEnabled' => true,
+            'isFixedPositionEnabled' => true, 
+        ])
+        ->setPaper('a4');
 
         return $pdf->stream('csr-pdf.pdf');
     }

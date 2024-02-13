@@ -161,7 +161,7 @@
                         {{-- Attached File end --}}
                         <a  class="btn btn-success mt-3 btn-parameter"
                         href="{{ url('admin/final_spec/parameter') }}/{{  $details->reference_no }}">Parameter</a>
-                    
+
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -769,9 +769,7 @@
                             }
                         });
 
-                    } else if (
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
+                    }else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

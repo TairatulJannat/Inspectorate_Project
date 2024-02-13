@@ -387,10 +387,7 @@
                             }
                         });
 
-                    }else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    } {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',
