@@ -55,10 +55,28 @@ class SearchController extends Controller
             }
 
             if ($reference_no) {
-                $data = $modelClass::where('reference_no', $reference_no)->get();
+                $data = $modelClass::leftjoin('items',  $table . '.item_id', 'items.id')
+                    ->leftJoin('fin_years',  $table . '.fin_year_id', '=', 'fin_years.id')
+                    ->where('reference_no', $reference_no)
+                    ->select(
+                        $table . '.*',
+                        'items.name as item_name',
+                        'fin_years.year as fin_year_name'
+                    )
+                    ->get();
+                // $data = $modelClass::where('reference_no', $reference_no)->get();
             }
             if ($fy) {
-                $data = $modelClass::where('fin_year_id', $fy)->get();
+                $data = $modelClass::leftjoin('items',  $table . '.item_id', 'items.id')
+                    ->leftJoin('fin_years',  $table . '.fin_year_id', '=', 'fin_years.id')
+                    ->where('fin_year_id', $fy)
+                    ->select(
+                        $table . '.*',
+                        'items.name as item_name',
+                        'fin_years.year as fin_year_name'
+                    )
+                    ->get();
+                // $data = $modelClass::where('fin_year_id', $fy)->get();
             }
 
             // Process $data further if needed
