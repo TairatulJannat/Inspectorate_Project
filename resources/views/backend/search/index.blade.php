@@ -102,11 +102,11 @@
                 <form action="" method=" " id="searchItemParametersButton" autocomplete="off">
                     @csrf
                     <div class="row p-3">
-                        
-                        <div class="col-md-2 text-center mt-2">
+
+                        <div class="col-md-2 text-center mt-1">
                             <h6>Doc Type: </h6>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="mb-2">
                                 <select class="form-control select2 item-type-id" id="docTypeId" name="doc-type-id"
                                     style="width: 100% !important;">
@@ -118,18 +118,18 @@
                             </div>
                             <span class="text-danger error-text item-type-id-error"></span>
                         </div>
-                        <div class="col-md-2 text-center mt-2">
+                        <div class="col-md-1 text-center mt-2">
                             <h6 class="card-title">Referance Number: </h6>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input type="text" placeholder="Enter Reference" class="form-control" id="reference_number">
                             <span class="text-danger error-text item-id-error"></span>
                         </div>
 
-                        <div class="col-md-2 text-center mt-2">
+                        <div class="col-md-1 text-center mt-2">
                             <h6 class="card-title">FY </h6>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <select class="form-control select2 fy_id" id="fy_id" name="fy_id"
                                 style="width: 100% !important;">
                                 <option value="" selected disabled>Select FY</option>
@@ -256,9 +256,21 @@
                                 <th scope="row">${i++}</th>
                                 <td>${item.reference_no}</td>
 
-                                <td>${item.item_id}</td>
-                                <td>${item.item_id}</td>
-                                <td>${item.item_id}</td>
+                                <td>${item.item_name}</td>
+                                <td>${item.fin_year_name}</td>
+                                <td>`
+                                    if (item.status == 0) {
+                                        html += `<div><h4 class="m-0 btn btn-success">New Arrival</h4></div>`;
+                                    } else if (item.status == 1) {
+                                        html += `<div><h4 class="m-0 btn btn-info">Vetting On Process</h4></div>`;
+                                    } else if (item.status == 2) {
+                                        html += `<div><h4 class="m-0 btn btn-primary">Completed</h4></div>`;
+                                    } else if (item.status == 4) {
+                                        html += `<div><h4 class="m-0btn btn-danger">Dispatched</h4></div>`;
+                                    } else {
+                                        html += `<div><h4 class="m-0 bg-danger">None</h4></div>`;
+                                    }
+                html += `</td>
 
                                 <td>
                                     <button type="button" data-reference=${item.reference_no} data-type=${doc_type_id}  class="btn btn-success-gradien search-button detailsOfsearch">
@@ -386,22 +398,13 @@
                                 <th>Attribute</td>
                                 <td>${details.attribute}</td>
                             </tr>
-                            <tr>
-                                <th>Additional Documents</td>
-                                <td>${details.additional_documents_name}</td>
-                            </tr>
+
                             <tr>
                                 <th>Financial Year</td>
                                 <td>${details.fin_year_name }</td>
                             </tr>
-                            <tr>
-                                <th>Nomenclature</td>
-                                <td>${details.nomenclature }</td>
-                            </tr>
-                            <tr>
-                                <th>Make</td>
-                                <td>${ details.make }</td>
-                            </tr>
+
+
                             <tr>
                                 <th>Model</td>
                                 <td>${ details.model }</td>
