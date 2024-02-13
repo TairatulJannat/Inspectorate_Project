@@ -271,16 +271,6 @@ class FinalSpecController extends Controller
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
 
-//  dd($item_types );
-        // if ($item_types) {
-        //     // dd($item_types);
-        //      $itemTypeName = $item_types->name;
-
-        // } else{
-        //     $itemTypeName = Null;
-        // }
-
-        // $item = Items::where('id', $finalspec->item_id)->first();
         $item = Items::where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->first();
@@ -508,4 +498,3 @@ class FinalSpecController extends Controller
         return view('backend/finalspec/parameter', compact('supplierAssignValue','groupedData'));
     }
 }
-

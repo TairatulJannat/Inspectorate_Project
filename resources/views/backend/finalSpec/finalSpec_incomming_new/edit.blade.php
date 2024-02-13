@@ -70,7 +70,8 @@
                             <div class="form-group">
                                 <label for="final_spec_receive_Ltr_dt">Final Spec Receive Date</label>
                                 <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
-                                    name="final_spec_receive_Ltr_dt" value="{{ $finalspec->final_spec_receive_Ltr_dt ? $finalspec->final_spec_receive_Ltr_dt : '' }} ">
+                                    name="final_spec_receive_Ltr_dt"
+                                    value="{{ $finalspec->final_spec_receive_Ltr_dt ? $finalspec->final_spec_receive_Ltr_dt : '' }} ">
                                 <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -79,7 +80,7 @@
                             <div class="form-group">
 
                                 <label for="offer_reference_no">Offer Reference No</label>
-                                <select class="form-control select2" id="offer_reference_no" name="offer_reference_no">
+                                <select class="form-control" id="offer_reference_no" name="offer_reference_no">
 
                                     <option value="">Please Select</option>
 
@@ -99,8 +100,8 @@
                             <div class="form-group">
                                 <label for="tender_reference_no">Tender Reference No</label>
                                 <input type="text" id="tender_reference_no" class="form-control"
-                                name="tender_reference_no"
-                                value="{{ $finalspec->tender_reference_no ? $finalspec->tender_reference_no : '' }}">
+                                    name="tender_reference_no"
+                                    value="{{ $finalspec->tender_reference_no ? $finalspec->tender_reference_no : '' }}">
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -124,7 +125,9 @@
 
                                 <select class="form-control" id="supplier_id" name="supplier_id">
                                     @if ($supplier)
-                                    <option value="{{ $supplier->id == $finalspec->supplier_id ? $supplier->id : '' }}">{{$supplier->firm_name}} </option>
+                                        <option
+                                            value="{{ $supplier->id == $finalspec->supplier_id ? $supplier->id : '' }}">
+                                            {{ $supplier->firm_name }} </option>
                                     @endif
                                 </select>
 
@@ -140,12 +143,10 @@
 
                                     <option selected disabled value="">Please Select</option>
                                     @if ($item_types)
-
                                         <option value="{{ $item_types->id }}"
                                             {{ $item_types->id == $finalspec->item_type_id ? 'selected' : '' }}>
                                             {{ $item_types->name }}</option>
-
-                                @endif
+                                    @endif
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
@@ -160,11 +161,11 @@
                                 <select class="form-control" id="item_id" name="item_id">
                                     {{-- <option value="">Please Select</option> --}}
                                     @if ($item)
-
-                                         <option value="{{ $item->id }}"
-                                        {{ $item->id == $finalspec->item_id ? 'selected' : '' }}>
-                                        {{ $item->name }}</option>
-                                     @endif
+                                        <option value="{{ $item->id }}"
+                                            {{ $item->id == $finalspec->item_id ? 'selected' : '' }}>
+                                            {{ $item->name }}
+                                        </option>
+                                    @endif
                                 </select>
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
@@ -179,7 +180,9 @@
 
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
-                                        <option value={{ $fin_year->id }} {{ $fin_year->id == $finalspec->fin_year_id ? 'selected' : '' }}>{{ $fin_year->year }}
+                                        <option value={{ $fin_year->id }}
+                                            {{ $fin_year->id == $finalspec->fin_year_id ? 'selected' : '' }}>
+                                            {{ $fin_year->year }}
 
                                         </option>
                                     @endforeach
@@ -211,7 +214,7 @@
 
                     </div>
                 </div>
-                <div  class="card-body">
+                <div class="card-body">
                     <h1 class="mb-4">Upload Document</h1>
 
                     <div class="file-container">
@@ -253,7 +256,11 @@
     <script>
         let fileCount = 1;
         $("#addFile").click(function() {
-            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            var newFileInput =
+                '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' +
+                fileCount +
+                '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' +
+                fileCount + '"></div></div></div>';
             $(".file-container").append(newFileInput);
 
             // Increment the fileCount for the next set of inputs
@@ -392,10 +399,12 @@
 
 
 
-                            $('#item_id').val(item_html);
+                            $('#item_id').html(item_html);
                             $('#item_type_id').html(itemType_html);
-                            $('#tender_reference_no').val(response.tenderReferenceNo.reference_no);
-                            $('#indent_reference_no').val(response .indentReferenceNo.reference_no);
+                            $('#tender_reference_no').val(response.tenderReferenceNo
+                                .reference_no);
+                            $('#indent_reference_no').val(response.indentReferenceNo
+                                .reference_no);
                             $('#supplier_id').html(suppliers_html);
 
 
