@@ -3,12 +3,12 @@
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/animate.css') }}">
     <style>
-.nav-tabs .nav-link{
-    width: 15% !important;
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #ffff;
-}
+        .nav-tabs .nav-link {
+            width: 15% !important;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #ffff;
+        }
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -32,6 +32,10 @@
         <div class="tab-pane fade" id="nav-offer" role="tabpanel" aria-labelledby="nav-offer-tab">
             @include('backend.dashboard.offer')
         </div>
+        <div class="col-12">
+            <div class="dasboard_barchart"></div>
+
+        </div>
 
     </div>
 
@@ -40,181 +44,234 @@
 @endsection
 
 @push('js')
-<script>
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            toastr.error('{{ $error }}', 'Error', {
-                closeButton: true,
-                progressBar: true,
-            });
-        @endforeach
-    @endif
-    console.log = function() {};
+    <script>
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error('{{ $error }}', 'Error', {
+                    closeButton: true,
+                    progressBar: true,
+                });
+            @endforeach
+        @endif
+        console.log = function() {};
 
 
 
 
-    var options2 = {
-        chart: {
-            height: 210,
-            width: 450,
-            type: 'bar',
-            toolbar: {
-                show: false
+        var options2 = {
+            chart: {
+                height: 210,
+                width: 450,
+                type: 'bar',
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            series: [{
+                data: [
+                    {{ $indentcurrentMonthData }},
+                    {{ $indentoneMonthAgoData }},
+                    {{ $indenttwoMonthAgoData }},
+                    {{ $indentthreeMonthAgoData }}
+                ]
+            }],
+            xaxis: {
+                categories: [
+                    '{{ $currentMonthStart->format('M') }}',
+                    '{{ $oneMonthAgoStart->format('M') }}',
+                    '{{ $twoMonthAgoStart->format('M') }}',
+                    '{{ $threeMonthAgoStart->format('M') }}'
+                ],
+            },
+            colors: ['#B263C5']
+        }
+
+        var chart2 = new ApexCharts(
+            document.querySelector("#basic-bar-indent"),
+            options2
+        );
+
+        chart2.render();
+
+        var options2 = {
+            chart: {
+                height: 210,
+                width: 450,
+                type: 'bar',
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            series: [{
+                data: [
+                    {{ $currentMonthData }},
+                    {{ $oneMonthAgoData }},
+                    {{ $twoMonthAgoData }},
+                    {{ $threeMonthAgoData }}
+                ]
+            }],
+            xaxis: {
+                categories: [
+                    '{{ $currentMonthStart->format('M') }}',
+                    '{{ $oneMonthAgoStart->format('M') }}',
+                    '{{ $twoMonthAgoStart->format('M') }}',
+                    '{{ $threeMonthAgoStart->format('M') }}'
+                ],
+            },
+            colors: ['#B263C5']
+        }
+
+        var chart2 = new ApexCharts(
+            document.querySelector("#basic-bar_offer"),
+            options2
+        );
+
+        chart2.render();
+
+        var options8 = {
+            chart: {
+                width: 380,
+                type: 'pie',
+            },
+            labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+            series: [44, 55, 13, 43],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#222222', '#717171', '#e2c636']
+        }
+
+        var options9 = {
+            chart: {
+                width: 380,
+                type: 'donut',
+            },
+            series: [{{ $indentNewChart }}, {{ $indentOnProcessChart }}, {{ $indentCompletedChart }},
+                {{ $indentDispatchChart }}
+            ],
+            labels: ['New Arrival', 'On Process', 'Completed', 'Dispatch'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#31D2F2', '#D22D3D']
+        }
+
+        var chart9 = new ApexCharts(
+            document.querySelector("#donutchart"),
+            options9
+        );
+
+        chart9.render();
+
+        var offer = {
+            chart: {
+                width: 380,
+                type: 'donut',
+            },
+            series: [{{ $offerNewChart }}, {{ $offerOnProcessChart }}, {{ $offerCompletedChart }},
+                {{ $offerDispatchChart }}
+            ],
+            labels: ['New Arrival', 'On Process', 'Completed', 'Dispatch'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#31D2F2', '#D22D3D']
+        }
+
+        var offer = new ApexCharts(
+            document.querySelector("#donutchart-offer"),
+            offer
+        );
+
+        offer.render();
+
+        var options = {
+          series: [{
+          data: [21, 22, 10, 28, 16, 21, 13, 30]
+        }],
+          chart: {
+          height: 350,
+          type: 'bar',
+          events: {
+            click: function(chart, w, e) {
+              // console.log(chart, w, e)
             }
+          }
         },
+        colors: colors,
         plotOptions: {
-            bar: {
-                horizontal: true,
-            }
+          bar: {
+            columnWidth: '45%',
+            distributed: true,
+          }
         },
         dataLabels: {
-            enabled: false
+          enabled: false
         },
-        series: [{
-            data: [
-                {{ $indentcurrentMonthData }},
-                {{ $indentoneMonthAgoData }},
-                {{ $indenttwoMonthAgoData }},
-                {{ $indentthreeMonthAgoData }}
-            ]
-        }],
+        legend: {
+          show: false
+        },
         xaxis: {
-            categories: [
-                '{{ $currentMonthStart->format("M") }}',
-                '{{ $oneMonthAgoStart->format("M") }}',
-                '{{ $twoMonthAgoStart->format("M") }}',
-                '{{ $threeMonthAgoStart->format("M") }}'
-            ],
-        },
-        colors: ['#B263C5']
-    }
-
-    var chart2 = new ApexCharts(
-        document.querySelector("#basic-bar-indent"),
-        options2
-    );
-
-    chart2.render();
-
-    var options2 = {
-        chart: {
-            height: 210,
-            width: 450,
-            type: 'bar',
-            toolbar: {
-                show: false
+          categories: [
+            ['John', 'Doe'],
+            ['Joe', 'Smith'],
+            ['Jake', 'Williams'],
+            'Amber',
+            ['Peter', 'Brown'],
+            ['Mary', 'Evans'],
+            ['David', 'Wilson'],
+            ['Lily', 'Roberts'],
+          ],
+          labels: {
+            style: {
+              colors: colors,
+              fontSize: '12px'
             }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        series: [{
-            data: [
-                {{ $currentMonthData }},
-                {{ $oneMonthAgoData }},
-                {{ $twoMonthAgoData }},
-                {{ $threeMonthAgoData }}
-            ]
-        }],
-        xaxis: {
-            categories: [
-                '{{ $currentMonthStart->format("M") }}',
-                '{{ $oneMonthAgoStart->format("M") }}',
-                '{{ $twoMonthAgoStart->format("M") }}',
-                '{{ $threeMonthAgoStart->format("M") }}'
-            ],
-        },
-        colors: ['#B263C5']
-    }
+          }
+        }
+        };
 
-    var chart2 = new ApexCharts(
-        document.querySelector("#basic-bar_offer"),
-        options2
-    );
-
-    chart2.render();
-
-    var options8 = {
-        chart: {
-            width: 380,
-            type: 'pie',
-        },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-        series: [44, 55, 13, 43],
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#222222', '#717171', '#e2c636']
-    }
-
-    var options9 = {
-        chart: {
-            width: 380,
-            type: 'donut',
-        },
-        series: [{{$indentNewChart}}, {{$indentOnProcessChart}}, {{$indentCompletedChart}}, {{$indentDispatchChart}}],
-        labels: ['New Arrival', 'On Process', 'Completed', 'Dispatch'],
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#31D2F2', '#D22D3D']
-    }
-
-    var chart9 = new ApexCharts(
-        document.querySelector("#donutchart"),
-        options9
-    );
-
-    chart9.render();
-
-    var offer = {
-        chart: {
-            width: 380,
-            type: 'donut',
-        },
-        series: [{{$offerNewChart}}, {{$offerOnProcessChart}}, {{$offerCompletedChart}}, {{$offerDispatchChart}}],
-        labels: ['New Arrival', 'On Process', 'Completed', 'Dispatch'],
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#31D2F2', '#D22D3D']
-    }
-
-    var offer = new ApexCharts(
-        document.querySelector("#donutchart-offer"),
-        offer
-    );
-
-    offer.render();
-</script>
+        var chart = new ApexCharts(document.querySelector("#dasboard_barchart"), options);
+        chart.render();
+    </script>
 @endpush

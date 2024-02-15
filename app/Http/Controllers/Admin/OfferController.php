@@ -272,7 +272,11 @@ class OfferController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+        // $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+        $item_types = Item_type::where('status', 1)
+            ->where('inspectorate_id', $inspectorate_id)
+            ->whereIn('section_id', $section_ids)
+            ->first();
         // dd($item_types);
         $items = Items::where('id', $offer->item_id)->first();
         $fin_years = FinancialYear::all();

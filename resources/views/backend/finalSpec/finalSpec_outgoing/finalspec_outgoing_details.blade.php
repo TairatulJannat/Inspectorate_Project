@@ -598,7 +598,7 @@
                                         <input type="text" class="form-control" id="act" placeholder="Act"
                                             value="{{ $cover_letter->act }}">
                                         <input type="text" class="form-control" id="info" placeholder="info"
-                                            {{ $cover_letter->info }}>
+                                           value="{{ $cover_letter->info }}" >
 
                                     </div>
                                 </div>
