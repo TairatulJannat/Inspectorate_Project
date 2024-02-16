@@ -33,6 +33,11 @@
             transition: all 0.5s ease;
             position: relative;
         }
+        .menu-title:hover {
+            background-color: #f4d929d4 !important;
+           
+        }
+        
 
         /* .open_menu {
             display: block !important;

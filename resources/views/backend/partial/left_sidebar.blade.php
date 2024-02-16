@@ -11,6 +11,7 @@ $currentControllerName = Request::segment(2);
         color: #e2e2e2;
     }
 
+    /* scrollbar */
     #mainnav {
         height: calc(100vh - 78px);
         overflow-y: scroll;
@@ -122,7 +123,8 @@ $currentControllerName = Request::segment(2);
                     {{-- start final sepecification --}}
                     @if (count(menu_check('FinalSpec')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == ' ' ? 'active' : '' }}"href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                class="nav-link menu-title {{ $currentControllerName == ' ' ? 'active' : '' }}"href="javascript:void(0)"><i
+                                    data-feather="file-text" class="text-light"></i>
                                 <span>Final Spec</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/FinalSpec/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('FinalSpec/view') !== null)
@@ -135,7 +137,7 @@ $currentControllerName = Request::segment(2);
                                     <li><a class="text-light" href="{{ route('admin.FinalSpec/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Final Spec</a>
-                                        </li>
+                                    </li>
                                 @endif
                                 @if (sub_menu_check('FinalSpec/create') !== null)
                                     <li><a class="text-light"
@@ -406,7 +408,8 @@ $currentControllerName = Request::segment(2);
                                     data-feather="list"></i><span>Supplier</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/supplier/index') }}"
-                                        class="{{ Request::is('*/admin/supplier/index') ? 'active' : '' }} text-white">Create Supplier
+                                        class="{{ Request::is('*/admin/supplier/index') ? 'active' : '' }} text-white">Create
+                                        Supplier
                                     </a>
                                 </li>
                             </ul>
