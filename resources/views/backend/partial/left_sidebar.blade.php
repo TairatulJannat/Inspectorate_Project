@@ -37,8 +37,8 @@ $currentControllerName = Request::segment(2);
     <nav>
         <div class="main-navbar">
             <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
-            <div id="mainnav">
-                <ul class="nav-menu custom-scrollbar">
+            <div id="mainnav  ">
+                <ul class="nav-menu custom-scrollbar mt-2">
                     <li class="back-btn">
                         <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2"
                                 aria-hidden="true"></i></div>
@@ -52,7 +52,7 @@ $currentControllerName = Request::segment(2);
                     </li>
                     @if (count(menu_check('Search')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Search' ? 'active' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'search' ? 'active_menu' : '' }}"
                                 href="{{ route('admin.search') }}"><i data-feather="search" class="text-light"></i>
                                 <span>Search</span></a>
 
@@ -60,13 +60,13 @@ $currentControllerName = Request::segment(2);
                     @endif
                     @if (count(menu_check('Indent')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'indent' ? 'active_menu' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>Indent</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/Indent/*') ? 'open_menu' : '' }}">
+                            <ul class="nav-submenu menu-content {{ Request::is('*/indent/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('indent/view') !== null)
                                     <li><a class="text-light" href="{{ route('admin.indent/view') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Indent</a>
+                                            class="{{ Request::is('*/*/view') ? 'active_menu' : '' }}">View Indent</a>
                                     </li>
                                 @endif
                                 @if (sub_menu_check('indent/create') !== null)
