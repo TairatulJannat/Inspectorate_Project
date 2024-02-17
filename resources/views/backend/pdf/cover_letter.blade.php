@@ -17,9 +17,13 @@
             src: url('/BengaliFont.ttf') format('truetype');
             /* Replace with the actual path to your Bangla font file */
         }
+         /* @font-face {
+            font-family: 'Nikosh';
+            src: url('{{ public_path('fonts/Nikosh.ttf') }}') format('truetype');
+        } */
 
         body {
-            font-family: 'bengali', 'Arial', sans-serif;
+            font-family: "Times New Roman", Times, serif;
         }
 
         header {

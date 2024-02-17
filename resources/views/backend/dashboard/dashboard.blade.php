@@ -8,6 +8,43 @@
             font-size: 24px;
             font-weight: bold;
             background-color: #ffff;
+            border: none;
+            border-radius: none;
+        }
+
+        .nav-tabs button {
+            border: none;
+            border-radius: 0px;
+        }
+
+        #nav-indent-tab {
+            background-color: #28A8BC;
+            color: #ffff;
+        }
+
+        #nav-offer-tab {
+            background-color: #FBA45A;
+            color: #ffff;
+        }
+
+        #nav-finalSpec-tab {
+            background-color: #28A744;
+            color: #ffff;
+        }
+
+        #nav-draftContract-tab {
+            background-color: #B87AEB;
+            color: #ffff;
+        }
+
+        #nav-contact-tab {
+            background-color: #007AFF;
+            color: #ffff;
+        }
+
+        #nav-iNote-tab {
+            background-color: #AB8574;
+            color: #ffff;
         }
     </style>
 @endpush
@@ -16,12 +53,21 @@
 @section('content')
 
 
-    <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-indent-tab" data-bs-toggle="tab" data-bs-target="#nav-indent" type="button"
-                role="tab" aria-controls="nav-indent" aria-selected="true">Indent</button>
+    <nav class="mt-1">
+        <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-indent-tab" data-bs-toggle="tab" data-bs-target="#nav-indent"
+                type="button" role="tab" aria-controls="nav-indent" aria-selected="true">Indent</button>
             <button class="nav-link" id="nav-offer-tab" data-bs-toggle="tab" data-bs-target="#nav-offer" type="button"
                 role="tab" aria-controls="nav-offer" aria-selected="false">Offer</button>
+            <button class="nav-link" id="nav-finalSpec-tab" data-bs-toggle="tab" data-bs-target="#nav-finalSpec"
+                type="button" role="tab" aria-controls="nav-finalSpec" aria-selected="false">Final Spec</button>
+            <button class="nav-link" id="nav-draftContract-tab" data-bs-toggle="tab" data-bs-target="#nav-draftContract"
+                type="button" role="tab" aria-controls="nav-draftContract" aria-selected="false">Draft
+                Contract</button>
+            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
+                role="tab" aria-controls="nav-contact" aria-selected="false">Contract</button>
+            <button class="nav-link" id="nav-iNote-tab" data-bs-toggle="tab" data-bs-target="#nav-iNote" type="button"
+                role="tab" aria-controls="nav-iNote" aria-selected="false">I-Note</button>
 
         </div>
     </nav>
@@ -32,10 +78,18 @@
         <div class="tab-pane fade" id="nav-offer" role="tabpanel" aria-labelledby="nav-offer-tab">
             @include('backend.dashboard.offer')
         </div>
-        <div class="col-12">
-            <div class="dasboard_barchart"></div>
 
+        <div class="col-sm-12 col-xl-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div id="dasboard_barchart"></div>
+                </div>
+            </div>
         </div>
+
+
+
 
     </div>
 
@@ -225,53 +279,84 @@
 
         offer.render();
 
-        var options = {
-          series: [{
-          data: [21, 22, 10, 28, 16, 21, 13, 30]
-        }],
-          chart: {
-          height: 350,
-          type: 'bar',
-          events: {
+        var indentReport = {
+    series: [{
+        data: [21, 22, 10, 28, 16, 21]
+    }],
+    chart: {
+        height: 350,
+        type: 'bar',
+        events: {
             click: function(chart, w, e) {
-              // console.log(chart, w, e)
+                // console.log(chart, w, e)
             }
-          }
         },
-        colors: colors,
-        plotOptions: {
-          bar: {
+        toolbar: {
+            show: true,
+            tools: {
+                download: false,
+                selection: false,
+                zoom: false,
+                zoomin: false,
+                zoomout: false,
+                pan: false,
+                reset: false
+            },
+            autoSelected: 'zoom'
+        },
+        zoom: {
+            enabled: false
+        }
+    },
+    title: {
+        text: 'Overall Report',
+        align: 'center',
+        style: {
+            fontSize: '20px'
+        }
+    },
+    plotOptions: {
+        bar: {
             columnWidth: '45%',
             distributed: true,
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        legend: {
-          show: false
-        },
-        xaxis: {
-          categories: [
-            ['John', 'Doe'],
-            ['Joe', 'Smith'],
-            ['Jake', 'Williams'],
-            'Amber',
-            ['Peter', 'Brown'],
-            ['Mary', 'Evans'],
-            ['David', 'Wilson'],
-            ['Lily', 'Roberts'],
-          ],
-          labels: {
-            style: {
-              colors: colors,
-              fontSize: '12px'
+            dataLabels: {
+                position: 'top' // Show data values on top of bars
             }
-          }
         }
-        };
+    },
+    dataLabels: {
+        enabled: true,
+        formatter: function(val) {
+            return val;
+        },
+        offsetY: -20,
+        style: {
+            fontSize: '12px',
+            colors: ["#304758"]
+        }
+    },
+    legend: {
+        show: false
+    },
+    xaxis: {
+        categories: [
+            "Indent",
+            'Offer',
+            'Final Spec',
+            'Draft Contract',
+            'Contract',
+            'I-Note',
+        ],
+        labels: {
+            style: {
+                fontSize: '12px'
+            }
+        }
+    }
+};
 
-        var chart = new ApexCharts(document.querySelector("#dasboard_barchart"), options);
-        chart.render();
+var renderIndentReport = new ApexCharts(document.querySelector("#dasboard_barchart"), indentReport);
+renderIndentReport.render();
+
     </script>
 @endpush

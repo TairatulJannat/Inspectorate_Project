@@ -72,7 +72,7 @@ class CoverLetterController extends Controller
         // $mpdf->WriteHTML($html);
 
         // Output or download the PDF
-        $mpdf->Output('sample.pdf', 'D');
+        // $mpdf->Output('sample.pdf', 'D');
     }
 
     public function edit(Request $request)
