@@ -40,6 +40,7 @@ class CoverLetterController extends Controller
         $data->info = $request->info;
         $data->internal = $request->internal;
         $data->internal_act = $request->internal_act;
+        $data->internal_info = $request->internal_info;
         $data->page_size = $request->page_size;
         $data->header_footer = $request->header_footer;
 
@@ -71,14 +72,14 @@ class CoverLetterController extends Controller
         // $mpdf->WriteHTML($html);
 
         // Output or download the PDF
-        $mpdf->Output('sample.pdf', 'D');
+        // $mpdf->Output('sample.pdf', 'D');
     }
 
     public function edit(Request $request)
     {
 
         $data = CoverLetter::find($request->editId);
-        // dd( $request->all());
+        //  dd( $request->all());
         $data->doc_type_id = $request->doc_type_id;
         $data->letter_reference_no = $request->letter_reference_no;
         $data->inspectorate_name = $request->inspectorate_name;
@@ -92,15 +93,15 @@ class CoverLetterController extends Controller
         $data->body_2 = $request->bodyEdit_2;
         $data->signature = $request->signatureEdit;
         $data->anxs = $request->anxsEdit;
-        $data->distr = $request->distr;
-        $data->extl = $request->extl;
-        $data->act = $request->act;
-        $data->info = $request->info;
-        $data->internal = $request->internal;
-        $data->internal_act = $request->internal_act;
-        $data->internal_info = $request->internal_info;
-        $data->page_size = $request->page_size;
-        $data->header_footer = $request->header_footer;
+        $data->distr = $request->distrEdit;
+        $data->extl = $request->extlEdit;
+        $data->act = $request->actEdit;
+        $data->info = $request->infoEdit;
+        $data->internal = $request->internalEdit;
+        $data->internal_act = $request->internal_actEdit;
+        $data->internal_info = $request->internal_infoEdit;
+        $data->page_size = $request->page_sizeEdit;
+        $data->header_footer = $request->header_footerEdit;
         $data->save();
 
         return response()->json(['success' => "Letter information updated"]);

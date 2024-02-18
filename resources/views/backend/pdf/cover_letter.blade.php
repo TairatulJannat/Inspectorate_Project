@@ -17,9 +17,13 @@
             src: url('/BengaliFont.ttf') format('truetype');
             /* Replace with the actual path to your Bangla font file */
         }
+         /* @font-face {
+            font-family: 'Nikosh';
+            src: url('{{ public_path('fonts/Nikosh.ttf') }}') format('truetype');
+        } */
 
         body {
-            font-family: 'bengali', 'Arial', sans-serif;
+            font-family: "Times New Roman", Times, serif;
         }
 
         header {
@@ -69,10 +73,21 @@
             margin: 0px;
 
         }
+
         /* .content {
             margin-top: 80px;
             margin-bottom: 60px;
         } */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        tr,
+        td {
+            padding: 5px;
+            border: 1px solid black;
+        }
     </style>
 </head>
 
@@ -120,30 +135,30 @@
                 <p style="margin: 10px 0;">Anxs / Enclosures:</p>
                 <div>{!! $cover_letter->anxs !!}</div>
             </div>
-            @if ($cover_letter->distr)
+            {{-- @if ($cover_letter->distr) --}}
                 <div>
                     <p style="margin: 10px 0;">Distr:</p>
                     <div>{!! $cover_letter->distr !!}</div>
                 </div>
-            @endif
-            @if ($cover_letter->extl)
+            {{-- @endif --}}
+            {{-- @if ($cover_letter->extl) --}}
                 <div>
                     <p style="margin: 10px 0;">Extl:</p>
                     <div>{!! $cover_letter->extl !!}</div>
                 </div>
-            @endif
-            @if ($cover_letter->act)
+            {{-- @endif --}}
+            {{-- @if ($cover_letter->act) --}}
                 <div>
                     <p style="margin: 10px 0;">Act:</p>
                     <div>{!! $cover_letter->act !!}</div>
                 </div>
-            @endif
-            @if ($cover_letter->info)
+            {{-- @endif --}}
+            {{-- @if ($cover_letter->info) --}}
                 <div>
                     <p style="margin: 10px 0;">Info:</p>
                     <div>{!! $cover_letter->info !!}</div>
                 </div>
-            @endif
+            {{-- @endif --}}
 
 
             @if ($cover_letter->internal)

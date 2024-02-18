@@ -402,9 +402,9 @@
         </div>
     </div>
     {{-- start Modal for cover letter --}}
+    @include('backend.offer.cover_letter.cover_letter_create')
 
-
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    {{-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -511,13 +511,14 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- start Modal for cover letter --}}
 
     {{-- start edit cover letter --}}
     @if ($cover_letter)
-        <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        @include('backend.offer.cover_letter.cover_letter_edit')
+        {{-- <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -651,7 +652,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     @endif
 
     {{-- start edit cover letter --}}
@@ -668,53 +669,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        // ClassicEditor
-        //     .create(document.querySelector(''))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-        ClassicEditor
-            .create(document.querySelector('#body_1'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#body_2'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#anxs'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#signature'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#bodyEdit_1'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#bodyEdit_2'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#anxsEdit'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#signatureEdit'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
+
+    @include('backend.offer.cover_letter.cover_letter_js')
+
 
     <script>
         $(document).ready(function() {
@@ -726,9 +683,7 @@
                 reciever_desig_text =
                     `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
 
-
             });
-
 
             $('#submitBtn').off('click').on('click', function(event) {
 
@@ -805,7 +760,7 @@
                             }
                         });
 
-                    }  else if (result.dismiss === swal.DismissReason.cancel) {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',
@@ -819,56 +774,5 @@
 
         });
 
-        $('#myForm').submit(function(e) {
-
-            var formData = {}; // Object to store form data
-
-            $(this).find('input, textarea').each(function() {
-                var fieldId = $(this).attr('id');
-                var fieldValue = $(this).val();
-                formData[fieldId] = fieldValue;
-            });
-
-            console.log(formData);
-
-            $.ajax({
-                url: '{{ url('admin/cover_letter/create') }}',
-                method: 'POST',
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    toastr.success('Information Saved', 'Saved');
-                },
-                error: function(error) {
-                    console.error('Error sending data:', error);
-                }
-            });
-        });
-        $('#editForm').submit(function(e) {
-            var formData = {}; // Object to store form data
-
-            $(this).find('input, textarea').each(function() {
-                var fieldId = $(this).attr('id');
-                var fieldValue = $(this).val();
-                formData[fieldId] = fieldValue;
-            });
-
-            $.ajax({
-                url: '{{ url('admin/cover_letter/edit') }}',
-                method: 'POST',
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    toastr.success('Information Updated', 'Saved');
-                },
-                error: function(error) {
-                    console.error('Error sending data:', error);
-                }
-            });
-        });
     </script>
 @endpush

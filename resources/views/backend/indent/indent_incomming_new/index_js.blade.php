@@ -8,7 +8,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            
+
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -105,8 +105,8 @@
         event.preventDefault();
 
         var formData = new FormData($('#save_info')[0]);
-
         disableButton()
+
         $.ajax({
             url: "{{ url('admin/indent/store') }}",
             type: "POST",
@@ -133,10 +133,14 @@
                 enableeButton()
                 clear_error_field();
                 error_notification('Please fill up the form correctly and try again')
-                // $('#error_sender').text(response.responseJSON.errors.sender);
-                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
-                // $('#admin_section').text(response.responseJSON.errors.admin_section);
-                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                $('#error_sender').text(response.responseJSON.errors.sender);
+                $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                $('#error_admin_section').text(response.responseJSON.errors.admin_section);
+                $('#error_indent_number').text(response.responseJSON.errors.indent_number);
+                $('#error_indent_received_date').text(response.responseJSON.errors
+                    .indent_received_date);
+                $('#error_indent_reference_date').text(response.responseJSON.errors
+                    .indent_reference_date);
 
             }
         });
@@ -144,53 +148,50 @@
     // End:: save information
 
     //Start:: Update information
-    // $('#update_form').off().on('submit', function(event) {
-    //     event.preventDefault();
-    //     var formData = new FormData($('#update_form')[0]);
-
-    //     disableButton()
-    //     $.ajax({
-    //         url: "{{ url('admin/hall_price/update') }}",
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-    //         },
-    //         success: function(response) {
-    //             if (response.error) {
-    //                 error_notification(response.error)
-    //                 enableeButton()
-    //             }
-    //             if (response.success) {
-    //                 enableeButton()
-    //                 $('.yajra-datatable').DataTable().ajax.reload(null, false);
-    //                 toastr.success('Information Updated', 'Saved');
-    //                 $('#edit_model').modal('hide');
-    //             }
-    //             setTimeout(window.location.href = "{{ route('admin.prelimgeneral/view') }}", 40000);
-    //         },
-    //         error: function(response) {
-    //             enableeButton()
-    //             clear_error_field();
-    //             error_notification('Please fill up the form correctly and try again')
-    //             // $('#error_hall_id').text(response.responseJSON.errors.hall_id);
-    //             // $('#error_floor_id').text(response.responseJSON.errors.floor_id);
-    //             // $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
-    //             // $('#error_specify_event').text(response.responseJSON.errors.specify_event);
-    //             // $('#error_event_name').text(response.responseJSON.errors.event_name);
-    //             // $('#error_specify_month').text(response.responseJSON.errors.specify_month);
-    //             // $('#error_months').text(response.responseJSON.errors.months);
-    //             // $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
-    //             // $('#error_specify_shift_charge').text(response.responseJSON.errors
-    //             //     .specify_shift_charge);
-    //             // $('#error_shift_id').text(response.responseJSON.errors.shift_id);
-    //             // $('#error_price').text(response.responseJSON.errors.price);
-    //             // $('#error_status').text(response.responseJSON.errors.status);
-    //         }
-    //     });
-    // })
+    $('#update_form').off().on('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData($('#update_form')[0]);
+        disableButton()
+        $.ajax({
+            url: "{{ url('admin/indent/update') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function(response) {
+                if (response.error) {
+                    error_notification(response.error)
+                    enableeButton()
+                }
+                if (response.success) {
+                    // enableeButton()
+                    $('.yajra-datatable').DataTable().ajax.reload(null, false);
+                    toastr.success('Information Updated', 'Saved');
+                    $('#edit_model').modal('hide');
+                }
+                setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
+            },
+            error: function(response) {
+                enableeButton()
+                clear_error_field();
+                error_notification('Please fill up the form correctly and try again')
+                $('#error_sender').text(response.responseJSON.errors.sender);
+                $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                $('#error_admin_section').text(response.responseJSON.errors.admin_section);
+                $('#error_indent_number').text(response.responseJSON.errors.indent_number);
+                $('#error_indent_received_date').text(response.responseJSON.errors
+                    .indent_received_date);
+                $('#error_indent_reference_date').text(response.responseJSON.errors
+                    .indent_reference_date);
+                $('#error_item_id').text(response.responseJSON.errors.item_id);
+                $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
+                $('#error_fin_year_id').text(response.responseJSON.errors.fin_year_id);
+            }
+        });
+    })
     //End:: Update information
 
     // Start:: delete user
@@ -248,6 +249,13 @@
     function clear_error_field() {
         $('#error_sender').text("");
         $('#error_reference_no').text("");
+        $('#error_admin_section').text("");
+        $('#error_indent_number').text("");
+        $('#error_indent_received_date').text("");
+        $('#error_indent_reference_date').text("");
+        $('#error_item_id').text("");
+        $('#error_item_type_id').text("");
+        $('#error_fin_year_id').text("");
 
     }
 
