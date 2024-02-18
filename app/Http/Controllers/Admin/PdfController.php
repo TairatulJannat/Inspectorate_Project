@@ -75,10 +75,11 @@ class PdfController extends Controller
             'enable_remote' => true,
             'enable_css_float' => true,
             'isPhpEnabled' => true,
-            'isFixedPositionEnabled' => true, 
+            'isFixedPositionEnabled' => true,
         ])
         ->setPaper('a4');
 
         return $pdf->stream('csr-pdf.pdf');
     }
 }
+
