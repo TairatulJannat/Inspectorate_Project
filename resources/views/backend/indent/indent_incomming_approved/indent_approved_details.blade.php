@@ -16,8 +16,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #1B4C43;
+            color: #ffff;
+        }
+
+        .card-body {
+
+            margin: 30px 15px 30px 0
         }
 
         .table thead {
@@ -148,7 +154,10 @@
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
                             </tr>
-
+                            <tr>
+                                <th>Nomenclature</td>
+                                <td>{{ $details->nomenclature }}</td>
+                            </tr>
 
                             <tr>
                                 <th>Model</td>
@@ -168,7 +177,7 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-
+                        
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->doc_file) }}"
@@ -395,7 +404,9 @@
                             }
                         });
 
-                    }  else if (result.dismiss === swal.DismissReason.cancel) {
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
 
                         swal(
                             'Cancelled',

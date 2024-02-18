@@ -102,7 +102,7 @@
                         <table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
-                                <td>{{ $details->reference_no }}</td>
+                                <td id="offerRefNo">{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
@@ -219,7 +219,6 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -306,7 +305,7 @@
                     </div>
 
                     <!-- Notes Sectio
-                                                                                                                n - Uncomment if needed -->
+                                                                                                                        n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
@@ -326,7 +325,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.offer.offer_incomming_new.index_js')
+    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -390,21 +389,18 @@
                                     }
                                 }
                             },
-                            error: function(response) {
-                                enableeButton()
-                                clear_error_field();
-                                error_notification(
-                                    'Please fill up the form correctly and try again'
-                                )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                            error: function(xhr, status, error) {
 
-
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 
-                    } else if (result.dismiss === swal.DismissReason.cancel) {
-                        
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -418,9 +414,9 @@
                 event.preventDefault();
 
                 var url = $(this).attr('href');
-                var tenderRefNo = $('#tenderRefNo').text();
+                var offerRefNo = $('#offerRefNo').text();
 
-                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
+                var redirectUrl = url + '?offerRefNo=' + encodeURIComponent(offerRefNo);
 
                 window.location.href = redirectUrl;
             });

@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DocType;
-use Yajra\DataTables\Facades\DataTables;
+use DataTables;
 use Validator;
 use Illuminate\Support\Facades\DB;
-
 
 class DocTypeController extends Controller
 {

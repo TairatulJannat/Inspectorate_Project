@@ -16,7 +16,6 @@ use App\Models\Items;
 use App\Models\Offer;
 use App\Models\Section;
 use App\Models\Supplier;
-use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -136,7 +135,7 @@ class OfferDispatchController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -152,7 +151,7 @@ class OfferDispatchController extends Controller
                 ->addColumn('action', function ($data) {
 
                     // start Forward Btn Change for index
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 5)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 5)->latest()->first();
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // start Forward Btn Change for index
                     if ($DocumentTrack) {
@@ -290,19 +289,6 @@ class OfferDispatchController extends Controller
     public function offerTracking(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'doc_ref_id' => 'required',
-            'doc_reference_number' => 'required',
-            'reciever_desig_id' => 'required',
-        ], [
-            'reciever_desig_id.required' => 'The receiver designation field is required.'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
-
-
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -314,15 +300,9 @@ class OfferDispatchController extends Controller
         $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
 
-
-
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 
-        $data = new DocumentTrack();if ($validator) {
-            if ($reciever_desig_id == $sender_designation_id) {
-                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
-            }
-        }
+        $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;
         $data->doc_type_id = $doc_type_id;

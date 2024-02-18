@@ -41,8 +41,6 @@ class CoverLetterController extends Controller
         $data->internal = $request->internal;
         $data->internal_act = $request->internal_act;
         $data->internal_info = $request->internal_info;
-        $data->page_size = $request->page_size;
-        $data->header_footer = $request->header_footer;
 
         $data->save();
 
@@ -55,7 +53,7 @@ class CoverLetterController extends Controller
             $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
             return $pdf->stream('cover_letter.pdf');
         }
-        $fontPath = public_path('fonts');
+        // $fontPath = public_path('fonts');
 
         // // Create an mPDF object
         // $mpdf = new Mpdf([
@@ -71,7 +69,7 @@ class CoverLetterController extends Controller
         // $html = view('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->render();
         // $mpdf->WriteHTML($html);
 
-        // Output or download the PDF
+        // // Output or download the PDF
         // $mpdf->Output('sample.pdf', 'D');
     }
 
@@ -79,7 +77,7 @@ class CoverLetterController extends Controller
     {
 
         $data = CoverLetter::find($request->editId);
-        //  dd( $request->all());
+        // dd( $request->all());
         $data->doc_type_id = $request->doc_type_id;
         $data->letter_reference_no = $request->letter_reference_no;
         $data->inspectorate_name = $request->inspectorate_name;
@@ -93,15 +91,15 @@ class CoverLetterController extends Controller
         $data->body_2 = $request->bodyEdit_2;
         $data->signature = $request->signatureEdit;
         $data->anxs = $request->anxsEdit;
-        $data->distr = $request->distrEdit;
-        $data->extl = $request->extlEdit;
-        $data->act = $request->actEdit;
-        $data->info = $request->infoEdit;
-        $data->internal = $request->internalEdit;
-        $data->internal_act = $request->internal_actEdit;
-        $data->internal_info = $request->internal_infoEdit;
-        $data->page_size = $request->page_sizeEdit;
-        $data->header_footer = $request->header_footerEdit;
+        $data->distr = $request->distr;
+        $data->extl = $request->extl;
+        $data->act = $request->act;
+        $data->info = $request->info;
+        $data->internal = $request->internal;
+        $data->internal_act = $request->internal_act;
+        $data->internal_info = $request->internal_info;
+
+
         $data->save();
 
         return response()->json(['success' => "Letter information updated"]);

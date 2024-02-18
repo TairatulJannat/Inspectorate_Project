@@ -104,7 +104,7 @@
                         <table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
-                                <td>{{ $details->reference_no }}</td>
+                                <td id="offerRefNo">{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
@@ -201,7 +201,6 @@
                                                                 </option>
                                                             @endforeach
                                                         </select>
-                                                        <span id="error_designation" class="text-danger"></span>
                                                     </div>
                                                 @endif
                                                 <div class="col-md-6 mb-2">
@@ -331,7 +330,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.offer.offer_dispatch.offer_dispatch_index_js')
+    {{-- @include('backend.indent.indent_dispatch.indent_dispatch_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -397,21 +396,18 @@
                                     }
                                 }
                             },
-                            error: function(response) {
-                                enableeButton()
-                                clear_error_field();
-                                error_notification(
-                                    'Please fill up the form correctly and try again'
-                                )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                            error: function(xhr, status, error) {
 
-
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 
-                    }  else if (result.dismiss === swal.DismissReason.cancel) {
-
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -419,16 +415,15 @@
                         )
                     }
                 })
-
             });
 
             $('#csrBtn').on('click', function(event) {
                 event.preventDefault();
 
                 var url = $(this).attr('href');
-                var tenderRefNo = $('#tenderRefNo').text();
+                var offerRefNo = $('#offerRefNo').text();
 
-                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
+                var redirectUrl = url + '?offerRefNo=' + encodeURIComponent(offerRefNo);
 
                 window.location.href = redirectUrl;
             });

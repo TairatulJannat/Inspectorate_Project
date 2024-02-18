@@ -16,8 +16,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #006A4E !important;
             border-radius: 8px 8px 0 0 !important;
-            color: #1B4C43;
+            color: #ffff;
+        }
+
+        .card-body {
+
+            margin: 30px 15px 30px 0
         }
 
         .table thead {
@@ -177,7 +183,7 @@
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
                         {{-- <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
-
+                        
 
                         @if ($cover_letter)
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -258,8 +264,7 @@
 
                                                 <div class="col-md-2">
                                                     @if ($cover_letter)
-                                                        <button class="delivery-btn btn btn-success mt-2"
-                                                            id="form_submission_button"
+                                                        <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
                                                             style="height: 40px;">Deliver</button>
                                                     @else
                                                         <button class="delivery-btn btn btn-info text-white mt-2"
@@ -321,8 +326,8 @@
                                             <div class="col-md-2">
 
 
-                                                <button class="delivery-btn btn btn-success mt-2"
-                                                    id="form_submission_button" style="height: 40px;">Deliver</button>
+                                                <button class="delivery-btn btn btn-success mt-2" id="form_submission_button"
+                                                    style="height: 40px;">Deliver</button>
                                             </div>
                                         </div>
                                     </form>
@@ -402,13 +407,268 @@
         </div>
     </div>
     {{-- start Modal for cover letter --}}
-    @include('backend.indent.cover_letter.cover_letter_create')
 
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myLargeModalLabel">Cover Letter</h4>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <form action="" id="myForm">
+                            @csrf
+                            <div class="col-12 text-center">RESTRICTED</div>
+                            <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
+                            <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                            <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                            <input type="hidden" id="doc_type_id" value="3">
+                            <div class="row text-center">
+                                <div class="col-6 align-self-end">
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text">23.01.901.051. </span>
+                                        </div>
+                                        <input type="text" class="form-control " id="letter_reference_no">
+                                        <div class="input-group-append ">
+                                            <span class="input-group-text "> .{{ \Carbon\Carbon::now()->format('d.m.y') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <input type="text" class="form-control inspectorate_name"
+                                            id="inspectorate_name" name="inspectorate_name"
+                                            placeholder="Inspectorate Name" value="I E & I">
+                                        <input type="text" class="form-control place" id="place" name="place"
+                                            placeholder="Address" value="Dhaka Cantt">
+                                        <input type="text" class="form-control mobile" id="mobile" name="mobile"
+                                            placeholder="Telephone" value="8711111 Ext-7122">
+                                        <input type="text" class="form-control fax" id="fax" name="fax"
+                                            placeholder="fax" value="9837120">
+                                        <input type="text" class="form-control email" id="email" name="email"
+                                            placeholder="email" value="iei.dci@army.mil.bd">
+                                        <input type="text" class="form-control date" id="date" name="date"
+                                            placeholder="date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <textarea class="form-control my-2" name="subject" id="subject" placeholder="Subject"></textarea>
+                                {{-- <input type="text" id="subject" class="form-control my-2" placeholder="Subject"> --}}
+                            </div>
+                            <div class="my-2">
+                                <label for="body_1">Refs: </label>
+                                <textarea class="form-control " name="body_1" id="body_1"></textarea>
+                            </div>
+                            <div class="mt-2">
+                                <label for="body_2">Body </label>
+                                <textarea class="form-control " name="body_2" id="body_2"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-4"></div>
+                                <div class="col-4"></div>
+                                <div class="col-4 mt-5">
+
+                                    <div class="mt-2">
+                                        <label for="signature">Signature Details </label>
+                                        <textarea class="form-control " name="signature" id="signature"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <label for="anxs">Anxs: </label>
+                                    <textarea class="form-control" name="anxs" id="anxs"></textarea>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mt-2">
+
+                                    <input type="text" class="form-control" id="distr" placeholder="Distr">
+                                    <input type="text" class="form-control" id="extl" placeholder="Extl">
+                                    <input type="text" class="form-control" id="act" placeholder="Act">
+                                    <input type="text" class="form-control" id="info" placeholder="info">
+
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div>
+                                    <label for="anxs">Internal: </label>
+                                    <textarea class="form-control" name="internal" id="internal">
+                                </textarea>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mt-2">
+
+                                    <input type="text" class="form-control" id="internal_act" placeholder="Act">
+                                    <input type="text" class="form-control" id="internal_info" placeholder="Info">
+
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">RESTRICTED</div>
+
+                            <div>
+                                <button type="submit" class="btn btn-success"> Save </button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- start Modal for cover letter --}}
 
     {{-- start edit cover letter --}}
     @if ($cover_letter)
-        @include('backend.indent.cover_letter.cover_letter_edit')
+        <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Edit Cover Letter</h4>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <form action="" id="editForm">
+                                @csrf
+                                <div class="col-12 text-center">RESTRICTED</div>
+                                <input type="hidden" id="editId" value="{{ $cover_letter->id }}">
+                                <input type="hidden" id="insp_id" value="{{ $details->insp_id }}">
+                                <input type="hidden" id="sec_id" value="{{ $details->sec_id }}">
+                                <input type="hidden" id="doc_reference_no" value="{{ $details->reference_no }}">
+                                <input type="hidden" id="doc_type_id" value="3">
+                                <div class="row text-center">
+                                    <div class="col-6 align-self-end">
+                                        <div class="input-group ">
+
+                                            <input type="text" class="form-control " id="letter_reference_no"
+                                                value="{{ $cover_letter->letter_reference_no }}">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+
+                                    </div>
+                                    <div class="col-4">
+                                        <div>
+                                            <input type="text" class="form-control inspectorate_name"
+                                                id="inspectorate_name" name="inspectorate_name"
+                                                placeholder="Inspectorate Name"
+                                                value="{{ $cover_letter->inspectorate_name }}">
+                                            <input type="text" class="form-control place" id="place"
+                                                name="place" placeholder="Address"
+                                                value="{{ $cover_letter->inspectorate_place }}">
+                                            <input type="text" class="form-control mobile" id="mobile"
+                                                name="mobile" placeholder="Telephone"
+                                                value="{{ $cover_letter->mobile }}">
+                                            <input type="text" class="form-control fax" id="fax" name="fax"
+                                                placeholder="fax" value="{{ $cover_letter->fax }}">
+                                            <input type="text" class="form-control email" id="email"
+                                                name="email" placeholder="email" value="{{ $cover_letter->email }}">
+                                            <input type="text" class="form-control date" id="date"
+                                                name="date" placeholder="date"
+                                                value="{{ $cover_letter->letter_date }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="text" id="subject" class="form-control my-2" placeholder="Subject"
+                                        value="{{ $cover_letter->subject }}">
+                                </div>
+                                <div class="my-2">
+                                    <label for="body_1">Refs: </label>
+                                    <textarea class="form-control body_1" name="bodyEdit_1" id="bodyEdit_1">
+                                {!! $cover_letter->body_1 !!}
+                    </textarea>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="body_2">Body </label>
+                                    <textarea class="form-control body_2" name="bodyEdit_2" id="bodyEdit_2">
+                                {!! $cover_letter->body_2 !!}
+                    </textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4"></div>
+                                    <div class="col-4 mt-5">
+
+                                        <div class="mt-2">
+                                            <label for="signatureEdit">Signature Details </label>
+                                            <textarea class="form-control " name="signatureEdit" id="signatureEdit"> {!! $cover_letter->signature !!}</textarea>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div>
+                                        <label for="anxs">Anxs: </label>
+                                        <textarea class="form-control" name="anxs" id="anxsEdit">
+                                    {!! $cover_letter->anxs !!}</textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 mt-2">
+
+                                        <input type="text" class="form-control" id="distr" placeholder="Distr"
+                                            value="{{ $cover_letter->distr }}">
+                                        <input type="text" class="form-control" id="extl" placeholder="Extl"
+                                            value="{{ $cover_letter->extl }}">
+                                        <input type="text" class="form-control" id="act" placeholder="Act"
+                                            value="{{ $cover_letter->act }}">
+                                        <input type="text" class="form-control infoedit" id="info"
+                                            placeholder="info" value="{{ $cover_letter->info }}">
+
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div>
+                                        <label for="anxs">Internal: </label>
+                                        <textarea class="form-control" name="internal" id="internal">
+                                    {!! $cover_letter->internal !!}</textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 mt-2">
+
+                                        <input type="text" class="form-control" id="internal_act" placeholder="Act"
+                                            value="{{ $cover_letter->internal_act }}">
+                                        <input type="text" class="form-control" id="internal_info" placeholder="Info"
+                                            value="{{ $cover_letter->internal_info }}">
+
+                                    </div>
+                                </div>
+
+                                <div class="col-12 text-center">RESTRICTED</div>
+
+                                <div>
+                                    <button type="submit" class="btn btn-primary"> Update </button>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 
     {{-- start edit cover letter --}}
@@ -420,11 +680,61 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.indent.indent_outgoing.outgoing_index_js')
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    @include('backend.indent.cover_letter.cover_letter_js')
+    <script>
+        // ClassicEditor
+        //     .create(document.querySelector(''))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        ClassicEditor
+            .create(document.querySelector('#body_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxs'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signature'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxsEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signatureEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('.infoedit'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -502,13 +812,14 @@
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                                 $('#error_designation').text(response.responseJSON.error.reciever_desig_id);
 
                             }
                         });
 
-                    } else if (result.dismiss === swal.DismissReason.cancel) {
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
 
                         swal(
                             'Cancelled',
@@ -521,7 +832,56 @@
             });
 
         });
-       
-        
+        $('#myForm').submit(function(e) {
+
+            var formData = {}; // Object to store form data
+
+            $(this).find('input, textarea').each(function() {
+                var fieldId = $(this).attr('id');
+                var fieldValue = $(this).val();
+                formData[fieldId] = fieldValue;
+            });
+
+            console.log(formData);
+
+            $.ajax({
+                url: '{{ url('admin/cover_letter/create') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    toastr.success('Information Saved', 'Saved');
+                },
+                error: function(error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+        });
+        $('#editForm').submit(function(e) {
+            var formData = {}; // Object to store form data
+
+            $(this).find('input, textarea').each(function() {
+                var fieldId = $(this).attr('id');
+                var fieldValue = $(this).val();
+                formData[fieldId] = fieldValue;
+            });
+
+            $.ajax({
+                url: '{{ url('admin/cover_letter/edit') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    toastr.success('Information Updated', 'Saved');
+                },
+                error: function(error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+        });
     </script>
 @endpush

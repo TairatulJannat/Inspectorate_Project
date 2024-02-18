@@ -32,6 +32,9 @@ class OutgoingTenderController extends Controller
             $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
             $desig_position = Designation::where('id', $designation_id)->first();
 
+
+
+
             if (Auth::user()->id == 92) {
                 $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
                     ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
@@ -58,7 +61,7 @@ class OutgoingTenderController extends Controller
                     ->whereIn('tenders.id', $tenderIds)
                     ->where('tenders.status', '=', 1)
                     ->get();
-
+            
                 // $designation_ids = AdminSection::where('admin_id', $admin_id)->select('desig_id')->first();
 
                 $tenderId = [];
@@ -68,16 +71,20 @@ class OutgoingTenderController extends Controller
                     }
                 }
 
+         
+
                 $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $tenderId)
                     ->where('reciever_desig_id', $designation_id)
                     ->first();
+
+
 
                 if (!$document_tracks_receiver_id) {
                     $query = Tender::where('id', 'no data')->get();
                 }
             }
 
-            $query=$query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -122,12 +129,12 @@ class OutgoingTenderController extends Controller
         $details->additional_documents = json_decode($details->additional_documents, true);
 
         $additional_documents_names = [];
-
+        
         foreach ($details->additional_documents as $document_id) {
             $additional_names=Additional_document::where('id',$document_id)->pluck('name')->first();
-
+        
            array_push($additional_documents_names, $additional_names);
-
+            
         }
 
         $designations = Designation::all();
@@ -152,9 +159,9 @@ class OutgoingTenderController extends Controller
             if ($document_tracks->isNotEmpty()) {
                 $notes = $document_tracks->last();
             }
-
+    
             //End blade notes section....
-
+    
 
         // delay cause for sec IC start
 

@@ -1,5 +1,7 @@
 @extends('backend.app')
+
 @section('title', 'Offer (Outgoing)')
+
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
     <style>
@@ -95,8 +97,11 @@
         }
     </style>
 @endpush
+
 @section('main_menu', 'Offer (Outgoing)')
+
 @section('active_menu', 'Outgoing Details')
+
 @section('content')
     <div class="col-sm-12 col-xl-12">
         <div class="card ">
@@ -104,14 +109,12 @@
                 <h2><b>Details of Offer</b></h2>
             </div>
             <div style="display: flex">
-
                 <div class="card-body col-4">
-
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
-                                <td>{{ $details->reference_no }}</td>
+                                <td id="offerRefNo">{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
@@ -125,7 +128,6 @@
                                 <th>Receive Date</td>
                                 <td>{{ $details->offer_rcv_ltr_dt }}</td>
                             </tr>
-
                             <tr>
                                 <th>Nomenclature</td>
                                 <td>{{ $details->item_name }}</td>
@@ -135,7 +137,6 @@
                                 <td>{{ $details->attribute }}</td>
                             </tr>
                             <tr>
-
                                 <th>Additional Documents</th>
                                 <td>
                                     @if (!empty($additional_documents_names))
@@ -149,7 +150,6 @@
                                         No additional documents available.
                                     @endif
                                 </td>
-
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
@@ -177,7 +177,8 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
+                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{ url('admin/csr/index') }}">CSR</a>
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
                             href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a> --}}
 
@@ -194,7 +195,6 @@
                     </div>
                 </div>
 
-
                 <div class="card-body col-8">
                     <div class="row">
                         @if ($DocumentTrack_hidden)
@@ -207,7 +207,6 @@
                                         <form action="">
                                             <div class="row">
                                                 <div class="col-md-12 d-flex">
-
                                                     <select name="designation" id="designations" class="form-control "
                                                         style="height: 40px; margin-right">
                                                         <option value="">Select To Receiver </option>
@@ -215,8 +214,6 @@
                                                             <option value={{ $d->id }}>{{ $d->name }}</option>
                                                         @endforeach
                                                     </select>
-                                                    <span id="error_designation" class="text-danger"></span>
-
                                                     <textarea name="remarks" id="remarks" class="form-control ml-2 " placeholder="Remarks Here"
                                                         style="height: 40px; margin-left: 10px;"></textarea>
                                                 </div>
@@ -235,7 +232,6 @@
                                                         </div>
                                                     @endif
                                                 </div>
-
                                                 <div class="d-flex">
                                                     @if (!$details->terms_conditions)
                                                         <div class="col-md-6 mt-2 ">
@@ -244,7 +240,6 @@
                                                                 id="terms_conditions_text" placeholder="Please write terms and conditions"></textarea>
                                                         </div>
                                                     @endif
-
 
                                                     @if (!$cover_letter)
                                                         <div
@@ -256,12 +251,8 @@
                                                         </div>
                                                     @endif
 
-
-
-
                                                 </div>
                                                 <div class="col-md-2">
-
                                                     @if ($cover_letter)
                                                         <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
                                                             style="height: 40px;">Deliver</button>
@@ -274,7 +265,6 @@
                                                 </div>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             @else
@@ -319,19 +309,14 @@
                                                 @endif
                                             </div>
                                             <div class="col-md-2">
-
-
                                                 <button class="delivery-btn btn btn-success mt-2" id="submitBtn"
                                                     style="height: 40px;">Deliver</button>
                                             </div>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
-
                         @endif
-
 
                         <div class="forward_status col-md-12 mb-3">
                             <div>
@@ -382,7 +367,6 @@
                                 </div>
                             </div>
                         @endif
-
                         @if ($details->terms_conditions)
                             <div class="forward_status col-md-12 mb-3">
                                 <div>
@@ -395,16 +379,13 @@
                             </div>
                         @endif
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
     {{-- start Modal for cover letter --}}
-    @include('backend.offer.cover_letter.cover_letter_create')
 
-    {{-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -413,7 +394,6 @@
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     <div class="row">
                         <form action="" id="myForm">
                             @csrf
@@ -436,7 +416,6 @@
                                     </div>
                                 </div>
                                 <div class="col-2">
-
                                 </div>
                                 <div class="col-4">
                                     <div>
@@ -473,12 +452,10 @@
                                 <div class="col-4"></div>
                                 <div class="col-4"></div>
                                 <div class="col-4 mt-5">
-
                                     <div class="mt-2">
                                         <label for="signature">Signature Details </label>
                                         <textarea class="form-control " name="signature" id="signature"></textarea>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="row">
@@ -487,38 +464,31 @@
                                     <textarea class="form-control" name="anxs" id="anxs">
                               </textarea>
                                 </div>
-
                             </div>
                             <div class="row">
                                 <div class="col-4 mt-2">
-
                                     <input type="text" class="form-control" id="distr" placeholder="Distr">
                                     <input type="text" class="form-control" id="extl" placeholder="Extl">
                                     <input type="text" class="form-control" id="act" placeholder="Act">
                                     <input type="text" class="form-control" id="info" placeholder="info">
-
                                 </div>
                             </div>
                             <div class="col-12 text-center">RESTRICTED</div>
-
                             <div>
                                 <button type="submit"> Save </button>
                             </div>
-
                         </form>
                     </div>
 
                 </div>
             </div>
         </div>
-    </div> --}}
-
+    </div>
     {{-- start Modal for cover letter --}}
 
     {{-- start edit cover letter --}}
     @if ($cover_letter)
-        @include('backend.offer.cover_letter.cover_letter_edit')
-        {{-- <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        <div class="modal fade edit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -527,7 +497,6 @@
                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
                         <div class="row">
                             <form action="" id="editForm">
                                 @csrf
@@ -540,14 +509,11 @@
                                 <div class="row text-center">
                                     <div class="col-6 align-self-end">
                                         <div class="input-group ">
-
                                             <input type="text" class="form-control " id="letter_reference_no"
                                                 value="{{ $cover_letter->letter_reference_no }}">
-
                                         </div>
                                     </div>
                                     <div class="col-2">
-
                                     </div>
                                     <div class="col-4">
                                         <div>
@@ -591,12 +557,10 @@
                                     <div class="col-4"></div>
                                     <div class="col-4"></div>
                                     <div class="col-4 mt-5">
-
                                         <div class="mt-2">
                                             <label for="signatureEdit">Signature Details </label>
                                             <textarea class="form-control " name="signatureEdit" id="signatureEdit"> {!! $cover_letter->signature !!}</textarea>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="row">
@@ -605,7 +569,6 @@
                                         <textarea class="form-control" name="anxs" id="anxsEdit">
                                     {!! $cover_letter->anxs !!}</textarea>
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="col-4 mt-2">
@@ -627,36 +590,27 @@
                                         <textarea class="form-control" name="internal" id="internal">
                                     {!! $cover_letter->internal !!}</textarea>
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="col-4 mt-2">
-
                                         <input type="text" class="form-control" id="internal_act" placeholder="Act"
                                             value="{{ $cover_letter->internal_act }}">
                                         <input type="text" class="form-control" id="internal_info" placeholder="Info"
                                             value="{{ $cover_letter->internal_info }}">
-
                                     </div>
                                 </div>
-
                                 <div class="col-12 text-center">RESTRICTED</div>
-
                                 <div>
                                     <button type="submit" class="btn btn-primary"> Update </button>
                                 </div>
-
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
     @endif
-
     {{-- start edit cover letter --}}
-
 
 @endsection
 @push('js')
@@ -665,13 +619,57 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.offer.offer_outgoing.outgoing_index_js')
+    {{-- @include('backend.indent.indent_outgoing.outgoing_index_js') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/40.2.0/ckeditor.min.js"
         integrity="sha512-8gumiqgUuskL3/m+CdsrNnS9yMdMTCdo5jj5490wWG5QaxStAxJSYNJ0PRmuMNYYtChxYVFQuJD0vVQwK2Y1bQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    @include('backend.offer.cover_letter.cover_letter_js')
-
+    <script>
+        // ClassicEditor
+        //     .create(document.querySelector(''))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        ClassicEditor
+            .create(document.querySelector('#body_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#body_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxs'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signature'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_1'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#bodyEdit_2'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#anxsEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#signatureEdit'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -683,7 +681,9 @@
                 reciever_desig_text =
                     `to the <span style="color: red; font-weight: bold;">  ${reciever_desig_text}</span>`
 
+
             });
+
 
             $('#submitBtn').off('click').on('click', function(event) {
 
@@ -747,21 +747,18 @@
                                     }
                                 }
                             },
-                            error: function(response) {
-                                enableeButton()
-                                clear_error_field();
-                                error_notification(
-                                    'Please fill up the form correctly and try again'
-                                )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                            error: function(xhr, status, error) {
 
-
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 
-                    } else if (result.dismiss === swal.DismissReason.cancel) {
-
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -769,10 +766,69 @@
                         )
                     }
                 })
-
             });
+            $('#csrBtn').on('click', function(event) {
+                event.preventDefault();
 
+                var url = $(this).attr('href');
+                var offerRefNo = $('#offerRefNo').text();
+
+                var redirectUrl = url + '?offerRefNo=' + encodeURIComponent(offerRefNo);
+
+                window.location.href = redirectUrl;
+            });
         });
 
+        $('#myForm').submit(function(e) {
+
+            var formData = {}; // Object to store form data
+
+            $(this).find('input, textarea').each(function() {
+                var fieldId = $(this).attr('id');
+                var fieldValue = $(this).val();
+                formData[fieldId] = fieldValue;
+            });
+
+            console.log(formData);
+
+            $.ajax({
+                url: '{{ url('admin/cover_letter/create') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    toastr.success('Information Saved', 'Saved');
+                },
+                error: function(error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+        });
+        $('#editForm').submit(function(e) {
+            var formData = {}; // Object to store form data
+
+            $(this).find('input, textarea').each(function() {
+                var fieldId = $(this).attr('id');
+                var fieldValue = $(this).val();
+                formData[fieldId] = fieldValue;
+            });
+
+            $.ajax({
+                url: '{{ url('admin/cover_letter/edit') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    toastr.success('Information Updated', 'Saved');
+                },
+                error: function(error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+        });
     </script>
 @endpush

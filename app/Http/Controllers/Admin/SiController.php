@@ -155,7 +155,7 @@ class SiController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -171,7 +171,7 @@ class SiController extends Controller
                 })
 
                 ->addColumn('action', function ($data) {
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 11)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 11)->latest()->first();
                     $DesignationId = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
                     if ($DocumentTrack) {
@@ -284,26 +284,34 @@ class SiController extends Controller
 
 
         // $selected_document =$indent->additional_documents;
-        $item_types = Item_type::where('id', $si->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+        $item_types = Item_type::where('id', $si->item_id)->where('status', 1)
+            ->where('inspectorate_id', $inspectorate_id)
+            ->whereIn('section_id', $section_ids)
+            ->first();
 
-            // if ($item_types) {
-            //     // dd($item_types);
-            //      $itemTypeName = $item_types->name;
+            if ($item_types) {
+                // dd($item_types);
+                 $itemTypeName = $item_types->name;
 
-            // } else{
-            //     $itemTypeName = Null;
-            // }
+            } else{
+                $itemTypeName = Null;
+            }
 
-        $item = Items::where('inspectorate_id', $inspectorate_id)
-         ->whereIn('section_id', $section_ids)
-        ->first();
+        $item = Items::where('id', $si->item_id)->first();
+
+        if ($item) {
+            $itemName = $item->name;
+            // dd($itemName );
+        } else{
+            $itemName = Null;
+        }
 
         $fin_years = FinancialYear::all();
 
         $contracts = Contract::all();
         $supplier=Supplier::where('id', $si->supplier_id)->first();
 
-        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts', 'supplier'));
+        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts','itemTypeName','itemName', 'supplier'));
 
     }
 
@@ -334,8 +342,6 @@ class SiController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->received_date;
-        $data->contract_no = $request->contract_no;
-        $data->contract_date = $request->contract_date;
         $data->provationally_status = $request->provationally_status;
         $data->reference_date = $request->reference_date;
         $data->fin_year_id = $request->fin_year_id;
@@ -432,14 +438,11 @@ class SiController extends Controller
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
-        ], [
-            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
+            return response()->json(['error' => $validator->errors()->first()], 422);
         }
-
 
 
         $ins_id = Auth::user()->inspectorate_id;
@@ -453,12 +456,6 @@ class SiController extends Controller
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Si::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
-
-        if ($validator) {
-            if ($reciever_desig_id == $sender_designation_id) {
-                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
-            }
-        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;

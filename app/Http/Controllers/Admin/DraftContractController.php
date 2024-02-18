@@ -154,7 +154,8 @@ class DraftContractController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
+
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -322,8 +323,6 @@ class DraftContractController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->draft_contract_received_date;
         $data->reference_date = $request->draft_contract_reference_date;
-        $data->draft_contract_no = $request->draft_contract_no;
-        $data->draft_contract_date = $request->draft_contract_date;
         $data->fin_year_id = $request->fin_year_id;
         $data->supplier_id = $request->supplier_id;
         $data->final_spec_reference_no = $request->final_spec_reference_no;

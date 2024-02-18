@@ -71,7 +71,7 @@ class OutgoingIndentController extends Controller
                 ->whereIn('document_tracks.section_id', $section_ids)
                 ->count();
         }
-        return view('backend.indent.indent_outgoing.outgoing', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch'));
+        return view('backend.indent.indent_outgoing.outgoing', compact('indentNew','indentOnProcess','indentCompleted','indentDispatch'));
     }
     public function all_data(Request $request)
     {
@@ -103,7 +103,7 @@ class OutgoingIndentController extends Controller
                 $query = Indent::leftJoin('items', 'indents.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'indents.sec_id', '=', 'sections.id')
-                    ->select('indents.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('indents.*', 'items.name as item_name','dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('indents.id', $indentIds)
                     ->where('indents.status', '=', 1)
                     ->get();
@@ -129,7 +129,7 @@ class OutgoingIndentController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -196,10 +196,10 @@ class OutgoingIndentController extends Controller
     {
 
         $details = Indent::leftJoin('item_types', 'indents.item_type_id', '=', 'item_types.id')
-            ->leftJoin('items', 'indents.item_id', '=', 'items.id')
+        ->leftJoin('items', 'indents.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'indents.sender', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'indents.fin_year_id', '=', 'fin_years.id')
-            ->select('indents.*', 'item_types.name as item_type_name', 'fin_years.year as fin_year_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
+            ->select('indents.*', 'item_types.name as item_type_name','fin_years.year as fin_year_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
             ->where('indents.id', $id)
             ->where('indents.status', 1)
             ->first();
@@ -254,7 +254,7 @@ class OutgoingIndentController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-            ->where('doc_type_id',  3)->latest()->first();
+        ->where('doc_type_id',  3)->latest()->first();
 
         //End blade forward on off section....
 
@@ -265,7 +265,7 @@ class OutgoingIndentController extends Controller
         // end cover letter start
 
 
-        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'cover_letter', 'files'));
+        return view('backend.indent.indent_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'additional_documents_names', 'DocumentTrack_hidden', 'cover_letter','files'));
     }
 
     public function OutgoingIndentTracking(Request $request)
@@ -297,7 +297,7 @@ class OutgoingIndentController extends Controller
             if ($reciever_desig_id == $sender_designation_id) {
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
-        }
+         }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
