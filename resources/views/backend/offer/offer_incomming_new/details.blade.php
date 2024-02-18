@@ -102,7 +102,7 @@
                         <table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
-                                <td>{{ $details->reference_no }}</td>
+                                <td id="offerRefNo">{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
@@ -154,7 +154,7 @@
                             <tr>
                                 <th>Financial Year</td>
 
-                                <td>{{$details->fin_year_name }}</td>
+                                <td>{{ $details->fin_year_name }}</td>
 
                             </tr>
                             <tr>
@@ -174,7 +174,7 @@
 
                             <tr>
                                 <th>Quantity</td>
-                                <td>{{  $details->qty}}</td>
+                                <td>{{ $details->qty }}</td>
                             </tr>
 
 
@@ -184,12 +184,10 @@
                         {{-- Attached File end --}}
 
                         @if ($desig_id != 1)
-
                             <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
                                 href="{{ url('admin/csr/index') }}">CSR</a>
-
-                         @endif
-                         {{-- @if ($desig_id != 1)
+                        @endif
+                        {{-- @if ($desig_id != 1)
                                 <a class="btn btn-info mt-3 btn-parameter text-light"
                                     href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
                             @endif --}}
@@ -307,7 +305,7 @@
                     </div>
 
                     <!-- Notes Sectio
-                                                                                                            n - Uncomment if needed -->
+                                                                                                                n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
@@ -416,9 +414,9 @@
                 event.preventDefault();
 
                 var url = $(this).attr('href');
-                var tenderRefNo = $('#tenderRefNo').text();
+                var offerRefNo = $('#offerRefNo').text();
 
-                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
+                var redirectUrl = url + '?offerRefNo=' + encodeURIComponent(offerRefNo);
 
                 window.location.href = redirectUrl;
             });

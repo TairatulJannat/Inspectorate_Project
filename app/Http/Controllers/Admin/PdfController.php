@@ -16,10 +16,13 @@ class PdfController extends Controller
 {
     public function csrGeneratePdf(Request $request)
     {
-        $tenderRefNo = $request->input('tenderRefNo');
-        $tenderData = Tender::where('reference_no', $tenderRefNo)->first();
+        // $tenderRefNo = $request->input('tenderRefNo');
+        // $tenderData = Tender::where('reference_no', $tenderRefNo)->first();
 
-        $offerData = Offer::where('tender_reference_no', $tenderData->reference_no)->first();
+        // $offerData = Offer::where('tender_reference_no', $tenderData->reference_no)->first();
+        $offerData = Offer::where('reference_no', $request->offerRefNo)->first();
+        $tenderData = Tender::where('reference_no', $offerData->tender_reference_no)->first();
+        $tenderRefNo = $tenderData->reference_no;
 
         $item = Items::findOrFail($offerData->item_id);
 
@@ -70,4 +73,3 @@ class PdfController extends Controller
         return $pdf->stream('csr-pdf.pdf');
     }
 }
-
