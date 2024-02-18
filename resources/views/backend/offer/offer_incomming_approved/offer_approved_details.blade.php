@@ -109,7 +109,7 @@
                         <table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
-                                <td>{{ $details->reference_no }}</td>
+                                <td id="offerRefNo">{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
@@ -171,18 +171,15 @@
                                 <th>Quantity</td>
                                 <td>{{ $details->qty }}</td>
                             </tr>
-
-
                         </table>
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a class="btn btn-success mt-3 btn-parameter"
-                        href="{{url('admin/csr/index') }}">CSR</a>
+                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{ url('admin/csr/index') }}">CSR</a>
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a> --}}
                     </div>
                 </div>
-
 
                 {{-- @if (!$sender_designation_id) --}}
 
@@ -307,7 +304,7 @@
                     </div>
 
                     <!-- Notes Sectio
-                            n - Uncomment if needed -->
+                                                n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
@@ -417,7 +414,16 @@
 
             });
 
+            $('#csrBtn').on('click', function(event) {
+                event.preventDefault();
 
+                var url = $(this).attr('href');
+                var offerRefNo = $('#offerRefNo').text();
+
+                var redirectUrl = url + '?offerRefNo=' + encodeURIComponent(offerRefNo);
+
+                window.location.href = redirectUrl;
+            });
         });
     </script>
 @endpush
