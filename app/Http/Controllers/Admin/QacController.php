@@ -10,7 +10,6 @@ use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
-use App\Models\File;
 use App\Models\FinancialYear;
 
 use App\Models\Item_type;
@@ -28,12 +27,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class QacController extends Controller
 {
-    protected $fileController;
-    public function __construct(FileController $fileController)
-    {
-        $this->fileController = $fileController;
-    }
-
     public function index()
     {
 
@@ -90,7 +83,7 @@ class QacController extends Controller
         }
 
 
-        return view('backend.qac.qac_incomming_new.index', compact('qacNew', 'qacOnProcess', 'qacCompleted', 'qacDispatch'));
+        return view('backend.qac.qac_incomming_new.index', compact('qacNew','qacOnProcess','qacCompleted','qacDispatch'));
     }
 
     public function all_data(Request $request)
@@ -106,7 +99,7 @@ class QacController extends Controller
             if (Auth::user()->id == 92) {
                 $query = Qac::leftJoin('items', 'qacs.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'qacs.sender_id', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id')
+                    ->leftJoin('sections', 'qacs.section_id', '=', 'sections.id') 
                     ->where('qacs.status', 0)
                     ->select('qacs.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
@@ -118,7 +111,7 @@ class QacController extends Controller
                     ->where('qacs.inspectorate_id', $insp_id)
                     ->where('qacs.status', 0)
                     ->whereIn('qacs.section_id', $section_ids)
-                    ->select('qacs.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('qacs.*','items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -157,7 +150,7 @@ class QacController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query = $query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -263,17 +256,13 @@ class QacController extends Controller
             $data->created_at = Carbon::now()->format('Y-m-d');
             $data->updated_at = Carbon::now()->format('Y-m-d');
 
-            // if ($request->hasFile('doc_file')) {
+            if ($request->hasFile('doc_file')) {
 
-            //     $path = $request->file('doc_file')->store('uploads', 'public');
-            //     $data->attached_file = $path;
-            // }
+                $path = $request->file('doc_file')->store('uploads', 'public');
+                $data->attached_file = $path;
+            }
 
             $data->save();
-            $save_id = $data->id;
-            if ($save_id) {
-                $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 7,  $request->reference_no);
-            }
 
             return response()->json(['success' => 'QAC entry created successfully']);
         } catch (ValidationException $e) {
@@ -290,7 +279,7 @@ class QacController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
-        $contracts = Contract::all();
+        $contracts=Contract::all();
         // $selected_document =$qac->additional_documents;
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
@@ -299,7 +288,7 @@ class QacController extends Controller
         $item = Items::where('id', $qac->item_id)->first();
         $supplier = Supplier::where('id', $qac->supplier_id)->first();
         $fin_years = FinancialYear::all();
-        return view('backend.qac.qac_incomming_new.edit', compact('qac', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts', 'supplier'));
+        return view('backend.qac.qac_incomming_new.edit', compact('qac', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts','supplier'));
     }
 
     public function update(Request $request)
@@ -328,21 +317,20 @@ class QacController extends Controller
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->qac_received_date;
-        $data->contract_no = $request->contract_no;
-        $data->contract_date = $request->contract_date;
         $data->provationally_status = $request->provationally_status;
         $data->fin_year_id = $request->fin_year_id;
         $data->remarks = $request->remark;
         $data->updated_by = Auth::user()->id;
         $data->updated_at = Carbon::now()->format('Y-m-d');
 
-        $data->save();
+        $path='';
+        if ($request->hasFile('doc_file')) {
 
-        //Multipule File Upload in files table
-        $save_id = $data->id;
-        if ($save_id) {
-            $this->fileController->SaveFile($data->inspectorate_id, $data->section_id, $request->file_name, $request->file, 7,  $request->reference_no);
+            $path = $request->file('doc_file')->store('uploads', 'public');
         }
+        $data->attached_file = $path;
+
+        $data->save();
 
         return response()->json(['success' => 'Done']);
     }
@@ -366,9 +354,7 @@ class QacController extends Controller
             )
             ->where('qacs.id', $id)
             ->first();
-        // Attached File
-        $files = File::where('doc_type_id', 7)->where('reference_no', $details->reference_no)->get();
-        // Attached File End
+
         $document_tracks = DocumentTrack::where('doc_ref_id', $details->id)
             ->leftJoin('designations as sender_designation', 'document_tracks.sender_designation_id', '=', 'sender_designation.id')
             ->leftJoin('designations as receiver_designation', 'document_tracks.reciever_desig_id', '=', 'receiver_designation.id')
@@ -380,6 +366,7 @@ class QacController extends Controller
                 'receiver_designation.name as receiver_designation_name'
             )
             ->get();
+
         $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
 
         if ($auth_designation_id) {
@@ -401,12 +388,12 @@ class QacController extends Controller
 
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
-            ->where('doc_type_id',  7)->latest()->first();
+        ->where('doc_type_id',  7)->latest()->first();
 
         //End blade forward on off section....
 
 
-        return view('backend.qac.qac_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden', 'files'));
+        return view('backend.qac.qac_incomming_new.details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id',  'DocumentTrack_hidden'));
     }
 
     public function qacTracking(Request $request)
@@ -416,12 +403,10 @@ class QacController extends Controller
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
-        ], [
-            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
+            return response()->json(['error' => $validator->errors()->first()], 422);
         }
 
 
@@ -436,12 +421,6 @@ class QacController extends Controller
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Qac::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
-
-        if ($validator) {
-            if ($reciever_desig_id == $sender_designation_id) {
-                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
-            }
-        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
@@ -483,14 +462,14 @@ class QacController extends Controller
 
         return response()->json(['success' => 'Done']);
     }
-    public function getContractData($referenceNo)
+    public function getContractData ($referenceNo)
     {
 
-        $contract = Contract::where('reference_no', $referenceNo)->first();
-        $item = Items::where('id', $contract->item_id)->first();
-        $itemType = Item_type::where('id', $contract->item_type_id)->first();
-        $supplier = Supplier::where('id', $contract->supplier_id)->first();
+        $contract=Contract::where('reference_no', $referenceNo)->first();
+        $item=Items::where('id',$contract->item_id)->first();
+        $itemType=Item_type::where('id',$contract->item_type_id)->first();
+        $supplier=Supplier::where('id',$contract->supplier_id)->first();
 
-        return response()->json(['item' => $item, 'itemType' => $itemType, 'supplier' => $supplier, 'contract' => $contract]);
+        return response()->json(['item' => $item,'itemType' => $itemType, 'supplier' => $supplier, 'contract'=>$contract]);
     }
 }

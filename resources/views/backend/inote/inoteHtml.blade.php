@@ -209,10 +209,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="d-flex col-4 mt-3">
-                        <p class="">স্টেশন- </p><input type="text" class="form-control me-5" id="station" name="station">
-                        <p>তারিখ-</p><input type="date" class="form-control me-5" id="date" name="date">
-                    </div>
                 </div>
 
                 <div class="footer-box">

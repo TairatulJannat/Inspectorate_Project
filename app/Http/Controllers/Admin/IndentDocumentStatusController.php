@@ -20,6 +20,8 @@ class IndentDocumentStatusController extends Controller
 
     public function all_data(Request $request)
     {
+
+
         $query = IndentDocumentStatus::where('indent_id', $request->indentId)
             ->leftJoin('additional_documents', 'indent_progresses.indent_item_id', '=', 'additional_documents.id')
             ->select('indent_progresses.*', 'additional_documents.name as additional_documents_name')

@@ -162,7 +162,7 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a  class="btn btn-success mt-3 btn-parameter"
+                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
                             href="{{ url('admin/final_spec/parameter') }}/{{  $details->reference_no }}">Parameter</a>
 
                         {{-- @if ($desig_id != 1)
@@ -196,7 +196,6 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -298,7 +297,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.finalSpec.finalSpec_incomming_new.index_js')
+    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -362,19 +361,18 @@
                                     }
                                 }
                             },
-                            error: function(response) {
-                                error_notification(
-                                    'Please fill up the form correctly and try again'
-                                )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                            error: function(xhr, status, error) {
 
-
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 
-                    }  else if (result.dismiss === swal.DismissReason.cancel) {
-
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
                         swal(
                             'Cancelled',
                             'Your data is safe :)',

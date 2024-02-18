@@ -156,7 +156,7 @@ class ContractController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
 
 
             return DataTables::of($query)
@@ -282,7 +282,7 @@ class ContractController extends Controller
         $contract = Contract::find($id);
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
-        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         // $sections = Section::whereIn('id', $section_ids)->get();
         $draft_contracts = DraftContract::all();
 
@@ -325,8 +325,6 @@ class ContractController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->contract_received_date;
         $data->reference_date = $request->contract_reference_date;
-        $data->contract_date = $request->contract_date;
-        $data->contract_no = $request->contract_no;
         $data->fin_year_id = $request->fin_year_id;
         $data->supplier_id = $request->supplier_id;
         $data->contracted_value = $request->contracted_value;
