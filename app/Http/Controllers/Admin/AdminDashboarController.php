@@ -6,6 +6,7 @@ use App\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminSection;
 use App\Models\Designation;
+use App\Models\DocType;
 use App\Models\DocumentTrack;
 use App\Models\Indent;
 use App\Models\Offer;
@@ -134,8 +135,8 @@ class AdminDashboarController extends Controller
         $offerOnProcessChart = Offer::where('status', 3)->count();
         $offerCompletedChart = Offer::where('status', 1)->count();
         $offerDispatchChart = Offer::where('status', 4)->count();
-        
-  
+
+
 
 
         $currentDate = Carbon::now();
@@ -169,9 +170,9 @@ class AdminDashboarController extends Controller
         $indentoneMonthAgoData = Indent::whereBetween('created_at', [$oneMonthAgoStart, $oneMonthAgoEnd])->where('status', 2)->count();
         $indenttwoMonthAgoData = Indent::whereBetween('created_at', [$twoMonthAgoStart, $twoMonthAgoEnd])->where('status', 2)->count();
         $indentthreeMonthAgoData = Indent::whereBetween('created_at', [$threeMonthAgoStart, $threeMonthAgoEnd])->where('status', 2)->count();
- //end indent bar chart       
-       
-        
+ //end indent bar chart
+
+
 
 
         return view('backend.dashboard.dashboard', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch', 'indentNewChart','indentOnProcessChart','indentCompletedChart','indentDispatchChart', 'offerNewChart','offerOnProcessChart','offerCompletedChart','offerDispatchChart','offerNew','offerOnProcess','offerCompleted','offerDispatch','currentMonthData','oneMonthAgoData','twoMonthAgoData','threeMonthAgoData','currentMonthStart','oneMonthAgoStart','twoMonthAgoStart','threeMonthAgoStart', 'indentcurrentMonthData','indentoneMonthAgoData','indenttwoMonthAgoData','indentthreeMonthAgoData'));
@@ -216,5 +217,12 @@ class AdminDashboarController extends Controller
     {
         Auth::logout();
         return redirect()->route('login');
+    }
+    public function multiDeshboard($docTypeId){
+        $doc_type = DocType::find($docTypeId);
+        $modelClass = 'App\\Models\\' . $doc_type->name;
+        $table = $doc_type->table_name;
+        return view('backend.dashboard.multiDashboard');
+
     }
 }
