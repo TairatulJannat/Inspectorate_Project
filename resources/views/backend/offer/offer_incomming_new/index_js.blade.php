@@ -55,12 +55,12 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    
+
                 },
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-                    
+
                 },
                 {
                     data: 'tender_reference_no',
@@ -69,37 +69,37 @@
                 {
                     data: 'item_name',
                     name: 'item_id',
-                    
+
                 },
                 {
                     data: 'dte_managment_name',
                     name: 'sender',
-                   
+
                 },
                 {
                     data: 'offer_rcv_ltr_dt',
                     name: 'offer_rcv_ltr_dt',
-                    
+
                 },
                 {
                     data: 'section_name',
                     name: 'section_name',
-                   
+
                 },
                 {
                     data: 'qty',
                     name: 'qty',
-                   
+
                 },
                 {
                     data: 'status',
                     name: 'status',
-                    
+
                 },
                 {
                     data: 'action',
                     name: 'action',
-                    
+
                 },
             ],
             dom: 'lBfrtip',

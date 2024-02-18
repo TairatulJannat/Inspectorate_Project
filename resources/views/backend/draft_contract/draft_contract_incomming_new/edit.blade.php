@@ -9,19 +9,26 @@
 @section('content')
     <div class="col-sm-12 col-xl-12">
         <div class="card">
+            <div class=" header">
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <form action="{{ url('admin/import-final-spec-data-index') }}" method="POST">
+                            @csrf
+                            <input type="hidden" value="{{ $draft_contract->id }}" id="importId" name="importId">
+                            <input type="hidden" value="9" id="doc_type_id" name="doc_type_id">
+                            <button class="btn btn-success" type="submit">Import Excel</button>
+
+                        </form>
+                        {{-- <a href="{{ url('admin/import-final-spec-data-index') }}" class="btn btn-success"
+                            id="importExcelBtn">Import Excel</a> --}}
+                    </div>
+                </div>
+            </div>
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    <div class=" header">
-
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <a href="{{ url('admin/excel/import_documet_data') }}/{{ $draft_contract->reference_no }}"
-                                    class="btn btn-success">Import
-                                    Excel</a>
-                            </div>
-                        </div>
-                    </div>
+                  
                     <div class="row mt-4">
 
                         <div class="col-md-4">
@@ -55,8 +62,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="reference_date">Draft Contract Reference Date</label>
-                                <input type="date" class="form-control" id="reference_date"
-                                    name="reference_date"
+                                <input type="date" class="form-control" id="reference_date" name="reference_date"
                                     value="{{ $draft_contract->reference_date ? $draft_contract->reference_date : '' }}">
                                 <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
@@ -69,8 +75,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="draft_contract_no">Draft Contract Number</label>
-                                <input type="text" class="form-control" id="draft_contract_no"
-                                    name="draft_contract_no"
+                                <input type="text" class="form-control" id="draft_contract_no" name="draft_contract_no"
                                     value="{{ $draft_contract->draft_contract_no ? $draft_contract->draft_contract_no : '' }}">
                                 <span id="error_draft_contract_no" class="text-danger error_field"></span>
                             </div>
@@ -113,7 +118,7 @@
                         </div>
 
 
-                        <div class="col-md-4 d-none" >
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference No</label>
 
@@ -127,7 +132,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference No</label>
-                                <input type="text" id="offer_reference_no" class="form-control" name="offer_reference_no"
+                                <input type="text" id="offer_reference_no" class="form-control"
+                                    name="offer_reference_no"
                                     value="{{ $draft_contract->offer_reference_no ? $draft_contract->offer_reference_no : '' }}">
 
                                 <span id="error_offer_reference_no" class="text-danger error_field"></span>
@@ -140,13 +146,13 @@
 
                                     <option selected disabled value="">Please Select</option>
                                     @if ($item)
-                                    @foreach ($item_types as $i_type)
-                                        <option value="{{ $i_type->id }}"
-                                            {{ $i_type->id == $draft_contract->item_type_id ? 'selected' : '' }}>
-                                            {{ $i_type->name }}</option>
-                                    @endforeach
+                                        @foreach ($item_types as $i_type)
+                                            <option value="{{ $i_type->id }}"
+                                                {{ $i_type->id == $draft_contract->item_type_id ? 'selected' : '' }}>
+                                                {{ $i_type->name }}</option>
+                                        @endforeach
 
-                                @endif
+                                    @endif
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>

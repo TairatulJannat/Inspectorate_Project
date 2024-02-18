@@ -37,7 +37,41 @@
     @endif
 
     <div class="card shadow-lg" style="background-color: darkseagreen;">
-        <form id="import-final-spec-data-form" method="POST" action="{{ url('admin/import-final-spec-data') }}"
+        <form method="POST" action="{{ url('admin/import-final-spec-data') }}"
+            enctype="multipart/form-data">
+            @csrf
+            <div class="row">
+                <input type="hidden" name="document_id" id="document_id" value="{{ $documentDetails->reference_no }}">
+                <input type="hidden" name="doc_type_id" id="doc_type_id" value="{{ $doc_type_id }}">
+                <input type="hidden" name="supplierId" id="supplierId" value="{{ $supplier->id }}">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <div class="text-center text-light">
+                        <p>Final Spec Reference No: {{ $documentDetails->reference_no }}</p>
+                        <p>Item Type: {{ $itemType->name }}</p>
+                        <p>Nomenclature: {{ $item->name }}</p>
+                        <p>Supplier: {{ $supplier->firm_name }}</p>
+
+                    </div>
+
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="file" class="form-label mb-2 f-20 fw-bold bg-success p-1 required-field">Choose
+                            Excel/CSV File:</label>
+                        <input class="form-control" type="file" id="file" name="file">
+                        @error('file')
+                            <div class="invalid-feedback d-block f-14">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary float-end">Import</button>
+                </div>
+            </div>
+        </form>
+        {{-- <form id="import-final-spec-data-form" method="POST" action="{{ url('admin/import-final-spec-data') }}"
             accept-charset="utf-8" enctype="multipart/form-data">
             @csrf
             <div class="card-header p-5 pb-3" style="background-color: #b6e9b6 !important;">
@@ -117,7 +151,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </form> --}}
     </div>
 @endsection
 
@@ -127,5 +161,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- Developer's JS file for brand page -->
-    @include('backend.excel-files.final-spec-index-js')
+    {{-- @include('backend.excel-files.final-spec-index-js') --}}
 @endpush
