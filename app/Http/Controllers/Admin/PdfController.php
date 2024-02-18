@@ -70,3 +70,4 @@ class PdfController extends Controller
         return $pdf->stream('csr-pdf.pdf');
     }
 }
+
