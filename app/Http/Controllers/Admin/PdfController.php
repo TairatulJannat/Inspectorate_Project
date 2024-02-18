@@ -67,6 +67,8 @@ class PdfController extends Controller
     {
         $pdf = PDF::loadView('backend.csr.csr-pdf', $data)->setPaper('a4');
 
+
         return $pdf->stream('csr-pdf.pdf');
     }
 }
+

@@ -33,6 +33,17 @@
             @include('backend.dashboard.offer')
         </div>
 
+
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div id="dasboard_barchart" class="col-10"></div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
 
@@ -97,69 +108,28 @@
 
     chart2.render();
 
-    var options2 = {
-        chart: {
-            height: 210,
-            width: 450,
-            type: 'bar',
-            toolbar: {
-                show: false
-            }
+        var docPieChart = {
+          series: [44, 55, 13, 43],
+          chart: {
+          width: 380,
+          type: 'pie',
         },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        series: [{
-            data: [
-                {{ $currentMonthData }},
-                {{ $oneMonthAgoData }},
-                {{ $twoMonthAgoData }},
-                {{ $threeMonthAgoData }}
-            ]
-        }],
-        xaxis: {
-            categories: [
-                '{{ $currentMonthStart->format("M") }}',
-                '{{ $oneMonthAgoStart->format("M") }}',
-                '{{ $twoMonthAgoStart->format("M") }}',
-                '{{ $threeMonthAgoStart->format("M") }}'
-            ],
-        },
-        colors: ['#B263C5']
-    }
-
-    var chart2 = new ApexCharts(
-        document.querySelector("#basic-bar_offer"),
-        options2
-    );
-
-    chart2.render();
-
-    var options8 = {
-        chart: {
-            width: 380,
-            type: 'pie',
-        },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-        series: [44, 55, 13, 43],
+        labels: ['New Arrivel', 'Approved', 'Completed', 'Dispatch'],
         responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
             }
-        }],
-        colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#222222', '#717171', '#e2c636']
-    }
+          }
+        }]
+        };
+
+        var paichart = new ApexCharts(document.querySelector("#pichart"), docPieChart);
+        paichart.render();
 
     var options9 = {
         chart: {
