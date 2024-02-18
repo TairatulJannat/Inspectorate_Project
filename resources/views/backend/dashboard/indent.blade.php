@@ -225,7 +225,7 @@
                 <div class="card-body new-arrival-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$indentNew}} <sub>Indent</sub></h1>
+                        <h1>{{ $indentNew }} <sub>Indent</sub></h1>
 
                     </div>
                 </div>
@@ -247,7 +247,7 @@
                 <div class="card-body approved-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$indentOnProcess}} <sub>Indent</sub></h1>
+                        <h1>{{ $indentOnProcess }} <sub>Indent</sub></h1>
 
                     </div>
                 </div>
@@ -269,7 +269,7 @@
                 <div class="card-body outgoing-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$indentCompleted}} <sub>Indent</sub></h1>
+                        <h1>{{ $indentCompleted }} <sub>Indent</sub></h1>
 
                     </div>
                 </div>
@@ -291,7 +291,7 @@
                 <div class="card-body dispatch-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{$indentDispatch}} <sub>Indent</sub></h1>
+                        <h1>{{ $indentDispatch }} <sub>Indent</sub></h1>
 
                     </div>
                 </div>
@@ -310,21 +310,22 @@
 <div class="row">
     <div class="col-sm-12 col-xl-6 box-col-6">
         <div class="card">
-          <div class="card-header pb-0">
-            <h5>Indent report for last 4 month</h5>
-          </div>
-          <div class="card-body">
-            <div id="basic-bar-indent"></div>
-          </div>
+            <div class="card-header pb-0">
+                <h5>Indent report for last 4 month</h5>
+            </div>
+            <div class="card-body">
+                <div id="basic-bar-indent"></div>
+            </div>
         </div>
-      </div>
+    </div>
     <div class="col-sm-12 col-xl-6 box-col-6">
         <div class="card">
             <div class="card-header pb-0">
-            <h5>   Overall Indent Report</h5>
+                <h5> Overall Indent Report</h5>
             </div>
             <div class="card-body apex-chart">
-                <div id="donutchart"></div>
+                {{-- <div id="donutchart"></div> --}}
+                <div id="pichart"></div>
             </div>
         </div>
     </div>
