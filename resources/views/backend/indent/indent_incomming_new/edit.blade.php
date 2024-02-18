@@ -26,7 +26,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <input type="hidden" value=" {{ $indent->id }}" id="editId" name="editId">
-                                <label for="sender">Sender</label>
+                                <label for="sender">*Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
                                     <option value="">Please Select</option>
@@ -44,16 +44,24 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="reference_no">Reference No.</label>
+                                <label for="reference_no">*Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
                                     value="{{ $indent->reference_no ? $indent->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="indent_number">Indent Number</label>
+                                <label for="indent_reference_date">*Reference Date</label>
+                                <input type="date" class="form-control" id="indent_reference_date"
+                                    name="indent_reference_date"
+                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date : '' }}">
+                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_number">*Indent Number</label>
 
                                 <input type="text" class="form-control" id="indent_number" name="indent_number"
                                     value="{{ $indent->indent_number ? $indent->indent_number : '' }}">
@@ -61,25 +69,25 @@
                                 <span id="error_indent_number" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_date">*Indent Date</label>
+                                <input type="date" class="form-control" id="indent_date" name="indent_date"
+                                    value="{{ $indent->indent_date ? $indent->indent_date : '' }}">
+                                <span id="error_indent_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="indent_received_date">Indent Received Date</label>
+                                <label for="indent_received_date">*Indent Received Date</label>
                                 <input type="date" class="form-control" id="indent_received_date"
                                     name="indent_received_date"
                                     value="{{ $indent->indent_received_date ? $indent->indent_received_date : '' }}">
                                 <span id="error_indent_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_reference_date">Indent Reference Date</label>
-                                <input type="date" class="form-control" id="indent_reference_date"
-                                    name="indent_reference_date"
-                                    value="{{ $indent->indent_reference_date ? $indent->indent_reference_date : '' }}">
-                                <span id="error_indent_reference_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -104,10 +112,10 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_type_id">Item Type</label>
+                                <label for="item_type_id">*Item Type</label>
                                 <select class="form-control" id="item_type_id" name="item_type_id">
 
-                                    <option selected disabled value="">Please Select</option>
+                                    <option value="">Please Select</option>
 
                                     @foreach ($item_types as $item_type)
                                         <option value="{{ $item_type->id }}"
@@ -123,7 +131,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="item_id">Nomenclature</label>
+                                <label for="item_id">*Nomenclature</label>
 
                                 <select class="form-control select2" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
@@ -132,7 +140,7 @@
                                     @endif
                                 </select>
 
-
+                                <span id="loading-message" class="text-danger error_field"></span>
                                 <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -201,7 +209,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="fin_year_id">Financial Year </label>
+                                <label for="fin_year_id">*Financial Year </label>
                                 <select class="form-control" id="fin_year_id" name="fin_year_id">
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
@@ -214,26 +222,7 @@
                                 <span id="error_fin_year_id" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="nomenclature">Nomenclature</label>
-                                <input type="text" class="form-control" id="nomenclature" name="nomenclature"
-                                    value="{{ $indent->nomenclature ? $indent->nomenclature : '' }}">
 
-                                <span id="error_nomenclature" class="text-danger error_field"></span>
-                            </div>
-
-                        </div>
-
-
-                        </div> --}}
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="make">Make</label>
-                                <input type="text" class="form-control" id="make" name="make">
-                                <span id="error_make" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -280,7 +269,7 @@
 
                     </div>
                 </div>
-                <div  class="card-body">
+                <div class="card-body">
                     <h1 class="mb-4">Upload Document</h1>
 
                     <div class="file-container">
@@ -319,6 +308,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
+    @include('backend.indent.indent_incomming_new.index_js')
     <script>
         $(document).ready(function() {
             $('.select2').select2();
@@ -347,140 +337,16 @@
         let fileCount = 1;
 
         $("#addFile").click(function() {
-            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            var newFileInput =
+                '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' +
+                fileCount +
+                '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' +
+                fileCount + '"></div></div></div>';
             $(".file-container").append(newFileInput);
 
             // Increment the fileCount for the next set of inputs
             fileCount++;
         });
-
-        //Start:: Update information
-        $('#update_form').off().on('submit', function(event) {
-            event.preventDefault();
-            var formData = new FormData($('#update_form')[0]);
-            disableButton()
-            $.ajax({
-                url: "{{ url('admin/indent/update') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    if (response.error) {
-                        error_notification(response.error)
-                        enableeButton()
-                    }
-                    if (response.success) {
-                        // enableeButton()
-                        $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                        toastr.success('Information Updated', 'Saved');
-                        $('#edit_model').modal('hide');
-                    }
-                    setTimeout(window.location.href = "{{ route('admin.indent/view') }}", 40000);
-                },
-                error: function(response) {
-                    enableeButton()
-                    clear_error_field();
-                    error_notification('Please fill up the form correctly and try again')
-                    // $('#error_hall_id').text(response.responseJSON.errors.hall_id);
-                    // $('#error_floor_id').text(response.responseJSON.errors.floor_id);
-                    // $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
-                    // $('#error_specify_event').text(response.responseJSON.errors.specify_event);
-                    // $('#error_event_name').text(response.responseJSON.errors.event_name);
-                    // $('#error_specify_month').text(response.responseJSON.errors.specify_month);
-                    // $('#error_months').text(response.responseJSON.errors.months);
-                    // $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
-                    // $('#error_specify_shift_charge').text(response.responseJSON.errors
-                    //     .specify_shift_charge);
-                    // $('#error_shift_id').text(response.responseJSON.errors.shift_id);
-                    // $('#error_price').text(response.responseJSON.errors.price);
-                    // $('#error_status').text(response.responseJSON.errors.status);
-                }
-            });
-        })
-        //End:: Update information
-
-        // Start:: delete user
-        // function delete_data(id) {
-        //     swal({
-        //         title: 'Are you sure?',
-        //         text: "You won't be able to revert this!",
-        //         type: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Yes, delete it!',
-        //         cancelButtonText: 'No, cancel!',
-        //         confirmButtonClass: 'btn btn-success',
-        //         cancelButtonClass: 'btn btn-danger',
-        //         buttonsStyling: false,
-        //         reverseButtons: true
-        //     }).then((result) => {
-        //         if (result.value) {
-        //             event.preventDefault();
-        //             $.ajax({
-        //                 type: 'get',
-        //                 url: '{{ url('admin/hall_price/delete') }}/' + id,
-        //                 success: function(response) {
-        //                     if (response) {
-        //                         if (response.permission == false) {
-        //                             toastr.warning('you dont have that Permission',
-        //                                 'Permission Denied');
-        //                         } else {
-        //                             toastr.success('Deleted Successful', 'Deleted');
-        //                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
-        //                         }
-        //                     }
-        //                 }
-        //             });
-        //         } else if (
-        //             result.dismiss === swal.DismissReason.cancel
-        //         ) {
-        //             swal(
-        //                 'Cancelled',
-        //                 'Your data is safe :)',
-        //                 'error'
-        //             )
-        //         }
-        //     })
-        // }
-        // End:: delete user
-
-        function form_reset() {
-            document.getElementById("search_form").reset();
-            $('.select2').val(null).trigger('change');
-            $('.yajra-datatable').DataTable().ajax.reload(null, false);
-        }
-
-        function clear_error_field() {
-            $('#error_name').text('');
-            $('#error_holiday_date').text('');
-        }
-
-        function disableButton() {
-            var btn = document.getElementById('form_submission_button');
-            btn.disabled = true;
-            btn.innerText = 'Saving....';
-        }
-
-        function enableeButton() {
-            var btn = document.getElementById('form_submission_button');
-            btn.disabled = false;
-            btn.innerText = 'Save'
-        }
-
-        function error_notification(message) {
-            var notify = $.notify('<i class="fa fa-bell-o"></i><strong>' + message + '</strong> ', {
-                type: 'theme',
-                allow_dismiss: true,
-                delay: 2000,
-                showProgressbar: true,
-                timer: 300
-            });
-        }
     </script>
     <script>
         $(document).ready(function() {
@@ -490,7 +356,9 @@
 
             $("#item_type_id").off('change').on('change', function() {
 
-                //  alert('123');
+
+                $('#loading-message').text('Please wait nomenclature loading...');
+
                 var itemtype_id = $('#item_type_id').val();
 
                 if (itemtype_id > 0) {
@@ -500,7 +368,8 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(res) {
-                            console.log(res);
+
+                            $('#loading-message').text('Nomenclature loaded successfully');
 
                             var _html = '<option value="">Select an item</option>';
                             $.each(res, function(index, item) {
@@ -508,6 +377,10 @@
                                     .name + '</option>';
                             });
                             $('#item_id').html(_html);
+
+                            setTimeout(function() {
+                                $('#loading-message').text('');
+                            }, 3000);
                         }
                     });
                 }

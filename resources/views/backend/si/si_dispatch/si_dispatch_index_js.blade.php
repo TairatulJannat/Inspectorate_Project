@@ -8,9 +8,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            "order": [
-                [1, 'desc']
-            ],
+            
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -87,9 +85,9 @@
             table.draw(true);
         });
     });
-    
 
-   
+
+
 
     function form_reset() {
         document.getElementById("search_form").reset();

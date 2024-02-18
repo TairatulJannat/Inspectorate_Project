@@ -69,6 +69,24 @@
                                 <span id="error_psi_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
+
+                        <div class="col-md-4 d-none">
+                            <div class="form-group">
+                                <label for="contract_no">Contract Number</label>
+                                <input type="text" class="form-control" id="contract_no" name="contract_no"
+                                    value="{{ $psi->contract_no ? $psi->contract_no : '' }}">
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 d-none">
+                            <div class="form-group ">
+                                <label for="contract_date">Contract Date</label>
+                                <input type="date" class="form-control" id="contract_date" name="contract_date"
+                                    value="{{ $psi->contract_date ? $psi->contract_date : '' }}">
+                                <span id="error_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_reference_no">Contract Reference No.</label>
@@ -89,7 +107,7 @@
                                 <span id="error_contract_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference No.</label>
 
@@ -99,7 +117,7 @@
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference No.</label>
 

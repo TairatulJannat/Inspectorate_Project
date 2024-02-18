@@ -149,7 +149,7 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        
+
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
                             href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a> --}}
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
@@ -378,18 +378,18 @@
                             },
                             error: function(response) {
                                 enableeButton()
+                                clear_error_field();
                                 error_notification(
                                     'Please fill up the form correctly and try again'
                                 )
                                 $('#error_designation').text(response.responseJSON.error
                                     .reciever_desig_id);
 
+
                             }
                         });
 
-                    } else if (
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

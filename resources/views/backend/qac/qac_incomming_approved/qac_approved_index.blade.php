@@ -40,13 +40,7 @@
 @section('active_menu', 'All Data')
 @section('content')
 
-    <div class="panel-heading">
-        <div class="invoice_date_filter" style="">
-
-        </div>
-
-    </div>
-    <br>
+    
 
     <div class="col-sm-12 col-xl-12">
         <div class="card">

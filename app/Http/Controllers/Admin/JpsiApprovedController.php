@@ -10,6 +10,7 @@ use App\Models\DocumentTrack;
 use App\Models\File;
 use App\Models\Jpsi;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
@@ -133,7 +134,7 @@ class jpsiApprovedController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            // $query->orderBy('id', 'asc');
+            $query=$query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -254,6 +255,18 @@ class jpsiApprovedController extends Controller
     public function Tracking(Request $request)
     {
 
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -264,6 +277,12 @@ class jpsiApprovedController extends Controller
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Jpsi::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $desig_position = Designation::where('id', $sender_designation_id)->first();
 

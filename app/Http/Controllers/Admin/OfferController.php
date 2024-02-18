@@ -18,6 +18,7 @@ use App\Models\Dte_managment;
 use App\Models\FinancialYear;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -142,6 +143,7 @@ class OfferController extends Controller
                 }
                 //......End for showing data for receiver designation
             }
+            $query=$query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -156,7 +158,7 @@ class OfferController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_ref_id', 5)->latest()->first();
+                    $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 5)->latest()->first();
 
                     $designation_id = AdminSection::where('admin_id', Auth::user()->id)->pluck('desig_id')->first();
                     // dd($DocumentTrack);
@@ -270,13 +272,20 @@ class OfferController extends Controller
 
         $dte_managments = Dte_managment::where('status', 1)->get();
         $additional_documnets = Additional_document::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->get();
-        $item = Items::where('id', $offer->item_id)->first();
+        // $item_types = Item_type::where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+        $item_types = Item_type::where('status', 1)
+            ->where('inspectorate_id', $inspectorate_id)
+            ->whereIn('section_id', $section_ids)
+            ->first();
+        // dd($item_types);
+        $items = Items::where('id', $offer->item_id)->first();
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::all();
+
         $indent_reference_numbers = Indent::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->get();
-        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers'));
+        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers','items'));
+
     }
 
     public function update(Request $request)
@@ -294,7 +303,6 @@ class OfferController extends Controller
         $data->item_type_id = $request->item_type_id;
         $data->qty = $request->qty;
         $data->supplier_id = json_encode($request->supplier_id);
-        // $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
         $data->fin_year_id = $request->fin_year_id;
 
         // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
@@ -403,6 +411,19 @@ class OfferController extends Controller
 
     public function offerTracking(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'doc_ref_id' => 'required',
+            'doc_reference_number' => 'required',
+            'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -414,6 +435,12 @@ class OfferController extends Controller
         $section_id = Offer::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;

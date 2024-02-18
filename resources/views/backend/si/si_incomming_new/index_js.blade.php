@@ -8,9 +8,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            "order": [
-                [1, 'desc']
-            ],
+          
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -42,13 +40,13 @@
                 {
                     data: 'reference_no',
                     name: 'reference_no',
-              
+
                 },
-                
+
                 {
                     data: 'item_name',
                     name: 'item_name',
-                   
+
                 },
                 {
                     data: 'dte_managment_name',
@@ -64,7 +62,7 @@
                     data: 'section_name',
                     name: 'section_name',
                 },
-                
+
 
                 {
                     data: 'status',
@@ -146,7 +144,7 @@
         $('#error_reference_no').text("");
         $('#error_psi_received_date').text("");
         $('#error_psi_reference_date').text("");
-       
+
     }
 
     function disableButton() {
