@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\AdminDashboarController;
 use App\dynamic_route;
 use App\Http\Controllers\Admin\PDFController;
-use App\Http\Controllers\Admin\testController;
 use App\Http\Controllers\website\WebsiteController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -48,4 +47,3 @@ Route::middleware(['auth', 'routeprifix'])->prefix('{roleBased}')->group(functio
 
 
 Route::get('/pdf/indent', [PDFController::class, 'generatePDF'])->name('generate_pdf');
-Route::get('/test/pdf', [testController::class, 'testPdf'])->name('testPdf');

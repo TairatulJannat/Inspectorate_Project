@@ -225,7 +225,7 @@
                 <div class="card-body new-arrival-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{ $offerNew }} <sub>Offer</sub></h1>
+                        <h1>{{$offerNew}} <sub>Offer</sub></h1>
 
                     </div>
                 </div>
@@ -247,7 +247,7 @@
                 <div class="card-body approved-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{ $offerOnProcess }} <sub>Offer</sub></h1>
+                        <h1>{{$offerOnProcess}} <sub>Offer</sub></h1>
 
                     </div>
                 </div>
@@ -269,7 +269,7 @@
                 <div class="card-body outgoing-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{ $offerCompleted }} <sub>Offer</sub></h1>
+                        <h1>{{$offerCompleted}} <sub>Offer</sub></h1>
 
                     </div>
                 </div>
@@ -291,7 +291,7 @@
                 <div class="card-body dispatch-body p-0">
                     <div id="chart-dashbord"></div>
                     <div class="code-box-copy">
-                        <h1>{{ $offerDispatch }} <sub>Offer</sub></h1>
+                        <h1>{{$offerDispatch}} <sub>Offer</sub></h1>
 
                     </div>
                 </div>
@@ -311,18 +311,18 @@
 
     <div class="col-sm-12 col-xl-6 box-col-6">
         <div class="card">
-            <div class="card-header pb-0">
-                <h5>Offer report for last 4 month</h5>
-            </div>
-            <div class="card-body">
-                <div id="basic-bar_offer"></div>
-            </div>
+          <div class="card-header pb-0">
+            <h5>Offer report for last 4 month</h5>
+          </div>
+          <div class="card-body">
+            <div id="basic-bar_offer"></div>
+          </div>
         </div>
-    </div>
+      </div>
     <div class="col-sm-12 col-xl-6 box-col-6">
         <div class="card">
             <div class="card-header pb-0">
-                <h5> Overall Offer Report</h5>
+            <h5>   Overall Offer Report</h5>
             </div>
             <div class="card-body apex-chart">
                 <div id="donutchart-offer"></div>

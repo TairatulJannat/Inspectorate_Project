@@ -11,7 +11,6 @@ $currentControllerName = Request::segment(2);
         color: #e2e2e2;
     }
 
-    /* scrollbar */
     #mainnav {
         height: calc(100vh - 78px);
         overflow-y: scroll;
@@ -38,8 +37,8 @@ $currentControllerName = Request::segment(2);
     <nav>
         <div class="main-navbar">
             <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
-            <div id="mainnav  ">
-                <ul class="nav-menu custom-scrollbar mt-2">
+            <div id="mainnav">
+                <ul class="nav-menu custom-scrollbar">
                     <li class="back-btn">
                         <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2"
                                 aria-hidden="true"></i></div>
@@ -53,7 +52,7 @@ $currentControllerName = Request::segment(2);
                     </li>
                     @if (count(menu_check('Search')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'search' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Search' ? 'active' : '' }}"
                                 href="{{ route('admin.search') }}"><i data-feather="search" class="text-light"></i>
                                 <span>Search</span></a>
 
@@ -61,13 +60,13 @@ $currentControllerName = Request::segment(2);
                     @endif
                     @if (count(menu_check('Indent')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'indent' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Indent' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>Indent</span></a>
-                            <ul class="nav-submenu menu-content {{ Request::is('*/indent/*') ? 'open_menu' : '' }}">
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Indent/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('indent/view') !== null)
                                     <li><a class="text-light" href="{{ route('admin.indent/view') }}"
-                                            class="{{ Request::is('*/*/view') ? 'active_menu' : '' }}">View Indent</a>
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Indent</a>
                                     </li>
                                 @endif
                                 @if (sub_menu_check('indent/create') !== null)
@@ -81,15 +80,15 @@ $currentControllerName = Request::segment(2);
 
                     @if (count(menu_check('Tender')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'tender' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Tender' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>Tender</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Tender/*') ? 'open_menu' : '' }}">
-                                @if (sub_menu_check('tender/view') !== null)
+                                {{-- @if (sub_menu_check('tender/view') !== null)
                                     <li><a class="text-light" href="{{ route('admin.tender/view') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">View Tender</a>
                                     </li>
-                                @endif
+                                @endif --}}
                                 @if (sub_menu_check('tender/create') !== null)
                                     <li><a class="text-light" href="{{ route('admin.tender/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
@@ -101,7 +100,7 @@ $currentControllerName = Request::segment(2);
 
                     @if (count(menu_check('Offer')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'offer' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Offer' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>Offer</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Offer/*') ? 'open_menu' : '' }}">
@@ -123,8 +122,7 @@ $currentControllerName = Request::segment(2);
                     {{-- start final sepecification --}}
                     @if (count(menu_check('FinalSpec')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'FinalSpec' ? 'active_menu' : '' }}"href="javascript:void(0)"><i
-                                    data-feather="file-text" class="text-light"></i>
+                                class="nav-link menu-title {{ $currentControllerName == ' ' ? 'active' : '' }}"href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>Final Spec</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/FinalSpec/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('FinalSpec/view') !== null)
@@ -137,14 +135,14 @@ $currentControllerName = Request::segment(2);
                                     <li><a class="text-light" href="{{ route('admin.FinalSpec/create') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create
                                             Final Spec</a>
-                                    </li>
+                                        </li>
                                 @endif
-                                {{-- @if (sub_menu_check('FinalSpec/create') !== null)
+                                @if (sub_menu_check('FinalSpec/create') !== null)
                                     <li><a class="text-light"
                                             href="{{ url('admin/import-final-spec-data-index?refNo=FS-REF-14012024') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Import Final
                                             Spec</a></li>
-                                @endif --}}
+                                @endif
                             </ul>
                         </li>
                     @endif
@@ -154,7 +152,7 @@ $currentControllerName = Request::segment(2);
                     {{-- Side Menu Button Links for draft Contract --}}
                     @if (count(menu_check('DraftContract')) !== 0)
                         <li class="dropdown">
-                            <a class="nav-link menu-title text-white {{ $currentControllerName == 'draft_contract' ? 'active_menu' : '' }}" href="javascript:void(0)">
+                            <a class="nav-link menu-title text-white" href="javascript:void(0)">
                                 <i data-feather="file-text"></i> <!-- Add the icon for "Contract" -->
                                 <span>Draft Contract</span>
                             </a>
@@ -178,7 +176,7 @@ $currentControllerName = Request::segment(2);
                     {{-- Side Menu Button Links for Contract --}}
                     @if (count(menu_check('Contract')) !== 0)
                         <li class="dropdown">
-                            <a class="nav-link menu-title text-white {{ $currentControllerName == 'contract' ? 'active_menu' : '' }}" href="javascript:void(0)">
+                            <a class="nav-link menu-title text-white" href="javascript:void(0)">
                                 <i data-feather="file-text"></i> <!-- Add the icon for "Contract" -->
                                 <span>Contract</span>
                             </a>
@@ -204,7 +202,7 @@ $currentControllerName = Request::segment(2);
                     {{-- SI Links --}}
                     @if (count(menu_check('Si')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'si' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Si' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>SI</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Si/*') ? 'open_menu' : '' }}">
@@ -226,7 +224,7 @@ $currentControllerName = Request::segment(2);
                     {{-- Dummy PSI/QAC Links --}}
                     @if (count(menu_check('Qac')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'qac' ? 'active_menu' : '' }} {{ $currentControllerName == 'psi' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Qac' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>PSI/QAC</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Qac/*') ? 'open_menu' : '' }}">
@@ -269,7 +267,7 @@ $currentControllerName = Request::segment(2);
                     {{-- Dummy JPSI Links --}}
                     @if (count(menu_check('Jpsi')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'jpsi' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Jpsi' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>JPSI</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/jpsi/*') ? 'open_menu' : '' }}">
@@ -291,7 +289,7 @@ $currentControllerName = Request::segment(2);
                     {{-- Dummy I-Note Links --}}
                     @if (count(menu_check('Inote')) !== 0)
                         <li class="dropdown"><a
-                                class="nav-link menu-title {{ $currentControllerName == 'inote' ? 'active_menu' : '' }}"
+                                class="nav-link menu-title {{ $currentControllerName == 'Inote' ? 'active' : '' }}"
                                 href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
                                 <span>I-Note</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Inote/*') ? 'open_menu' : '' }}">
@@ -385,7 +383,7 @@ $currentControllerName = Request::segment(2);
 
                     {{-- Side Menu Button Links for Items --}}
                     @if (count(menu_check('Items')) !== 0)
-                        <li class="dropdown"><a class="nav-link menu-title text-white {{ $currentControllerName == 'items' ? 'active_menu' : '' }} {{ $currentControllerName == 'item_types' ? 'active_menu' : '' }}" href="javascript:void(0)"><i
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Items</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/item_types/index') }}"
@@ -404,12 +402,11 @@ $currentControllerName = Request::segment(2);
 
                     {{-- Side Menu Button Links for Supllier --}}
                     @if (count(menu_check('Supplier')) !== 0)
-                        <li class="dropdown"><a class="nav-link menu-title text-white {{ $currentControllerName == 'supplier' ? 'active_menu' : '' }}" href="javascript:void(0)"><i
+                        <li class="dropdown"><a class="nav-link menu-title text-white" href="javascript:void(0)"><i
                                     data-feather="list"></i><span>Supplier</span></a>
                             <ul class="nav-submenu menu-content">
                                 <li><a href="{{ url('admin/supplier/index') }}"
-                                        class="{{ Request::is('*/admin/supplier/index') ? 'active' : '' }} text-white">Create
-                                        Supplier
+                                        class="{{ Request::is('*/admin/supplier/index') ? 'active' : '' }} text-white">Create Supplier
                                     </a>
                                 </li>
                             </ul>

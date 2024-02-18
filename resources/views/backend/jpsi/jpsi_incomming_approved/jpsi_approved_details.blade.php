@@ -179,7 +179,6 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -297,7 +296,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.jpsi.jpsi_incomming_approved.jpsi_approved_index_js')
+    {{-- @include('backend.jpsi.jpsi_incomming_approved.jpsi_approved_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -362,20 +361,18 @@
                                     }
                                 }
                             },
-                            error: function(response) {
-                                enableeButton()
-                                clear_error_field();
-                                error_notification(
-                                    'Please fill up the form correctly and try again'
-                                )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                            error: function(xhr, status, error) {
 
-
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 
-                    } else if (result.dismiss === swal.DismissReason.cancel) {
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
 
                         swal(
                             'Cancelled',

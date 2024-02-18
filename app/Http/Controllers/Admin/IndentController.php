@@ -19,7 +19,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
 
@@ -154,8 +153,6 @@ class IndentController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query = $query->sortByDesc('id');
-
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -240,124 +237,116 @@ class IndentController extends Controller
         $this->validate($request, [
             'sender' => 'required',
             'admin_section' => 'required',
-            'reference_no' => [
-                'required',
-                Rule::unique('indents')->where(function ($query) {
-                    return $query->where('insp_id', Auth::user()->inspectorate_id);
-                }),
-            ],
-            'indent_number' => 'required',
+            'reference_no' => 'required',
+            'indent_received_date' => 'required',
             'indent_reference_date' => 'required',
         ]);
 
-        try {
-            $insp_id = Auth::user()->inspectorate_id;
+        $insp_id = Auth::user()->inspectorate_id;
+        $sec_id = $request->admin_section;
 
-            $data = new Indent();
-            $data->insp_id = $insp_id;
-            $data->sec_id = $request->admin_section;
-            $data->sender = $request->sender;
-            $data->reference_no = $request->reference_no;
-            $data->indent_number = $request->indent_number;
-            $data->indent_received_date = $request->indent_received_date;
-            $data->indent_reference_date = $request->indent_reference_date;
+        $data = new Indent();
+        $data->insp_id = $insp_id;
+        $data->sec_id = $sec_id;
+        $data->sender = $request->sender;
+        $data->reference_no = $request->reference_no;
+        $data->indent_number = $request->indent_number;
 
-            $data->received_by = Auth::user()->id;
-            $data->remark = $request->remark;
-            $data->status = 0;
-            $data->created_at = Carbon::now()->format('Y-m-d');
-            $data->updated_at = Carbon::now()->format('Y-m-d');
-            $data->save();
+        $data->additional_documents = json_encode($request->additional_documents);
+        $data->item_id = $request->item_id;
+        $data->item_type_id = $request->item_type_id;
+        $data->qty = $request->qty;
+        $data->estimated_value = $request->estimated_value;
+        $data->indent_received_date = $request->indent_received_date;
+        $data->indent_reference_date = $request->indent_reference_date;
+        $data->fin_year_id = $request->fin_year_id;
+        $data->attribute = $request->attribute;
+        $data->spare = $request->spare;
+        $data->checked_standard = $request->checked_standard;
+        // $data->nomenclature = $request->nomenclature;
+        $data->make = $request->make;
+        $data->model = $request->model;
+        $data->country_of_origin = $request->country_of_origin;
+        $data->country_of_assembly = $request->country_of_assembly;
 
-            // save aditional file
+        $data->received_by = Auth::user()->id;
+        $data->remark = $request->remark;
+        $data->status = 0;
+        $data->created_at = Carbon::now()->format('Y-m-d');
+        $data->updated_at = Carbon::now()->format('Y-m-d');
 
+        if ($request->hasFile('doc_file')) {
 
-            return response()->json(['success' => 'Done']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            $path = $request->file('doc_file')->store('uploads', 'public');
+            $data->doc_file = $path;
         }
+        $data->save();
+
+        // save aditional file
+
+
+        return response()->json(['success' => 'Done']);
     }
     public function edit($id)
     {
-        try {
-            $indent = Indent::find($id);
-            $admin_id = Auth::user()->id;
-            $inspectorate_id = Auth::user()->inspectorate_id;
-            $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-            $dte_managments = Dte_managment::where('status', 1)->get();
-            $additional_documnets = Additional_document::where('status', 1)->get();
+        $indent = Indent::find($id);
+        $admin_id = Auth::user()->id;
+        $inspectorate_id = Auth::user()->inspectorate_id;
+        $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        // $sections = Section::whereIn('id', $section_ids)->get();
 
-            // $selected_document =$indent->additional_documents;
-            $item_types = Item_type::where('status', 1)
-                ->where('inspectorate_id', $inspectorate_id)
-                ->whereIn('section_id', $section_ids)
-                ->get();
-            $item = Items::where('id', $indent->item_id)->first();
-            $fin_years = FinancialYear::all();
-            return view('backend.indent.indent_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        $dte_managments = Dte_managment::where('status', 1)->get();
+        $additional_documnets = Additional_document::where('status', 1)->get();
+
+        // $selected_document =$indent->additional_documents;
+        $item_types = Item_type::where('status', 1)
+            ->where('inspectorate_id', $inspectorate_id)
+            ->whereIn('section_id', $section_ids)
+            ->get();
+        $item = Items::where('id', $indent->item_id)->first();
+        $fin_years = FinancialYear::all();
+        return view('backend.indent.indent_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
     }
 
     public function update(Request $request)
     {
-        $this->validate($request, [
-            'sender' => 'required',
-            'reference_no' => 'required',
-            'indent_number' => 'required',
-            'indent_received_date' => 'required',
-            'indent_reference_date' => 'required',
-            'item_id' => 'required',
-            'item_type_id' => 'required',
-            'fin_year_id' => 'required',
-        ], [
-            'item_id.required' => 'The nomenclature field is required.',
-            'item_type_id.required' => 'The item type field is required.',
-            'fin_year_id.required' => 'The FY field is required.',
-        ]);
 
-        try {
-            $data = Indent::findOrFail($request->editId);
+        $data = Indent::findOrFail($request->editId);
 
-            $data->sender = $request->sender;
-            $data->reference_no = $request->reference_no;
-            $data->indent_number = $request->indent_number;
-            $data->additional_documents = json_encode($request->additional_documents);
-            $data->item_id = $request->item_id;
-            $data->item_type_id = $request->item_type_id;
-            $data->qty = $request->qty;
-            $data->estimated_value = $request->estimated_value;
-            $data->indent_received_date = $request->indent_received_date;
-            $data->indent_reference_date = $request->indent_reference_date;
-            // $data->contract_no = $request->contract_no;
-            $data->indent_date = $request->indent_date;
-            $data->fin_year_id = $request->fin_year_id;
-            $data->attribute = $request->attribute;
-            $data->spare = $request->spare;
-            $data->checked_standard = $request->checked_standard;
-            // $data->nomenclature = $request->nomenclature;
-            $data->make = $request->make;
-            $data->model = $request->model;
-            $data->country_of_origin = $request->country_of_origin;
-            $data->country_of_assembly = $request->country_of_assembly;
-            $data->remark = $request->remark;
-            $data->updated_by = Auth::user()->id;
-            $data->updated_at = Carbon::now()->format('Y-m-d');
+        $data->sender = $request->sender;
+        $data->reference_no = $request->reference_no;
+        $data->indent_number = $request->indent_number;
+        $data->additional_documents = json_encode($request->additional_documents);
+        $data->item_id = $request->item_id;
+        $data->item_type_id = $request->item_type_id;
+        $data->qty = $request->qty;
+        $data->estimated_value = $request->estimated_value;
+        $data->indent_received_date = $request->indent_received_date;
+        $data->indent_reference_date = $request->indent_reference_date;
+        $data->fin_year_id = $request->fin_year_id;
+        $data->attribute = $request->attribute;
+        $data->spare = $request->spare;
+        $data->checked_standard = $request->checked_standard;
+        // $data->nomenclature = $request->nomenclature;
+        $data->make = $request->make;
+        $data->model = $request->model;
+        $data->country_of_origin = $request->country_of_origin;
+        $data->country_of_assembly = $request->country_of_assembly;
+        $data->remark = $request->remark;
+        $data->updated_by = Auth::user()->id;
+        $data->updated_at = Carbon::now()->format('Y-m-d');
 
-            $data->save();
-
-            //Multipule File Upload in files table
-            $save_id = $data->id;
-            if ($save_id) {
-                $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 3, $request->reference_no);
-            }
+        $data->save();
 
 
-            return response()->json(['success' => 'Done']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+        //Multipule File Upload in files table
+        $save_id = $data->id;
+        if ($save_id) {
+            $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 3, $request->reference_no);
         }
+
+
+        return response()->json(['success' => 'Done']);
     }
 
     public function details($id)
@@ -465,7 +454,7 @@ class IndentController extends Controller
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
             }
         }
-
+        
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
         $data->section_id = $section_id;

@@ -154,7 +154,7 @@
                             <tr>
                                 <th>Financial Year</td>
 
-                                <td>{{ $details->fin_year_name }}</td>
+                                <td>{{$details->fin_year_name }}</td>
 
                             </tr>
                             <tr>
@@ -174,7 +174,7 @@
 
                             <tr>
                                 <th>Quantity</td>
-                                <td>{{ $details->qty }}</td>
+                                <td>{{  $details->qty}}</td>
                             </tr>
 
 
@@ -184,10 +184,12 @@
                         {{-- Attached File end --}}
 
                         @if ($desig_id != 1)
+
                             <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
                                 href="{{ url('admin/csr/index') }}">CSR</a>
-                        @endif
-                        {{-- @if ($desig_id != 1)
+
+                         @endif
+                         {{-- @if ($desig_id != 1)
                                 <a class="btn btn-info mt-3 btn-parameter text-light"
                                     href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
                             @endif --}}
@@ -219,7 +221,6 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -306,7 +307,7 @@
                     </div>
 
                     <!-- Notes Sectio
-                                                                                                                n - Uncomment if needed -->
+                                                                                                            n - Uncomment if needed -->
                     {{-- <div class="col-md-6">
                         @if ($notes == !null)
                             ... <!-- Your notes HTML here -->
@@ -326,7 +327,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.offer.offer_incomming_new.index_js')
+    {{-- @include('backend.indent.indent_incomming_new.index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -390,21 +391,18 @@
                                     }
                                 }
                             },
-                            error: function(response) {
-                                enableeButton()
-                                clear_error_field();
-                                error_notification(
-                                    'Please fill up the form correctly and try again'
-                                )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                            error: function(xhr, status, error) {
 
-
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 
-                    } else if (result.dismiss === swal.DismissReason.cancel) {
-                        
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
                         swal(
                             'Cancelled',
                             'Your data is safe :)',

@@ -139,7 +139,8 @@ class IndentApprovedController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            // $query->orderBy('id', 'asc');
+
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()

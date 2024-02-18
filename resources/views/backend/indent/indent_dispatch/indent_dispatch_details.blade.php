@@ -418,7 +418,9 @@
                             }
                         });
 
-                    }  else if (result.dismiss === swal.DismissReason.cancel) {
+                    } else if (
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
 
                         swal(
                             'Cancelled',

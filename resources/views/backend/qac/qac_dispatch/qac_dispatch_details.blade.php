@@ -20,6 +20,10 @@
             color: #1B4C43;
         }
 
+        .card-body {
+
+            margin: 30px 15px 30px 0
+        }
 
         .table thead {
             background-color: #1B4C43 !important;
@@ -133,9 +137,8 @@
 
                         </table>
 
-                        {{-- additional file design start here --}}
-                        @include('backend.files.file')
-                        {{-- additional file design end here --}}
+                        <a class="btn btn-info mt-3 btn-parameter text-light"
+                            href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a>
                         <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                             class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                             Letter</a>
@@ -163,7 +166,6 @@
                                                                 </option>
                                                             @endforeach
                                                         </select>
-                                                        <span id="error_designation" class="text-danger"></span>
                                                     </div>
                                                 @endif
                                                 <div class="col-md-6 mb-2">
@@ -294,7 +296,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.qac.qac_dispatch.qac_dispatch_index_js')
+    {{-- @include('backend.qac.qac_dispatch.qac_dispatch_index_js') --}}
 
     <script>
         $(document).ready(function() {
@@ -362,16 +364,12 @@
                                     }
                                 }
                             },
-                            error: function(response) {
-                                enableeButton()
-                                clear_error_field();
-                                error_notification(
-                                    'Please fill up the form correctly and try again'
-                                )
-                                $('#error_designation').text(response.responseJSON.error
-                                    .reciever_desig_id);
+                            error: function(xhr, status, error) {
 
-
+                                console.error(xhr.responseText);
+                                toastr.error(
+                                    'An error occurred while processing the request',
+                                    'Error');
                             }
                         });
 
