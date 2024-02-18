@@ -85,7 +85,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_reference_date">Final Spec Reference Date</label>
-                                <input type="date" class="form-control" id="reference_date" name="reference_date"}}">
+                                <input type="date" class="form-control" id="reference_date" name="reference_date">
                                 <span id="reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                             <div class="form-group">
                                 <label for="final_spec_receive_Ltr_dt">Final Spec Receive Letter Date</label>
                                 <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
-                                    name="final_spec_receive_Ltr_dt">
+                                    name="final_spec_receive_Ltr_dt" value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
                                 <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>

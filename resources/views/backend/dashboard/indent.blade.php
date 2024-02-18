@@ -318,6 +318,7 @@
           </div>
         </div>
       </div>
+      
     <div class="col-sm-12 col-xl-6 box-col-6">
         <div class="card">
             <div class="card-header pb-0">
