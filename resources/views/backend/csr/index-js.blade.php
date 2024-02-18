@@ -8,14 +8,14 @@
         $('.select2').select2();
         // toastr.options.preventDuplicates = true;
 
-        function updatePrintButtonUrl(offerRefNo, itemTypeId, itemId) {
+        function updatePrintButtonUrl(tenderRefNo, itemTypeId, itemId) {
             var selectedItemType = itemTypeId;
             var selectedItem = itemId;
-            var offerRefNo = offerRefNo;
+            var tenderRefNo = tenderRefNo;
             var printButton = $("#printButton");
 
             if (selectedItemType && selectedItem) {
-                var printButtonUrl = '{{ url('admin/csr-generate-pdf') }}?offerRefNo=' + offerRefNo;
+                var printButtonUrl = '{{ url('admin/csr-generate-pdf') }}?tenderRefNo=' + tenderRefNo;
                 printButton.attr('href', printButtonUrl);
             } else {
                 printButton.addClass('disabled');
@@ -184,45 +184,59 @@
             }
         }
 
-        var offerRefNo = new URLSearchParams(window.location.search).get('offerRefNo');
+        var tenderRefNo = new URLSearchParams(window.location.search).get('tenderRefNo');
 
-        if (offerRefNo) {
+        if (tenderRefNo) {
             $(".infoHide").hide();
             $(".infoShow").show();
 
             $.ajax({
                 type: 'GET',
-                url: "{{ url('admin/tender/info-to-csr') }}",
+                url: "{{ url('admin/tender/info') }}",
                 data: {
-                    offerRefNo: offerRefNo
+                    tenderRefNo: tenderRefNo
                 },
-                success: function(Response) {
-                    if (Response.isSuccess === false) {
-                        $.each(Response.error, function(prefix, val) {
-                            $(form).find("span." + prefix + "-error")
-                                .text(val[0]);
-                        });
-                        toastr.error(Response.message);
-                        var buttonLink = $('#printButton');
-                        buttonLink.addClass('disabled');
-                        var searchedDataContainer = $(".searched-data");
-                        searchedDataContainer.empty();
-                    } else if (Response.isSuccess === true) {
-                        toastr.success(Response.message);
-                        renderTreeView(Response.combinedData,
-                            Response.itemTypeName, Response
-                            .itemName, Response.indentRefNo,
-                            Response.tenderRefNo);
-                        var buttonLink = $('#printButton');
-                        buttonLink.removeClass('disabled');
-                        updatePrintButtonUrl(Response.offerRefNo,
-                            Response.itemTypeId, Response
-                            .itemId);
-                    }
+                success: function(response) {
+                    var tenderId = response.Data[0].id;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('admin/tender/info-to-csr') }}",
+                        data: {
+                            tenderId: tenderId
+                        },
+                        success: function(secondResponse) {
+                            if (secondResponse.isSuccess === false) {
+                                $.each(secondResponse.error, function(prefix, val) {
+                                    $(form).find("span." + prefix + "-error")
+                                        .text(val[0]);
+                                });
+                                toastr.error(secondResponse.message);
+                                var buttonLink = $('#printButton');
+                                buttonLink.addClass('disabled');
+                                var searchedDataContainer = $(".searched-data");
+                                searchedDataContainer.empty();
+                            } else if (secondResponse.isSuccess === true) {
+                                toastr.success(secondResponse.message);
+                                renderTreeView(secondResponse.combinedData,
+                                    secondResponse.itemTypeName, secondResponse
+                                    .itemName, secondResponse.indentRefNo,
+                                    secondResponse.tenderRefNo);
+                                var buttonLink = $('#printButton');
+                                buttonLink.removeClass('disabled');
+                                updatePrintButtonUrl(secondResponse.tenderRefNo,
+                                    secondResponse.itemTypeId, secondResponse
+                                    .itemId);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // console.error(xhr.responseText);
+                            console.error("I am getting error here");
+                        }
+                    });
                 },
                 error: function(xhr, status, error) {
-                    // console.error(xhr.responseText);
-                    console.error("I am getting error here");
+                    console.error(xhr.responseText);
                 }
             });
         }

@@ -153,7 +153,7 @@ class InoteController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            // $query->orderBy('id', 'asc');
+            $query=$query->sortByDesc('id');
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -316,6 +316,8 @@ class InoteController extends Controller
         $data->contract_reference_no = $request->contract_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->offer_reference_no = $request->offer_reference_no;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->item_id = $request->item_id;
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
@@ -405,10 +407,12 @@ class InoteController extends Controller
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
             'reciever_desig_id' => 'required',
+        ], [
+            'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
+            return response()->json(['error' => $validator->errors()], 422);
         }
 
         $ins_id = Auth::user()->inspectorate_id;
@@ -422,6 +426,12 @@ class InoteController extends Controller
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Inote::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;
@@ -486,7 +496,6 @@ class InoteController extends Controller
         $admin_id = Auth::user()->id;
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
         $desig_position = Designation::where('id', $sender_designation_id)->first();
-
         $inote_reference_no = $request->inote_reference_no;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
@@ -525,7 +534,19 @@ class InoteController extends Controller
         $inote->serial_12 = $request->serial_12;
         $inote->serial_13 = $request->serial_13;
         $inote->body_info = $request->body_info;
+        $inote->station = $request->station;
+        $inote->date = $request->date;
         $inote->save();
         return response()->json(['success' => 'Done']);
+    }
+    public function EditInoteLetter($id)
+    {
+        $inoteLetter = InoteLetter::find($id);
+        // $supplier = Supplier::find($inoteLetter->supplier_id);
+        // $supplier_details = '';
+        // if ($supplier) {
+        //     $supplier_details = $supplier->firm_name . ', ' . $supplier->address_of_local_agent;
+        // }
+        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter'));
     }
 }

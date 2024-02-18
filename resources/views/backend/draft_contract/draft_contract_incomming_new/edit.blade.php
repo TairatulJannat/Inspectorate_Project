@@ -52,9 +52,39 @@
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="reference_date">Draft Contract Reference Date</label>
+                                <input type="date" class="form-control" id="reference_date"
+                                    name="reference_date"
+                                    value="{{ $draft_contract->reference_date ? $draft_contract->reference_date : '' }}">
+                                <span id="error_reference_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
 
 
 
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="draft_contract_no">Draft Contract Number</label>
+                                <input type="text" class="form-control" id="draft_contract_no"
+                                    name="draft_contract_no"
+                                    value="{{ $draft_contract->draft_contract_no ? $draft_contract->draft_contract_no : '' }}">
+                                <span id="error_draft_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="draft_contract_date">Draft Contract Date</label>
+                                <input type="date" class="form-control" id="draft_contract_date"
+                                    name="draft_contract_date"
+                                    value="{{ $draft_contract->draft_contract_date ? $draft_contract->draft_contract_date : '' }}">
+                                <span id="error_draft_contract_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="draft_contract_received_date">Draft Contract Received Date</label>
@@ -64,15 +94,7 @@
                                 <span id="error_draft_contract_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="draft_contract_reference_date">Draft Contract Reference Date</label>
-                                <input type="date" class="form-control" id="draft_contract_reference_date"
-                                    name="draft_contract_reference_date"
-                                    value="{{ $draft_contract->reference_date ? $draft_contract->reference_date : '' }}">
-                                <span id="error_draft_contract_reference_date" class="text-danger error_field"></span>
-                            </div>
-                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="final_spec_reference_no">Final Spec Reference No.</label>
@@ -91,18 +113,14 @@
                         </div>
 
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none" >
                             <div class="form-group">
                                 <label for="indent_reference_no">Indent Reference No</label>
 
                                 <input type="text" id="indent_reference_no" class="form-control"
                                     name="indent_reference_no"
                                     value="{{ $draft_contract->indent_reference_no ? $draft_contract->indent_reference_no : '' }}">
-                                {{-- <select class="form-control" id="indent_reference_no" name="indent_reference_no">
 
-                                    <option value="">Please Select</option>
-
-                                </select> --}}
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>

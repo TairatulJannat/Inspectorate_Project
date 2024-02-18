@@ -34,8 +34,6 @@ class jpsiController extends Controller
     }
     public function index()
     {
-
-
         $insp_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -156,7 +154,7 @@ class jpsiController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            // $query->orderBy('id', 'asc');
+            $query=$query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -320,6 +318,8 @@ class jpsiController extends Controller
         $data->contract_reference_no = $request->contract_reference_no;
         $data->indent_reference_no = $request->indent_reference_no;
         $data->offer_reference_no = $request->offer_reference_no;
+        $data->contract_no = $request->contract_no;
+        $data->contract_date = $request->contract_date;
         $data->item_id = $request->item_id;
         $data->supplier_id = $request->supplier_id;
         $data->item_type_id = $request->item_type_id;
@@ -430,6 +430,12 @@ class jpsiController extends Controller
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = Jpsi::where('reference_no', $doc_reference_number)->pluck('section_id')->first();
+
+        if ($validator) {
+            if ($reciever_desig_id == $sender_designation_id) {
+                return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);
+            }
+        }
 
         $data = new DocumentTrack();
         $data->ins_id = $ins_id;

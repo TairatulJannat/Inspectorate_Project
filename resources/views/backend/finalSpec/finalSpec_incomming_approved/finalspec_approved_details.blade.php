@@ -166,7 +166,8 @@
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a class="btn btn-success mt-3 btn-parameter" href="{{ url('admin/csr/index') }}">CSR</a>
+                        <a  class="btn btn-success mt-3 btn-parameter"
+                        href="{{ url('admin/final_spec/parameter') }}/{{  $details->reference_no }}">Parameter</a>
                         {{-- <a class="btn btn-info mt-3 btn-parameter text-light" href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a> --}}
                     </div>
                 </div>
@@ -194,6 +195,7 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span id="error_designation" class="text-danger"></span>
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
@@ -382,18 +384,19 @@
                                     }
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function(response) {
+                                clear_error_field();
+                                error_notification(
+                                    'Please fill up the form correctly and try again'
+                                )
+                                $('#error_designation').text(response.responseJSON.error
+                                    .reciever_desig_id);
 
-                                console.error(xhr.responseText);
-                                toastr.error(
-                                    'An error occurred while processing the request',
-                                    'Error');
+
                             }
                         });
 
-                    } else if (
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

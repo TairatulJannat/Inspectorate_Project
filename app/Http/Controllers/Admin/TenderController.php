@@ -325,7 +325,8 @@ class TenderController extends Controller
 
     public function infoToCSR(Request $request)
     {
-        $offerData = Offer::where('reference_no', $request->offerRefNo)->first();
+        $tenderData = Tender::findOrFail($request->tenderId);
+        $offerData = Offer::where('tender_reference_no', $tenderData->reference_no)->first();
 
         $itemId = $offerData->item_id;
         $itemTypeId = $offerData->item_type_id;
@@ -417,7 +418,6 @@ class TenderController extends Controller
                 'itemName' => $itemName,
                 'indentRefNo' => $indentRefNo,
                 'tenderRefNo' => $tenderRefNo,
-                'offerRefNo' => $request->offerRefNo,
             ], 200);
         } else {
             return response()->json([

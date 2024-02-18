@@ -126,7 +126,7 @@
                             </tr>
                             <tr>
                                 <th>Draft Contract Reference No</td>
-                                <td>{{ $details->contract_reference_no }}</td>
+                                <td>{{ $details->draft_contract_reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>User Directorate</td>
@@ -320,10 +320,9 @@
                 reciever_desig_text = $(this).find('option:selected').text();
             });
 
-            $('#submitBtn').off('click').on('click', function(event) {
+            $('#form_submission_button').off('click').on('click', function(event) {
 
                 event.preventDefault();
-                disableButton()
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
                 var doc_ref_id = {{ $details->id }}
@@ -382,9 +381,7 @@
                             }
                         });
 
-                    } else if (
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
+                    }  else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

@@ -66,7 +66,7 @@ class OutgoingPrelimGeneral extends Controller
                 }
             }
 
-            // $query->orderBy('id', 'asc');
+            $query=$query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())

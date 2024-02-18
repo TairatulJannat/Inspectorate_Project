@@ -47,6 +47,16 @@
 
 
 
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="inote_reference_date"> Reference Date</label>
+                                <input type="date" class="form-control" id="inote_reference_date"
+                                    name="inote_reference_date"
+                                    value="{{ $inote->reference_date ? $inote->reference_date : '' }}">
+                                <span id="error_inote_reference_date" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="inote_received_date"> Received Date</label>
@@ -56,13 +66,22 @@
                                 <span id="error_inote_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <div class="form-group">
-                                <label for="inote_reference_date"> Reference Date</label>
-                                <input type="date" class="form-control" id="inote_reference_date"
-                                    name="inote_reference_date"
-                                    value="{{ $inote->reference_date ? $inote->reference_date : '' }}">
-                                <span id="error_inote_reference_date" class="text-danger error_field"></span>
+                                <label for="contract_no">Contract Number</label>
+                                <input type="text" class="form-control" id="contract_no"
+                                    name="contract_no"
+                                    value="{{ $inote->contract_no ? $inote->contract_no : '' }}">
+                                <span id="error_contract_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-none">
+                            <div class="form-group">
+                                <label for="contract_date">Contract Date</label>
+                                <input type="date" class="form-control" id="contract_date"
+                                    name="contract_date"
+                                    value="{{ $inote->contract_date ? $inote->contract_date : '' }}">
+                                <span id="error_contract_date" class="text-danger error_field"></span>
                             </div>
                         </div>
                         <div class="col-md-4">

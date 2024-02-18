@@ -11,8 +11,7 @@ use App\Models\DraftContract;
 use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;;
-
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -127,7 +126,7 @@ class DraftContractDispatchController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            // $query->orderBy('id', 'asc');
+            $query=$query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())

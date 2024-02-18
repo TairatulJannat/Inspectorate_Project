@@ -27,16 +27,22 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap-toggle.min.css') }}">
     <style>
         .active_menu {
-            background-color: #24695c;
+            background-color: #e5b805c1;
             color: white !important;
             -webkit-transition: all 0.5s ease;
             transition: all 0.5s ease;
             position: relative;
         }
-
-        .open_menu {
-            display: block !important;
+        /* sidebar hover coller */
+        .menu-title:hover {
+            background-color: #f4d929d4 !important;
+           
         }
+        
+
+        /* .open_menu {
+            display: block !important;
+        } */
     </style>
     @stack('css')
 </head>
