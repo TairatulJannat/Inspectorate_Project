@@ -247,13 +247,7 @@
                                     </form>
                                 </div>
                             </div>
-
                         @endif
-
-
-
-
-
 
                         <div class="forward_status col-md-12">
                             <div>

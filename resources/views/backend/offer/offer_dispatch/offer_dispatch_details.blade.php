@@ -104,7 +104,7 @@
                         <table class="table table-bordered ">
                             <tr>
                                 <th>Referance No</td>
-                                <td>{{ $details->reference_no }}</td>
+                                <td id="offerRefNo">{{ $details->reference_no }}</td>
                             </tr>
                             <tr>
                                 <th>Tender Reference No</td>
@@ -408,7 +408,6 @@
                     } else if (
                         result.dismiss === swal.DismissReason.cancel
                     ) {
-
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -416,16 +415,15 @@
                         )
                     }
                 })
-
             });
 
             $('#csrBtn').on('click', function(event) {
                 event.preventDefault();
 
                 var url = $(this).attr('href');
-                var tenderRefNo = $('#tenderRefNo').text();
+                var offerRefNo = $('#offerRefNo').text();
 
-                var redirectUrl = url + '?tenderRefNo=' + encodeURIComponent(tenderRefNo);
+                var redirectUrl = url + '?offerRefNo=' + encodeURIComponent(offerRefNo);
 
                 window.location.href = redirectUrl;
             });
