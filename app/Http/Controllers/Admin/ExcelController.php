@@ -746,39 +746,40 @@ class ExcelController extends Controller
     protected function finalSpecIndex(Request $request)
     {
         try {
-            $doc_type_id=$request->doc_type_id;
-            if( $doc_type_id==9){
-                $documentDetails=DraftContract::find($request->importId);
-            }else{
-                $documentDetails=Contract::find($request->importId);
+            $doc_type_id = $request->doc_type_id;
+            if ($doc_type_id == 9) {
+                $documentDetails = DraftContract::find($request->importId);
+            } else {
+                $documentDetails = Contract::find($request->importId);
             }
-               
-            $item = Items::find( $documentDetails->item_id);
+
+            $item = Items::find($documentDetails->item_id);
             $itemType = Item_type::find($documentDetails->item_type_id);
             $supplier = Supplier::find($documentDetails->supplier_id);
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve from Database.');
         }
-        return view('backend.excel-files.import-final-spec-data', compact('doc_type_id','documentDetails','item', 'itemType', 'supplier'));
+        return view('backend.excel-files.import-final-spec-data', compact('doc_type_id', 'documentDetails', 'item', 'itemType', 'supplier'));
     }
 
     public function importFinalSpecEditedData(Request $request)
     {
-      
+       
         $request->validate([
             'supplierId' => ['required', 'exists:suppliers,id'],
             'file' => 'required|mimes:xlsx,csv|max:2048',
         ], [
             'supplierId.required' => 'Please choose an Supplier ID.',
-            'file.required' =>'Please choose an Excel/CSV file.',
+            'file.required' => 'Please choose an Excel/CSV file.',
             'file.mimes' => 'The file must be of type: xlsx, csv.',
             'file.max' => 'The file size must not exceed 2048 kilobytes.',
         ]);
-        dd($request->all());
+
 
         try {
-            $importedData = Excel::toCollection(new FinalSpecImport, $request->file('file'))->first();
 
+            $importedData = Excel::toCollection(new FinalSpecImport, $request->file('file'))->first();
+            dd($importedData);
             $parameterGroups = [];
             $currentGroupName = null;
 
@@ -849,11 +850,14 @@ class ExcelController extends Controller
                 'supplierFirmName' => $supplierFirmName,
             ]);
         } catch (UnreadableFileException $e) {
-            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'The uploaded file is unreadable.');
+            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'The uploaded file is unreadable.');
+            return response()->json(['errors' => $e], 422);
         } catch (SheetNotFoundException $e) {
-            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
+            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
+            return response()->json(['errors' => $e], 422);
         } catch (\Exception $e) {
-            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
+            return response()->json(['errors' => $e], 422);
+            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
         }
     }
 
