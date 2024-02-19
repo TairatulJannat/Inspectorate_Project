@@ -57,17 +57,11 @@
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-indent-tab" data-bs-toggle="tab" data-bs-target="#nav-indent"
                 type="button" role="tab" aria-controls="nav-indent" aria-selected="true">Indent</button>
-            <button class="nav-link" id="nav-offer-tab" data-bs-toggle="tab" data-bs-target="#nav-offer" type="button"
-                role="tab" aria-controls="nav-offer" aria-selected="false">Offer</button>
-            <button class="nav-link" id="nav-finalSpec-tab" data-bs-toggle="tab" data-bs-target="#nav-finalSpec"
-                type="button" role="tab" aria-controls="nav-finalSpec" aria-selected="false">Final Spec</button>
-            <button class="nav-link" id="nav-draftContract-tab" data-bs-toggle="tab" data-bs-target="#nav-draftContract"
-                type="button" role="tab" aria-controls="nav-draftContract" aria-selected="false">Draft
-                Contract</button>
-            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
-                role="tab" aria-controls="nav-contact" aria-selected="false">Contract</button>
-            <button class="nav-link" id="nav-iNote-tab" data-bs-toggle="tab" data-bs-target="#nav-iNote" type="button"
-                role="tab" aria-controls="nav-iNote" aria-selected="false">I-Note</button>
+                <a href="{{ url('admin/multiDashboard/5') }}"><button class="nav-link" id="nav-offer-tab"  type="button">Offer</button></a>
+                <a href="{{ url('admin/multiDashboard/6') }}"><button class="nav-link" id="nav-finalSpec-tab" type="button">Final Spec</button></a>
+                <a href="{{ url('admin/multiDashboard/9') }}"><button class="nav-link" id="nav-draftContract-tab" type="button" >Draft Contract</button></a>
+                <a href="{{ url('admin/multiDashboard/10') }}"><button class="nav-link" id="nav-contact-tab" type="button">Contract</button></a>
+                <a href="{{ url('admin/multiDashboard/13') }}"><button class="nav-link" id="nav-iNote-tab" type="button">I-Note</button></a>
 
         </div>
     </nav>
