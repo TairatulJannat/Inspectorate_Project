@@ -258,6 +258,22 @@
             background-color: #AB8574;
             color: #ffff;
         }
+
+        body {
+            /* background: #1D1F20; */
+            padding: 16px;
+        }
+
+        canvas {
+            border: 1px dotted red;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 80vh;
+            width: 80vw;
+        }
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -296,7 +312,7 @@
                             <div class="card-body new-arrival-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelNew }} <sub>{{$doc_type->doc_name}}</sub></h1>
+                                    <h1>{{ $mulipleModelNew }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -318,7 +334,7 @@
                             <div class="card-body approved-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelOnProcess }} <sub>{{$doc_type->doc_name}}</sub></h1>
+                                    <h1>{{ $mulipleModelOnProcess }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -340,7 +356,7 @@
                             <div class="card-body outgoing-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelCompleted }} <sub>{{$doc_type->doc_name}}</sub></h1>
+                                    <h1>{{ $mulipleModelCompleted }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -362,7 +378,7 @@
                             <div class="card-body dispatch-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelDispatch }} <sub>{{$doc_type->doc_name}}</sub></h1>
+                                    <h1>{{ $mulipleModelDispatch }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -382,19 +398,27 @@
 
             <div class="row">
                 <div class="col-sm-12 col-xl-6 box-col-6">
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header pb-0">
                             <h5>Indent report for last 4 month</h5>
                         </div>
                         <div class="card-body">
                             <div id="basic-bar-indent"></div>
                         </div>
+                    </div> --}}
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h5>Bar Chart</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="myBarGraph"></canvas>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-xl-6 box-col-6">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5> Current Report</h5>
+                            <h5> Current Status</h5>
                         </div>
                         <div class="card-body apex-chart">
                             <div id="donutchart"></div>
@@ -426,7 +450,10 @@
 @endsection
 
 @push('js')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+        //start piechart//
         var docPieChart = {
             series: [{{ $mulipleModelNew }}, {{ $mulipleModelOnProcess }}, {{ $mulipleModelCompleted }},
                 {{ $mulipleModelDispatch }}
@@ -452,12 +479,15 @@
 
         var paichart = new ApexCharts(document.querySelector("#pichart"), docPieChart);
         paichart.render();
-        var counts = <?php echo json_encode(array_values($counts)); ?>; 
+        //end piechart//
+
+        //start barchart//
+        var counts = <?php echo json_encode(array_values($counts)); ?>;
         var monthlyReport = {
             series: [{
                 data: counts
             }],
-                    chart: {
+            chart: {
                 height: 350,
                 type: 'bar',
                 events: {
@@ -531,5 +561,43 @@
 
         var renderMonthlyReport = new ApexCharts(document.querySelector("#dasboard_barchart"), monthlyReport);
         renderMonthlyReport.render();
+        //end barchart//
+
+
+        var barData = {
+            labels: ["New Arrival", "On Process", "Completed", "Dispatch"],
+            datasets: [{
+                label: "Current status",
+                fillColor: "rgba(40, 105, 92, 0.4)",
+                strokeColor: vihoAdminConfig.primary,
+                highlightFill: "rgba(36, 105, 92, 0.6)",
+                highlightStroke: vihoAdminConfig.primary,
+                data: [35, 59, 80, 81, 56, 55, 40]
+            }]
+        };
+
+
+
+        var barOptions = {
+            scaleBeginAtZero: true,
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,0.1)",
+            scaleGridLineWidth: 1,
+            scaleShowHorizontalLines: true,
+            scaleShowVerticalLines: true,
+            barShowStroke: true,
+            barStrokeWidth: 2,
+            barValueSpacing: 5,
+            barDatasetSpacing: 1,
+        };
+
+
+        var barCtx = document.getElementById("myBarGraph").getContext("2d");
+        var myBarChart = new Chart(barCtx, {
+            type: 'bar',
+            data: barData,
+            options: barOptions
+        });
+        
     </script>
 @endpush
