@@ -322,7 +322,8 @@ class ExcelController extends Controller
             DB::rollBack();
             \Log::error('Error saving data: ' . $e->getMessage());
 
-            return redirect()->back()->with('error', 'Error saving data. Please check the logs for details.');
+            // return redirect()->back()->with('error', 'Error saving data. Please check the logs for details.');
+            return redirect()->route('admin.import-indent-spec-data-index')->with('error', 'Error saving data. Please check the logs for details.');
         }
     }
 
