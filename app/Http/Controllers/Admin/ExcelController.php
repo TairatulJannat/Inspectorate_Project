@@ -234,6 +234,7 @@ class ExcelController extends Controller
                 }
 
                 $groupName = trim($row[1]);
+                // $groupName = preg_replace('/^[^\w\(\)\{\}\[\]]+|[^\w\(\)\{\}\[\]]+$/', '', $groupName);
 
                 if ($groupName != null) {
                     $currentGroupName = $groupName;
@@ -242,16 +243,6 @@ class ExcelController extends Controller
                 } else {
                     $groupName = $currentGroupName;
                 }
-
-                // $parameterName = trim($row[1]);
-                // if (empty($parameterName)) {
-                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                // }
-
-                // $parameterValue = trim($row[2]);
-                // if (empty($parameterValue)) {
-                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                // }
 
                 $parameterGroups[$groupName][] = [
                     'parameter_name' => trim($row[2]),
@@ -301,11 +292,10 @@ class ExcelController extends Controller
 
             $this->deleteAllParameterGroupsAndValues($itemId);
 
-            foreach ($jsonData as $groupName => $parameterGroup) {
-                $modifiedGroupName = $request->input("editedData.$groupName.parameter_group_name");
+            foreach ($jsonData as $groupIndex => $parameterGroup) {
+                $modifiedGroupName = $request->input("editedData.$groupIndex.parameter_group_name");
 
                 $existingGroup = $this->getParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
-
                 if (!$existingGroup) {
                     $newGroup = $this->createParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
                     $lastInsertedId = $newGroup->id;
@@ -313,7 +303,16 @@ class ExcelController extends Controller
                     $lastInsertedId = $existingGroup->id;
                 }
 
-                $this->saveAssignParameterValues($lastInsertedId, $parameterGroup, $indentRefNo);
+                foreach ($parameterGroup as $paramIndex => $parameter) {
+                    if ($paramIndex === 'parameter_group_name') {
+                        continue;
+                    }
+
+                    $parameterName = $request->input("editedData.$groupIndex.$paramIndex.parameter_name");
+                    $parameterValue = $request->input("editedData.$groupIndex.$paramIndex.parameter_value");
+
+                    $this->saveAssignParameterValues($lastInsertedId, $parameterName, $parameterValue, $indentRefNo);
+                }
             }
 
             DB::commit();
@@ -367,41 +366,15 @@ class ExcelController extends Controller
         return $newGroup;
     }
 
-    protected function saveAssignParameterValues($parameterGroupId, $parameterGroup, $indentRefNo)
+    protected function saveAssignParameterValues($parameterGroupId, $parameterName, $parameterValue, $indentRefNo)
     {
-        foreach ($parameterGroup as $parameterName => $parameterData) {
-            if (is_array($parameterData)) {
-                $parameterValue = $parameterData['parameter_value'];
-
-                AssignParameterValue::create([
-                    'parameter_group_id' => $parameterGroupId,
-                    'parameter_name' => $parameterName,
-                    'parameter_value' => $parameterValue,
-                    'doc_type_id' => 3,
-                    'reference_no' => $indentRefNo,
-                ])->fresh();
-
-                // try {
-                //     // Try to update the existing record
-                //     AssignParameterValue::updateOrCreate(
-                //         [
-                //             'parameter_group_id' => $parameterGroupId,
-                //             'parameter_name' => $parameterName,
-                //         ],
-                //         [
-                //             'parameter_value' => $parameterValue,
-                //         ]
-                //     );
-                // } catch (ModelNotFoundException $e) {
-                //     // If the record doesn't exist, catch the exception and create a new one
-                //     AssignParameterValue::create([
-                //         'parameter_group_id' => $parameterGroupId,
-                //         'parameter_name' => $parameterName,
-                //         'parameter_value' => $parameterValue,
-                //     ]);
-                // }
-            }
-        }
+        AssignParameterValue::create([
+            'parameter_group_id' => $parameterGroupId,
+            'parameter_name' => $parameterName,
+            'parameter_value' => $parameterValue,
+            'doc_type_id' => 3,
+            'reference_no' => $indentRefNo,
+        ])->fresh();
     }
 
     protected function exportIndentEditedData()
@@ -746,31 +719,31 @@ class ExcelController extends Controller
     protected function finalSpecIndex(Request $request)
     {
         try {
-            $doc_type_id=$request->doc_type_id;
-            if( $doc_type_id==9){
-                $documentDetails=DraftContract::find($request->importId);
-            }else{
-                $documentDetails=Contract::find($request->importId);
+            $doc_type_id = $request->doc_type_id;
+            if ($doc_type_id == 9) {
+                $documentDetails = DraftContract::find($request->importId);
+            } else {
+                $documentDetails = Contract::find($request->importId);
             }
-               
-            $item = Items::find( $documentDetails->item_id);
+
+            $item = Items::find($documentDetails->item_id);
             $itemType = Item_type::find($documentDetails->item_type_id);
             $supplier = Supplier::find($documentDetails->supplier_id);
         } catch (\Exception $e) {
             return back()->withError('Failed to retrieve from Database.');
         }
-        return view('backend.excel-files.import-final-spec-data', compact('doc_type_id','documentDetails','item', 'itemType', 'supplier'));
+        return view('backend.excel-files.import-final-spec-data', compact('doc_type_id', 'documentDetails', 'item', 'itemType', 'supplier'));
     }
 
     public function importFinalSpecEditedData(Request $request)
     {
-      
+
         $request->validate([
             'supplierId' => ['required', 'exists:suppliers,id'],
             'file' => 'required|mimes:xlsx,csv|max:2048',
         ], [
             'supplierId.required' => 'Please choose an Supplier ID.',
-            'file.required' =>'Please choose an Excel/CSV file.',
+            'file.required' => 'Please choose an Excel/CSV file.',
             'file.mimes' => 'The file must be of type: xlsx, csv.',
             'file.max' => 'The file size must not exceed 2048 kilobytes.',
         ]);
