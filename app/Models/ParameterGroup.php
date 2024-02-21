@@ -6,14 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ParameterGroup extends Model
 {
-    protected $fillable = [
-        'name',
-        'inspectorate_id',
-        'section_id',
-        'item_id',
-        'item_type_id',
-        'description',
-        'status',
+    protected $guarded = [
+        'id'
     ];
 
     // Define relationships

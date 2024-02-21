@@ -290,18 +290,13 @@ class ExcelController extends Controller
             $itemTypeId = $request->input('item-type-id');
             $indentRefNo = $request->input('indent-ref-no');
 
-            $this->deleteAllParameterGroupsAndValues($itemId);
+            $this->deleteAllParameterGroupsAndValues($itemId, $indentRefNo);
 
             foreach ($jsonData as $groupIndex => $parameterGroup) {
                 $modifiedGroupName = $request->input("editedData.$groupIndex.parameter_group_name");
 
-                $existingGroup = $this->getParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
-                if (!$existingGroup) {
-                    $newGroup = $this->createParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
-                    $lastInsertedId = $newGroup->id;
-                } else {
-                    $lastInsertedId = $existingGroup->id;
-                }
+                $newGroup = $this->createParameterGroup($modifiedGroupName, $itemId, $itemTypeId, $indentRefNo);
+                $lastInsertedId = $newGroup->id;
 
                 foreach ($parameterGroup as $paramIndex => $parameter) {
                     if ($paramIndex === 'parameter_group_name') {
@@ -322,14 +317,13 @@ class ExcelController extends Controller
             DB::rollBack();
             \Log::error('Error saving data: ' . $e->getMessage());
 
-            // return redirect()->back()->with('error', 'Error saving data. Please check the logs for details.');
             return redirect()->route('admin.import-indent-spec-data-index')->with('error', 'Error saving data. Please check the logs for details.');
         }
     }
 
-    private function deleteAllParameterGroupsAndValues($itemId)
+    private function deleteAllParameterGroupsAndValues($itemId, $indentRefNo)
     {
-        $parameterGroups = ParameterGroup::where('item_id', $itemId)->get();
+        $parameterGroups = ParameterGroup::where('item_id', $itemId)->where('reference_no', $indentRefNo)->get();
 
         foreach ($parameterGroups as $group) {
             $group->assignParameterValues()->delete();
@@ -337,15 +331,15 @@ class ExcelController extends Controller
         }
     }
 
-    protected function getParameterGroup($name, $itemId, $itemTypeId)
+    protected function getParameterGroup($itemId, $itemTypeId, $indentRefNo)
     {
-        return ParameterGroup::where('name', $name)
-            ->where('item_id', $itemId)
+        return ParameterGroup::where('item_id', $itemId)
             ->where('item_type_id', $itemTypeId)
+            ->where('reference_no', $indentRefNo)
             ->first();
     }
 
-    protected function createParameterGroup($name, $itemId, $itemTypeId)
+    protected function createParameterGroup($name, $itemId, $itemTypeId, $indentRefNo)
     {
         $newGroup = new ParameterGroup();
         $newGroup->name = $name;
@@ -360,6 +354,7 @@ class ExcelController extends Controller
             $section = $inspectorate->section;
             $newGroup->section_id = $section->id;
         }
+        $newGroup->reference_no = $indentRefNo;
         $newGroup->status = 1;
 
         $newGroup->save();
