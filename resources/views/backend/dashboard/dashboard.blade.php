@@ -6,6 +6,7 @@
         .nav-tabs .nav-link {
             width: 15% !important;
             font-size: 24px;
+            padding: 0px;
             font-weight: bold;
             background-color: #ffff;
             border: none;
@@ -46,6 +47,16 @@
             background-color: #AB8574;
             color: #ffff;
         }
+        .nav-link a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            width: 100%;
+            height: 100%;
+            font-size: 24px;
+            font-weight: bold;
+        }
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -55,13 +66,18 @@
 
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-indent-tab" data-bs-toggle="tab" data-bs-target="#nav-indent"
-                type="button" role="tab" aria-controls="nav-indent" aria-selected="true">Indent</button>
-                <a href="{{ url('admin/multiDashboard/5') }}"><button class="nav-link" id="nav-offer-tab"  type="button">Offer</button></a>
-                <a href="{{ url('admin/multiDashboard/6') }}"><button class="nav-link" id="nav-finalSpec-tab" type="button">Final Spec</button></a>
-                <a href="{{ url('admin/multiDashboard/9') }}"><button class="nav-link" id="nav-draftContract-tab" type="button" >Draft Contract</button></a>
-                <a href="{{ url('admin/multiDashboard/10') }}"><button class="nav-link" id="nav-contact-tab" type="button">Contract</button></a>
-                <a href="{{ url('admin/multiDashboard/13') }}"><button class="nav-link" id="nav-iNote-tab" type="button">I-Note</button></a>
+            <button class="nav-link active" id="nav-indent-tab" type="button"><a class="btn "
+                href="{{ url('admin/adminDashboard') }}">Indent </a></button>
+            <button class="nav-link" id="nav-offer-tab" type="button"><a class="btn "
+                    href="{{ url('admin/multiDashboard/5') }}">Offer </a></button>
+            <button class="nav-link" id="nav-finalSpec-tab"
+                    type="button"><a href="{{ url('admin/multiDashboard/6') }}">Final Spec</a></button>
+            <button class="nav-link" id="nav-draftContract-tab"
+                    type="button"><a href="{{ url('admin/multiDashboard/9') }}">Draft Contract</a></button>
+           <button class="nav-link" id="nav-contact-tab"
+                    type="button"> <a href="{{ url('admin/multiDashboard/10') }}">Contract</a></button>
+           <button class="nav-link" id="nav-iNote-tab"
+                    type="button"> <a href="{{ url('admin/multiDashboard/13') }}">I-Note</a></button>
 
         </div>
     </nav>
@@ -149,7 +165,7 @@
 
         chart2.render();
 
-   
+
 
         var docPieChart = {
           series: [44, 55, 13, 43],

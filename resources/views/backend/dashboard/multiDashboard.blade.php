@@ -218,6 +218,7 @@
         .nav-tabs .nav-link {
             width: 15% !important;
             font-size: 24px;
+            padding: 0px;
             font-weight: bold;
             background-color: #ffff;
             border: none;
@@ -235,6 +236,10 @@
         }
 
         #nav-offer-tab {
+            background-color: #FBA45A;
+            color: #ffff;
+        }
+        #nav-offer-tab:hover {
             background-color: #FBA45A;
             color: #ffff;
         }
@@ -258,21 +263,25 @@
             background-color: #AB8574;
             color: #ffff;
         }
-
-        body {
-            /* background: #1D1F20; */
-            padding: 16px;
-        }
-
-        canvas {
-            border: 1px dotted red;
-        }
-
         .chart-container {
             position: relative;
             margin: auto;
             height: 80vh;
             width: 80vw;
+        }
+
+        .nav-link a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            width: 100%;
+            height: 100%;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .pichart, .myBarGraph {
+        height: 95%
         }
     </style>
 @endpush
@@ -283,17 +292,18 @@
 
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-indent-tab" type="button">Indent</button>
-            <a href="{{ url('admin/multiDashboard/5') }}"><button class="nav-link" id="nav-offer-tab"
-                    type="button">Offer</button></a>
-            <a href="{{ url('admin/multiDashboard/6') }}"><button class="nav-link" id="nav-finalSpec-tab"
-                    type="button">Final Spec</button></a>
-            <a href="{{ url('admin/multiDashboard/9') }}"><button class="nav-link" id="nav-draftContract-tab"
-                    type="button">Draft Contract</button></a>
-            <a href="{{ url('admin/multiDashboard/10') }}"><button class="nav-link" id="nav-contact-tab"
-                    type="button">Contract</button></a>
-            <a href="{{ url('admin/multiDashboard/13') }}"><button class="nav-link" id="nav-iNote-tab"
-                    type="button">I-Note</button></a>
+            <button class="nav-link active" id="nav-indent-tab" type="button"><a class="btn "
+                href="{{ url('admin/adminDashboard') }}">Indent </a></button>
+            <button class="nav-link" id="nav-offer-tab" type="button"><a class="btn "
+                    href="{{ url('admin/multiDashboard/5') }}">Offer </a></button>
+            <button class="nav-link" id="nav-finalSpec-tab"
+                    type="button"><a href="{{ url('admin/multiDashboard/6') }}">Final Spec</a></button>
+            <button class="nav-link" id="nav-draftContract-tab"
+                    type="button"><a href="{{ url('admin/multiDashboard/9') }}">Draft Contract</a></button>
+           <button class="nav-link" id="nav-contact-tab"
+                    type="button"> <a href="{{ url('admin/multiDashboard/10') }}">Contract</a></button>
+           <button class="nav-link" id="nav-iNote-tab"
+                    type="button"> <a href="{{ url('admin/multiDashboard/13') }}">I-Note</a></button>
 
         </div>
     </nav>
@@ -406,9 +416,10 @@
                             <div id="basic-bar-indent"></div>
                         </div>
                     </div> --}}
-                    <div class="card">
-                        <div class="card-header pb-0">
+                    <div class="card myBarGraph">
+                        <div class="card-header text-center pb-0">
                             <h5>Bar Chart</h5>
+                            <hr>
                         </div>
                         <div class="card-body">
                             <canvas id="myBarGraph"></canvas>
@@ -416,12 +427,13 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-xl-6 box-col-6">
-                    <div class="card">
-                        <div class="card-header pb-0">
-                            <h5> Current Status</h5>
+                    <div class="card pichart">
+                        <div class="card-header text-center pb-0">
+                            <h5 > Current Status</h5>
+                            <hr>
                         </div>
                         <div class="card-body apex-chart">
-                            <div id="donutchart"></div>
+                            {{-- <div id="donutchart"></div> --}}
                             <div id="pichart"></div>
                         </div>
                     </div>
@@ -568,6 +580,12 @@
             labels: ["New Arrival", "On Process", "Completed", "Dispatch"],
             datasets: [{
                 label: "Current status",
+                backgroundColor: [
+                    '#1B4C43', // Color for "New Arrival"
+                    '#BA895D', // Color for "On Process"
+                    '#31D2F2', // Color for "Completed"
+                    '#D22D3D' // Color for "Dispatch"
+                ],
                 fillColor: "rgba(40, 105, 92, 0.4)",
                 strokeColor: vihoAdminConfig.primary,
                 highlightFill: "rgba(36, 105, 92, 0.6)",
@@ -598,6 +616,5 @@
             data: barData,
             options: barOptions
         });
-        
     </script>
 @endpush
