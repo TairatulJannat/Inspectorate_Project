@@ -27,11 +27,11 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="sender">Sender</label>
+                                <label for="sender">*Sender</label>
                                 <input type="hidden" value=" {{ $offer->id }}" id="editId" name="editId">
                                 <select class="form-control " id="sender" name="sender">
 
-                                    <option value="">Please Select</option>
+                                    <option value="">*Please Select</option>
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
@@ -46,7 +46,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="reference_no">Reference Number</label>
+                                <label for="reference_no">*Reference Number</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
                                     value="{{ $offer->reference_no ? $offer->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="offer_reference_date">Offer Reference Date</label>
+                                <label for="offer_reference_date">*Offer Reference Date</label>
                                 <input type="date" class="form-control" id="offer_reference_date"
                                     name="offer_reference_date"
                                     value="{{ $offer->offer_reference_date ? $offer->offer_reference_date : '' }}">
@@ -65,7 +65,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="offer_rcv_ltr_dt">Offer Receive Date</label>
+                                <label for="offer_rcv_ltr_dt">*Offer Receive Date</label>
                                 <input type="date" class="form-control" id="offer_rcv_ltr_dt" name="offer_rcv_ltr_dt"
                                     value="{{ $offer->offer_rcv_ltr_dt ? $offer->offer_rcv_ltr_dt : '' }}">
                                 <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>
@@ -75,8 +75,8 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="tender_reference_no">Tender Reference Number</label>
-                                <select class="form-control" id="tender_reference_no" name="tender_reference_no">
+                                <label for="tender_reference_no">*Tender Reference Number</label>
+                                <select class="form-control select2" id="tender_reference_no" name="tender_reference_no">
                                     <option value="">Please Select</option>
                                     @if ($offer->tender_reference_no)
                                         <option value="{{ $offer->tender_reference_no }}" selected>
@@ -93,14 +93,65 @@
                             </div>
                         </div>
 
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="indent_reference_no">*Indent Reference Number</label>
 
 
+                                <select class="form-control select2" id="indent_reference_no" name="indent_reference_no">
+
+                                    <option value="">Please Select</option>
+                                    @if ($offer->indent_reference_no)
+                                        <option value={{ $offer->indent_reference_no }} selected>
+                                            {{ $offer->indent_reference_no }}</option>
+                                    @endif
+                                    @foreach ($indent_reference_numbers as $indent_reference_number)
+                                        <option value="{{ $indent_reference_number->reference_no }}">
+                                            {{ $indent_reference_number->reference_no }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_type_id">*Item Type</label>
+                                <select class="form-control" id="item_type_id" name="item_type_id" >
+
+                                    <option value="">Please Select</option>
+
+                                    @if ($item_types)
+                                        <option
+                                            value="{{ $item_types->id == $offer->item_type_id ? $item_types->id : '' }}">
+                                            {{ $item_types->name }} </option>
+                                    @endif
+
+                                </select>
+                                <span id="error_item_type_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="item_id">*Nomenclature</label>
+                                <select class="form-control" id="item_id" name="item_id">
+                                    @if ($items)
+                                        <option value="{{ $items->id == $offer->item_id ? $items->id : '' }}">
+                                            {{ $items->name }} </option>
+                                    @endif
+                                </select>
+
+                                <span id="error_item_id" class="text-danger error_field"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
 
                                 <label for="additional_documents">Additional Documents</label>
-                                <select class="form-control select2" id="additional_documents" name="additional_documents[]"
-                                    multiple>
+                                <select class="form-control select2" id="additional_documents"
+                                    name="additional_documents[]" multiple>
                                     <option value="">Please Select</option>
                                     @foreach ($additional_documnets as $additional_document)
                                         @php
@@ -120,7 +171,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
 
-                                <label for="supplier_id">Suppiler</label>
+                                <label for="supplier_id">*Suppiler</label>
 
                                 <select class="form-control select2" id="supplier_id" name="supplier_id[]" multiple>
                                     <option value="">Please Select</option>
@@ -136,71 +187,7 @@
 
                                 </select>
 
-
-
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="offer_rcv_ltr_no">Offer Receive Letter No</label>
-                                <input type="text" class="form-control" id="offer_rcv_ltr_no" name="offer_rcv_ltr_no"
-                                    value="{{ $offer->offer_rcv_ltr_no ? $offer->offer_rcv_ltr_no : '' }}">
-                                <span id="error_offer_rcv_ltr_no" class="text-danger error_field"></span>
-
-                            </div>
-                        </div> --}}
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="indent_reference_no">Indent Reference Number</label>
-
-
-                                <select class="form-control " id="indent_reference_no" name="indent_reference_no">
-
-                                    <option value="">Please Select</option>
-                                    @if ($offer->indent_reference_no)
-                                        <option value={{ $offer->indent_reference_no }} selected>
-                                            {{ $offer->indent_reference_no }}</option>
-                                    @endif
-                                    @foreach ($indent_reference_numbers as $indent_reference_number)
-                                        <option value="{{ $indent_reference_number->reference_no }}">
-                                            {{ $indent_reference_number->reference_no }}</option>
-                                    @endforeach
-
-                                </select>
-                                <span id="error_indent_reference_no" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="item_type_id">Item Type</label>
-                                <select class="form-control" id="item_type_id" name="item_type_id" required>
-
-                                    <option selected disabled value="">Please Select</option>
-
-                                    @if ($item_types)
-                                    <option value="{{ $item_types->id == $offer->item_type_id ? $item_types->id : '' }}">{{ $item_types->name }} </option>
-                                        @endif
-
-                                </select>
-                                <span id="error_item_type_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="item_id">Nomenclature</label>
-                                <select class="form-control" id="item_id" name="item_id">
-                                    @if ($items)
-                                        <option value="{{ $items->id == $offer->item_id ? $items->id : '' }}">
-                                            {{ $items->name }} </option>
-                                    @endif
-                                </select>
-
-                                <span id="error_item_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 
@@ -236,7 +223,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="fin_year_id">Financial Year </label>
+                                <label for="fin_year_id">*Financial Year </label>
 
                                 <select class="form-control" id="fin_year_id" name="fin_year_id">
                                     <option value="">Please Select Year </option>
@@ -249,25 +236,11 @@
                                 </select>
 
 
-                                <span id="error_item_id" class="text-danger error_field"></span>
+                                <span id="error_fin_year_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 
-                        {{-- <div class="col-md-4">
-                        <label for="receive_status">Is Offer Vetted</label>
-                        <input class="form-check-input" type="checkbox" id="is_offer_vetted" name="is_offer_vetted" checked>
-                        <span class="text-danger error-text receive_status_error"></span>
-                    </div>
-                    <div class="col-md-4" id="offer_vetting_ltr_no">
-                        <label  for="receive_date">Offer Vetting Ltr No</label>
-                        <input class="form-control"  type="text" id="offer_vetting_ltr_no" name="offer_vetting_ltr_no" >
-                        <span class="text-danger error-text rreceive_date_error"></span>
-                    </div>
-                    <div class="col-md-4" id="offer_vetting_ltr_dt">
-                        <label  for="asking_date">Offer vetting Ltr Date</label>
-                        <input class="form-control" type="date" id="offer_vetting_ltr_dt" name="offer_vetting_ltr_dt" >
-                        <span class="text-danger error-text receiveDate_error"></span>
-                    </div> --}}
+                      
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -329,6 +302,7 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
+    @include('backend.offer.offer_incomming_new.index_js')
     <script>
         let fileCount = 1;
         $("#addFile").click(function() {
@@ -356,118 +330,12 @@
             });
         });
 
-        //Start:: Update information
-        $('#update_form').off().on('submit', function(event) {
-            event.preventDefault();
-            var formData = new FormData($('#update_form')[0]);
-            disableButton()
-            $.ajax({
-                url: "{{ url('admin/offer/update') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    if (response.error) {
-                        error_notification(response.error)
-                        enableeButton()
-                    }
-                    if (response.success) {
-                        // enableeButton()
-                        $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                        toastr.success('Information Updated', 'Saved');
-                        $('#edit_model').modal('hide');
-                    }
-                    setTimeout(window.location.href = "{{ route('admin.offer/view') }}", 40000);
-                },
-                error: function(response) {
-                    enableeButton()
-                    clear_error_field();
-                    error_notification('Please fill up the form correctly and try again')
-                    // $('#error_hall_id').text(response.responseJSON.errors.hall_id);
-                    // $('#error_floor_id').text(response.responseJSON.errors.floor_id);
-                    // $('#error_user_category_id').text(response.responseJSON.errors.user_category_id);
-                    // $('#error_specify_event').text(response.responseJSON.errors.specify_event);
-                    // $('#error_event_name').text(response.responseJSON.errors.event_name);
-                    // $('#error_specify_month').text(response.responseJSON.errors.specify_month);
-                    // $('#error_months').text(response.responseJSON.errors.months);
-                    // $('#error_specify_ramadan').text(response.responseJSON.errors.specify_ramadan);
-                    // $('#error_specify_shift_charge').text(response.responseJSON.errors
-                    //     .specify_shift_charge);
-                    // $('#error_shift_id').text(response.responseJSON.errors.shift_id);
-                    // $('#error_price').text(response.responseJSON.errors.price);
-                    // $('#error_status').text(response.responseJSON.errors.status);
-                }
-            });
-        })
-
-
-        function form_reset() {
-            document.getElementById("search_form").reset();
-            $('.select2').val(null).trigger('change');
-            $('.yajra-datatable').DataTable().ajax.reload(null, false);
-        }
-
-        function clear_error_field() {
-            $('#error_name').text('');
-            $('#error_holiday_date').text('');
-        }
-
-        function disableButton() {
-            var btn = document.getElementById('form_submission_button');
-            btn.disabled = true;
-            btn.innerText = 'Saving....';
-        }
-
-        function enableeButton() {
-            var btn = document.getElementById('form_submission_button');
-            btn.disabled = false;
-            btn.innerText = 'Save'
-        }
-
-        function error_notification(message) {
-            var notify = $.notify('<i class="fa fa-bell-o"></i><strong>' + message + '</strong> ', {
-                type: 'theme',
-                allow_dismiss: true,
-                delay: 2000,
-                showProgressbar: true,
-                timer: 300
-            });
-        }
+        
     </script>
     <script>
         $(document).ready(function() {
 
             $('.select2').select2();
-
-
-            // $("#item_type_id").off('change').on('change', function() {
-
-            //     //  alert('123');
-            //     var itemtype_id = $('#item_type_id').val();
-
-            //     if (itemtype_id > 0) {
-            //         $.ajax({
-            //             url: "{{ url('admin/prelimgeneral/item_name') }}" +
-            //                 '/' + itemtype_id,
-            //             type: 'GET',
-            //             dataType: 'json',
-            //             success: function(res) {
-            //                 console.log(res);
-
-            //                 var _html = '<option value="">Select an item</option>';
-            //                 $.each(res, function(index, item) {
-            //                     _html += '<option value="' + item.id + '">' + item
-            //                         .name + '</option>';
-            //                 });
-            //                 $('#item_id').html(_html);
-            //             }
-            //         });
-            //     }
-            // });
 
             $('#indent_reference_no').off('change').on('change', function() {
                 var indentReferenceNo = $(this).val();

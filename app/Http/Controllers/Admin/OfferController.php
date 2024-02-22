@@ -21,6 +21,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Models\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class OfferController extends Controller
@@ -143,7 +144,7 @@ class OfferController extends Controller
                 }
                 //......End for showing data for receiver designation
             }
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -217,50 +218,52 @@ class OfferController extends Controller
     public function create()
     {
         $admin_id = Auth::user()->id;
+        $insp_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $sections = Section::whereIn('id', $section_ids)->get();
         $dte_managments = Dte_managment::where('status', 1)->get();
-        $additional_documnets = Additional_document::where('status', 1)->get();
-        $item_types = Item_type::where('status', 1)->get();
-        $item = Items::all();
-        $fin_years = FinancialYear::all();
-        $suppliers = Supplier::all();
-        $tender_reference_numbers = Tender::all();
-        $indent_reference_numbers = Indent::all();
-        return view('backend.offer.offer_incomming_new.create', compact('sections', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'suppliers', 'tender_reference_numbers', 'indent_reference_numbers'));
+
+
+        return view('backend.offer.offer_incomming_new.create', compact('sections',  'dte_managments'));
     }
 
     public function store(Request $request)
     {
-        $insp_id = Auth::user()->inspectorate_id;
-        $sec_id = $request->admin_section;
-        $data = new Offer();
-        $data->insp_id = $insp_id;
-        $data->sec_id = $sec_id;
-        $data->sender = $request->sender;
-        $data->reference_no = $request->reference_no;
-        $data->offer_reference_date = $request->offer_reference_date;
-        $data->tender_reference_no = $request->tender_reference_no;
-        $data->indent_reference_no = $request->indent_reference_no;
-        $data->attribute = $request->attribute;
-        $data->additional_documents = json_encode($request->additional_documents);
-        $data->item_id = $request->item_id;
-        $data->item_type_id = $request->item_type_id;
-        $data->qty = $request->qty;
-        $data->supplier_id = json_encode($request->supplier_id);
-        $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
-        $data->fin_year_id = $request->fin_year_id;
+        $this->validate($request, [
+            'sender' => 'required',
+            'admin_section' => 'required',
+            'reference_no' => [
+                'required',
+                Rule::unique('offers')->where(function ($query) {
+                    return $query->where('insp_id', Auth::user()->inspectorate_id);
+                }),
+            ],
+            'offer_rcv_ltr_dt' => 'required',
+            'offer_reference_date' => 'required'
+        ]);
+        try {
 
+            $insp_id = Auth::user()->inspectorate_id;
+            $sec_id = $request->admin_section;
+            $data = new Offer();
 
-        $data->received_by = Auth::user()->id;
-        $data->remark = $request->remark;
-        $data->status = 0;
-        $data->created_at = Carbon::now()->format('Y-m-d');
-        $data->updated_at = Carbon::now()->format('Y-m-d');;
+            $data->insp_id = $insp_id;
+            $data->sec_id = $sec_id;
+            $data->sender = $request->sender;
+            $data->reference_no = $request->reference_no;
+            $data->offer_reference_date = $request->offer_reference_date;
+            $data->received_by = Auth::user()->id;
+            $data->remark = $request->remark;
+            $data->status = 0;
+            $data->created_at = Carbon::now()->format('Y-m-d');
+            $data->updated_at = Carbon::now()->format('Y-m-d');;
+            $data->save();
 
-        $data->save();
-
-        return response()->json(['success' => 'Done']);
+            return response()->json(['success' => 'Done']);
+        } catch (\Exception $e) {
+            // Handle any exceptions
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function edit($id)
@@ -281,47 +284,65 @@ class OfferController extends Controller
         $items = Items::where('id', $offer->item_id)->first();
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
-        $tender_reference_numbers = Tender::all();
+        $tender_reference_numbers = Tender::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->orderBy('id', 'desc')->get();
 
-        $indent_reference_numbers = Indent::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->get();
-        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers','items'));
-
+        $indent_reference_numbers = Indent::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->orderBy('id', 'desc')->get();
+        return view('backend.offer.offer_incomming_new.edit', compact('offer', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'items'));
     }
 
     public function update(Request $request)
     {
+        $this->validate($request, [
+            'sender' => 'required',
+            'reference_no' => 'required',
+            'offer_rcv_ltr_dt' => 'required',
+            'offer_reference_date' => 'required',
+            'item_id' => 'required',
+            'item_type_id' => 'required',
+            'fin_year_id' => 'required',
+            'tender_reference_no' => 'required',
+            'indent_reference_no' => 'required',
+        ], [
+            'item_id.required' => 'The nomenclature field is required.',
+            'item_type_id.required' => 'The item type field is required.',
+            'fin_year_id.required' => 'The FY field is required.',
+        ]);
+        try {
+            $data = Offer::findOrFail($request->editId);
+            $data->sender = $request->sender;
+            $data->reference_no = $request->reference_no;
+            $data->offer_reference_date = $request->offer_reference_date;
+            $data->tender_reference_no = $request->tender_reference_no;
+            $data->indent_reference_no = $request->indent_reference_no;
+            $data->attribute = $request->attribute;
+            $data->additional_documents = json_encode($request->additional_documents);
+            $data->item_id = $request->item_id;
+            $data->item_type_id = $request->item_type_id;
+            $data->qty = $request->qty;
+            $data->supplier_id = json_encode($request->supplier_id);
+            $data->fin_year_id = $request->fin_year_id;
 
-        $data = Offer::findOrFail($request->editId);
-        $data->sender = $request->sender;
-        $data->reference_no = $request->reference_no;
-        $data->offer_reference_date = $request->offer_reference_date;
-        $data->tender_reference_no = $request->tender_reference_no;
-        $data->indent_reference_no = $request->indent_reference_no;
-        $data->attribute = $request->attribute;
-        $data->additional_documents = json_encode($request->additional_documents);
-        $data->item_id = $request->item_id;
-        $data->item_type_id = $request->item_type_id;
-        $data->qty = $request->qty;
-        $data->supplier_id = json_encode($request->supplier_id);
-        $data->fin_year_id = $request->fin_year_id;
+            // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
 
-        // $data->pdf_file = $request->file('pdf_file')->store('pdf', 'public');
+            $data->received_by = Auth::user()->id;
+            $data->remark = $request->remark;
+            $data->status = 0;
+            $data->created_at = Carbon::now()->format('Y-m-d');
+            $data->updated_at = Carbon::now()->format('Y-m-d');;
 
-        $data->received_by = Auth::user()->id;
-        $data->remark = $request->remark;
-        $data->status = 0;
-        $data->created_at = Carbon::now()->format('Y-m-d');
-        $data->updated_at = Carbon::now()->format('Y-m-d');;
+            $data->save();
 
-        $data->save();
+            //Multipule File Upload in files table
+            $save_id = $data->id;
+            if ($save_id) {
+                $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 5,  $request->reference_no);
+            }
 
-        //Multipule File Upload in files table
-        $save_id = $data->id;
-        if ($save_id) {
-            $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 5,  $request->reference_no);
+            return response()->json(['success' => 'Done']);
+        } catch (\Exception $e) {
+            // Handle any exceptions
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        return response()->json(['success' => 'Done']);
     }
 
     public function details($id)
