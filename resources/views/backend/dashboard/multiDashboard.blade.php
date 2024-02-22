@@ -258,6 +258,22 @@
             background-color: #AB8574;
             color: #ffff;
         }
+
+        body {
+            /* background: #1D1F20; */
+            padding: 16px;
+        }
+
+        canvas {
+            border: 1px dotted red;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 80vh;
+            width: 80vw;
+        }
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -267,19 +283,17 @@
 
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-indent-tab" data-bs-toggle="tab" data-bs-target="#nav-indent"
-                type="button" role="tab" aria-controls="nav-indent" aria-selected="true">Indent</button>
-            <button class="nav-link" id="nav-offer-tab" data-bs-toggle="tab" data-bs-target="#nav-offer" type="button"
-                role="tab" aria-controls="nav-offer" aria-selected="false">Offer</button>
-            <button class="nav-link" id="nav-finalSpec-tab" data-bs-toggle="tab" data-bs-target="#nav-finalSpec"
-                type="button" role="tab" aria-controls="nav-finalSpec" aria-selected="false">Final Spec</button>
-            <button class="nav-link" id="nav-draftContract-tab" data-bs-toggle="tab" data-bs-target="#nav-draftContract"
-                type="button" role="tab" aria-controls="nav-draftContract" aria-selected="false">Draft
-                Contract</button>
-            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
-                role="tab" aria-controls="nav-contact" aria-selected="false">Contract</button>
-            <button class="nav-link" id="nav-iNote-tab" data-bs-toggle="tab" data-bs-target="#nav-iNote" type="button"
-                role="tab" aria-controls="nav-iNote" aria-selected="false">I-Note</button>
+            <button class="nav-link active" id="nav-indent-tab" type="button">Indent</button>
+            <a href="{{ url('admin/multiDashboard/5') }}"><button class="nav-link" id="nav-offer-tab"
+                    type="button">Offer</button></a>
+            <a href="{{ url('admin/multiDashboard/6') }}"><button class="nav-link" id="nav-finalSpec-tab"
+                    type="button">Final Spec</button></a>
+            <a href="{{ url('admin/multiDashboard/9') }}"><button class="nav-link" id="nav-draftContract-tab"
+                    type="button">Draft Contract</button></a>
+            <a href="{{ url('admin/multiDashboard/10') }}"><button class="nav-link" id="nav-contact-tab"
+                    type="button">Contract</button></a>
+            <a href="{{ url('admin/multiDashboard/13') }}"><button class="nav-link" id="nav-iNote-tab"
+                    type="button">I-Note</button></a>
 
         </div>
     </nav>
@@ -298,7 +312,7 @@
                             <div class="card-body new-arrival-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $indentNew }} <sub>Indent</sub></h1>
+                                    <h1>{{ $mulipleModelNew }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -320,7 +334,7 @@
                             <div class="card-body approved-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $indentOnProcess }} <sub>Indent</sub></h1>
+                                    <h1>{{ $mulipleModelOnProcess }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -342,7 +356,7 @@
                             <div class="card-body outgoing-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $indentCompleted }} <sub>Indent</sub></h1>
+                                    <h1>{{ $mulipleModelCompleted }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -364,7 +378,7 @@
                             <div class="card-body dispatch-body p-0">
                                 <div id="chart-dashbord"></div>
                                 <div class="code-box-copy">
-                                    <h1>{{ $indentDispatch }} <sub>Indent</sub></h1>
+                                    <h1>{{ $mulipleModelDispatch }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
                                 </div>
                             </div>
@@ -380,24 +394,34 @@
 
                 </div>
             </div>
+
+
             <div class="row">
                 <div class="col-sm-12 col-xl-6 box-col-6">
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header pb-0">
                             <h5>Indent report for last 4 month</h5>
                         </div>
                         <div class="card-body">
                             <div id="basic-bar-indent"></div>
                         </div>
+                    </div> --}}
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h5>Bar Chart</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="myBarGraph"></canvas>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-xl-6 box-col-6">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5> Overall Indent Report</h5>
+                            <h5> Current Status</h5>
                         </div>
                         <div class="card-body apex-chart">
-                            {{-- <div id="donutchart"></div> --}}
+                            <div id="donutchart"></div>
                             <div id="pichart"></div>
                         </div>
                     </div>
@@ -426,72 +450,20 @@
 @endsection
 
 @push('js')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                toastr.error('{{ $error }}', 'Error', {
-                    closeButton: true,
-                    progressBar: true,
-                });
-            @endforeach
-        @endif
-        console.log = function() {};
-
-
-
-
-        var options2 = {
-            chart: {
-                height: 210,
-                width: 450,
-                type: 'bar',
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: true,
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            series: [{
-                data: [
-                    {{ $indentcurrentMonthData }},
-                    {{ $indentoneMonthAgoData }},
-                    {{ $indenttwoMonthAgoData }},
-                    {{ $indentthreeMonthAgoData }}
-                ]
-            }],
-            xaxis: {
-                categories: [
-                    '{{ $currentMonthStart->format('M') }}',
-                    '{{ $oneMonthAgoStart->format('M') }}',
-                    '{{ $twoMonthAgoStart->format('M') }}',
-                    '{{ $threeMonthAgoStart->format('M') }}'
-                ],
-            },
-            colors: ['#B263C5']
-        }
-
-        var chart2 = new ApexCharts(
-            document.querySelector("#basic-bar-indent"),
-            options2
-        );
-
-        chart2.render();
-
-
-
+        //start piechart//
         var docPieChart = {
-            series: [44, 55, 13, 43],
+            series: [{{ $mulipleModelNew }}, {{ $mulipleModelOnProcess }}, {{ $mulipleModelCompleted }},
+                {{ $mulipleModelDispatch }}
+            ],
             chart: {
                 width: 380,
                 type: 'pie',
             },
-            labels: ['New Arrivel', 'Approved', 'Completed', 'Dispatch'],
+            labels: ['New Arrivel', 'On Process', 'Completed', 'Dispatch'],
+            colors: ['#1B4C43', '#BA895D', '#31D2F2', '#D22D3D'],
             responsive: [{
                 breakpoint: 480,
                 options: {
@@ -507,40 +479,13 @@
 
         var paichart = new ApexCharts(document.querySelector("#pichart"), docPieChart);
         paichart.render();
+        //end piechart//
 
-        var offer = {
-            chart: {
-                width: 380,
-                type: 'donut',
-            },
-            series: [{{ $offerNewChart }}, {{ $offerOnProcessChart }}, {{ $offerCompletedChart }},
-                {{ $offerDispatchChart }}
-            ],
-            labels: ['New Arrival', 'On Process', 'Completed', 'Dispatch'],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }],
-            colors: [vihoAdminConfig.primary, vihoAdminConfig.secondary, '#31D2F2', '#D22D3D']
-        }
-
-        var offer = new ApexCharts(
-            document.querySelector("#donutchart-offer"),
-            offer
-        );
-
-        offer.render();
-
-        var indentReport = {
+        //start barchart//
+        var counts = <?php echo json_encode(array_values($counts)); ?>;
+        var monthlyReport = {
             series: [{
-                data: [21, 22, 10, 28, 16, 21]
+                data: counts
             }],
             chart: {
                 height: 350,
@@ -614,7 +559,45 @@
             }
         };
 
-        var renderIndentReport = new ApexCharts(document.querySelector("#dasboard_barchart"), indentReport);
-        renderIndentReport.render();
+        var renderMonthlyReport = new ApexCharts(document.querySelector("#dasboard_barchart"), monthlyReport);
+        renderMonthlyReport.render();
+        //end barchart//
+
+
+        var barData = {
+            labels: ["New Arrival", "On Process", "Completed", "Dispatch"],
+            datasets: [{
+                label: "Current status",
+                fillColor: "rgba(40, 105, 92, 0.4)",
+                strokeColor: vihoAdminConfig.primary,
+                highlightFill: "rgba(36, 105, 92, 0.6)",
+                highlightStroke: vihoAdminConfig.primary,
+                data: [35, 59, 80, 81, 56, 55, 40]
+            }]
+        };
+
+
+
+        var barOptions = {
+            scaleBeginAtZero: true,
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,0.1)",
+            scaleGridLineWidth: 1,
+            scaleShowHorizontalLines: true,
+            scaleShowVerticalLines: true,
+            barShowStroke: true,
+            barStrokeWidth: 2,
+            barValueSpacing: 5,
+            barDatasetSpacing: 1,
+        };
+
+
+        var barCtx = document.getElementById("myBarGraph").getContext("2d");
+        var myBarChart = new Chart(barCtx, {
+            type: 'bar',
+            data: barData,
+            options: barOptions
+        });
+        
     </script>
 @endpush

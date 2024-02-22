@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminSection;
+use App\Models\Contract;
 use App\Models\Designation;
 use App\Models\DocType;
 use App\Models\DocumentTrack;
+use App\Models\DraftContract;
+use App\Models\FinalSpec;
 use App\Models\Indent;
+use App\Models\Inote;
 use App\Models\Offer;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -218,11 +222,82 @@ class AdminDashboarController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
-    public function multiDeshboard($docTypeId){
+    public function multiDashboard($docTypeId){
+
+        // dd($docTypeId->all());
         $doc_type = DocType::find($docTypeId);
         $modelClass = 'App\\Models\\' . $doc_type->name;
         $table = $doc_type->table_name;
-        return view('backend.dashboard.multiDashboard');
+
+
+
+        $insp_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+        $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+
+
+
+        if ($designation_id==1 || $designation_id==0) {
+            $mulipleModelNew = $modelClass::where('status' ,0)->count();
+            $mulipleModelOnProcess = '0';
+            $mulipleModelCompleted = '0';
+            $mulipleModelDispatch = DocumentTrack::where('doc_type_id', $doc_type->doc_serial)
+            ->leftJoin($table, 'document_tracks.doc_ref_id', '=', $table.'.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 4)
+            ->where($table.'.status', 4)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+            //  dd($mulipleModelDispatch);
+        }else {
+
+            $mulipleModelNew = DocumentTrack::where('doc_type_id', $doc_type->doc_serial)
+            ->leftJoin($table, 'document_tracks.doc_ref_id', '=', $table . '.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 1)
+            ->where($table . '.status', 0)
+            ->where('document_tracks.section_id', $section_ids)
+            ->count();        
+// dd($mulipleModelNew);
+            $mulipleModelOnProcess = DocumentTrack::where('doc_type_id', $doc_type->doc_serial)
+            ->leftJoin($table, 'document_tracks.doc_ref_id', '=', $table.'.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 3)
+            ->where($table.'.status', 3)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+
+            $mulipleModelCompleted = DocumentTrack::where('doc_type_id', $doc_type->doc_serial)
+            ->leftJoin($table, 'document_tracks.doc_ref_id', '=', $table.'.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 2)
+            ->where($table.'.status', 1)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+
+            $mulipleModelDispatch = DocumentTrack::where('doc_type_id', $doc_type->doc_serial)
+            ->leftJoin($table, 'document_tracks.doc_ref_id', '=', $table.'.id')
+            ->where('reciever_desig_id', $designation_id)
+            ->where('track_status', 4)
+            ->where($table.'.status', 4)
+            ->whereIn('document_tracks.section_id', $section_ids)
+            ->count();
+
+        }
+
+        $counts = [
+            'IndentOverAll' => Indent::count(),
+            'OfferOverAll' => Offer::count(),
+            'FinalSpecOverAll' => FinalSpec::count(),
+            'DraftContractOverAll' => DraftContract::count(),
+            'ContractOverAll' => Contract::count(),
+            'I_NoteOverAll' => Inote::count()
+        ];
+        // dd($counts);
+
+        //   dd($counts);   
+        return view('backend.dashboard.multiDashboard',compact('mulipleModelNew', 'mulipleModelOnProcess', 'mulipleModelCompleted','mulipleModelDispatch','doc_type','counts'));
 
     }
 }
