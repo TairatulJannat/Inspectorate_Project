@@ -16,6 +16,7 @@ use App\Models\Indent;
 use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\inote;
+use App\Models\InoteDeviation;
 use App\Models\InoteLetter;
 use App\Models\Section;
 use App\Models\Supplier;
@@ -548,5 +549,43 @@ class InoteController extends Controller
         //     $supplier_details = $supplier->firm_name . ', ' . $supplier->address_of_local_agent;
         // }
         return view('backend.inote.inoteHtmlEdit', compact('inoteLetter'));
+    }
+
+    public function InoteDeviation(Request $request)
+    {
+// dd( $request->all());
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
+        $inote_reference_no = $request->inote_reference_no;
+        $reciever_desig_id = $request->reciever_desig_id;
+        $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
+
+        $inote = new InoteDeviation();
+
+        $inote->inspectorate_id = $ins_id;
+        $inote->section_id = $section_id;
+        $inote->file_no = $request->file_no;
+        $inote->nomenclature = $request->nomenclature;
+        $inote->contract_no_dt = $request->contract_no_dt;
+        $inote->suppliers_name_address = $request->suppliers_name_address;
+        $inote->qty = $request->qty;
+        $inote->on_order = $request->on_order;
+        $inote->deviation_required = $request->deviation_required;
+        $inote->accepted_to_date = $request->accepted_to_date;
+        $inote->others_particulars = $request->others_particulars;
+        $inote->classification_of_deviation = $request->classification_of_deviation;
+        $inote->contract_approved_simple_basis = $request->contract_approved_simple_basis;
+        $inote->deviation_recommended = $request->deviation_recommended;
+        $inote->stores_issue = $request->stores_issue;
+        $inote->considered_that = $request->considered_that;
+        $inote->others_remarks = $request->others_remarks;
+        $inote->deviation_applied_above = $request->deviation_applied_above;
+        $inote->created_at = Carbon::now('Asia/Dhaka');
+        $inote->updated_at = Carbon::now('Asia/Dhaka');
+        $inote->save();
+        return response()->json(['success' => 'Done']);
+        
     }
 }

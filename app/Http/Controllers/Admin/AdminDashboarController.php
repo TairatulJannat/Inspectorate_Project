@@ -126,60 +126,28 @@ class AdminDashboarController extends Controller
 
 
 
+        $counts = [
+            'IndentOverAll' => Indent::count(),
+            'OfferOverAll' => Offer::count(),
+            'FinalSpecOverAll' => FinalSpec::count(),
+            'DraftContractOverAll' => DraftContract::count(),
+            'ContractOverAll' => Contract::count(),
+            'I_NoteOverAll' => Inote::count()
+        ];
+        $currentStatusCounts = [
+            'IndentOverAll' => Indent::whereIn('status',[0,1,3,4])->whereIn('sec_id',$section_ids)->where('insp_id', $insp_id)->count(),
+            'OfferOverAll' => Offer::whereIn('status',[0,1,3,4])->whereIn('sec_id',$section_ids)->where('insp_id', $insp_id)->count(),
+            'FinalSpecOverAll' => FinalSpec::whereIn('status',[0,1,3,4])->whereIn('sec_id',$section_ids)->where('insp_id', $insp_id)->count(),
+            'DraftContractOverAll' => DraftContract::whereIn('status',[0,1,3,4])->whereIn('section_id',$section_ids)->where('inspectorate_id', $insp_id)->count(),
+            'ContractOverAll' => Contract::whereIn('status',[0,1,3,4])->whereIn('section_id',$section_ids)->where('inspectorate_id', $insp_id)->count(),
+            'I_NoteOverAll' => Inote::whereIn('status',[0,1,3,4])->whereIn('section_id',$section_ids)->where('inspectorate_id', $insp_id)->count()
+        ];
 
 
 
 
-        $indentNewChart = Indent::where('status', 0)->count();
-        $indentOnProcessChart = Indent::where('status', 3)->count();
-        $indentCompletedChart = Indent::where('status', 1)->count();
-        $indentDispatchChart = Indent::where('status', 4)->count();
 
-        $offerNewChart = Offer::where('status', 0)->count();
-        $offerOnProcessChart = Offer::where('status', 3)->count();
-        $offerCompletedChart = Offer::where('status', 1)->count();
-        $offerDispatchChart = Offer::where('status', 4)->count();
-
-
-
-
-        $currentDate = Carbon::now();
-
-        // Calculate the first day and last day of the current month
-        $currentMonthStart = $currentDate->copy()->startOfMonth();
-        $currentMonthEnd = $currentDate->copy()->endOfMonth();
-
-        // Calculate the first day and last day of the month one month ago
-        $oneMonthAgoStart = $currentDate->copy()->subMonth()->startOfMonth();
-        $oneMonthAgoEnd = $currentDate->copy()->subMonth()->endOfMonth();
-
-        // Calculate the first day and last day of the month two months ago
-        $twoMonthAgoStart = $currentDate->copy()->subMonth(2)->startOfMonth();
-        $twoMonthAgoEnd = $currentDate->copy()->subMonth(2)->endOfMonth();
-
-        // Calculate the first day and last day of the month three months ago
-        $threeMonthAgoStart = $currentDate->copy()->subMonth(3)->startOfMonth();
-        $threeMonthAgoEnd = $currentDate->copy()->subMonth(3)->endOfMonth();
-//start offer bar chart
-        // Retrieve data for each month
-        $currentMonthData = Offer::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->where('status', 2)->count();
-        $oneMonthAgoData = Offer::whereBetween('created_at', [$oneMonthAgoStart, $oneMonthAgoEnd])->where('status', 2)->count();
-        $twoMonthAgoData = Offer::whereBetween('created_at', [$twoMonthAgoStart, $twoMonthAgoEnd])->where('status', 2)->count();
-        $threeMonthAgoData = Offer::whereBetween('created_at', [$threeMonthAgoStart, $threeMonthAgoEnd])->where('status', 2)->count();
-//end offer bar chart
-
-//start indent bar chart
-        // Retrieve data for each month
-        $indentcurrentMonthData = Indent::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->where('status', 2)->count();
-        $indentoneMonthAgoData = Indent::whereBetween('created_at', [$oneMonthAgoStart, $oneMonthAgoEnd])->where('status', 2)->count();
-        $indenttwoMonthAgoData = Indent::whereBetween('created_at', [$twoMonthAgoStart, $twoMonthAgoEnd])->where('status', 2)->count();
-        $indentthreeMonthAgoData = Indent::whereBetween('created_at', [$threeMonthAgoStart, $threeMonthAgoEnd])->where('status', 2)->count();
- //end indent bar chart
-
-
-
-
-        return view('backend.dashboard.dashboard', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch', 'indentNewChart','indentOnProcessChart','indentCompletedChart','indentDispatchChart', 'offerNewChart','offerOnProcessChart','offerCompletedChart','offerDispatchChart','offerNew','offerOnProcess','offerCompleted','offerDispatch','currentMonthData','oneMonthAgoData','twoMonthAgoData','threeMonthAgoData','currentMonthStart','oneMonthAgoStart','twoMonthAgoStart','threeMonthAgoStart', 'indentcurrentMonthData','indentoneMonthAgoData','indenttwoMonthAgoData','indentthreeMonthAgoData'));
+        return view('backend.dashboard.dashboard', compact('indentNew', 'indentOnProcess', 'indentCompleted', 'indentDispatch','counts','currentStatusCounts'));
     }
 
 
@@ -294,10 +262,18 @@ class AdminDashboarController extends Controller
             'ContractOverAll' => Contract::count(),
             'I_NoteOverAll' => Inote::count()
         ];
+        $currentStatusCounts = [
+            'IndentOverAll' => Indent::whereIn('status',[0,1,3,4])->whereIn('sec_id',$section_ids)->where('insp_id', $insp_id)->count(),
+            'OfferOverAll' => Offer::whereIn('status',[0,1,3,4])->whereIn('sec_id',$section_ids)->where('insp_id', $insp_id)->count(),
+            'FinalSpecOverAll' => FinalSpec::whereIn('status',[0,1,3,4])->whereIn('sec_id',$section_ids)->where('insp_id', $insp_id)->count(),
+            'DraftContractOverAll' => DraftContract::whereIn('status',[0,1,3,4])->whereIn('section_id',$section_ids)->where('inspectorate_id', $insp_id)->count(),
+            'ContractOverAll' => Contract::whereIn('status',[0,1,3,4])->whereIn('section_id',$section_ids)->where('inspectorate_id', $insp_id)->count(),
+            'I_NoteOverAll' => Inote::whereIn('status',[0,1,3,4])->whereIn('section_id',$section_ids)->where('inspectorate_id', $insp_id)->count()
+        ];
         // dd($counts);
 
         //   dd($counts);   
-        return view('backend.dashboard.multiDashboard',compact('mulipleModelNew', 'mulipleModelOnProcess', 'mulipleModelCompleted','mulipleModelDispatch','doc_type','counts'));
+        return view('backend.dashboard.multiDashboard',compact('mulipleModelNew', 'mulipleModelOnProcess', 'mulipleModelCompleted','mulipleModelDispatch','doc_type','counts','currentStatusCounts'));
 
     }
 }
