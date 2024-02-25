@@ -72,7 +72,7 @@
             </div>
             {{-- dANXpl5 end here --}}
         </div>
-        
+
 
     </div>
 @endsection
@@ -179,5 +179,30 @@
             btn.disabled = false;
             btn.innerText = 'Save'
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Next button click event
+            $("#nextBtn").click(function(e) {
+                e.preventDefault()
+                var $active = $('.nav-tabs .nav-link.active');
+                var $next = $active.parent().next().find('.nav-link');
+
+                if ($next.length > 0) {
+                    $next.tab('show');
+                }
+            });
+
+            // Previous button click event
+            $("#prevBtn").click(function(e) {
+                e.preventDefault()
+                var $active = $('.nav-tabs .nav-link.active');
+                var $prev = $active.parent().prev().find('.nav-link');
+
+                if ($prev.length > 0) {
+                    $prev.tab('show');
+                }
+            });
+        });
     </script>
 @endpush
