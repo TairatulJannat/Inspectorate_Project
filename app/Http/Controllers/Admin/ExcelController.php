@@ -373,8 +373,48 @@ class ExcelController extends Controller
         ])->fresh();
     }
 
-    protected function exportIndentEditedData()
+    protected function exportIndentEditedData($indentRefNo)
     {
+        $parameterGroups = ParameterGroup::where('reference_no', $indentRefNo)
+            ->with('assignParameterValues')
+            ->get();
+
+        $excelData = [];
+        $sNo = 1;
+
+        foreach ($parameterGroups as $group) {
+            $first = true;
+            if (count($group->assignParameterValues) > 0) {
+                foreach ($group->assignParameterValues as $value) {
+                    if ($first) {
+                        $excelData[] = [
+                            'S. No.' => $sNo++,
+                            'Parameter Group Name' => $group->name,
+                            'Parameter Name' => '',
+                            'Parameter Value' => '',
+                        ];
+                        $first = false;
+                    }
+                    $excelData[] = [
+                        'S. No.' => '',
+                        'Parameter Group Name' => '',
+                        'Parameter Name' => $value->parameter_name,
+                        'Parameter Value' => $value->parameter_value,
+                    ];
+                }
+            } else {
+                $excelData[] = [
+                    'S. No.' => $sNo++,
+                    'Parameter Group Name' => $group->name,
+                    'Parameter Name' => '',
+                    'Parameter Value' => '',
+                ];
+            }
+        }
+
+        $fileName = "indent_data_{$indentRefNo}.xlsx";
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\IndentExport($excelData), $fileName);
     }
 
     protected function supplierIndex()

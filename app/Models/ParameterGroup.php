@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ParameterGroup extends Model
 {
-    protected $guarded = [
-        'id'
-    ];
+    protected $guarded = ['id'];
 
     // Define relationships
     public function inspectorate()
