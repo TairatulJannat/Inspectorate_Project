@@ -38,9 +38,9 @@
                 <label for="">Action:</label>
                <textarea name="" class="form-control" id="" cols="30" rows="10"></textarea>
             </div>
-            <div class="footer-box d-flex justify-content-between pt-2">
-                <button type="submit" class="btn btn-primary px-4 py-3 me-2" id="form_submission_button">Previous</button>
-                <button type="submit" class="btn btn-success px-4 py-3" id="form_submission_button">Save And Next</button>
+            <div class="footer-box d-flex justify-content-center pt-2">
+                <button type="submit" class="btn btn-primary px-4 py-3 me-2" id="prevBtn">Previous</button>
+                <button type="submit" class="btn btn-success px-4 py-3" id="nextBtn">Save And Continue</button>
             </div>
         </form>
     </div>
