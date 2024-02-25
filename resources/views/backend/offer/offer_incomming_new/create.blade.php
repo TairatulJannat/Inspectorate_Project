@@ -39,9 +39,9 @@
                     <div  class=" header">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="additional_documents">Select Section</label>
+                                <label for="additional_documents">*Select Section</label>
                                 <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
-                                    <Option>Select Section</Option>
+                                    <Option value="">Select Section</Option>
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
@@ -60,7 +60,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="sender">Sender</label>
+                                <label for="sender">*Sender</label>
                                 <select class="form-control " id="sender" name="sender">
 
                                     <option value="">Please Select</option>
@@ -76,7 +76,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="reference_no">Reference Number</label>
+                                <label for="reference_no">*Reference Number</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
@@ -85,16 +85,18 @@
                  
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="offer_reference_date">Offer Reference Date</label>
+                                <label for="offer_reference_date">*Offer Reference Date</label>
                                 <input type="date" class="form-control" id="offer_reference_date" name="offer_reference_date">
-                                <span id="offer_reference_date" class="text-danger error_field"></span>
+                                <span id="error_offer_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
+
                                 <label for="offer_rcv_ltr_dt">Offer Receive Letter Date</label>
-                                <input type="date" class="form-control" id="offer_rcv_ltr_dt" name="offer_rcv_ltr_dt">
+                                <input type="date" class="form-control" id="offer_rcv_ltr_dt" name="offer_rcv_ltr_dt" value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
+
                                 <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>

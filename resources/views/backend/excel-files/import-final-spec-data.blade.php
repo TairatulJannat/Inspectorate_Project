@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'Import Final Spec')
+@section('title', 'Import Draft Contract')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
@@ -37,8 +37,7 @@
     @endif
 
     <div class="card shadow-lg" style="background-color: darkseagreen;">
-        <form method="POST" action="{{ url('admin/import-final-spec-data') }}"
-            enctype="multipart/form-data">
+        <form enctype="multipart/form-data" action="" method="POST" id="save_info">
             @csrf
             <div class="row">
                 <input type="hidden" name="document_id" id="document_id" value="{{ $documentDetails->reference_no }}">
@@ -67,7 +66,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary float-end">Import</button>
+                    <button class="btn btn-primary float-end" id="importDocExcel" type="submit">Import</button>
                 </div>
             </div>
         </form>
@@ -162,4 +161,69 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- Developer's JS file for brand page -->
     {{-- @include('backend.excel-files.final-spec-index-js') --}}
+    <script>
+        $(document).ready(function() {
+            $('#save_info').off().on('submit', function(event) {
+
+                event.preventDefault();
+                alert('ok')
+                var formData = new FormData($('#save_info')[0]);
+
+                $.ajax({
+                    url: "{{ url('admin/import-final-spec-data') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: function(response) {
+                        if (response.error) {
+                            error_notification(response.error)
+                            // enableeButton()
+                        }
+                        if (response.success) {
+                            // enableeButton()
+                            $('.modal-backdrop').remove();
+                            $('.yajra-datatable').DataTable().ajax.reload(null, false);
+                            toastr.success('Information Saved', 'Saved');
+                        }
+                        // setTimeout(window.location.href =
+                        //     "{{ route('admin.FinalSpec/view') }}", 40000);
+                    },
+                    error: function(response) {
+                        // enableeButton()
+                        // clear_error_field();
+                        error_notification('Please fill up the form correctly and try again')
+                        // $('#error_sender').text(response.responseJSON.errors.sender);
+                        // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                        // $('#error_spec_type').text(response.responseJSON.errors.spec_type);
+                        // $('#error_additional_documents').text(response.responseJSON.errors
+                        //     .additional_documents);
+                        // $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
+                        // $('#error_spec_received_date').text(response.responseJSON.errors
+                        //     .spec_received_date);
+                        // $('#error_estimated_value').text(response.responseJSON.errors
+                        //     .estimated_value);
+                        // $('#error_qty').text(response.responseJSON.errors
+                        //     .qty);
+                        // $('#error_indent_received_date').text(response.responseJSON.errors
+                        //     .indent_received_date);
+
+                    }
+                });
+            })
+        })
+
+        function error_notification(message) {
+            var notify = $.notify('<i class="fa fa-bell-o"></i><strong>' + message + '</strong> ', {
+                type: 'theme',
+                allow_dismiss: true,
+                delay: 2000,
+                showProgressbar: true,
+                timer: 300
+            });
+        }
+    </script>
 @endpush

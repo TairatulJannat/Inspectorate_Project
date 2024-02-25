@@ -783,11 +783,12 @@ class ExcelController extends Controller
             'file.mimes' => 'The file must be of type: xlsx, csv.',
             'file.max' => 'The file size must not exceed 2048 kilobytes.',
         ]);
-        dd($request->all());
+
 
         try {
-            $importedData = Excel::toCollection(new FinalSpecImport, $request->file('file'))->first();
 
+            $importedData = Excel::toCollection(new FinalSpecImport, $request->file('file'))->first();
+            dd($importedData);
             $parameterGroups = [];
             $currentGroupName = null;
 
@@ -858,11 +859,14 @@ class ExcelController extends Controller
                 'supplierFirmName' => $supplierFirmName,
             ]);
         } catch (UnreadableFileException $e) {
-            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'The uploaded file is unreadable.');
+            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'The uploaded file is unreadable.');
+            return response()->json(['errors' => $e], 422);
         } catch (SheetNotFoundException $e) {
-            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
+            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
+            return response()->json(['errors' => $e], 422);
         } catch (\Exception $e) {
-            return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
+            return response()->json(['errors' => $e], 422);
+            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
         }
     }
 
