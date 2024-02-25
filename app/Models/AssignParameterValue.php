@@ -9,15 +9,7 @@ class AssignParameterValue extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'parameter_group_id',
-        'parameter_name',
-        'parameter_value',
-        'doc_type_id',
-        'reference_no',
-        'created_at',
-        'updated_at',
-    ];
+    protected $guarded = ['id'];
 
     public function parameterGroup()
     {

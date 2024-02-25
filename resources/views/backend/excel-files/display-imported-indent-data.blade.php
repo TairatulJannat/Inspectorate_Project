@@ -39,31 +39,33 @@
                                     <th>Parameter value</th>
                                 </tr>
                             </thead>
-                            @php $slNo = 0; @endphp
+                            @php
+                                $slNo = 0;
+                                $groupIndex = 0;
+                            @endphp
                             @foreach ($parameterGroups as $groupName => $parameters)
                                 <tbody>
                                     <tr>
                                         <td colspan="3">
                                             <input type="text" class="form-control bg-success"
-                                                name="editedData[{{ $groupName }}][parameter_group_name]"
+                                                name="editedData[{{ $groupIndex }}][parameter_group_name]"
                                                 value="{{ $groupName }}">
                                         </td>
                                     </tr>
-                                    @foreach ($parameters as $parameter)
+                                    @foreach ($parameters as $paramIndex => $parameter)
                                         <tr>
                                             <td class="col-md-1 py-1 text-center">{{ $slNo + 1 }}</td>
                                             <td class="col-md-5 py-1">
-                                                <textarea class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
+                                                <textarea class="form-control" name="editedData[{{ $groupIndex }}][{{ $paramIndex }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
                                             </td>
                                             <td class="col-md-6 py-1">
-                                                <textarea class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
+                                                <textarea class="form-control" name="editedData[{{ $groupIndex }}][{{ $paramIndex }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
                                             </td>
                                         </tr>
                                         @php $slNo++; @endphp
                                     @endforeach
                                 </tbody>
+                                @php $groupIndex++; @endphp
                             @endforeach
                         </table>
                     </div>
