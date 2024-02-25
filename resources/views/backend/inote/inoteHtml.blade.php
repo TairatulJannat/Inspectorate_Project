@@ -37,7 +37,7 @@
                     role="tab" aria-controls="inote" aria-selected="true">I-Note</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="daviation-tab" data-bs-toggle="tab" data-bs-target="#daviation" type="button"
+                <button class="nav-link " id="daviation-tab" data-bs-toggle="tab" data-bs-target="#daviation" type="button"
                     role="tab" aria-controls="daviation" aria-selected="false">Daviation</button>
             </li>
             <li class="nav-item" role="presentation">

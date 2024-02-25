@@ -1,4 +1,4 @@
-<div class="inote_boc">
+<div class="inote_boc mb-2">
     <form action="" id='saveInote' method="POST" enctype="multipart/form-data">
         <input type="hidden" id="inote_reference_no" name="inote_reference_no" value="{{ $inote->reference_no }}">
         <div class="header-box">
@@ -183,8 +183,9 @@
             </div>
         </div>
 
-        <div class="footer-box">
-            <button type="submit" class="btn btn-primary" id="form_submission_button">Save</button>
+        <div class="footer-box d-flex justify-content-center mt-3 pb-2">
+           
+            <button type="submit" class="btn btn-success px-4 py-3" id="form_submission_button"><b>Save & Next</b></button>
         </div>
     </form>
 </div>
