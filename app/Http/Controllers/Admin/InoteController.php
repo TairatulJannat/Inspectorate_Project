@@ -553,7 +553,7 @@ class InoteController extends Controller
 
     public function InoteDeviation(Request $request)
     {
-// dd( $request->all());
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
@@ -586,6 +586,12 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
+        
+    }
+    public function deviation($id)
+    {
+
+        return view('backend.pdf.inote_deviation_pdf');
         
     }
 }
