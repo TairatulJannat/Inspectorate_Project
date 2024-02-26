@@ -28,6 +28,8 @@ class IndentExport implements FromCollection, WithHeadings, WithEvents
             'Parameter Group Name',
             'Parameter Name',
             'Parameter Value',
+            'Supplier Name',
+            'Remarks',
         ];
     }
 
@@ -36,6 +38,25 @@ class IndentExport implements FromCollection, WithHeadings, WithEvents
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $event->sheet->insertNewRowBefore(1, 4);
+
+                $event->sheet->getDelegate()->getProtection()->setPassword('123456');
+                $event->sheet->getDelegate()->getProtection()->setSheet(true);
+
+                $event->sheet->getStyle('E5:E' . $event->sheet->getHighestRow())->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+                $event->sheet->getStyle('F7:F' . $event->sheet->getHighestRow())->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+
+                $event->sheet->getDelegate()->getColumnDimension('A')->setWidth(10);
+                $event->sheet->getDelegate()->getColumnDimension('B')->setWidth(40);
+                $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(40);
+                $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(40);
+                $event->sheet->getDelegate()->getColumnDimension('E')->setWidth(40);
+                $event->sheet->getDelegate()->getColumnDimension('F')->setWidth(40);
+
+                $event->sheet->getDelegate()->getStyle('B')->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('C')->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('D')->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('E')->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('F')->getAlignment()->setWrapText(true);
             },
         ];
     }

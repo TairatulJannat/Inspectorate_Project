@@ -31,10 +31,12 @@
                                 <div class="indent-id f-20">Indent Ref. No: <span class="fw-bold">{{ $indentRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="indent-id" value="{{ $indentId }}">
+                                <input type="hidden" name="indentRefNo" value="{{ $indentRefNo }}">
                                 <div class="tender-id f-20">Tender Ref. No: <span class="fw-bold">{{ $tenderRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="tender-id" value="{{ $tenderId }}">
-                                <div class="offerRefNo f-20">Offer Ref. No: <span class="fw-bold">{{ $offerRefNo }}</span>
+                                <div class="offerRefNo f-20">Offer Ref. No: <span
+                                        class="fw-bold">{{ $offerRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="offerRefNo" value="{{ $offerRefNo }}">
                                 <div class="supplier-id f-20">Supplier Name: <span
@@ -56,48 +58,49 @@
                                     <th style="background-color: #b0e0bc">Remarks</th>
                                 </tr>
                             </thead>
-                            @php $slNo = 0; @endphp
+                            @php
+                                $slNo = 0;
+                                $groupIndex = 0;
+                            @endphp
                             @foreach ($parameterGroups as $groupName => $parameters)
                                 <tbody>
                                     <tr>
                                         <td style="background-color: #bdf5fb"></td>
                                         <td colspan="5" style="background-color: #c3d0ff;">
                                             <input type="text" class="form-control bg-body text-body"
-                                                name="editedData[{{ $groupName }}][parameter_group_name]"
-                                                value="{{ $groupName }}" disabled>
+                                                name="editedData[{{ $groupIndex }}][parameter_group_name]"
+                                                value="{{ $groupName }}" readonly>
                                         </td>
                                     </tr>
-                                    @foreach ($parameters as $parameter)
+                                    @foreach ($parameters as $paramIndex => $parameter)
                                         <tr>
                                             <td class="col-md-1 py-1 text-center" style="background-color: #bdf5fb">
                                                 {{ $slNo + 1 }}</td>
                                             <td class="col-md-2 py-1" style="background-color: #bdf5fb">
-                                                <textarea class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
+                                                <textarea class="form-control" name="editedData[{{ $groupIndex }}][{{ $paramIndex }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
                                             </td>
                                             <td class="col-md-3 py-1" style="background-color: #bdf5fb">
-                                                <textarea class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]">{{ $parameter['indent_parameter_value'] }}</textarea>
+                                                <textarea class="form-control" name="editedData[{{ $groupIndex }}][{{ $paramIndex }}][indent_parameter_value]">{{ $parameter['indent_parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-3 py-1" style="background-color: #b0e0bc">
-                                                <textarea class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
+                                                <textarea class="form-control" name="editedData[{{ $groupIndex }}][{{ $paramIndex }}][parameter_value]">{{ $parameter['parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-1 py-1" style="background-color: #b0e0bc">
                                                 <select class="form-control select2"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][compliance_status]">
+                                                    name="editedData[{{ $groupIndex }}][{{ $paramIndex }}][compliance_status]">
                                                     <option value="Comply" selected>Comply</option>
                                                     <option value="Partially Comply">Partially Comply</option>
                                                     <option value="Non Comply">Non Comply</option>
                                                 </select>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
-                                                <textarea class="form-control" name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][remarks]"></textarea>
+                                                <textarea class="form-control" name="editedData[{{ $groupIndex }}][{{ $paramIndex }}][remarks]"></textarea>
                                             </td>
                                         </tr>
                                         @php $slNo++; @endphp
                                     @endforeach
                                 </tbody>
+                                @php $groupIndex++; @endphp
                             @endforeach
                         </table>
                     </div>
@@ -137,5 +140,19 @@
             .catch(error => {
                 console.error(error);
             });
+    </script>
+    <script>
+        window.onload = function() {
+            var textareas = document.querySelectorAll('.form-control[name^="editedData"]');
+
+            textareas.forEach(function(textarea) {
+                if (textarea.value === "No data found against this parameter!") {
+                    var td = textarea.closest('td');
+
+                    td.classList.add('bg-danger');
+                    textarea.value = '';
+                }
+            });
+        };
     </script>
 @endpush

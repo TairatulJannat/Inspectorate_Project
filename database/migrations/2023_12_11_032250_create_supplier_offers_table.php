@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('item_id');
+            $table->string('offer_reference_no');
             $table->string('offer_status');
             $table->longText('offer_summary')->nullable();
             $table->longText('remarks_summary')->nullable();
