@@ -89,7 +89,7 @@
                             <div class="form-group">
                                 <label for="received_date">SI Received Date</label>
                                 <input type="date" class="form-control" id="received_date"
-                                    name="received_date">
+                                    name="received_date" value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
                                 <span id="error_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
