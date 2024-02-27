@@ -489,6 +489,9 @@ class InoteController extends Controller
         if ($supplier) {
             $supplier_details = $supplier->firm_name . ', ' . $supplier->address_of_local_agent;
         }
+        // $inote_letter=InoteLetter::where("inote_reference_no", $inote->reference_no)->first();
+        // $deviation=InoteDeviation::where("reference_no", $inote->reference_no)->first();
+        // $dpl15=InoteDPL::where("reference_no", $inote->reference_no)->first();
         return view('backend.inote.inoteHtml', compact('inote', 'supplier_details'));
     }
     public function InoteLetterStore(Request $request)
@@ -504,54 +507,53 @@ class InoteController extends Controller
 
 
 
-        // $inote = new InoteLetter();
+        $inote = new InoteLetter();
 
-        // $inote->inspectorate_id = $ins_id;
-        // $inote->section_id = $section_id;
-        // $inote->book_no = $request->book_no;
-        // $inote->book_no = $request->book_no;
-        // $inote->set_no = $request->set_no;
-        // $inote->copy_number = $request->copy_number;
-        // $inote->copy_no = $request->copy_no;
-        // $inote->visiting_letter_no = $request->visiting_letter_no;
-        // $inote->contract_reference_no = $request->contract_reference_no;
-        // $inote->inote_reference_no = $request->inote_reference_no;
-        // $inote->indent_reference_no = $request->indent_reference_no;
-        // $inote->supplier_info = $request->supplier_info;
-        // $inote->sender_id = $request->sender_id;
-        // $inote->cahidakari = $request->cahidakari;
-        // $inote->visiting_process = $request->visiting_process;
-        // $inote->status = $request->status;
-        // $inote->punishment = $request->punishment;
-        // $inote->slip_return = $request->slip_return;
-        // $inote->slip_return = $request->slip_return;
-        // $inote->slip_return = $request->slip_return;
-        // $inote->serial_1 = $request->serial_1;
-        // $inote->serial_2to4 = $request->serial_2to4;
-        // $inote->serial_5 = $request->serial_5;
-        // $inote->serial_6 = $request->serial_6;
-        // $inote->serial_7 = $request->serial_7;
-        // $inote->serial_8 = $request->serial_8;
-        // $inote->serial_9 = $request->serial_9;
-        // $inote->serial_10 = $request->serial_10;
-        // $inote->serial_11 = $request->serial_11;
-        // $inote->serial_12 = $request->serial_12;
-        // $inote->serial_13 = $request->serial_13;
-        // $inote->body_info = $request->body_info;
-        // $inote->station = $request->station;
-        // $inote->date = $request->date;
-        // $inote->save();
+        $inote->inspectorate_id = $ins_id;
+        $inote->section_id = $section_id;
+        $inote->book_no = $request->book_no;
+        $inote->book_no = $request->book_no;
+        $inote->set_no = $request->set_no;
+        $inote->copy_number = $request->copy_number;
+        $inote->copy_no = $request->copy_no;
+        $inote->visiting_letter_no = $request->visiting_letter_no;
+        $inote->contract_reference_no = $request->contract_reference_no;
+        $inote->inote_reference_no = $request->inote_reference_no;
+        $inote->indent_reference_no = $request->indent_reference_no;
+        $inote->supplier_info = $request->supplier_info;
+        $inote->sender_id = $request->sender_id;
+        $inote->cahidakari = $request->cahidakari;
+        $inote->visiting_process = $request->visiting_process;
+        $inote->status = $request->status;
+        $inote->punishment = $request->punishment;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->serial_1 = $request->serial_1;
+        $inote->serial_2to4 = $request->serial_2to4;
+        $inote->serial_5 = $request->serial_5;
+        $inote->serial_6 = $request->serial_6;
+        $inote->serial_7 = $request->serial_7;
+        $inote->serial_8 = $request->serial_8;
+        $inote->serial_9 = $request->serial_9;
+        $inote->serial_10 = $request->serial_10;
+        $inote->serial_11 = $request->serial_11;
+        $inote->serial_12 = $request->serial_12;
+        $inote->serial_13 = $request->serial_13;
+        $inote->body_info = $request->body_info;
+        $inote->station = $request->station;
+        $inote->date = $request->date;
+        $inote->save();
         return response()->json(['success' => 'Done']);
     }
     public function EditInoteLetter($id)
     {
-        $inoteLetter = InoteLetter::find($id);
-        // $supplier = Supplier::find($inoteLetter->supplier_id);
-        // $supplier_details = '';
-        // if ($supplier) {
-        //     $supplier_details = $supplier->firm_name . ', ' . $supplier->address_of_local_agent;
-        // }
-        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter'));
+        $inoteLetter = InoteLetter::where("inote_reference_no", $id)->first();
+        $deviation = InoteDeviation::where("reference_no", $id)->first();
+        $dpl_15 = InoteDPL::where("reference_no", $id)->first();
+        $anx = InoteDPL::where("reference_no", $id)->first();
+        
+        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx' ));
     }
 
     public function InoteDeviation(Request $request)

@@ -96,7 +96,7 @@
         </div>
 
         <div class="footer-box d-flex justify-content-center pt-2">
-            <button type="submit" class="btn btn-primary px-4 py-3 me-2" id="prevBtn2">Previous</button>
+            <a href="#" class="btn btn-primary px-4 py-3 me-2" id="prevBtn">Previous</a>
             <button type="submit" class="btn btn-success px-4 py-3" id="nextBtn2">Save And Continue</button>
         </div>
     </form>

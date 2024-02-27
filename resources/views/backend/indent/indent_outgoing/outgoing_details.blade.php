@@ -175,8 +175,15 @@
 
                         <a class="btn btn-success mt-3 btn-parameter"
                             href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
-                        {{-- <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameterPdf', ['indent_id' => $details->id]) }}">Genarate Parameter Pdf</a> --}}
+                        <a href="#" class="btn btn-success-gradien mt-3"
+                            onclick="event.preventDefault(); document.getElementById('export-form').submit();">Export
+                            Indent Spec</a>
+
+                        <form id="export-form"
+                            action="{{ url('admin/export-indent-spec-data', ['slug' => $details->reference_no]) }}"
+                            method="post" style="display: none;">
+                            @csrf
+                        </form>
 
 
                         @if ($cover_letter)
@@ -521,7 +528,5 @@
             });
 
         });
-       
-        
     </script>
 @endpush

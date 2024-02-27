@@ -107,8 +107,14 @@
                         $('.yajra-datatable').DataTable().ajax.reload(null, false);
                         toastr.success('Information Saved', 'Saved');
                     }
-                    setTimeout(window.location.href =
-                        "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
+                    var $active = $('.nav-tabs .nav-link.active');
+                    var $next = $active.parent().next().find('.nav-link');
+
+                    if ($next.length > 0) {
+                        $next.tab('show');
+                    }
+                    // setTimeout(window.location.href =
+                    //     "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
@@ -150,8 +156,15 @@
                         $('.yajra-datatable').DataTable().ajax.reload(null, false);
                         toastr.success('Information Saved', 'Saved');
                     }
-                    setTimeout(window.location.href =
-                        "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
+                   
+                    var $active = $('.nav-tabs .nav-link.active');
+                    var $next = $active.parent().next().find('.nav-link');
+
+                    if ($next.length > 0) {
+                        $next.tab('show');
+                    }
+                    // setTimeout(window.location.href =
+                    //     "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
@@ -192,8 +205,14 @@
                         $('.yajra-datatable').DataTable().ajax.reload(null, false);
                         toastr.success('Information Saved', 'Saved');
                     }
-                    setTimeout(window.location.href =
-                        "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
+                    var $active = $('.nav-tabs .nav-link.active');
+                    var $next = $active.parent().next().find('.nav-link');
+
+                    if ($next.length > 0) {
+                        $next.tab('show');
+                    }
+                    // setTimeout(window.location.href =
+                    //     "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
@@ -209,7 +228,7 @@
                 }
             });
         })
-        
+
 
         function disableButton() {
             var btn = document.getElementById('form_submission_button');
