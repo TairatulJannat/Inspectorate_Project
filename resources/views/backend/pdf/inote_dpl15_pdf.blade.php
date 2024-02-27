@@ -41,7 +41,7 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 mb-2"><b> Firm's Name</b></div>
-                        <div class="col-9 mb-2">: name here </div>
+                        <div class="col-9 mb-2">:{{ $dpl15->firms_name }} </div>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 mb-2"><b> Nomenclature of store</b></div>
-                        <div class="col-9 mb-2">: here </div>
+                        <div class="col-9 mb-2">: {{ $dpl15->nomenclature }} </div>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 mb-2"><b>Contract no</b></div>
-                        <div class="col-9 mb-2">: here </div>
+                        <div class="col-9 mb-2">: {{ $dpl15->contract_no }} </div>
                     </div>
                 </div>
             </div>
@@ -65,14 +65,14 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 mb-2"><b>Qty</b> </div>
-                        <div class="col-9 mb-2">: here </div>
+                        <div class="col-9 mb-2">: {{ $dpl15->qty }} </div>
                     </div>
                 </div>
             </div>
             <div class="row  mb-2 mt-3">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-12 mb-2">1 body </div>
+                        <div class="col-12 mb-2">{{ $deviations->warranty }} </div>
 
                     </div>
                 </div>
@@ -80,7 +80,7 @@
             <div class="row  mb-2 mt-3">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-7 mb-2">The signature must be the same as that on the tender/ contract or if otherwise, must be shown to be the signature of a person capable of giving guarantee on behalf the contractor. </div>
+                        <div class="col-7 mb-2"></div>
                         <div class="col-5 mb-2 mt-3">Signature <br>Date...................... </div>
 
                     </div>
@@ -96,8 +96,8 @@
                 <div class="col-6 ">
 
                     <p>Action:</p>
-                    <p>DGDP</p>
-                    <p>AFMSD</p>
+                    <p>{{ $dpl15->action }}</p>
+                    {{-- <p>AFMSD</p> --}}
                 </div>
 
             </div>

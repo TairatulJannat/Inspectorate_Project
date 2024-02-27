@@ -165,6 +165,10 @@
                             <a class="btn btn-success text-light ml-2 mt-2"
                                 href="{{ url('admin/inote/generateinote') }}/{{ $inote_letter->id }}">Genarate I-Note</a>
                         @endif
+                        <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{ url('admin/pdf/deviation') }}/{{ $details->reference_no }}">Deviation</a>
+                         <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                            href="{{ url('admin/pdf/dpl15') }}/{{ $details->reference_no }}">DPL-15</a>
                     </div>
                 </div>
 
