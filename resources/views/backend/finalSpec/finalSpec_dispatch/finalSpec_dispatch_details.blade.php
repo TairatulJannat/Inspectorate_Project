@@ -194,7 +194,16 @@
                                                     </div>
                                                 @endif
                                                 <div class="col-md-6 mb-2">
-                                                    <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                                    <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>                                                   
+                                                </div>
+                                                <label class="text-success" for="final_spec_fwd_date">Forward Date</label>
+                                                <div class="col-md-4 mb-2">
+                                                    {{-- <div class="form-group"> --}}
+                                                        
+                                                        <input type="date" class="form-control" id="final_spec_fwd_date"
+                                                            name="final_spec_fwd_date">
+                                                        <span id="error_final_spec_fwd_date" class="text-danger error_field"></span>
+                                                    {{-- </div>                                                 --}}
                                                 </div>
                                                 <div class="col-md-4">
                                                     <button class="btn btn-success" id="submitBtn"
@@ -232,7 +241,17 @@
                                             @endif
                                             <div class="col-md-6 mb-2">
                                                 <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks Here" style="height: 40px;"></textarea>
+                                                <input type="text" class="form-control" placeholder="Remarks Here" style="height: 40px;">
                                             </div>
+                                            <label class="text-success" for="final_spec_fwd_date">Forward Date</label>
+                                                <div class="col-md-4 mb-2">
+                                                    {{-- <div class="form-group"> --}}
+                                                        
+                                                        <input type="date" class="form-control" id="final_spec_fwd_date"
+                                                            name="final_spec_fwd_date">
+                                                        <span id="error_final_spec_fwd_date" class="text-danger error_field"></span>
+                                                    {{-- </div>                                                 --}}
+                                                </div>
                                             <div class="col-md-4">
                                                 <button class="btn btn-success" id="submitBtn"
                                                     style="height: 40px;">Deliver</button>
@@ -338,6 +357,7 @@
 
                 var reciever_desig_id = $('#designations').val()
                 var remarks = $('#remarks').val()
+                var final_spec_fwd_date = $('#final_spec_fwd_date').val()
                 var doc_ref_id = {{ $details->id }}
                 var doc_reference_number = '{{ $details->reference_no }}'
                 swal({
@@ -365,7 +385,7 @@
                                 'doc_ref_id': doc_ref_id,
                                 'doc_reference_number': doc_reference_number,
                                 'remarks': remarks,
-
+                                'final_spec_fwd_date': final_spec_fwd_date,
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
