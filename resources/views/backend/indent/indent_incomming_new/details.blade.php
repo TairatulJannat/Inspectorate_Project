@@ -197,6 +197,16 @@
 
                             {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
                                 href="{{ asset('storage/' . $details->doc_file) }}" target="_blank">Pdf Document</a> --}}
+
+                            <a href="#" class="btn btn-success-gradien mt-3"
+                                onclick="event.preventDefault(); document.getElementById('export-form').submit();">Export
+                                Indent Spec</a>
+
+                            <form id="export-form"
+                                action="{{ url('admin/export-indent-spec-data', ['slug' => $details->reference_no]) }}"
+                                method="post" style="display: none;">
+                                @csrf
+                            </form>
                         @endif
 
                     </div>
@@ -406,7 +416,7 @@
                             }
                         });
 
-                    }else if (result.dismiss === swal.DismissReason.cancel) {
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
 
                         swal(
                             'Cancelled',

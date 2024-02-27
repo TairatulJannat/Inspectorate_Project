@@ -234,6 +234,7 @@ class ExcelController extends Controller
                 }
 
                 $groupName = trim($row[1]);
+                // $groupName = preg_replace('/^[^\w\(\)\{\}\[\]]+|[^\w\(\)\{\}\[\]]+$/', '', $groupName);
 
                 if ($groupName != null) {
                     $currentGroupName = $groupName;
@@ -242,16 +243,6 @@ class ExcelController extends Controller
                 } else {
                     $groupName = $currentGroupName;
                 }
-
-                // $parameterName = trim($row[1]);
-                // if (empty($parameterName)) {
-                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                // }
-
-                // $parameterValue = trim($row[2]);
-                // if (empty($parameterValue)) {
-                //     return redirect()->to('admin/import-indent-spec-data-index')->with('error', 'Empty Cell found in the Excel file!');
-                // }
 
                 $parameterGroups[$groupName][] = [
                     'parameter_name' => trim($row[2]),
@@ -299,21 +290,24 @@ class ExcelController extends Controller
             $itemTypeId = $request->input('item-type-id');
             $indentRefNo = $request->input('indent-ref-no');
 
-            $this->deleteAllParameterGroupsAndValues($itemId);
+            $this->deleteAllParameterGroupsAndValues($itemId, $indentRefNo);
 
-            foreach ($jsonData as $groupName => $parameterGroup) {
-                $modifiedGroupName = $request->input("editedData.$groupName.parameter_group_name");
+            foreach ($jsonData as $groupIndex => $parameterGroup) {
+                $modifiedGroupName = $request->input("editedData.$groupIndex.parameter_group_name");
 
-                $existingGroup = $this->getParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
+                $newGroup = $this->createParameterGroup($modifiedGroupName, $itemId, $itemTypeId, $indentRefNo);
+                $lastInsertedId = $newGroup->id;
 
-                if (!$existingGroup) {
-                    $newGroup = $this->createParameterGroup($modifiedGroupName, $itemId, $itemTypeId);
-                    $lastInsertedId = $newGroup->id;
-                } else {
-                    $lastInsertedId = $existingGroup->id;
+                foreach ($parameterGroup as $paramIndex => $parameter) {
+                    if ($paramIndex === 'parameter_group_name') {
+                        continue;
+                    }
+
+                    $parameterName = $request->input("editedData.$groupIndex.$paramIndex.parameter_name");
+                    $parameterValue = $request->input("editedData.$groupIndex.$paramIndex.parameter_value");
+
+                    $this->saveAssignParameterValues($lastInsertedId, $parameterName, $parameterValue, $indentRefNo);
                 }
-
-                $this->saveAssignParameterValues($lastInsertedId, $parameterGroup, $indentRefNo);
             }
 
             DB::commit();
@@ -323,13 +317,13 @@ class ExcelController extends Controller
             DB::rollBack();
             \Log::error('Error saving data: ' . $e->getMessage());
 
-            return redirect()->back()->with('error', 'Error saving data. Please check the logs for details.');
+            return redirect()->route('admin.import-indent-spec-data-index')->with('error', 'Error saving data. Please check the logs for details.');
         }
     }
 
-    private function deleteAllParameterGroupsAndValues($itemId)
+    private function deleteAllParameterGroupsAndValues($itemId, $indentRefNo)
     {
-        $parameterGroups = ParameterGroup::where('item_id', $itemId)->get();
+        $parameterGroups = ParameterGroup::where('item_id', $itemId)->where('reference_no', $indentRefNo)->get();
 
         foreach ($parameterGroups as $group) {
             $group->assignParameterValues()->delete();
@@ -337,15 +331,15 @@ class ExcelController extends Controller
         }
     }
 
-    protected function getParameterGroup($name, $itemId, $itemTypeId)
+    protected function getParameterGroup($itemId, $itemTypeId, $indentRefNo)
     {
-        return ParameterGroup::where('name', $name)
-            ->where('item_id', $itemId)
+        return ParameterGroup::where('item_id', $itemId)
             ->where('item_type_id', $itemTypeId)
+            ->where('reference_no', $indentRefNo)
             ->first();
     }
 
-    protected function createParameterGroup($name, $itemId, $itemTypeId)
+    protected function createParameterGroup($name, $itemId, $itemTypeId, $indentRefNo)
     {
         $newGroup = new ParameterGroup();
         $newGroup->name = $name;
@@ -360,6 +354,7 @@ class ExcelController extends Controller
             $section = $inspectorate->section;
             $newGroup->section_id = $section->id;
         }
+        $newGroup->reference_no = $indentRefNo;
         $newGroup->status = 1;
 
         $newGroup->save();
@@ -367,45 +362,59 @@ class ExcelController extends Controller
         return $newGroup;
     }
 
-    protected function saveAssignParameterValues($parameterGroupId, $parameterGroup, $indentRefNo)
+    protected function saveAssignParameterValues($parameterGroupId, $parameterName, $parameterValue, $indentRefNo)
     {
-        foreach ($parameterGroup as $parameterName => $parameterData) {
-            if (is_array($parameterData)) {
-                $parameterValue = $parameterData['parameter_value'];
-
-                AssignParameterValue::create([
-                    'parameter_group_id' => $parameterGroupId,
-                    'parameter_name' => $parameterName,
-                    'parameter_value' => $parameterValue,
-                    'doc_type_id' => 3,
-                    'reference_no' => $indentRefNo,
-                ])->fresh();
-
-                // try {
-                //     // Try to update the existing record
-                //     AssignParameterValue::updateOrCreate(
-                //         [
-                //             'parameter_group_id' => $parameterGroupId,
-                //             'parameter_name' => $parameterName,
-                //         ],
-                //         [
-                //             'parameter_value' => $parameterValue,
-                //         ]
-                //     );
-                // } catch (ModelNotFoundException $e) {
-                //     // If the record doesn't exist, catch the exception and create a new one
-                //     AssignParameterValue::create([
-                //         'parameter_group_id' => $parameterGroupId,
-                //         'parameter_name' => $parameterName,
-                //         'parameter_value' => $parameterValue,
-                //     ]);
-                // }
-            }
-        }
+        AssignParameterValue::create([
+            'parameter_group_id' => $parameterGroupId,
+            'parameter_name' => $parameterName,
+            'parameter_value' => $parameterValue,
+            'doc_type_id' => 3,
+            'reference_no' => $indentRefNo,
+        ])->fresh();
     }
 
-    protected function exportIndentEditedData()
+    protected function exportIndentEditedData($indentRefNo)
     {
+        $parameterGroups = ParameterGroup::where('reference_no', $indentRefNo)
+            ->with('assignParameterValues')
+            ->get();
+
+        $excelData = [];
+        $sNo = 1;
+
+        foreach ($parameterGroups as $group) {
+            $first = true;
+            if (count($group->assignParameterValues) > 0) {
+                foreach ($group->assignParameterValues as $value) {
+                    if ($first) {
+                        $excelData[] = [
+                            'S. No.' => $sNo++,
+                            'Parameter Group Name' => $group->name,
+                            'Parameter Name' => '',
+                            'Parameter Value' => '',
+                        ];
+                        $first = false;
+                    }
+                    $excelData[] = [
+                        'S. No.' => '',
+                        'Parameter Group Name' => '',
+                        'Parameter Name' => $value->parameter_name,
+                        'Parameter Value' => $value->parameter_value,
+                    ];
+                }
+            } else {
+                $excelData[] = [
+                    'S. No.' => $sNo++,
+                    'Parameter Group Name' => $group->name,
+                    'Parameter Name' => '',
+                    'Parameter Value' => '',
+                ];
+            }
+        }
+
+        $fileName = "indent_data_{$indentRefNo}.xlsx";
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\IndentExport($excelData), $fileName);
     }
 
     protected function supplierIndex()
@@ -764,7 +773,7 @@ class ExcelController extends Controller
 
     public function importFinalSpecEditedData(Request $request)
     {
-       
+
         $request->validate([
             'supplierId' => ['required', 'exists:suppliers,id'],
             'file' => 'required|mimes:xlsx,csv|max:2048',
