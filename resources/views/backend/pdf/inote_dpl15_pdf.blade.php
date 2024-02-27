@@ -26,111 +26,69 @@
     <div class=" col-sm-12 col-xl-12 ">
         <div class="deviation_box">
             <div class="row">
-                <div class="col-10 "><p class="text-end">DPL-15</p> </div>
+                <div class="col-10 ">
+                    <p class="text-end">DPL-15</p>
+                </div>
             </div>
             <div class="row">
                 <h5 class="text-center underline mb-1">DIRECTORATE GENERAL DEFENCE PURCHASE </h5>
                 <h5 class="text-center underline mb-1">MINISTRY OF DEFENCE, DHAKA</h5>
                 <h5 class="text-center underline mb-3">WARRANTY</h5>
             </div>
+
             {{-- this section for no 1  --}}
             <div class="row  mb-2">
-                <div class="col-1">1.</div>
-                <div class="col-11">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-6 mb-2">Details of contract:</div>
-                        <div class="col-6 mb-2">File no:</div>
+                        <div class="col-3 mb-2"><b> Firm's Name</b></div>
+                        <div class="col-9 mb-2">: name here </div>
                     </div>
+                </div>
+            </div>
+            <div class="row  mb-2">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-12 mb-2">a. Nomenclature:</div>
-
+                        <div class="col-3 mb-2"><b> Nomenclature of store</b></div>
+                        <div class="col-9 mb-2">:  here </div>
                     </div>
+                </div>
+            </div>
+            <div class="row  mb-2">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-12 mb-2">b. Contract no & dt:</div>
-
+                        <div class="col-3 mb-2"><b>Contract no</b></div>
+                        <div class="col-9 mb-2">:  here </div>
                     </div>
+                </div>
+            </div>
+            <div class="row  mb-2">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-12 mb-2">c. Supplier's name & address:</div>
-
+                        <div class="col-3 mb-2"><b>Qty</b> </div>
+                        <div class="col-9 mb-2">:  here </div>
                     </div>
+                </div>
+            </div>
+            <div class="row  mb-2 mt-3">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-6 mb-2">d. Quantity:</div>
-                        <div class="col-6 mb-2">e. Others particulars:</div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-6 mb-2">(1) On order:</div>
-                        <div class="col-6 mb-2">f. Classification of deviation</div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-6 mb-2">
-                            <p>(2) Deviation required: </p>
-                            <p>(3) Accepted to date:</p>
-
-                        </div>
-                        <div class="col-6 mb-2">g. Contract made on the basis on approved sample/advance sample basis.
-                            The fol deviation (s) from particulars is/are recommended:</div>
+                        <div class="col-12 mb-2">1     body </div>
 
                     </div>
                 </div>
-
             </div>
-
- 
-
-            {{-- this section for no dci/go  --}}
-            <div class="row mb-2">
-                <div class="col-1"></div>
-                <div class="col-11">
+            <div class="row  mb-2 mt-3">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-8"></div>
-                        <div class="col-4 mt-4">
-                            <p class="p-0 m-0">DCI/GO</p>
-                            <p class="p-0 m-0">Date......................</p>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            {{-- this section for no 6  --}}
-            <div class="row mb-2">
-                <div class="col-1">6.</div>
-                <div class="col-11">
-                    <div class="row">
-                        <div class="col-12">The deviation (s) applied for above is/are recommended/sanctioned in full
-                            with &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % price reduction is in part
-                            .................................. above
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-12">Text here</div>
+                        <div class="col-6 mb-2">1     body </div>
+                        <div class="col-6 mb-2">Signature <br>Date...................... </div>
 
                     </div>
                 </div>
             </div>
 
 
-            {{-- this section for no sig and date  --}}
-            <div class="row mb-2">
-                <div class="col-1"></div>
-                <div class="col-11">
-                    <div class="row">
-                        <div class="col-8"></div>
-                        <div class="col-4  mt-3">
-                            <p class="p-0 m-0">Col</p>
-                            <p class="p-0 m-0">Chief Inspector</p>
-                            <p class="p-0 m-0">I E & I, Dhaka Cantt</p>
-                            <p class="p-0 m-0">Date......................</p>
-                        </div>
 
-                    </div>
-
-                </div>
-            </div>
             <div class="row mb-2">
                 <div class="col-6 ">
                     Copy to:
