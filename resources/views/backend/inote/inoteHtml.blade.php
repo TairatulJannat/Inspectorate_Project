@@ -151,7 +151,7 @@
                         toastr.success('Information Saved', 'Saved');
                     }
                     setTimeout(window.location.href =
-                        "", 40000);
+                        "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()
@@ -193,7 +193,7 @@
                         toastr.success('Information Saved', 'Saved');
                     }
                     setTimeout(window.location.href =
-                        "", 40000);
+                        "{{ route('admin.outgoing_inote/details', $inote->id) }}", 40000);
                 },
                 error: function(response) {
                     enableeButton()

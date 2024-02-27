@@ -586,6 +586,7 @@ class InoteController extends Controller
         $inote->considered_that = $request->considered_that;
         $inote->others_remarks = $request->others_remarks;
         $inote->deviation_applied_above = $request->deviation_applied_above;
+        $inote->copy = $request->copy;
         $inote->created_at = Carbon::now('Asia/Dhaka');
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
@@ -595,12 +596,18 @@ class InoteController extends Controller
     public function deviation($id)
     {
 
-        return view('backend.pdf.inote_deviation_pdf');
-    }
-    public function dpl5($id)
-    {
+        $inote = Inote::find($id);
+        $deviations = InoteDeviation::where('reference_no',$id)->first();
+        // dd($deviations);
+        
+        return view('backend.pdf.inote_deviation_pdf', compact('deviations'));
 
-        return view('backend.pdf.inote_dpl15_pdf');
+    }
+    public function dpl15($id)
+    {
+        $dpl15 = InoteDPL::where('reference_no',$id)->first();
+
+        return view('backend.pdf.inote_dpl15_pdf', compact('dpl15'));
     }
 
 
@@ -632,4 +639,3 @@ class InoteController extends Controller
 
     }
 }
-

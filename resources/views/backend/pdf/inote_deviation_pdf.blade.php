@@ -34,38 +34,38 @@
                 <div class="col-11">
                     <div class="row">
                         <div class="col-6 mb-2">Details of contract:</div>
-                        <div class="col-6 mb-2">File no:</div>
+                        <div class="col-6 mb-2">File no:{{ $deviations->file_no }}</div>
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">a. Nomenclature:</div>
+                        <div class="col-12 mb-2">a. Nomenclature:{{ $deviations->nomenclature }}</div>
 
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">b. Contract no & dt:</div>
+                        <div class="col-12 mb-2">b. Contract no & dt:{{ $deviations->contract_no_dt }}</div>
 
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">c. Supplier's name & address:</div>
+                        <div class="col-12 mb-2">c. Supplier's name & address:{{ $deviations->suppliers_name_address }}</div>
 
                     </div>
                     <div class="row">
-                        <div class="col-6 mb-2">d. Quantity:</div>
-                        <div class="col-6 mb-2">e. Others particulars:</div>
+                        <div class="col-6 mb-2">d. Quantity:{{ $deviations->qty }}</div>
+                        <div class="col-6 mb-2">e. Others particulars:{{ $deviations->others_particulars }}</div>
 
                     </div>
                     <div class="row">
-                        <div class="col-6 mb-2">(1) On order:</div>
-                        <div class="col-6 mb-2">f. Classification of deviation</div>
+                        <div class="col-6 mb-2">(1) On order:{{ $deviations->on_order }}</div>
+                        <div class="col-6 mb-2">f. Classification of deviation:{{ $deviations->classification_of_deviation }}</div>
 
                     </div>
                     <div class="row">
                         <div class="col-6 mb-2">
-                            <p>(2) Deviation required: </p>
-                            <p>(3) Accepted to date:</p>
+                            <p>(2) Deviation required:{{ $deviations->deviation_required }} </p>
+                            <p>(3) Accepted to date:{{ $deviations->accepted_to_date }}</p>
 
                         </div>
                         <div class="col-6 mb-2">g. Contract made on the basis on approved sample/advance sample basis.
-                            The fol deviation (s) from particulars is/are recommended:</div>
+                            The fol deviation (s) from particulars is/are recommended:{{ $deviations->contract_approved_simple_basis }}</div>
 
                     </div>
                 </div>
@@ -81,7 +81,7 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">Text here</div>
+                        <div class="col-12 mb-2">{{ $deviations->deviation_recommended }}</div>
 
                     </div>
                 </div>
@@ -95,7 +95,7 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">Text here</div>
+                        <div class="col-12 mb-2">{{ $deviations->stores_issue }}</div>
 
                     </div>
                 </div>
@@ -110,7 +110,7 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">Text here</div>
+                        <div class="col-12 mb-2">{{ $deviations->considered_that }}</div>
 
                     </div>
                 </div>
@@ -125,7 +125,7 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">Text here</div>
+                        <div class="col-12 mb-2">{{ $deviations->others_remarks }}</div>
 
                     </div>
                 </div>
@@ -152,16 +152,18 @@
                 <div class="col-1">6.</div>
                 <div class="col-11">
                     <div class="row">
-                        <div class="col-12">The deviation (s) applied for above is/are recommended/sanctioned in full
+                        <div class="col-12">
+                            {{ $deviations->deviation_applied_above }}
+                            {{-- The deviation (s) applied for above is/are recommended/sanctioned in full
                             with &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % price reduction is in part
-                            .................................. above
+                            .................................. above --}}
                         </div>
 
                     </div>
-                    <div class="row">
-                        <div class="col-12">Text here</div>
+                    {{-- <div class="row">
+                        <div class="col-12"></div>
 
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
@@ -186,8 +188,8 @@
             <div class="row mb-2">
                 <div class="col-6 ">
                     Copy to:
-                    <p>DGDP</p>
-                    <p>AFMSD</p>
+                    <p>{{ $deviations->copy }}</p>
+                    
                 </div>
 
             </div>

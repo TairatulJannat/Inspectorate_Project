@@ -271,11 +271,12 @@ class FinalSpecDispatchController extends Controller
 
     public function FinalSpecDispatchTracking(Request $request)
     {
+        // dd($request->all());
 
         $validator = Validator::make($request->all(), [
             'doc_ref_id' => 'required',
             'doc_reference_number' => 'required',
-            'reciever_desig_id' => 'required',
+            // 'reciever_desig_id' => 'required',
         ], [
             'reciever_desig_id.required' => 'The receiver designation field is required.'
         ]);
@@ -292,6 +293,7 @@ class FinalSpecDispatchController extends Controller
         $doc_ref_id = $request->doc_ref_id;
         $doc_reference_number =htmlspecialchars_decode($request->doc_reference_number);
         $remarks = $request->remarks;
+        $forward_date = $request->final_spec_fwd_date;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
@@ -314,6 +316,7 @@ class FinalSpecDispatchController extends Controller
         $data->reciever_desig_id = $reciever_desig_id;
         $data->sender_designation_id = $sender_designation_id;
         $data->remarks = $remarks;
+        $data->final_spec_fwd_date = $forward_date;
         $data->created_at =  Carbon::now('Asia/Dhaka');
         $data->updated_at =  Carbon::now('Asia/Dhaka');
         $data->save();
@@ -338,6 +341,7 @@ class FinalSpecDispatchController extends Controller
                 $value->reciever_desig_id = $reciever_desig_id;
                 $value->sender_designation_id = $sender_designation_id;
                 $value->remarks = $remarks;
+                $value->final_spec_fwd_date = $forward_date;
                 $value->created_at =  Carbon::now('Asia/Dhaka');
                 $value->updated_at =  Carbon::now('Asia/Dhaka');
                 $value->save();

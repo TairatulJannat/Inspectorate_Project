@@ -27,8 +27,6 @@
                 <div class="col-md-6 p-2">
                     <label for="quantity">d. Quantity</label>
                     <input type="text" id="quantity" name="qty" class="form-control">
-
-]
                     <input type="text" id="quantity" class="form-control mt-2" name="on_order"   placeholder="(1) On order">
                     <input type="text" id="quantity" class="form-control mt-2" name="deviation_required"  placeholder="(2) Deviation required">
                     <input type="text" id="quantity" class="form-control mt-2" name="accepted_to_date"   placeholder="(3) Accepted to date">
@@ -53,7 +51,7 @@
             <div class="row mt-3">
                 <h5>2. The fol veviation (s) form particulars is/are recommended </h5>
                 <div class="col-md-12">
-                    <textarea name="" class="form-control" name="deviation_recommended"  id="" cols="30" rows="10">a.</textarea>
+                    <textarea  class="form-control" name="deviation_recommended"  id="" cols="30" rows="10">a.</textarea>
                 </div>
 
 
@@ -61,7 +59,7 @@
             <div class="row mt-3">
                 <h5>3. The stores are required fir issue to: </h5>
                 <div class="col-md-12">
-                    <textarea name="" class="form-control" name="stores_issue"  id="" cols="30" rows="10">a.</textarea>
+                    <textarea class="form-control" name="stores_issue"  id="" cols="30" rows="10">a.</textarea>
                 </div>
 
 
@@ -69,28 +67,28 @@
             <div class="row mt-3">
                 <h5>4. It is considred that: </h5>
                 <div class="col-md-12">
-                    <textarea name="" class="form-control" name="considered_that"  id="" cols="30" rows="10">a.</textarea>
+                    <textarea  class="form-control" name="considered_that"  id="" cols="30" rows="10">a.</textarea>
                 </div>
 
             </div>
             <div class="row mt-3">
                 <h5>5. Other Remarks: </h5>
                 <div class="col-md-12">
-                    <textarea name="" class="form-control" name="others_remarks"  id="" cols="30" rows="10">a.</textarea>
+                    <textarea class="form-control" name="others_remarks"  id="" cols="30" rows="10">a.</textarea>
                 </div>
 
             </div>
             <div class="row mt-3">
 
                 <div class="col-md-12">
-                    <textarea name="" class="form-control" name="deviation_applied_above"  id="" cols="30" rows="10">6. The deviation (s) applied for avobe is/are recommended/sanctioned in full with .......% price reduction is in part ................above</textarea>
+                    <textarea  class="form-control" name="deviation_applied_above"  id="" cols="30" rows="10">6. The deviation (s) applied for avobe is/are recommended/sanctioned in full with .......% price reduction is in part ................above</textarea>
                 </div>
 
             </div>
             <div class="row mt-3">
                 <h5>Copy to </h5>
                 <div class="col-md-12">
-                    <textarea name="" class="form-control" id="" cols="30" rows="10">DGDP</textarea>
+                    <textarea name="copy" class="form-control" id="" cols="30" rows="10">DGDP</textarea>
                 </div>
 
             </div>
