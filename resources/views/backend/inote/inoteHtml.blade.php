@@ -63,7 +63,7 @@
 
             {{-- dpl5 start here --}}
             <div class="tab-pane fade" id="dpl5" role="tabpanel" aria-labelledby="dpl5-tab">
-                @include('backend.inote.all_inote_letter.dpl5_create')
+                @include('backend.inote.all_inote_letter.dpl15_create')
             </div>
             {{-- dpl5 end here --}}
             {{-- ANX start here --}}
@@ -133,6 +133,48 @@
 
             $.ajax({
                 url: "{{ url('admin/inote_deviation_letter/store') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.error) {
+                        error_notification(response.error)
+                        enableeButton()
+                    }
+                    if (response.success) {
+                        enableeButton()
+                        $('.yajra-datatable').DataTable().ajax.reload(null, false);
+                        toastr.success('Information Saved', 'Saved');
+                    }
+                    setTimeout(window.location.href =
+                        "", 40000);
+                },
+                error: function(response) {
+                    enableeButton()
+                    clear_error_field();
+                    error_notification('Please fill up the form correctly and try again')
+                    // $('#error_sender').text(response.responseJSON.errors.sender);
+                    // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                    // $('#error_inote_received_date').text(response.responseJSON.errors
+                    //     .inote_received_date);
+                    // $('#error_inote_reference_date').text(response.responseJSON.errors
+                    //     .inote_reference_date);
+
+                }
+            });
+        })
+
+        $('#saveDPL').off().on('submit', function(event) {
+            event.preventDefault();
+            disableButton()
+            var formData = new FormData($('#saveDPL')[0]);
+
+            $.ajax({
+                url: "{{ url('admin/inote_dpl_letter/store') }}",
                 type: "POST",
                 data: formData,
                 processData: false,
