@@ -309,6 +309,24 @@ $currentControllerName = Request::segment(2);
                             </ul>
                         </li>
                     @endif
+                    @if (count(menu_check('Inote')) !== 0)
+                        <li class="dropdown"><a
+                                class="nav-link menu-title {{ $currentControllerName == 'rr' ? 'active_menu' : '' }}"
+                                href="javascript:void(0)"><i data-feather="file-text" class="text-light"></i>
+                                <span>Report Return</span></a>
+                            <ul class="nav-submenu menu-content {{ Request::is('*/Inote/*') ? 'open_menu' : '' }}">
+                                @if (sub_menu_check('inote/view') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.rr/weekly') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Monthly Report</a>
+                                    </li>
+                                @endif
+                                @if (sub_menu_check('inote/create') !== null)
+                                    <li><a class="text-light" href="{{ route('admin.rr/weekly') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Weekly Report</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
 
                     {{-- @if (count(menu_check('PrelimGeneral')) !== 0)
                         <li class="dropdown"><a
