@@ -586,12 +586,16 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-        
+
     }
     public function deviation($id)
     {
 
         return view('backend.pdf.inote_deviation_pdf');
-        
+    }
+    public function dpl5($id)
+    {
+
+        return view('backend.pdf.inote_dpl15_pdf');
     }
 }
