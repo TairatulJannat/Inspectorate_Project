@@ -154,7 +154,6 @@
                             <textarea id="serial_2to4" name="serial_2to4" class="form-control"></textarea>
                         </td>
 
-
                         <td> <input type="text" id="serial_5" name="serial_5" class="form-control"></td>
                         <td> <input type="text" id="serial_6" name="serial_6" class="form-control"></td>
                         <td> <input type="text" id="serial_7" name="serial_7" class="form-control"></td>
@@ -164,7 +163,9 @@
                         <td> <input type="text" id="serial_11" name="serial_11" class="form-control"></td>
                         <td> <input type="text" id="serial_12" name="serial_12" class="form-control"></td>
                         <td rowspan="2"> <input type="text" id="serial_13" name="serial_13"
-                                class="form-control"></td>
+                                class="form-control">
+                           
+                        </td>
                     </tr>
                     <tr>
 
@@ -174,6 +175,8 @@
 
 
                     </tr>
+
+
                 </tbody>
             </table>
             <div class="d-flex col-4 mt-3">

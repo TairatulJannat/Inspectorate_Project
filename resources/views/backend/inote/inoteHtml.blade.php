@@ -209,6 +209,7 @@
                 }
             });
         })
+        
 
         function disableButton() {
             var btn = document.getElementById('form_submission_button');
