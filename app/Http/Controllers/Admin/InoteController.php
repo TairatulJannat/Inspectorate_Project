@@ -17,6 +17,7 @@ use App\Models\Item_type;
 use App\Models\Items;
 use App\Models\inote;
 use App\Models\InoteDeviation;
+use App\Models\InoteDPL;
 use App\Models\InoteLetter;
 use App\Models\Section;
 use App\Models\Supplier;
@@ -566,6 +567,7 @@ class InoteController extends Controller
 
         $inote->inspectorate_id = $ins_id;
         $inote->section_id = $section_id;
+        $inote->reference_no = $request->inote_reference_no;
         $inote->file_no = $request->file_no;
         $inote->nomenclature = $request->nomenclature;
         $inote->contract_no_dt = $request->contract_no_dt;
@@ -598,4 +600,34 @@ class InoteController extends Controller
 
         return view('backend.pdf.inote_dpl15_pdf');
     }
+
+
+    public function InoteDPL(Request $request)
+    {
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $desig_position = Designation::where('id', $sender_designation_id)->first();
+        $inote_reference_no = $request->inote_reference_no;
+        $reciever_desig_id = $request->reciever_desig_id;
+        $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
+
+        $inote = new InoteDPL();
+
+        $inote->inspectorate_id = $ins_id;
+        $inote->section_id = $section_id;
+        $inote->reference_no = $request->inote_reference_no;
+        $inote->firms_name = $request->firms_name;
+        $inote->nomenclature = $request->nomenclature;
+        $inote->contract_no = $request->contract_no;
+        $inote->action = $request->action;
+        $inote->qty = $request->qty;
+        $inote->warranty = $request->warranty;
+        $inote->created_at = Carbon::now('Asia/Dhaka');
+        $inote->updated_at = Carbon::now('Asia/Dhaka');
+        $inote->save();
+        return response()->json(['success' => 'Done']);
+        
+    }
 }
+
