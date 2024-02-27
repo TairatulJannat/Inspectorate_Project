@@ -51,5 +51,5 @@ Route::middleware(['auth', 'routeprifix'])->prefix('{roleBased}')->group(functio
 
 Route::get('/pdf/indent', [PDFController::class, 'generatePDF'])->name('generate_pdf');
 Route::get('/pdf/deviation/{id}', [InoteController::class, 'deviation'])->name('daviation');
-Route::get('/pdf/dpl5/{id}', [InoteController::class, 'dpl5'])->name('daviation');
+Route::get('/pdf/dpl15/{id}', [InoteController::class, 'dpl5'])->name('daviation');
 Route::get('/test/pdf', [testController::class, 'testPdf'])->name('testPdf');

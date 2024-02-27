@@ -49,7 +49,7 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 mb-2"><b> Nomenclature of store</b></div>
-                        <div class="col-9 mb-2">:  here </div>
+                        <div class="col-9 mb-2">: here </div>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 mb-2"><b>Contract no</b></div>
-                        <div class="col-9 mb-2">:  here </div>
+                        <div class="col-9 mb-2">: here </div>
                     </div>
                 </div>
             </div>
@@ -65,14 +65,14 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3 mb-2"><b>Qty</b> </div>
-                        <div class="col-9 mb-2">:  here </div>
+                        <div class="col-9 mb-2">: here </div>
                     </div>
                 </div>
             </div>
             <div class="row  mb-2 mt-3">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-12 mb-2">1     body </div>
+                        <div class="col-12 mb-2">1 body </div>
 
                     </div>
                 </div>
@@ -80,18 +80,22 @@
             <div class="row  mb-2 mt-3">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-6 mb-2">1     body </div>
-                        <div class="col-6 mb-2">Signature <br>Date...................... </div>
+                        <div class="col-7 mb-2">The signature must be the same as that on the tender/ contract or if otherwise, must be shown to be the signature of a person capable of giving guarantee on behalf the contractor. </div>
+                        <div class="col-5 mb-2 mt-3">Signature <br>Date...................... </div>
 
                     </div>
                 </div>
             </div>
 
+            <div class="row">
+                <h6 class="text-center underline mt-2 mb-5 pb-5">COUNTERSIGNED</h6>
 
+            </div>
 
             <div class="row mb-2">
                 <div class="col-6 ">
-                    Copy to:
+
+                    <p>Action:</p>
                     <p>DGDP</p>
                     <p>AFMSD</p>
                 </div>
