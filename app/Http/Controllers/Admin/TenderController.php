@@ -336,7 +336,7 @@ class TenderController extends Controller
         $itemType = Item_Type::findOrFail($itemTypeId);
         $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-        $indentData = Indent::where('item_id', $itemId)->get();
+        $indentData = Indent::where('item_id', $itemId)->where('reference_no', $offerData->indent_reference_no)->get();
 
         if ($indentData->isNotEmpty()) {
             $indentRefNo = $indentData[0]['reference_no'];
@@ -358,12 +358,14 @@ class TenderController extends Controller
         if ($parameterGroupsExist) {
             $supplierParameterGroups = ParameterGroup::with('supplierSpecData')
                 ->where('item_id', $itemId)
+                ->where('reference_no', $indentRefNo)
                 ->get();
 
             $organizedSupplierData = $this->organizeData($supplierParameterGroups);
 
             $parameterGroups = ParameterGroup::with('assignParameterValues')
                 ->where('item_id', $itemId)
+                ->where('reference_no', $indentRefNo)
                 ->get();
 
             $responseData = $parameterGroups->map(function ($parameterGroup) {
