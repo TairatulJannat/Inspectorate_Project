@@ -72,7 +72,7 @@
             <div class="row  mb-2 mt-3">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-12 mb-2">{{ $deviations->warranty }} </div>
+                        <div class="col-12 mb-2">{{ $dpl15->warranty }} </div>
 
                     </div>
                 </div>
