@@ -10,11 +10,14 @@ use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\File;
 use App\Models\Inote;
+use App\Models\InoteDeviation;
+use App\Models\InoteDPL;
 use App\Models\InoteLetter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Deviations;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -244,11 +247,13 @@ class InoteOutgoingController extends Controller
 
         $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
         $inote_letter = InoteLetter::where('inote_reference_no', $details->reference_no)->first();
+        $deviation = InoteDeviation::where('reference_no', $details->reference_no)->first();
+        $dpl_15 = InoteDPL::where('reference_no', $details->reference_no)->first();
 
         // end cover letter start
 
 
-        return view('backend.inote.inote_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'inote_letter', 'files'));
+        return view('backend.inote.inote_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'inote_letter', 'files', 'deviation','dpl_15'));
     }
 
     public function Tracking(Request $request)

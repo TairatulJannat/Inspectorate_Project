@@ -13,22 +13,29 @@
 
                 <div class="col-md-2">
                     <div class="form-group">
-                        <form action="{{ url('admin/import-final-spec-data-index') }}" method="POST">
+                        <form action="{{ url('admin/import-draft-contract-spec-data-index') }}" method="POST">
                             @csrf
-                            <input type="hidden" value="{{ $draft_contract->id }}" id="importId" name="importId">
-                            <input type="hidden" value="9" id="doc_type_id" name="doc_type_id">
-                            <button class="btn btn-success" type="submit">Import Excel</button>
-
+                            <input type="hidden" value="{{ $draft_contract->reference_no }}" id="dcRefNo" name="dcRefNo">
+                            <input type="hidden" value="{{ $draft_contract->final_spec_reference_no }}" id="fsRefNo"
+                                name="fsRefNo">
+                            <input type="hidden" value="{{ $draft_contract->offer_reference_no }}" id="DcRefNo"
+                                name="offerRefNo">
+                            <input type="hidden" value="{{ $draft_contract->indent_reference_no }}" id="DcRefNo"
+                                name="indentRefNo">
+                            <input type="hidden" value="{{ $draft_contract->item_id }}" id="itemId" name="itemId">
+                            <input type="hidden" value="{{ $draft_contract->item_type_id }}" id="itemTypeId"
+                                name="itemTypeId">
+                            <input type="hidden" value="{{ $draft_contract->supplier_id }}" id="supplierId"
+                                name="supplierId">
+                            <button class="btn btn-success ms-4 mt-3" type="submit">Import Excel</button>
                         </form>
-                        {{-- <a href="{{ url('admin/import-final-spec-data-index') }}" class="btn btn-success"
-                            id="importExcelBtn">Import Excel</a> --}}
                     </div>
                 </div>
             </div>
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                  
+
                     <div class="row mt-4">
 
                         <div class="col-md-4">
@@ -55,7 +62,7 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $draft_contract->reference_no ? $draft_contract->reference_no : '' }} ">
+                                    value="{{ $draft_contract->reference_no ? $draft_contract->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
