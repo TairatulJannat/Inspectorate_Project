@@ -42,6 +42,10 @@
                                         class="fw-bold">{{ $finalSpecRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="finalSpecRefNo" value="{{ $finalSpecRefNo }}">
+                                <div class="dcRefNo f-20">Draft Contract Ref. No: <span
+                                        class="fw-bold">{{ $dcRefNo }}</span>
+                                </div>
+                                <input type="hidden" name="dcRefNo" value="{{ $dcRefNo }}">
                                 <div class="supplier-id f-20">Supplier Name: <span
                                         class="fw-bold">{{ $supplierFirmName }}</span></div>
                                 <input type="hidden" name="supplier-id" value="{{ $supplierId }}">
@@ -112,7 +116,7 @@
             @endif
         </div>
         <div class="card-footer py-3" style="background-color: teal !important;">
-            <a href="{{ url('admin/import-supplier-spec-data-index') }}"
+            <a href="{{ url('admin/draft_contract/view') }}"
                 class="btn btn-danger-gradien float-end">Cancel</a>
         </div>
     </div>

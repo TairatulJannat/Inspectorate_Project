@@ -13,6 +13,10 @@
 
                 <div class="col-md-2">
                     <div class="form-group">
+                        <a id="importExcelBtn" href="{{ url('admin/import-draft-contract-spec-data-index') }}"
+                            class="btn btn-success ms-4 mt-3">Import Excel</a>
+                    </div>
+                    {{-- <div class="form-group">
                         <form action="{{ url('admin/import-draft-contract-spec-data-index') }}" method="POST">
                             @csrf
                             <input type="hidden" value="{{ $draft_contract->reference_no }}" id="dcRefNo" name="dcRefNo">
@@ -29,7 +33,7 @@
                                 name="supplierId">
                             <button class="btn btn-success ms-4 mt-3" type="submit">Import Excel</button>
                         </form>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <form action="" id="update_form" method="POST" enctype="multipart/form-data">
@@ -74,10 +78,6 @@
                                 <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-
-
-
-
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -302,6 +302,27 @@
 
         $(document).ready(function() {
             $('.select2').select2();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get('error');
+
+            if (errorMessage) {
+                toastr.error(decodeURIComponent(errorMessage));
+
+                const currentUrl = window.location.href;
+                const cleanUrl = currentUrl.split('?')[0];
+                history.replaceState({}, document.title, cleanUrl);
+            }
+
+            $('#importExcelBtn').on('click', function(event) {
+                event.preventDefault();
+
+                var url = $(this).attr('href');
+                var draftContractNo = $('#draft_contract_no').val();
+                var redirectUrl = url + '?draftContractNo=' + encodeURIComponent(draftContractNo);
+
+                window.location.href = redirectUrl;
+            });
         });
 
         //Start:: Update information

@@ -98,7 +98,12 @@
                                     @foreach ($additional_documnets as $additional_document)
                                         @php
                                             $documentIds = json_decode($indent->additional_documents);
-                                            $isSelected = in_array($additional_document->id, $documentIds ? $documentIds : []) ? 'selected' : '';
+                                            $isSelected = in_array(
+                                                $additional_document->id,
+                                                $documentIds ? $documentIds : [],
+                                            )
+                                                ? 'selected'
+                                                : '';
                                         @endphp
                                         <option value="{{ $additional_document->id }}" {{ $isSelected }}>
                                             {{ $additional_document->name }}
