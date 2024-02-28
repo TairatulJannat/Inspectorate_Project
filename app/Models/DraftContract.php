@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DraftContract extends Model
 {
     use HasFactory;
-    protected $table='draft_contracts';
-    protected $fillable=[];
+    protected $table = 'draft_contracts';
+
+    protected $guarded = ['id'];
 }

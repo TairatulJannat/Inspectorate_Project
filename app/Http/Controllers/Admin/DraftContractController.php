@@ -154,7 +154,7 @@ class DraftContractController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -275,7 +275,7 @@ class DraftContractController extends Controller
     }
     public function edit($id)
     {
-        $draft_contract = DraftContract::find($id);
+        $draft_contract = DraftContract::where('id', $id)->first();
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
