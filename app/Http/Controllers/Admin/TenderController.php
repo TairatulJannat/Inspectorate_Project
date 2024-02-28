@@ -325,8 +325,6 @@ class TenderController extends Controller
 
     public function infoToCSR(Request $request)
     {
-        // $tenderData = Tender::findOrFail($request->tenderId);
-        // $offerData = Offer::where('tender_reference_no', $tenderData->reference_no)->first();
         $offerData = Offer::where('reference_no', $request->offerRefNo)->first();
 
         $itemId = $offerData->item_id;
