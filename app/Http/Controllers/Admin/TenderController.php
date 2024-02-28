@@ -30,14 +30,11 @@ class TenderController extends Controller
 
     public function index()
     {
-
         return view('backend.tender.index');
     }
 
     public function all_data(Request $request)
     {
-
-
         if ($request->ajax()) {
 
             $insp_id = Auth::user()->inspectorate_id;
@@ -45,7 +42,6 @@ class TenderController extends Controller
             $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
             $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
             $desig_position = Designation::where('id', $designation_id)->first();
-
 
             if (Auth::user()->id == 92) {
                 $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
@@ -81,7 +77,6 @@ class TenderController extends Controller
                     ->where('tenders.status', 0)
                     ->get();
 
-
                 //......Start for DataTable Forward and Details btn change
                 $tenderId = [];
                 if ($query) {
@@ -90,21 +85,15 @@ class TenderController extends Controller
                     }
                 }
 
-
-
                 $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $tenderId)
                     ->where('reciever_desig_id', $designation_id)
                     ->first();
-
-
 
                 if (!$document_tracks_receiver_id) {
                     $query = Tender::where('id', 'no data')->get();
                 }
                 //......End for showing data for receiver designation
             }
-
-            // $query->orderBy('id', 'asc');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -123,7 +112,6 @@ class TenderController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-
                     if ($data->status == '2') {
                         $actionBtn = '<div class="btn-group" role="group">
                        
@@ -135,7 +123,6 @@ class TenderController extends Controller
                         <a href="' . url('admin/tender/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
                     }
-
 
                     return $actionBtn;
                 })
@@ -155,13 +142,12 @@ class TenderController extends Controller
         $item_types = Item_type::where('status', 1)->get();
         $fin_years = FinancialYear::all();
         $indent_reference_numbers = Indent::all();
-        // dd( $fin_years);
+
         return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections', 'fin_years', 'indent_reference_numbers'));
     }
 
     public function store(Request $request)
     {
-
         // $this->validate($request, [
         //     'sender' => 'required',
         //     'admin_section' => 'required',
@@ -203,8 +189,6 @@ class TenderController extends Controller
 
     public function details($id)
     {
-
-
         $details = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
             // ->leftJoin('additional_documents', 'tenders.additional_documents', '=', 'additional_documents.id')
@@ -222,7 +206,6 @@ class TenderController extends Controller
             array_push($additional_documents_names, $additional_names);
         }
 
-
         $designations = Designation::all();
 
         $admin_id = Auth::user()->id;
@@ -233,12 +216,11 @@ class TenderController extends Controller
             ->where('track_status', 1)
             ->select('document_tracks.*', 'designations.name as designations_name')->get();
 
-
         $auth_designation_id = AdminSection::where('admin_id', $admin_id)->first();
         if ($auth_designation_id) {
             $desig_id = $auth_designation_id->desig_id;
         }
-        // dd($auth_designation_id);
+
         //Start blade notes section....
         $notes = '';
 
@@ -246,18 +228,13 @@ class TenderController extends Controller
             ->where('track_status', 1)
             ->where('reciever_desig_id', $desig_id)->get();
 
-        // dd($document_tracks_notes);
         if ($document_tracks_notes->isNotEmpty()) {
             $notes = $document_tracks_notes;
         }
-
         //End blade notes section....
-
-
 
         return view('backend.tender.details', compact('details', 'designations', 'document_tracks', 'desig_id', 'additional_documents_names', 'auth_designation_id', 'notes'));
     }
-
 
     public function tenderTracking(Request $request)
     {
@@ -439,6 +416,10 @@ class TenderController extends Controller
 
                 if (!isset($result[$parameterId])) {
                     $result[$parameterId] = [];
+                }
+
+                if ($parameter->parameter_value == null) {
+                    $parameter->parameter_value = "";
                 }
 
                 $result[$parameterId][] = [
