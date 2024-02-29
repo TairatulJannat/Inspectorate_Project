@@ -18,8 +18,7 @@
     <div class="card">
         <div class="card-body" style="background-color: honeydew !important;">
             @if ($parameterGroups)
-                <form method="post" action="{{ url('admin/save-draft-contract-spec-data') }}"
-                    id="editDraftContractExcelInput">
+                <form method="post" action="{{ url('admin/save-contract-spec-data') }}" id="editContractExcelInput">
                     @csrf
 
                     <div class="row mb-3">
@@ -46,6 +45,10 @@
                                         class="fw-bold">{{ $dcRefNo }}</span>
                                 </div>
                                 <input type="hidden" name="dcRefNo" value="{{ $dcRefNo }}">
+                                <div class="contractRefNo f-20">Contract Ref. No: <span
+                                        class="fw-bold">{{ $contractRefNo }}</span>
+                                </div>
+                                <input type="hidden" name="contractRefNo" value="{{ $contractRefNo }}">
                                 <div class="supplier-id f-20">Supplier Name: <span
                                         class="fw-bold">{{ $supplierFirmName }}</span></div>
                                 <input type="hidden" name="supplier-id" value="{{ $supplierId }}">
@@ -62,6 +65,7 @@
                                     <th style="background-color: #bdf5fb">Indent Parameter value</th>
                                     <th style="background-color: #b0e0bc">Final Spec value</th>
                                     <th style="background-color: #b0e0bc">Draft Contract Spec value</th>
+                                    <th style="background-color: #b0e0bc">Contract Spec value</th>
                                     <th style="background-color: #b0e0bc">Remarks</th>
                                 </tr>
                             </thead>
@@ -70,7 +74,7 @@
                                 <tbody>
                                     <tr>
                                         <td style="background-color: #bdf5fb"></td>
-                                        <td colspan="5" style="background-color: #c3d0ff;">
+                                        <td colspan="6" style="background-color: #c3d0ff;">
                                             <input type="text" class="form-control bg-body text-body"
                                                 name="editedData[{{ $groupName }}][parameter_group_name]"
                                                 value="{{ $groupName }}" disabled>
@@ -80,21 +84,25 @@
                                         <tr>
                                             <td class="col-md-1 py-1 text-center" style="background-color: #bdf5fb">
                                                 {{ $slNo + 1 }}</td>
-                                            <td class="col-md-3 py-1" style="background-color: #bdf5fb">
+                                            <td class="col-md-2 py-1" style="background-color: #bdf5fb">
                                                 <textarea class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
                                             </td>
-                                            <td class="col-md-2 py-1" style="background-color: #bdf5fb">
+                                            <td class="col-md-1 py-1" style="background-color: #bdf5fb">
                                                 <textarea class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]">{{ $parameter['indent_parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
-                                                <textarea class="form-control supplier-parameter-value" id="supplier-{{ $parameter['parameter_name'] }}"
+                                                <textarea class="form-control supplier-parameter-value"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][supplier_parameter_value]">{{ $parameter['supplier_parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
                                                 <textarea class="form-control draft-contract-parameter-value" id="draft-contract-{{ $parameter['parameter_name'] }}"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][draft_contract_parameter_value]">{{ $parameter['draft_contract_parameter_value'] }}</textarea>
+                                            </td>
+                                            <td class="col-md-2 py-1" style="background-color: #b0e0bc">
+                                                <textarea class="form-control contract-parameter-value" id="contract-{{ $parameter['parameter_name'] }}"
+                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][contract_parameter_value]">{{ $parameter['contract_parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
                                                 <textarea class="form-control" name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][remarks]"></textarea>
@@ -116,8 +124,7 @@
             @endif
         </div>
         <div class="card-footer py-3" style="background-color: teal !important;">
-            <a href="{{ url('admin/draft_contract/view') }}"
-                class="btn btn-danger-gradien float-end">Cancel</a>
+            <a href="{{ url('admin/draft_contract/view') }}" class="btn btn-danger-gradien float-end">Cancel</a>
         </div>
     </div>
 @endsection
@@ -125,14 +132,14 @@
 @push('custom-scripts')
     <script>
         window.onload = function() {
-            var supplierValueElements = document.querySelectorAll('.supplier-parameter-value');
             var draftContractValueElements = document.querySelectorAll('.draft-contract-parameter-value');
+            var contractValueElements = document.querySelectorAll('.contract-parameter-value');
 
-            supplierValueElements.forEach(function(supplierValueElement, index) {
-                var draftContractValueElement = draftContractValueElements[index];
-                var tdElement = draftContractValueElement.closest('td');
+            draftContractValueElements.forEach(function(draftContractValueElement, index) {
+                var contractValueElement = contractValueElements[index];
+                var tdElement = contractValueElement.closest('td');
 
-                if (supplierValueElement.value !== draftContractValueElement.value) {
+                if (draftContractValueElement.value.trim() !== contractValueElement.value.trim()) {
                     tdElement.classList.add('bg-danger');
                 }
             });

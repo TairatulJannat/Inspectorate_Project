@@ -16,9 +16,8 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <a href="{{ url('admin/excel/import_documet_data') }}/{{ $contract->reference_no }}"
-                                    class="btn btn-success">Import
-                                    Excel</a>
+                                <a id="importExcelBtn" href="{{ url('admin/import-contract-spec-data-index') }}"
+                                    class="btn btn-success ms-4 mt-3">Import Excel</a>
                             </div>
                         </div>
                     </div>
@@ -48,7 +47,7 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $contract->reference_no ? $contract->reference_no : '' }} ">
+                                    value="{{ $contract->reference_no ? $contract->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -77,8 +76,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_no">Contract Number</label>
-                                <input type="text" class="form-control" id="contract_no"
-                                    name="contract_no"
+                                <input type="text" class="form-control" id="contract_no" name="contract_no"
                                     value="{{ $contract->contract_no ? $contract->contract_no : '' }}">
                                 <span id="error_contract_no" class="text-danger error_field"></span>
                             </div>
@@ -87,8 +85,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contract_date">Contract Date</label>
-                                <input type="date" class="form-control" id="contract_date"
-                                    name="contract_date"
+                                <input type="date" class="form-control" id="contract_date" name="contract_date"
                                     value="{{ $contract->contract_date ? $contract->contract_date : '' }}">
                                 <span id="error_contract_date" class="text-danger error_field"></span>
                             </div>
@@ -129,7 +126,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference No</label>
-                                <input type="text" id="offer_reference_no" class="form-control" name="offer_reference_no"
+                                <input type="text" id="offer_reference_no" class="form-control"
+                                    name="offer_reference_no"
                                     value="{{ $contract->offer_reference_no ? $contract->offer_reference_no : '' }}">
 
                                 <span id="error_offer_reference_no" class="text-danger error_field"></span>
@@ -152,13 +150,13 @@
 
                                     <option selected disabled value="">Please Select</option>
                                     @if ($item)
-                                    @foreach ($item_types as $i_type)
-                                        <option value="{{ $i_type->id }}"
-                                            {{ $i_type->id == $contract->item_type_id ? 'selected' : '' }}>
-                                            {{ $i_type->name }}</option>
-                                    @endforeach
+                                        @foreach ($item_types as $i_type)
+                                            <option value="{{ $i_type->id }}"
+                                                {{ $i_type->id == $contract->item_type_id ? 'selected' : '' }}>
+                                                {{ $i_type->name }}</option>
+                                        @endforeach
 
-                                @endif
+                                    @endif
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
                             </div>
@@ -171,13 +169,13 @@
                                 <select class="form-control select2" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
                                     @if ($item)
-                                    @foreach ($item as $i)
-                                        <option value="{{ $i->id }}"
-                                            {{ $i->id == $contract->item_id ? 'selected' : '' }}>
-                                            {{ $i->name }}</option>
-                                    @endforeach
+                                        @foreach ($item as $i)
+                                            <option value="{{ $i->id }}"
+                                                {{ $i->id == $contract->item_id ? 'selected' : '' }}>
+                                                {{ $i->name }}</option>
+                                        @endforeach
 
-                                @endif
+                                    @endif
                                 </select>
 
                                 <span id="error_item_id" class="text-danger error_field"></span>
@@ -191,13 +189,13 @@
                                 <select class="form-control " id="supplier_id" name="supplier_id">
                                     <option value="">Please Select</option>
                                     @if ($supplier)
-                                    @foreach ($supplier as $s)
-                                        <option value="{{ $s->id }}"
-                                            {{ $s->id == $contract->supplier_id ? 'selected' : '' }}>
-                                            {{ $s->firm_name }}</option>
-                                    @endforeach
+                                        @foreach ($supplier as $s)
+                                            <option value="{{ $s->id }}"
+                                                {{ $s->id == $contract->supplier_id ? 'selected' : '' }}>
+                                                {{ $s->firm_name }}</option>
+                                        @endforeach
 
-                                @endif
+                                    @endif
                                 </select>
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
@@ -205,8 +203,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="contracted_value">Contracted Value</label>
-                                <input type="text" id="contracted_value" name="contracted_value"
-                                    class="form-control" value="{{$contract->contracted_value?$contract->contracted_value:""}}">
+                                <input type="text" id="contracted_value" name="contracted_value" class="form-control"
+                                    value="{{ $contract->contracted_value ? $contract->contracted_value : '' }}">
 
                                 <span id="error_contracted_value" class="text-danger error_field"></span>
                             </div>
@@ -214,7 +212,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="currency_unit">Currency Unit</label>
-                                <input type="text" id="currency_unit" name="currency_unit" class="form-control" value="{{$contract->currency_unit?$contract->currency_unit:""}}">
+                                <input type="text" id="currency_unit" name="currency_unit" class="form-control"
+                                    value="{{ $contract->currency_unit ? $contract->currency_unit : '' }}">
 
                                 <span id="error_currency_unit" class="text-danger error_field"></span>
                             </div>
@@ -269,7 +268,7 @@
 
                     </div>
                 </div>
-                <div  class="card-body">
+                <div class="card-body">
                     <h1 class="mb-4">Upload Document</h1>
 
                     <div class="file-container">
@@ -309,10 +308,13 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <script>
-
         let fileCount = 1;
         $("#addFile").click(function() {
-            var newFileInput = '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' + fileCount + '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' + fileCount + '"></div></div></div>';
+            var newFileInput =
+                '<div class="form-row mb-3"><div class="col-md-4"><input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name" id="file_name_' +
+                fileCount +
+                '"></div><div class="col-md-6 mt-2"><div class="custom-file"><input type="file" class="custom-file-input file" name="file[]" id="file_' +
+                fileCount + '"></div></div></div>';
             $(".file-container").append(newFileInput);
 
             // Increment the fileCount for the next set of inputs
@@ -320,6 +322,27 @@
         });
         $(document).ready(function() {
             $('.select2').select2();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get('error');
+
+            if (errorMessage) {
+                toastr.error(decodeURIComponent(errorMessage));
+
+                const currentUrl = window.location.href;
+                const cleanUrl = currentUrl.split('?')[0];
+                history.replaceState({}, document.title, cleanUrl);
+            }
+
+            $('#importExcelBtn').on('click', function(event) {
+                event.preventDefault();
+
+                var url = $(this).attr('href');
+                var contractNo = $('#contract_no').val();
+                var redirectUrl = url + '?contractNo=' + encodeURIComponent(contractNo);
+
+                window.location.href = redirectUrl;
+            });
         });
 
         //Start:: Update information

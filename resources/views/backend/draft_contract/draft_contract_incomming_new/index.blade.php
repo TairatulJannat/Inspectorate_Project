@@ -33,25 +33,41 @@
         .badge-secondary {
             background-color: #1B4C43 !important;
         }
-        .dt-buttons .buttons-html5{
+
+        .dt-buttons .buttons-html5 {
             background-color: #A1B53A !important;
-            border:none;
-        }
-        .btn-danger{
-            background-color: #b53f4b !important;
+            border: none;
         }
 
+        .btn-danger {
+            background-color: #b53f4b !important;
+        }
     </style>
 @endpush
 @section('main_menu', 'Draft Contract (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="panel-heading">
         <div class="invoice_date_filter" style="">
-
         </div>
-
     </div>
     <br>
 
@@ -63,14 +79,15 @@
                     <div class="d-flex justify-content-between px-4 py-2">
 
                         <div class="col-9">
-                            <a href="{{ route('admin.draft_contract/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival ({{$draft_contractNew}})</a>
+                            <a href="{{ route('admin.draft_contract/view') }}" type="button"
+                                class="btn btn-success btn-sm">New
+                                Arrival ({{ $draft_contractNew }})</a>
                             <a href="{{ route('admin.draft_contract_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process ({{$draft_contractOnProcess}})</a>
+                                class="btn btn-secondary btn-sm">On Process ({{ $draft_contractOnProcess }})</a>
                             <a href="{{ route('admin.draft_contract/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed ({{$draft_contractCompleted}})</a>
+                                class="btn btn-info text-white btn-sm">Completed ({{ $draft_contractCompleted }})</a>
                             <a href="{{ route('admin.draft_contract_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch ({{$draft_contractDispatch}})</a>
+                                class="btn btn-danger btn-sm">Dispatch ({{ $draft_contractDispatch }})</a>
 
                         </div>
                         <div>
