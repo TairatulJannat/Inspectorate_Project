@@ -548,7 +548,9 @@ class InoteController extends Controller
     }
     public function EditInoteLetter($id)
     {
+       
         $inoteLetter = InoteLetter::where("inote_reference_no", $id)->first();
+        // dd( $inoteLetter);
         $deviation = InoteDeviation::where("reference_no", $id)->first();
         $dpl_15 = InoteDPL::where("reference_no", $id)->first();
         $anx = InoteDPL::where("reference_no", $id)->first();
@@ -611,6 +613,65 @@ class InoteController extends Controller
 
         return view('backend.pdf.inote_dpl15_pdf', compact('dpl15'));
     }
+
+    public function UpdateInoteLetter(Request $request){
+
+
+        $inote = InoteLetter::findOrFail($request->inote_letter_id);
+        $inote->book_no = $request->book_no;
+        $inote->set_no = $request->set_no;
+        $inote->copy_number = $request->copy_number;
+        $inote->copy_no = $request->copy_no;
+        $inote->visiting_letter_no = $request->visiting_letter_no;
+        $inote->supplier_info = $request->supplier_info;
+        $inote->sender_id = $request->sender_id;
+        $inote->cahidakari = $request->cahidakari;
+        $inote->visiting_process = $request->visiting_process;
+        $inote->status = $request->status;
+        $inote->punishment = $request->punishment;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->serial_1 = $request->serial_1;
+        $inote->serial_2to4 = $request->serial_2to4;
+        $inote->serial_5 = $request->serial_5;
+        $inote->serial_6 = $request->serial_6;
+        $inote->serial_7 = $request->serial_7;
+        $inote->serial_8 = $request->serial_8;
+        $inote->serial_9 = $request->serial_9;
+        $inote->serial_10 = $request->serial_10;
+        $inote->serial_11 = $request->serial_11;
+        $inote->serial_12 = $request->serial_12;
+        $inote->serial_13 = $request->serial_13;
+        $inote->body_info = $request->body_info;
+        $inote->station = $request->station;
+        $inote->date = $request->date;
+        $inote->update();
+        return response()->json(['success' => 'Done']);
+        
+    }
+
+    // public function updateInoteLetter(Request $request) {
+    //     // Validate the incoming request data
+    //     $validator = Validator::make($request->all(), [
+    //         'inote_letter_id' => 'required|exists:inote_letters,id',
+    //         // Add validation rules for other fields as needed
+    //     ]);
+    
+    //     // Check if the validation fails
+    //     if ($validator->fails()) {
+    //         return response()->json(['error' => $validator->errors()], 400);
+    //     }
+    
+    //     // Retrieve the InoteLetter instance
+    //     $inote = InoteLetter::findOrFail($request->inote_letter_id);
+    
+    //     // Update the fields with the data from the request
+    //     $inote->update($request->all());
+    
+    //     // Return a success response
+    //     return response()->json(['success' => 'InoteLetter updated successfully']);
+    // }
 
 
     public function InoteDPL(Request $request)
