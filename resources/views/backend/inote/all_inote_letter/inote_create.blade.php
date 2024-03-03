@@ -164,7 +164,7 @@
                         <td> <input type="text" id="serial_12" name="serial_12" class="form-control"></td>
                         <td rowspan="2">
                             <input type="text" id="serial_13" name="serial_13" class="form-control">
-                            <a href="#" class="btn btn-success m-2" id="cartItem">+</a>
+                            <a href="#" class="btn btn-success m-2" id="cartItemBtn">+</a>
 
                         </td>
                     </tr>
@@ -179,7 +179,14 @@
 
 
                 </tbody>
+                <tbody id="cartItem">
+
+                </tbody>
+
             </table>
+       
+
+
             <div class="d-flex col-4 mt-3">
                 <p class="">স্টেশন- </p><input type="text" class="form-control me-5" id="station"
                     name="station">
