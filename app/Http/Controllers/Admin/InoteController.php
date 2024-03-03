@@ -651,27 +651,51 @@ class InoteController extends Controller
         
     }
 
-    // public function updateInoteLetter(Request $request) {
-    //     // Validate the incoming request data
-    //     $validator = Validator::make($request->all(), [
-    //         'inote_letter_id' => 'required|exists:inote_letters,id',
-    //         // Add validation rules for other fields as needed
-    //     ]);
-    
-    //     // Check if the validation fails
-    //     if ($validator->fails()) {
-    //         return response()->json(['error' => $validator->errors()], 400);
-    //     }
-    
-    //     // Retrieve the InoteLetter instance
-    //     $inote = InoteLetter::findOrFail($request->inote_letter_id);
-    
-    //     // Update the fields with the data from the request
-    //     $inote->update($request->all());
-    
-    //     // Return a success response
-    //     return response()->json(['success' => 'InoteLetter updated successfully']);
-    // }
+
+    public function UpdateInoteDeviationLetter(Request $request){
+
+
+
+        $inote = InoteDeviation::findOrFail($request->deviation_id);
+        $inote->file_no = $request->file_no;
+        $inote->nomenclature = $request->nomenclature;
+        $inote->contract_no_dt = $request->contract_no_dt;
+        $inote->suppliers_name_address = $request->suppliers_name_address;
+        $inote->qty = $request->qty;
+        $inote->on_order = $request->on_order;
+        $inote->deviation_required = $request->deviation_required;
+        $inote->accepted_to_date = $request->accepted_to_date;
+        $inote->others_particulars = $request->others_particulars;
+        $inote->classification_of_deviation = $request->classification_of_deviation;
+        $inote->contract_approved_simple_basis = $request->contract_approved_simple_basis;
+        $inote->deviation_recommended = $request->deviation_recommended;
+        $inote->stores_issue = $request->stores_issue;
+        $inote->considered_that = $request->considered_that;
+        $inote->others_remarks = $request->others_remarks;
+        $inote->deviation_applied_above = $request->deviation_applied_above;
+        $inote->copy = $request->copy;
+        $inote->created_at = Carbon::now('Asia/Dhaka');
+        $inote->updated_at = Carbon::now('Asia/Dhaka');
+        $inote->save();
+        return response()->json(['success' => 'Done']);
+        
+    }
+
+    public function UpdateInoteDpl15Letter(Request $request){
+        
+        $inote = InoteDPL::findOrFail($request->dpl_15_id);
+        $inote->firms_name = $request->firms_name;
+        $inote->nomenclature = $request->nomenclature;
+        $inote->contract_no = $request->contract_no;
+        $inote->action = $request->action;
+        $inote->qty = $request->qty;
+        $inote->warranty = $request->warranty;
+        $inote->created_at = Carbon::now('Asia/Dhaka');
+        $inote->updated_at = Carbon::now('Asia/Dhaka');
+        $inote->save();
+        return response()->json(['success' => 'Done']);
+        
+    }
 
 
     public function InoteDPL(Request $request)

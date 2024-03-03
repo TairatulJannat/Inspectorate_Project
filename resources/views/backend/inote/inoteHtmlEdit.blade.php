@@ -272,6 +272,98 @@
         })
 
 
+
+        $('#updateDeviation').off().on('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData($('#updateDeviation')[0]);
+            disableButton()
+            $.ajax({
+                url: "{{ url('admin/inote_letter_deviation/update') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.error) {
+                        error_notification(response.error)
+                        enableeButton()
+                    }
+                    if (response.success) {
+                        // enableeButton()
+                        toastr.success('Information Updated', 'Saved');
+                    }
+                    setTimeout(window.location.href = "",
+                        2000);
+                },
+                error: function(response) {
+                    enableeButton()
+                    clear_error_field();
+                    error_notification('Please fill up the form correctly and try again')
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        // Iterate over the validation errors and display them
+                        $.each(response.responseJSON.errors, function(key, value) {
+
+                            var errorSpanId =  key + '_error';
+
+                            $('.' + errorSpanId).text(value[
+                            0]); // Assuming you want to display only the first error
+                        });
+                    }
+
+
+                }
+            });
+        })
+
+        $('#updateDPL').off().on('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData($('#updateDPL')[0]);
+            disableButton()
+            $.ajax({
+                url: "{{ url('admin/inote_letter_dpl15/update') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.error) {
+                        error_notification(response.error)
+                        enableeButton()
+                    }
+                    if (response.success) {
+                        // enableeButton()
+                        toastr.success('Information Updated', 'Saved');
+                    }
+                    setTimeout(window.location.href = "",
+                        2000);
+                },
+                error: function(response) {
+                    enableeButton()
+                    clear_error_field();
+                    error_notification('Please fill up the form correctly and try again')
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        // Iterate over the validation errors and display them
+                        $.each(response.responseJSON.errors, function(key, value) {
+
+                            var errorSpanId =  key + '_error';
+
+                            $('.' + errorSpanId).text(value[
+                            0]); // Assuming you want to display only the first error
+                        });
+                    }
+
+
+                }
+            });
+        })
+
+
         function disableButton() {
             var btn = document.getElementById('form_submission_button');
             btn.disabled = true;

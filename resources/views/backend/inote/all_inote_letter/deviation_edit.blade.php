@@ -1,6 +1,6 @@
 @if ($deviation)
     <div class="inote_boc mb-2">
-        <form action="" id="saveDeviation" method="POST" enctype="multipart/form-data">
+        <form action="" id="updateDeviation" method="POST" enctype="multipart/form-data">
             <input type="hidden" id="deviation_id" name="deviation_id" value="{{ $deviation->id }}">
             <div class="container">
                 <div class="py-3">
