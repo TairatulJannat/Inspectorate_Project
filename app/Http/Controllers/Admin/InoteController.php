@@ -548,7 +548,9 @@ class InoteController extends Controller
     }
     public function EditInoteLetter($id)
     {
+       
         $inoteLetter = InoteLetter::where("inote_reference_no", $id)->first();
+        // dd( $inoteLetter);
         $deviation = InoteDeviation::where("reference_no", $id)->first();
         $dpl_15 = InoteDPL::where("reference_no", $id)->first();
         $anx = InoteDPL::where("reference_no", $id)->first();
@@ -610,6 +612,89 @@ class InoteController extends Controller
         $dpl15 = InoteDPL::where('reference_no',$id)->first();
 
         return view('backend.pdf.inote_dpl15_pdf', compact('dpl15'));
+    }
+
+    public function UpdateInoteLetter(Request $request){
+
+
+        $inote = InoteLetter::findOrFail($request->inote_letter_id);
+        $inote->book_no = $request->book_no;
+        $inote->set_no = $request->set_no;
+        $inote->copy_number = $request->copy_number;
+        $inote->copy_no = $request->copy_no;
+        $inote->visiting_letter_no = $request->visiting_letter_no;
+        $inote->supplier_info = $request->supplier_info;
+        $inote->sender_id = $request->sender_id;
+        $inote->cahidakari = $request->cahidakari;
+        $inote->visiting_process = $request->visiting_process;
+        $inote->status = $request->status;
+        $inote->punishment = $request->punishment;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->slip_return = $request->slip_return;
+        $inote->serial_1 = $request->serial_1;
+        $inote->serial_2to4 = $request->serial_2to4;
+        $inote->serial_5 = $request->serial_5;
+        $inote->serial_6 = $request->serial_6;
+        $inote->serial_7 = $request->serial_7;
+        $inote->serial_8 = $request->serial_8;
+        $inote->serial_9 = $request->serial_9;
+        $inote->serial_10 = $request->serial_10;
+        $inote->serial_11 = $request->serial_11;
+        $inote->serial_12 = $request->serial_12;
+        $inote->serial_13 = $request->serial_13;
+        $inote->body_info = $request->body_info;
+        $inote->station = $request->station;
+        $inote->date = $request->date;
+        $inote->update();
+        return response()->json(['success' => 'Done']);
+        
+    }
+
+
+    public function UpdateInoteDeviationLetter(Request $request){
+
+
+
+        $inote = InoteDeviation::findOrFail($request->deviation_id);
+        $inote->file_no = $request->file_no;
+        $inote->nomenclature = $request->nomenclature;
+        $inote->contract_no_dt = $request->contract_no_dt;
+        $inote->suppliers_name_address = $request->suppliers_name_address;
+        $inote->qty = $request->qty;
+        $inote->on_order = $request->on_order;
+        $inote->deviation_required = $request->deviation_required;
+        $inote->accepted_to_date = $request->accepted_to_date;
+        $inote->others_particulars = $request->others_particulars;
+        $inote->classification_of_deviation = $request->classification_of_deviation;
+        $inote->contract_approved_simple_basis = $request->contract_approved_simple_basis;
+        $inote->deviation_recommended = $request->deviation_recommended;
+        $inote->stores_issue = $request->stores_issue;
+        $inote->considered_that = $request->considered_that;
+        $inote->others_remarks = $request->others_remarks;
+        $inote->deviation_applied_above = $request->deviation_applied_above;
+        $inote->copy = $request->copy;
+        $inote->created_at = Carbon::now('Asia/Dhaka');
+        $inote->updated_at = Carbon::now('Asia/Dhaka');
+        $inote->save();
+        return response()->json(['success' => 'Done']);
+        
+    }
+
+    public function UpdateInoteDpl15Letter(Request $request){
+        
+        $inote = InoteDPL::findOrFail($request->dpl_15_id);
+        $inote->firms_name = $request->firms_name;
+        $inote->nomenclature = $request->nomenclature;
+        $inote->contract_no = $request->contract_no;
+        $inote->action = $request->action;
+        $inote->qty = $request->qty;
+        $inote->warranty = $request->warranty;
+        $inote->created_at = Carbon::now('Asia/Dhaka');
+        $inote->updated_at = Carbon::now('Asia/Dhaka');
+        $inote->save();
+        return response()->json(['success' => 'Done']);
+        
     }
 
 

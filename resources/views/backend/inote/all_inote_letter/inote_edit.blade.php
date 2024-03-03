@@ -1,5 +1,5 @@
 <div class="inote_boc mb-2">
-    <form action="" id='saveInote' method="POST" enctype="multipart/form-data">
+    <form action="" id='updateInote' method="POST" enctype="multipart/form-data">
         <input type="hidden" id="inote_letter_id" name="inote_letter_id" value="{{ $inoteLetter->id }}">
         <div class="header-box">
             <div class="title">

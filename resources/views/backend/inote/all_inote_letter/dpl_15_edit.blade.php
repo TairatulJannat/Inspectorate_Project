@@ -1,7 +1,7 @@
 @if ($dpl_15)
     <div class="inote_boc mb-2">
         <div class="container">
-            <form action="" id='saveDPL' method="POST" enctype="multipart/form-data">
+            <form action="" id='updateDPL' method="POST" enctype="multipart/form-data">
                 <input type="hidden" id="dpl_15_id" name="dpl_15_id" value="{{ $dpl_15->id }}">
                 <div class="row mt-3">
 
