@@ -210,30 +210,33 @@
                                 <td> ১২</td>
                                 <td> ১৩</td>
                             </tr>
+                            @foreach ($inoteLetterDetails as $details)
                             <tr>
-                                <td rowspan="2"> {{ $inote_letter->serial_1 }} </td>
-                                <td rowspan="2" colspan="3"> {{ $inote_letter->serial_2to4 }}
+                                <td rowspan="2"> {{ $details->serial_1 }} </td>
+                                <td rowspan="2" colspan="3"> {{ $details->serial_2to4 }}
                                 </td>
 
 
-                                <td rowspan="2">{{ $inote_letter->serial_5 }} </td>
-                                <td rowspan="2"> {{ $inote_letter->serial_6 }}</td>
-                                <td>{{ $inote_letter->serial_7 }} </td>
-                                <td> {{ $inote_letter->serial_8 }}</td>
-                                <td>{{ $inote_letter->serial_9 }} </td>
-                                <td>{{ $inote_letter->serial_10 }} </td>
-                                <td> {{ $inote_letter->serial_11 }}</td>
-                                <td> {{ $inote_letter->serial_12 }}</td>
-                                <td rowspan="2">{{ $inote_letter->serial_13 }} </td>
+                                <td rowspan="2">{{ $details->serial_5 }} </td>
+                                <td rowspan="2"> {{ $details->serial_6 }}</td>
+                                <td>{{ $details->serial_7 }} </td>
+                                <td> {{ $details->serial_8 }}</td>
+                                <td>{{ $details->serial_9 }} </td>
+                                <td>{{ $details->serial_10 }} </td>
+                                <td> {{ $details->serial_11 }}</td>
+                                <td> {{ $details->serial_12 }}</td>
+                                <td rowspan="2">{{ $details->serial_13 }} </td>
                             </tr>
                             <tr>
 
                                 <td colspan="6">
-                                    {{ $inote_letter->body_info }}
+                                    {{ $details->body_info }}
                                 </td>
 
 
                             </tr>
+                            @endforeach
+
                             <tr class="">
                                 <td colspan="13">
                                     <div class="d-flex justify-content-between p-2">

@@ -19,6 +19,7 @@ use App\Models\inote;
 use App\Models\InoteDeviation;
 use App\Models\InoteDPL;
 use App\Models\InoteLetter;
+use App\Models\InoteLetterDetails;
 use App\Models\Section;
 use App\Models\Supplier;
 use Carbon\Carbon;
@@ -155,7 +156,7 @@ class InoteController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -529,33 +530,48 @@ class InoteController extends Controller
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
-        $inote->serial_1 = $request->serial_1;
-        $inote->serial_2to4 = $request->serial_2to4;
-        $inote->serial_5 = $request->serial_5;
-        $inote->serial_6 = $request->serial_6;
-        $inote->serial_7 = $request->serial_7;
-        $inote->serial_8 = $request->serial_8;
-        $inote->serial_9 = $request->serial_9;
-        $inote->serial_10 = $request->serial_10;
-        $inote->serial_11 = $request->serial_11;
-        $inote->serial_12 = $request->serial_12;
-        $inote->serial_13 = $request->serial_13;
-        $inote->body_info = $request->body_info;
         $inote->station = $request->station;
         $inote->date = $request->date;
+        $items = json_decode($request->items);
         $inote->save();
-        return response()->json(['success' => 'Done']);
+        $saveId = $inote->id;
+
+        if ($saveId) {
+            foreach ($items as $item) {
+                $details = new InoteLetterDetails();
+                $details->inote_letter_id = $saveId;
+                $details->serial_1 = $item->serial_1;
+                $details->serial_2to4 = $item->serial_2to4;
+                $details->serial_5 = $item->serial_5;
+                $details->serial_6 = $item->serial_6;
+                $details->serial_7 = $item->serial_7;
+                $details->serial_8 = $item->serial_8;
+                $details->serial_9 = $item->serial_9;
+                $details->serial_10 = $item->serial_10;
+                $details->serial_11 = $item->serial_11;
+                $details->serial_12 = $item->serial_12;
+                $details->serial_13 = $item->serial_13;
+                $details->body_info = $item->body_info;
+
+                $details->save();
+            }
+        }
+
+
+        return response()->json(['success' => $items]);
     }
     public function EditInoteLetter($id)
     {
-       
+
         $inoteLetter = InoteLetter::where("inote_reference_no", $id)->first();
+        $inoteLetterDetails = InoteLetterDetails::where("inote_letter_id", $inoteLetter->id)->get();
+
         // dd( $inoteLetter);
         $deviation = InoteDeviation::where("reference_no", $id)->first();
         $dpl_15 = InoteDPL::where("reference_no", $id)->first();
         $anx = InoteDPL::where("reference_no", $id)->first();
-        
-        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx' ));
+
+        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx','inoteLetterDetails'));
     }
 
     public function InoteDeviation(Request $request)
@@ -595,26 +611,25 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-
     }
     public function deviation($id)
     {
 
         $inote = Inote::find($id);
-        $deviations = InoteDeviation::where('reference_no',$id)->first();
+        $deviations = InoteDeviation::where('reference_no', $id)->first();
         // dd($deviations);
-        
-        return view('backend.pdf.inote_deviation_pdf', compact('deviations'));
 
+        return view('backend.pdf.inote_deviation_pdf', compact('deviations'));
     }
     public function dpl15($id)
     {
-        $dpl15 = InoteDPL::where('reference_no',$id)->first();
+        $dpl15 = InoteDPL::where('reference_no', $id)->first();
 
         return view('backend.pdf.inote_dpl15_pdf', compact('dpl15'));
     }
 
-    public function UpdateInoteLetter(Request $request){
+    public function UpdateInoteLetter(Request $request)
+    {
 
 
         $inote = InoteLetter::findOrFail($request->inote_letter_id);
@@ -648,11 +663,11 @@ class InoteController extends Controller
         $inote->date = $request->date;
         $inote->update();
         return response()->json(['success' => 'Done']);
-        
     }
 
 
-    public function UpdateInoteDeviationLetter(Request $request){
+    public function UpdateInoteDeviationLetter(Request $request)
+    {
 
 
 
@@ -678,11 +693,11 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-        
     }
 
-    public function UpdateInoteDpl15Letter(Request $request){
-        
+    public function UpdateInoteDpl15Letter(Request $request)
+    {
+
         $inote = InoteDPL::findOrFail($request->dpl_15_id);
         $inote->firms_name = $request->firms_name;
         $inote->nomenclature = $request->nomenclature;
@@ -694,7 +709,6 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-        
     }
 
 
@@ -723,6 +737,5 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-
     }
 }

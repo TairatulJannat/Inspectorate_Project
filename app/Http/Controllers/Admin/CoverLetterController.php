@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CoverLetter;
 use App\Models\InoteLetter;
+use App\Models\InoteLetterDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
@@ -111,8 +112,9 @@ class CoverLetterController extends Controller
     public function GenerateINotePdf($id)
     {
         $inote_letter=InoteLetter::find($id);
+        $inoteLetterDetails = InoteLetterDetails::where("inote_letter_id", $inote_letter->id)->get();
         // $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
         // return $pdf->stream('cover_letter.pdf');
-        return view('backend.pdf.inote', compact('inote_letter'));
+        return view('backend.pdf.inote', compact('inote_letter', 'inoteLetterDetails'));
     }
 }
