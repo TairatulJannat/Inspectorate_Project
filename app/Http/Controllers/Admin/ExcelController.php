@@ -12,15 +12,18 @@ use App\Models\Contract;
 use App\Models\Supplier;
 use App\Models\FinalSpec;
 use App\Models\Item_type;
+use Illuminate\Support\Arr;
 use App\Models\Inspectorate;
 use Illuminate\Http\Request;
 use App\Models\DraftContract;
 use App\Models\SupplierOffer;
 use App\Models\ParameterGroup;
 use App\Imports\FinalSpecImport;
+use App\Models\ComparisonRemark;
 use App\Models\SupplierSpecData;
 use App\Imports\IndentSpecImport;
 use Illuminate\Support\Facades\DB;
+use App\Imports\ContractSpecImport;
 use App\Imports\SupplierSpecImport;
 use App\Http\Controllers\Controller;
 use App\Models\AssignParameterValue;
@@ -1176,34 +1179,42 @@ class ExcelController extends Controller
     protected function draftContractSpecIndex(Request $request)
     {
         try {
-            $dcData = $request->all();
-            return view('backend.excel-files.import-draft-contract-data', compact('dcData'));
+            // Retrieve all data from the database
+            $draftContractNo = $request->query('draftContractNo');
+            $dcData = DraftContract::where('draft_contract_no', $draftContractNo)->first();
         } catch (\Exception $e) {
+            // If an exception occurs, return back to the previous page with an error message
             return back()->withError('Failed to retrieve from Database.');
         }
+        // Return the view for importing Draft Contract specific data, along with the retrieved Draft Contract Data
+        return view('backend.excel-files.import-draft-contract-data', compact('dcData'));
     }
 
     public function importDraftContractSpecData(Request $request)
     {
         // Validate the request parameters
-        // $request->validate([
-        //     // 'item-type-id' => ['required', 'exists:item_types,id'],
-        //     // 'item-id' => ['required', 'exists:items,id'],
-        //     // 'indent-id' => ['required', 'exists:indents,id'],
-        //     // 'supplier-id' => ['required', 'exists:suppliers,id'],
-        //     // 'tender-id' => ['required', 'exists:tenders,id'],
-        //     'file' => 'required|mimes:xlsx,csv|max:2048',
-        // ], [
-        //     // Custom validation messages
-        //     // 'item-type-id.required' => __('Please choose an Item Type ID.'),
-        //     // 'item-id.required' => __('Please choose an Item ID.'),
-        //     // 'indent-id.required' => __('Please choose an Indent ID.'),
-        //     // 'supplier-id.required' => __('Please choose an Supplier ID.'),
-        //     // 'tender-id.required' => __('Please choose an Tender ID.'),
-        //     'file.required' => __('Please choose an Excel/CSV file.'),
-        //     'file.mimes' => __('The file must be of type: xlsx, csv.'),
-        //     'file.max' => __('The file size must not exceed 2048 kilobytes.'),
-        // ]);
+        $request->validate([
+            'itemTypeId' => ['required', 'exists:item_types,id'],
+            'itemId' => ['required', 'exists:items,id'],
+            'dcRefNo' => ['required', 'exists:draft_contracts,reference_no'],
+            'finalSpecRefNo' => ['required', 'exists:final_specs,reference_no'],
+            'offerRefNo' => ['required', 'exists:offers,reference_no'],
+            'indentRefNo' => ['required', 'exists:indents,reference_no'],
+            'supplierId' => ['required', 'exists:suppliers,id'],
+            'file' => 'required|mimes:xlsx,csv|max:2048',
+        ], [
+            // Custom validation messages
+            'itemTypeId.required' => __('Please choose an Item Type ID.'),
+            'itemId.required' => __('Please choose an Item ID.'),
+            'dcRefNo.required' => __('Please choose an Draft Contract.'),
+            'finalSpecRefNo.required' => __('Please choose an Final Spec.'),
+            'offerRefNo.required' => __('Please choose an Offer.'),
+            'indentRefNo.required' => __('Please choose an Indent.'),
+            'supplierId.required' => __('Please choose an Supplier ID.'),
+            'file.required' => __('Please choose an Excel/CSV file.'),
+            'file.mimes' => __('The file must be of type: xlsx, csv.'),
+            'file.max' => __('The file size must not exceed 2048 kilobytes.'),
+        ]);
 
         try {
             // Import the data from the uploaded Excel file
@@ -1285,6 +1296,7 @@ class ExcelController extends Controller
                 'tenderRefNo' => $tenderRefNo,
                 'offerRefNo' => $offerRefNo,
                 'finalSpecRefNo' => $finalSpecRefNo,
+                'dcRefNo' => $request->input('dcRefNo'),
             ]);
         } catch (UnreadableFileException $e) {
             // If the uploaded file is unreadable, return to the previous page with an error message
@@ -1298,52 +1310,135 @@ class ExcelController extends Controller
         }
     }
 
-    public function importDraftContractSpecDatas(Request $request)
+    public function saveDraftContractSpecData(Request $request)
+    {
+        try {
+            // Extract data from request
+            $jsonData = $request->input('editedData');
+            $indentRefNo = $request->input('indentRefNo');
+            $tenderRefNo = $request->input('tenderRefNo');
+            $offerRefNo = $request->input('offerRefNo');
+            $finalSpecRefNo = $request->input('finalSpecRefNo');
+            $dcRefNo = $request->input('dcRefNo');
+
+            // Retrieve all ComparisonRemark records with the same draft_contract_ref_no
+            $existingRemarks = ComparisonRemark::where('draft_contract_ref_no', $dcRefNo)->get();
+
+            // Delete each existing remark
+            foreach ($existingRemarks as $existingRemark) {
+                $existingRemark->delete();
+            }
+
+            $remarks = [];
+
+            // Iterate through the array of specifications
+            foreach ($jsonData as $section => $specifications) {
+                // Check if a "remarks" key is set for each specification
+                foreach ($specifications as $key => $spec) {
+                    if (Arr::exists($spec, 'remarks')) {
+                        // Add the remark to the $remarks array
+                        $remarks[] = $spec['remarks'];
+                    }
+                }
+            }
+
+            // Filter the $remarks array to remove the null values
+            $filteredRemarks = array_filter($remarks, function ($value) {
+                return $value !== null;
+            });
+
+            // Create an HTML ordered list using the $filteredRemarks array
+            $htmlList = '<ol>';
+            foreach ($filteredRemarks as $remark) {
+                $htmlList .= '<li>' . $remark . '</li>';
+            }
+            $htmlList .= '</ol>';
+
+            // Create a new ComparisonRemark and save it
+            $comparisonRemark = new ComparisonRemark;
+            $comparisonRemark->indent_ref_no = $indentRefNo;
+            $comparisonRemark->tender_ref_no = $tenderRefNo;
+            $comparisonRemark->offer_ref_no = $offerRefNo;
+            $comparisonRemark->final_spec_ref_no = $finalSpecRefNo;
+            $comparisonRemark->draft_contract_ref_no = $dcRefNo;
+            $comparisonRemark->remarks = $htmlList;
+            $comparisonRemark->save();
+
+            // Return a success message
+            return redirect()->to('admin/draft_contract/view')->with('success', 'Draft Contract remarks saved successfully.');
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Error saving data: ' . $e->getMessage());
+
+            // Return an error message
+            return redirect()->to('admin/import-draft-contract-spec-data-index')->with('error', 'Error saving data. ' . $e->getMessage());
+        }
+    }
+
+    protected function contractSpecIndex(Request $request)
+    {
+        try {
+            // Retrieve all data from the database
+            $contractNo = $request->query('contractNo');
+            $contractData = Contract::where('contract_no', $contractNo)->first();
+        } catch (\Exception $e) {
+            // If an exception occurs, return back to the previous page with an error message
+            return back()->withError('Failed to retrieve from Database.');
+        }
+        // Return the view for importing Contract specific data, along with the retrieved Contract Data
+        return view('backend.excel-files.import-contract-data', compact('contractData'));
+    }
+
+    public function importContractSpecData(Request $request)
     {
         // Validate the request parameters
-        // $request->validate([
-        //     // 'item-type-id' => ['required', 'exists:item_types,id'],
-        //     // 'item-id' => ['required', 'exists:items,id'],
-        //     // 'indent-id' => ['required', 'exists:indents,id'],
-        //     // 'supplier-id' => ['required', 'exists:suppliers,id'],
-        //     // 'tender-id' => ['required', 'exists:tenders,id'],
-        //     'file' => 'required|mimes:xlsx,csv|max:2048',
-        // ], [
-        //     // Custom validation messages
-        //     // 'item-type-id.required' => __('Please choose an Item Type ID.'),
-        //     // 'item-id.required' => __('Please choose an Item ID.'),
-        //     // 'indent-id.required' => __('Please choose an Indent ID.'),
-        //     // 'supplier-id.required' => __('Please choose an Supplier ID.'),
-        //     // 'tender-id.required' => __('Please choose an Tender ID.'),
-        //     'file.required' => __('Please choose an Excel/CSV file.'),
-        //     'file.mimes' => __('The file must be of type: xlsx, csv.'),
-        //     'file.max' => __('The file size must not exceed 2048 kilobytes.'),
-        // ]);
-        // dd($request->all());
-        // $request->validate([
-        //     'supplierId' => ['required', 'exists:suppliers,id'],
-        //     'file' => 'required|mimes:xlsx,csv|max:2048',
-        // ], [
-        //     'supplierId.required' => 'Please choose an Supplier ID.',
-        //     'file.required' => 'Please choose an Excel/CSV file.',
-        //     'file.mimes' => 'The file must be of type: xlsx, csv.',
-        //     'file.max' => 'The file size must not exceed 2048 kilobytes.',
-        // ]);
+        $request->validate([
+            'itemTypeId' => ['required', 'exists:item_types,id'],
+            'itemId' => ['required', 'exists:items,id'],
+            'contractRefNo' => ['required', 'exists:contracts,reference_no'],
+            'dcRefNo' => ['required', 'exists:draft_contracts,reference_no'],
+            'finalSpecRefNo' => ['required', 'exists:final_specs,reference_no'],
+            'offerRefNo' => ['required', 'exists:offers,reference_no'],
+            'indentRefNo' => ['required', 'exists:indents,reference_no'],
+            'supplierId' => ['required', 'exists:suppliers,id'],
+            'file' => 'required|mimes:xlsx,csv|max:2048',
+        ], [
+            // Custom validation messages
+            'itemTypeId.required' => __('Please choose an Item Type ID.'),
+            'itemId.required' => __('Please choose an Item ID.'),
+            'contractRefNo.required' => __('Please choose a Contract.'),
+            'dcRefNo.required' => __('Please choose a Draft Contract.'),
+            'finalSpecRefNo.required' => __('Please choose a Final Spec.'),
+            'offerRefNo.required' => __('Please choose an Offer.'),
+            'indentRefNo.required' => __('Please choose an Indent.'),
+            'supplierId.required' => __('Please choose a Supplier ID.'),
+            'file.required' => __('Please choose an Excel/CSV file.'),
+            'file.mimes' => __('The file must be of type: xlsx, csv.'),
+            'file.max' => __('The file size must not exceed 2048 kilobytes.'),
+        ]);
 
         try {
-            $importedData = Excel::toCollection(new DraftContractSpecImport, $request->file('file'))->first();
-            // dd($importedData);
+            // Import the data from the uploaded Excel file
+            $importedData = Excel::toCollection(new ContractSpecImport, $request->file('file'))->first();
+
+            // Initialize an array to store the parameter groups
             $parameterGroups = [];
+
+            // Initialize a variable to store the current group name
             $currentGroupName = null;
 
+            // Iterate through each row of the imported data
             foreach ($importedData->toArray() as $row) {
+                // Skip the row if it's empty
                 if (empty(array_filter($row))) {
                     continue;
                 }
 
-                $groupName = $row[1];
+                // Trim and retrieve the group name from the second column of the row
+                $groupName = trim($row[1]);
 
-                if ($groupName !== null) {
+                // If the group name is not null, set it as the current group name and initialize an empty array for the group
+                if ($groupName != null) {
                     $currentGroupName = $groupName;
                     $parameterGroups[$currentGroupName] = [];
                     continue;
@@ -1351,147 +1446,141 @@ class ExcelController extends Controller
                     $groupName = $currentGroupName;
                 }
 
+                // Retrieve the parameter name, indent parameter value, and parameter value from the row
+                $parameterName = trim($row[2]);
+                $indentParameterValue = trim($row[3]);
+                // Set the parameter value to "No data found against this parameter!" if it's empty
+                $supplierParameterValue = trim($row[4]) ? trim($row[4]) : "No data found against this parameter!";
+                $draftContractParameterValue = trim($row[5]) ? trim($row[5]) : "No data found against this parameter!";
+                $contractParameterValue = trim($row[6]) ? trim($row[6]) : "No data found against this parameter!";
+
+                // Add the parameter to the parameter group
                 $parameterGroups[$groupName][] = [
-                    'parameter_name' => trim($row[2]),
-                    'indent_parameter_value' => trim($row[3]),
-                    'parameter_value' => trim($row[4]),
+                    'parameter_name' => $parameterName,
+                    'indent_parameter_value' => $indentParameterValue,
+                    'supplier_parameter_value' => $supplierParameterValue,
+                    'draft_contract_parameter_value' => $draftContractParameterValue,
+                    'contract_parameter_value' => $contractParameterValue,
                 ];
             }
 
-            $finalSpecRefNo = $request->finalSpecRefNo;
-            $finalSpecData = FinalSpec::where('reference_no', $finalSpecRefNo)->first();
+            // Retrieve the item ID, item type ID, indent ID, supplier ID, and offer reference number from the request
+            $itemTypeId = $request->input('itemTypeId');
+            $itemId = $request->input('itemId');
+            $indentRefNo = $request->input('indentRefNo');
+            $supplierId = $request->input('supplierId');
+            $offerRefNo = $request->input('offerRefNo');
+            $dcRefNo = $request->input('dcRefNo');
+            $contractRefNo = $request->input('contractRefNo');
 
-            $itemId = $finalSpecData['item_id'];
-            $itemTypeId = $finalSpecData['item_type_id'];
-            $indentRefNo = $request['indentRefNo'];
-            $tenderRefNo = $request['tenderRefNo'];
-            $offerRefNo = $request['offerRefNo'];
-            $supplierId = $request['supplierId'];
-
+            // Retrieve the item, item type, indent, supplier, and tender from the database based on the IDs
             $item = Items::find($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';
 
             $itemType = Item_Type::find($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-            $indent = Indent::where('reference_no', $indentRefNo)->first();
-            $indentId = $indent ? $indent->id : 'Unknown Indent';
-
-            $tender = Tender::where('reference_no', $tenderRefNo)->first();
-            $tenderId = $tender ? $tender->id : 'Unknown Tender';
-
             $offer = Offer::where('reference_no', $offerRefNo)->first();
-            $offerId = $offer ? $tender->id : 'Unknown Offer';
+            $tenderRefNo = $offer ? $offer->tender_reference_no : 'Unknown Offer';
+
+            $finalSpec = FinalSpec::where('offer_reference_no', $offerRefNo)->first();
+            $finalSpecRefNo = $finalSpec ? $finalSpec->reference_no : 'Unknown Offer';
 
             $supplier = Supplier::find($supplierId);
             $supplierFirmName = $supplier ? $supplier->firm_name : 'Unknown Supplier';
 
-            return view('backend.excel-files.display-imported-final-spec-data', [
+            // Return the view for displaying the imported supplier data, along with the retrieved data
+            return view('backend.excel-files.display-imported-contract-data', [
                 'parameterGroups' => $parameterGroups,
                 'itemTypeId' => $itemTypeId,
                 'itemTypeName' => $itemTypeName,
                 'itemId' => $itemId,
                 'itemName' => $itemName,
-                'indentId' => $indentId,
                 'indentRefNo' => $indentRefNo,
-                'tenderId' => $tenderId,
-                'tenderRefNo' => $tenderRefNo,
-                'offerId' => $offerId,
-                'offerRefNo' => $offerRefNo,
                 'supplierId' => $supplierId,
-                'finalSpecRefNo' => $finalSpecRefNo,
                 'supplierFirmName' => $supplierFirmName,
+                'tenderRefNo' => $tenderRefNo,
+                'offerRefNo' => $offerRefNo,
+                'finalSpecRefNo' => $finalSpecRefNo,
+                'dcRefNo' => $dcRefNo,
+                'contractRefNo' => $contractRefNo,
             ]);
         } catch (UnreadableFileException $e) {
-            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'The uploaded file is unreadable.');
-            return response()->json(['errors' => $e], 422);
+            // If the uploaded file is unreadable, return to the previous page with an error message
+            return redirect()->to('admin/import-contract-spec-data-index')->with('error', 'The uploaded file is unreadable.');
         } catch (SheetNotFoundException $e) {
-            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
-            return response()->json(['errors' => $e], 422);
+            // If the sheet is not found in the Excel file, return to the previous page with an error message
+            return redirect()->to('admin/import-contract-spec-data-index')->with('error', 'Sheet not found in the Excel file.');
         } catch (\Exception $e) {
-            return response()->json(['errors' => $e], 422);
-            // return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
+            // If an exception occurs, return to the previous page with an error message
+            return redirect()->to('admin/import-contract-spec-data-index')->with('error', 'Error importing Excel file: ' . $e->getMessage());
         }
     }
 
-    public function saveDraftContractSpecData(Request $request)
+    public function saveContractSpecData(Request $request)
     {
         try {
-            DB::beginTransaction();
-
+            // Extract data from request
             $jsonData = $request->input('editedData');
-            $itemId = $request->input('item-id');
-            $indentId = $request->input('indent-id');
-            $tenderId = $request->input('tender-id');
-            $tenderId = $request->input('tender-id');
+            $indentRefNo = $request->input('indentRefNo');
+            $tenderRefNo = $request->input('tenderRefNo');
+            $offerRefNo = $request->input('offerRefNo');
             $finalSpecRefNo = $request->input('finalSpecRefNo');
-            $supplierId = $request->input('supplier-id');
+            $dcRefNo = $request->input('dcRefNo');
+            $contractRefNo = $request->input('contractRefNo');
 
-            $indentParameterGroups = ParameterGroup::where('item_id', $itemId)->get();
-            $databaseParameterGroupCount = $indentParameterGroups->count();
+            // Retrieve all ComparisonRemark records with the same contract_ref_no
+            $existingRemarks = ComparisonRemark::where('contract_ref_no', $contractRefNo)->get();
 
-            $parameterGroupCount = count($jsonData);
-
-            if ($parameterGroupCount !== $databaseParameterGroupCount) {
-                DB::rollBack();
-                return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Parameter group count mismatch. Please check the Excel File.');
+            // Delete each existing remark
+            foreach ($existingRemarks as $existingRemark) {
+                $existingRemark->delete();
             }
 
-            foreach ($indentParameterGroups as $indentParameterGroup) {
-                $parameterGroupId = $indentParameterGroup->id;
+            $remarks = [];
 
-                AssignParameterValue::where('reference_no', $finalSpecRefNo)
-                    ->where('parameter_group_id', $parameterGroupId)
-                    ->delete();
-            }
-
-            $flag = true;
-
-            foreach ($jsonData as $groupName => $parameterGroup) {
-
-                $flag = false;
-
-                foreach ($indentParameterGroups as $indentParameterGroup) {
-                    if ($groupName == $indentParameterGroup->name) {
-                        $flag = true;
-                        break;
+            // Iterate through the array of specifications
+            foreach ($jsonData as $section => $specifications) {
+                // Check if a "remarks" key is set for each specification
+                foreach ($specifications as $key => $spec) {
+                    if (Arr::exists($spec, 'remarks')) {
+                        // Add the remark to the $remarks array
+                        $remarks[] = $spec['remarks'];
                     }
                 }
             }
 
-            if ($flag) {
-                $tableName = 'assign_parameter_values';
-                foreach ($indentParameterGroups as $indentParameterGroup) {
-                    $parameterGroupId = $indentParameterGroup->id;
+            // Filter the $remarks array to remove the null values
+            $filteredRemarks = array_filter($remarks, function ($value) {
+                return $value !== null;
+            });
 
-                    foreach ($jsonData as $groupName => $parameterGroup) {
-                        if ($indentParameterGroup->name == $groupName) {
-                            foreach ($parameterGroup as $pGroup) {
-                                $newParameter = new AssignParameterValue();
-                                $newParameter->parameter_group_id = $parameterGroupId;
-                                $newParameter->parameter_name = $pGroup['parameter_name'];
-                                $newParameter->parameter_value = $pGroup['parameter_value'];
-                                $newParameter->doc_type_id = 6;
-                                $newParameter->reference_no = $finalSpecRefNo;
-                                $newParameter->remarks = $pGroup['remarks'];
-
-                                $newParameter->save();
-                            }
-                        }
-                    }
-                }
-
-                DB::commit();
-                return redirect()->to('admin/FinalSpec/view')->with('success', 'Final Spec\'s file saved successfully.');
-            } else {
-                DB::rollBack();
-                return redirect()->to('admin/import-final-spec-data-index')->with('error', 'Parameter group Name mismatch. Please check the Excel File.');
+            // Create an HTML ordered list using the $filteredRemarks array
+            $htmlList = '<ol>';
+            foreach ($filteredRemarks as $remark) {
+                $htmlList .= '<li>' . $remark . '</li>';
             }
+            $htmlList .= '</ol>';
+
+            // Create a new ComparisonRemark and save it
+            $comparisonRemark = new ComparisonRemark;
+            $comparisonRemark->indent_ref_no = $indentRefNo;
+            $comparisonRemark->tender_ref_no = $tenderRefNo;
+            $comparisonRemark->offer_ref_no = $offerRefNo;
+            $comparisonRemark->final_spec_ref_no = $finalSpecRefNo;
+            $comparisonRemark->draft_contract_ref_no = $dcRefNo;
+            $comparisonRemark->contract_ref_no = $contractRefNo;
+            $comparisonRemark->remarks = $htmlList;
+            $comparisonRemark->save();
+
+            // Return a success message
+            return redirect()->to('admin/contract/view')->with('success', 'Contract remarks saved successfully.');
         } catch (\Exception $e) {
-            DB::rollBack();
+            // Log the error
             \Log::error('Error saving data: ' . $e->getMessage());
 
-            return redirect()->to('admin/import-supplier-spec-data-index')->with('error', 'Error saving data. ' . $e->getMessage());
+            // Return an error message
+            return redirect()->to('admin/import-contract-spec-data-index')->with('error', 'Error saving data. ' . $e->getMessage());
         }
     }
 }

@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'Import Draft Contract Spec')
+@section('title', 'Import Contract Spec')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
@@ -15,7 +15,7 @@
 @endpush
 
 @section('main_menu', 'Excel Files')
-@section('active_menu', 'Import Draft Contract Spec')
+@section('active_menu', 'Import Contract Spec')
 
 @section('content')
     @if (session('status'))
@@ -37,58 +37,68 @@
     @endif
 
     <div class="card shadow-lg" style="background-color: darkseagreen;">
-        <form id="import-draft-contract-spec-data-form" method="post"
-            action="{{ url('admin/import-draft-contract-spec-data') }}" accept-charset="utf-8"
-            enctype="multipart/form-data">
+        <form id="import-contract-spec-data-form" method="post" action="{{ url('admin/import-contract-spec-data') }}"
+            accept-charset="utf-8" enctype="multipart/form-data">
             @csrf
             <div class="card-header p-5 pb-3" style="background-color: #b6e9b6 !important;">
                 <div class="f-18">
                     <div class="row mb-3">
                         <div class="col-md-3">
+                            <label for="contractRefNo">Contract Reference Number:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <span id="contractRefNoDisplay" class="text-display fw-bold text-danger"></span>
+                            <span class="text-danger fw-bold">{{ $contractData['reference_no'] }}</span>
+                            <input type="hidden" name="contractRefNo" id="contractRefNo" class="dc-ref-no"
+                                value="{{ $contractData['reference_no'] }}" readonly>
+                        </div>
+                        <div class="col-md-3">
                             <label for="dcRefNo">Draft Contract Reference Number:</label>
                         </div>
                         <div class="col-md-3">
                             <span id="dcRefNoDisplay" class="text-display fw-bold text-danger"></span>
-                            <span class="text-danger fw-bold">{{ $dcData['reference_no'] }}</span>
+                            <span class="text-danger fw-bold">{{ $contractData['draft_contract_reference_no'] }}</span>
                             <input type="hidden" name="dcRefNo" id="dcRefNo" class="dc-ref-no"
-                                value="{{ $dcData['reference_no'] }}" readonly>
+                                value="{{ $contractData['draft_contract_reference_no'] }}" readonly>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-3">
                             <label for="finalSpecRefNo">Final Spec Reference Number:</label>
                         </div>
                         <div class="col-md-3">
                             <span id="finalSpecRefNoDisplay" class="text-display fw-bold text-danger"></span>
-                            <span class="text-danger fw-bold">{{ $dcData['final_spec_reference_no'] }}</span>
+                            <span class="text-danger fw-bold">{{ $contractData['final_spec_reference_no'] }}</span>
                             <input type="hidden" name="finalSpecRefNo" id="finalSpecRefNo" class="final-spec-ref-no"
-                                value="{{ $dcData['final_spec_reference_no'] }}" readonly>
+                                value="{{ $contractData['final_spec_reference_no'] }}" readonly>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-md-3">
                             <label for="offerRefNo">Offer Reference Number:</label>
                         </div>
                         <div class="col-md-3">
                             <span id="offerRefNoDisplay" class="text-display fw-bold text-danger"></span>
-                            <span class="text-danger fw-bold">{{ $dcData['offer_reference_no'] }}</span>
+                            <span class="text-danger fw-bold">{{ $contractData['offer_reference_no'] }}</span>
                             <input type="hidden" name="offerRefNo" id="offerRefNo" class="offer-ref-no"
-                                value="{{ $dcData['offer_reference_no'] }}" readonly>
+                                value="{{ $contractData['offer_reference_no'] }}" readonly>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-3">
                             <label for="indentRefNo">Indent Reference Number:</label>
                         </div>
                         <div class="col-md-3">
                             <span id="indentRefNoDisplay" class="text-display fw-bold text-danger"></span>
-                            <span class="text-danger fw-bold">{{ $dcData['indent_reference_no'] }}</span>
+                            <span class="text-danger fw-bold">{{ $contractData['indent_reference_no'] }}</span>
                             <input type="hidden" name="indentRefNo" id="indentRefNo" class="indent-ref-no"
-                                value="{{ $dcData['indent_reference_no'] }}" readonly>
+                                value="{{ $contractData['indent_reference_no'] }}" readonly>
                         </div>
                         <div>
                             <input type="hidden" name="itemId" id="itemId" class="indent-ref-no"
-                                value="{{ $dcData['item_id'] }}" readonly>
+                                value="{{ $contractData['item_id'] }}" readonly>
                             <input type="hidden" name="itemTypeId" id="itemTypeId" class="indent-ref-no"
-                                value="{{ $dcData['item_type_id'] }}" readonly>
+                                value="{{ $contractData['item_type_id'] }}" readonly>
                             <input type="hidden" name="supplierId" id="supplierId" class="indent-ref-no"
-                                value="{{ $dcData['supplier_id'] }}" readonly>
+                                value="{{ $contractData['supplier_id'] }}" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -121,5 +131,5 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- Developer's JS file for brand page -->
-    {{-- @include('backend.excel-files.draft-contract-index-js') --}}
+    {{-- @include('backend.excel-files.contract-index-js') --}}
 @endpush

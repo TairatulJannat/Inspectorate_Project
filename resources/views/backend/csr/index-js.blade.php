@@ -174,7 +174,7 @@
                         html += '</tr>';
                     });
 
-                    html += '</tbody></table></div></div>'; // Add this line
+                    html += '</tbody></table></div></div>';
                 });
 
                 html += '</div></div>';

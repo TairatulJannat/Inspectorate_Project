@@ -36,11 +36,11 @@
         </div>
     @endif
 
-    <div class="card" style="background-color: darkseagreen;">
+    <div class="card shadow-lg" style="background-color: darkseagreen;">
         <form id="import-supplier-spec-data-form" method="POST" action="{{ url('admin/import-supplier-spec-data') }}"
             accept-charset="utf-8" enctype="multipart/form-data">
             @csrf
-            <div class="card-header p-5 pb-0" style="background-color: darkseagreen !important;">
+            <div class="card-header p-5 pb-0" style="background-color: #b6e9b6  !important;">
                 <div class="row">
                     <input type="hidden" name="offerRefNo" id="offerRefNo" class="offer-ref-no">
                     <div class="col-md-2 mt-2">
@@ -156,11 +156,12 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="background-color: #b6e9b6  !important;">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
-                            <label for="file" class="form-label mb-2 text-white f-22">Choose Excel/CSV File:</label>
+                            <label for="file" class="form-label mb-2 f-20 fw-bold bg-success p-1 required-field">Choose
+                                Excel/CSV File:</label>
                             <input class="form-control" type="file" id="file" name="file">
                             @error('file')
                                 <div class="invalid-feedback d-block f-14">{{ $message }}</div>
