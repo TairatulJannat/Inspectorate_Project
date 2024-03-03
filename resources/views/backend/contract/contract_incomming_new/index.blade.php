@@ -33,25 +33,41 @@
         .badge-secondary {
             background-color: #1B4C43 !important;
         }
-        .dt-buttons .buttons-html5{
+
+        .dt-buttons .buttons-html5 {
             background-color: #A1B53A !important;
-            border:none;
-        }
-        .btn-danger{
-            background-color: #b53f4b !important;
+            border: none;
         }
 
+        .btn-danger {
+            background-color: #b53f4b !important;
+        }
     </style>
 @endpush
 @section('main_menu', 'Contract (New Arrival)')
 @section('active_menu', 'All Data')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="panel-heading">
         <div class="invoice_date_filter" style="">
-
         </div>
-
     </div>
     <br>
 
@@ -64,14 +80,13 @@
 
                         <div class="col-9">
                             <a href="{{ route('admin.contract/view') }}" type="button" class="btn btn-success btn-sm">New
-                                Arrival ({{$contractNew}})</a>
+                                Arrival ({{ $contractNew }})</a>
                             <a href="{{ route('admin.contract_approved/view') }}" type="button"
-                                class="btn btn-secondary btn-sm">On Process ({{$contractOnProcess}})</a>
+                                class="btn btn-secondary btn-sm">On Process ({{ $contractOnProcess }})</a>
                             <a href="{{ route('admin.contract/outgoing') }}" type="button"
-                                class="btn btn-info text-white btn-sm">Completed ({{$contractCompleted}})</a>
+                                class="btn btn-info text-white btn-sm">Completed ({{ $contractCompleted }})</a>
                             <a href="{{ route('admin.contract_dispatch/view') }}" type="button"
-                                class="btn btn-danger btn-sm">Dispatch ({{$contractDispatch}})</a>
-
+                                class="btn btn-danger btn-sm">Dispatch ({{ $contractDispatch }})</a>
                         </div>
                         <div>
                             <h6 class="card-title">Total: <span class="badge badge-secondary" id="total_data"></span></h6>
