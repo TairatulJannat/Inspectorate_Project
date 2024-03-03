@@ -156,7 +156,7 @@
                         $('.yajra-datatable').DataTable().ajax.reload(null, false);
                         toastr.success('Information Saved', 'Saved');
                     }
-                   
+
                     var $active = $('.nav-tabs .nav-link.active');
                     var $next = $active.parent().next().find('.nav-link');
 
@@ -228,6 +228,40 @@
                 }
             });
         })
+        $('#cartItem').on('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Example of getting individual input values
+            var serial_1_value = $('#serial_1').val();
+            var serial_2to4_value = $('#serial_2to4').val();
+            var serial_5_value = $('#serial_5').val();
+            var serial_6_value = $('#serial_6').val();
+            var serial_7_value = $('#serial_7').val();
+            var serial_8_value = $('#serial_8').val();
+            var serial_9_value = $('#serial_9').val();
+            var serial_10_value = $('#serial_10').val();
+            var serial_11_value = $('#serial_11').val();
+            var serial_12_value = $('#serial_12').val();
+            var serial_13_value = $('#serial_13').val();
+
+            // Merge new data with existing data
+            var formData = {
+                serial_1: serial_1_value,
+                serial_2to4: serial_2to4_value,
+                serial_5: serial_5_value,
+                serial_6: serial_6_value,
+                serial_7: serial_7_value,
+                serial_8: serial_8_value,
+                serial_9: serial_9_value,
+                serial_10: serial_10_value,
+                serial_11: serial_11_value,
+                serial_12: serial_12_value,
+                serial_13: serial_13_value
+            };
+
+            saveitem(formData);
+
+        });
 
 
         function disableButton() {
@@ -240,6 +274,22 @@
             var btn = document.getElementById('form_submission_button');
             btn.disabled = false;
             btn.innerText = 'Save'
+        }
+
+
+        function saveitem(formData) {
+            let cart = localStorage.getItem('formData');
+
+            if (cart != null) {
+                cart = JSON.parse(cart);
+                cart.push(formData);
+                localStorage.setItem('formData', JSON.stringify(cart));
+
+            } else {
+                cart = [];
+                cart.push(formData);
+                localStorage.setItem('formData', JSON.stringify(cart));
+            }
         }
     </script>
     <script>

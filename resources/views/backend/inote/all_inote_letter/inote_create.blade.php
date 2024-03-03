@@ -162,9 +162,10 @@
                         <td> <input type="text" id="serial_10" name="serial_10" class="form-control"></td>
                         <td> <input type="text" id="serial_11" name="serial_11" class="form-control"></td>
                         <td> <input type="text" id="serial_12" name="serial_12" class="form-control"></td>
-                        <td rowspan="2"> <input type="text" id="serial_13" name="serial_13"
-                                class="form-control">
-                           
+                        <td rowspan="2">
+                            <input type="text" id="serial_13" name="serial_13" class="form-control">
+                            <a href="#" class="btn btn-success m-2" id="cartItem">+</a>
+
                         </td>
                     </tr>
                     <tr>
@@ -188,7 +189,8 @@
 
         <div class="footer-box d-flex justify-content-center mt-3 pb-2">
 
-            <button type="submit" class="btn btn-success px-4 py-3" id="form_submission_button"><b>Save & Continue</b></button>
+            <button type="submit" class="btn btn-success px-4 py-3" id="form_submission_button"><b>Save &
+                    Continue</b></button>
         </div>
     </form>
 </div>
