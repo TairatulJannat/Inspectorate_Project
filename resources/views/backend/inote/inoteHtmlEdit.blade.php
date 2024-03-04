@@ -113,7 +113,7 @@
                     if ($next.length > 0) {
                         $next.tab('show');
                     }
-                   
+
                 },
                 error: function(response) {
                     enableeButton()
@@ -162,7 +162,7 @@
                     if ($next.length > 0) {
                         $next.tab('show');
                     }
-                   
+
                 },
                 error: function(response) {
                     enableeButton()
@@ -209,7 +209,7 @@
                     if ($next.length > 0) {
                         $next.tab('show');
                     }
-                   
+
                 },
                 error: function(response) {
                     enableeButton()
@@ -259,10 +259,10 @@
                         // Iterate over the validation errors and display them
                         $.each(response.responseJSON.errors, function(key, value) {
 
-                            var errorSpanId =  key + '_error';
+                            var errorSpanId = key + '_error';
 
                             $('.' + errorSpanId).text(value[
-                            0]); // Assuming you want to display only the first error
+                                0]); // Assuming you want to display only the first error
                         });
                     }
 
@@ -306,10 +306,10 @@
                         // Iterate over the validation errors and display them
                         $.each(response.responseJSON.errors, function(key, value) {
 
-                            var errorSpanId =  key + '_error';
+                            var errorSpanId = key + '_error';
 
                             $('.' + errorSpanId).text(value[
-                            0]); // Assuming you want to display only the first error
+                                0]); // Assuming you want to display only the first error
                         });
                     }
 
@@ -351,10 +351,10 @@
                         // Iterate over the validation errors and display them
                         $.each(response.responseJSON.errors, function(key, value) {
 
-                            var errorSpanId =  key + '_error';
+                            var errorSpanId = key + '_error';
 
                             $('.' + errorSpanId).text(value[
-                            0]); // Assuming you want to display only the first error
+                                0]); // Assuming you want to display only the first error
                         });
                     }
 
@@ -375,6 +375,88 @@
             btn.disabled = false;
             btn.innerText = 'Save'
         }
+        $('.detailsUpload').click(function(e) {
+            e.preventDefault();
+
+            var inoteLetterDetailsID = $(this).data('detailsid');
+            var noteLetterID = $(this).data('letterid');
+
+            // Initialize an empty object to store the values
+
+            // Iterate over each input element in the form
+            var serial_1_value = $(' #serial_1_' + inoteLetterDetailsID).val();
+            var serial_2to4_value = $('#serial_2to4_' + inoteLetterDetailsID).val();
+            var serial_5_value = $(' #serial_5_' + inoteLetterDetailsID).val();
+            var serial_6_value = $(' #serial_6_' + inoteLetterDetailsID).val();
+            var serial_7_value = $(' #serial_7_' + inoteLetterDetailsID).val();
+            var serial_8_value = $(' #serial_8_' + inoteLetterDetailsID).val();
+            var serial_9_value = $(' #serial_9_' + inoteLetterDetailsID).val();
+            var serial_10_value = $(' #serial_10_' + inoteLetterDetailsID).val();
+            var serial_11_value = $(' #serial_11_' + inoteLetterDetailsID).val();
+            var serial_12_value = $(' #serial_12_' + inoteLetterDetailsID).val();
+            var serial_13_value = $(' #serial_13_' + inoteLetterDetailsID).val();
+            var body_info_value = $(' #body_info_' + inoteLetterDetailsID).val();
+
+            var formData = {
+                inoteLetterDetailsID: inoteLetterDetailsID,
+                noteLetterID: noteLetterID,
+                serial_1: serial_1_value,
+                serial_2to4: serial_2to4_value,
+                serial_5: serial_5_value,
+                serial_6: serial_6_value,
+                serial_7: serial_7_value,
+                serial_8: serial_8_value,
+                serial_9: serial_9_value,
+                serial_10: serial_10_value,
+                serial_11: serial_11_value,
+                serial_12: serial_12_value,
+                serial_13: serial_13_value,
+                body_info: body_info_value
+            };
+
+            // Now formData object contains all the input values
+            console.log(formData);
+
+            // Make your AJAX call with the formData object
+            $.ajax({
+                url: '{{ url('admin/inote_letter_details/update') }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.error) {
+                        error_notification(response.error)
+                        enableeButton()
+                    }
+                    if (response.success) {
+                        // enableeButton()
+                        toastr.success('Information Updated', 'Updated');
+                    }
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                },
+                error: function(response) {
+                    enableeButton()
+                    clear_error_field();
+                    error_notification('Please fill up the form correctly and try again')
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        // Iterate over the validation errors and display them
+                        $.each(response.responseJSON.errors, function(key, value) {
+
+                            var errorSpanId = key + '_error';
+
+                            $('.' + errorSpanId).text(value[
+                                0]); // Assuming you want to display only the first error
+                        });
+                    }
+
+
+                }
+            });
+        });
     </script>
     <script>
         $(document).ready(function() {

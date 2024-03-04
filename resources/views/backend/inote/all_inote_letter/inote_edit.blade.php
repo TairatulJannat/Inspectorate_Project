@@ -159,45 +159,58 @@
                     </tr>
                     @foreach ($inoteLetterDetails as $details)
                         <tr>
-                            <td rowspan="2"> <input type="text" id="serial_1" name="serial_1"
-                                    class="form-control" value="{{ $details->serial_1 ? $details->serial_1 : '' }}">
+                            <td rowspan="2">
+                                <input type="text" id="serial_1_{{ $details->id }}"
+                                    name="serial_1_{{ $details->id }}" class="form-control"
+                                    value="{{ $details->serial_1 ? $details->serial_1 : '' }}">
                             </td>
                             <td rowspan="2" colspan="3">
-                                <textarea id="serial_2to4" name="serial_2to4" class="form-control">{{ $details->serial_2to4 ? $details->serial_2to4 : '' }}</textarea>
+                                <textarea id="serial_2to4_{{ $details->id }}" name="serial_2to4_{{ $details->id }}" class="form-control">{{ $details->serial_2to4 ? $details->serial_2to4 : '' }}</textarea>
                             </td>
 
-                            <td> <input type="text" id="serial_5" name="serial_5" class="form-control"
+                            <td> <input type="text" id="serial_5_{{ $details->id }}"
+                                    name="serial_5_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_5 ? $details->serial_5 : '' }}"></td>
-                            <td> <input type="text" id="serial_6" name="serial_6" class="form-control"
+                            <td> <input type="text" id="serial_6_{{ $details->id }}"
+                                    name="serial_6_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_6 ? $details->serial_6 : '' }}"></td>
-                            <td> <input type="text" id="serial_7" name="serial_7" class="form-control"
+                            <td> <input type="text" id="serial_7_{{ $details->id }}"
+                                    name="serial_7_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_7 ? $details->serial_7 : '' }}"></td>
-                            <td> <input type="text" id="serial_8" name="serial_8" class="form-control"
+                            <td> <input type="text" id="serial_8_{{ $details->id }}"
+                                    name="serial_8_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_8 ? $details->serial_8 : '' }}"></td>
-                            <td> <input type="text" id="serial_9" name="serial_9" class="form-control"
+                            <td> <input type="text" id="serial_9_{{ $details->id }}"
+                                    name="serial_9_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_9 ? $details->serial_9 : '' }}"></td>
-                            <td> <input type="text" id="serial_10" name="serial_10" class="form-control"
+                            <td> <input type="text" id="serial_10_{{ $details->id }}"
+                                    name="serial_10_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_10 ? $details->serial_10 : '' }}"></td>
-                            <td> <input type="text" id="serial_11" name="serial_11" class="form-control"
+                            <td> <input type="text" id="serial_11_{{ $details->id }}"
+                                    name="serial_11_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_11 ? $details->serial_11 : '' }}"></td>
-                            <td> <input type="text" id="serial_12" name="serial_12" class="form-control"
+                            <td> <input type="text" id="serial_12_{{ $details->id }}"
+                                    name="serial_12_{{ $details->id }}" class="form-control"
                                     value="{{ $details->serial_12 ? $details->serial_12 : '' }}"></td>
-                            <td rowspan="2"> <input type="text" id="serial_13" name="serial_13"
-                                    class="form-control" value="{{ $details->serial_13 ? $details->serial_13 : '' }}">
-                                    <br>
-                                    <a href="" class="btn btn-info"><i class="fa fa-check-square-o" aria-hidden="true"></i></a>
-
+                            <td rowspan="2">
+                                <input type="text" id="serial_13_{{ $details->id }}"
+                                    name="serial_13_{{ $details->id }}" class="form-control"
+                                    value="{{ $details->serial_13 ? $details->serial_13 : '' }}">
+                                <br>
+                                <a href="#" class="detailsUpload btn btn-danger m-2"
+                                     data-detailsID='{{ $details->id }}'
+                                    data-letterID="{{ $inoteLetter->id }}">
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                </a>
                             </td>
                         </tr>
                         <tr>
-
                             <td colspan="8">
-                                <textarea id="body_info" name="body_info" class="form-control"> {{ $details->body_info ? $details->body_info : '' }}</textarea>
+                                <textarea id="body_info_{{ $details->id }}" name="body_info_{{ $details->id }}" class="form-control">{{ $details->body_info ? $details->body_info : '' }}</textarea>
                             </td>
-
-
                         </tr>
                     @endforeach
+
 
 
 

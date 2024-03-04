@@ -193,8 +193,8 @@
                 enableeButton()
                 clear_error_field();
                 error_notification('Please fill up the form correctly and try again')
-                $('#error_sender').text(response.responseJSON.errors.sender);
-                $('#error_reference_no').text(response.responseJSON.errors.reference_no);
+                // $('#error_sender').text(response.responseJSON.errors.sender);
+                // $('#error_reference_no').text(response.responseJSON.errors.reference_no);
                 $('#error_offer_rcv_ltr_dt').text(response.responseJSON.errors
                     .offer_rcv_ltr_dt);
                 $('#error_item_type_id').text(response.responseJSON.errors

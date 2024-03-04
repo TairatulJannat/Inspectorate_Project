@@ -571,7 +571,7 @@ class InoteController extends Controller
         $dpl_15 = InoteDPL::where("reference_no", $id)->first();
         $anx = InoteDPL::where("reference_no", $id)->first();
 
-        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx','inoteLetterDetails'));
+        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx', 'inoteLetterDetails'));
     }
 
     public function InoteDeviation(Request $request)
@@ -647,18 +647,7 @@ class InoteController extends Controller
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
-        $inote->serial_1 = $request->serial_1;
-        $inote->serial_2to4 = $request->serial_2to4;
-        $inote->serial_5 = $request->serial_5;
-        $inote->serial_6 = $request->serial_6;
-        $inote->serial_7 = $request->serial_7;
-        $inote->serial_8 = $request->serial_8;
-        $inote->serial_9 = $request->serial_9;
-        $inote->serial_10 = $request->serial_10;
-        $inote->serial_11 = $request->serial_11;
-        $inote->serial_12 = $request->serial_12;
-        $inote->serial_13 = $request->serial_13;
-        $inote->body_info = $request->body_info;
+
         $inote->station = $request->station;
         $inote->date = $request->date;
         $inote->update();
@@ -668,8 +657,6 @@ class InoteController extends Controller
 
     public function UpdateInoteDeviationLetter(Request $request)
     {
-
-
 
         $inote = InoteDeviation::findOrFail($request->deviation_id);
         $inote->file_no = $request->file_no;
@@ -737,5 +724,37 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
+    }
+
+    public function UpdateInoteLetterDetails(Request $request)
+    {
+
+        try {
+            $inote_letter_details = InoteLetterDetails::find($request->inoteLetterDetailsID);
+
+            // Check if the InoteLetterDetails object exists
+            if (!$inote_letter_details) {
+                return response()->json(['error' => 'InoteLetterDetails not found'], 404);
+            }
+            // Update each attribute individually
+            $inote_letter_details->serial_1 = $request->serial_1;
+            $inote_letter_details->serial_2to4 = $request->serial_2to4;
+            $inote_letter_details->serial_5 = $request->serial_5;
+            $inote_letter_details->serial_6 = $request->serial_6;
+            $inote_letter_details->serial_7 = $request->serial_7;
+            $inote_letter_details->serial_8 = $request->serial_8;
+            $inote_letter_details->serial_9 = $request->serial_9;
+            $inote_letter_details->serial_10 = $request->serial_10;
+            $inote_letter_details->serial_11 = $request->serial_11;
+            $inote_letter_details->serial_12 = $request->serial_12;
+            $inote_letter_details->serial_13 = $request->serial_13;
+            $inote_letter_details->body_info = $request->body_info;
+            // Save the changes
+            $inote_letter_details->update();
+            return response()->json(['success' => 'Successfully Updated']);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
