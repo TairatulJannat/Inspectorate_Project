@@ -1,6 +1,6 @@
 @extends('backend.app')
 
-@section('title', 'Indent Parameters')
+@section('title', 'Final Spec Parameters')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
@@ -27,9 +27,9 @@
         .card-body {}
 
         /* .table thead {
-                                                                                                                                                background-color: #1B4C43 !important;
-                                                                                                                                                border-radius: 10px !important;
-                                                                                                                                            } */
+                                                                                                                                                                            background-color: #1B4C43 !important;
+                                                                                                                                                                            border-radius: 10px !important;
+                                                                                                                                                                        } */
 
         .table thead tr th {
             color: #ffff !important;
@@ -89,15 +89,15 @@
         }
 
         /* .header {
-                        background-color: #006A4E;
-                        color: #F5F7FB;
-                    } */
+                                                    background-color: #006A4E;
+                                                    color: #F5F7FB;
+                                                } */
     </style>
 @endpush
 
-@section('main_menu', 'Indent Parameters')
+@section('main_menu', 'Final Spec Parameters')
 
-@section('active_menu', 'Indent Spec')
+@section('active_menu', 'Final Spec')
 
 @section('content')
     <div class="row bg-body p-3 m-3" style="border-radius:8px">
@@ -110,7 +110,7 @@
         </div>
     </div>
 
-    @include('backend.item-parameters.edit')
+    @include('backend.finalSpec.spec-edit')
 
 @endsection
 
@@ -125,18 +125,18 @@
         $(document).ready(function() {
             var item_id = {{ $item_id }}
             var item_type_id = {{ $item_type_id }}
-            var indentRefNo = {!! json_encode($indentRefNo) !!};
+            var finalSpecRefNo = {!! json_encode($finalSpecRefNo) !!};
 
-            performSearchWithParams(item_id, item_type_id, indentRefNo)
+            performSearchWithParams(item_id, item_type_id, finalSpecRefNo)
 
-            function performSearchWithParams(item_id, item_type_id, indentRefNo) {
+            function performSearchWithParams(item_id, item_type_id, finalSpecRefNo) {
                 $.ajax({
-                    url: "{{ url('admin/assign-parameter-value/show') }}",
+                    url: "{{ url('admin/final-spec/get-spec-data') }}",
                     method: "POST",
                     data: {
                         'item-id': item_id,
                         'item-type-id': item_type_id,
-                        'indentRefNo': indentRefNo,
+                        'finalSpecRefNo': finalSpecRefNo,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),

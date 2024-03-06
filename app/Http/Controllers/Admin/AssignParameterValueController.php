@@ -130,16 +130,19 @@ class AssignParameterValueController extends Controller
         $customMessages = [
             'item-type-id.required' => 'Please select an Item Type.',
             'item-id.required' => 'Please select an Item.',
+            'indentRefNo.required' => 'Indent Ref No. is required.',
         ];
 
         $validator = Validator::make($request->all(), [
             'item-type-id' => ['required', 'exists:item_types,id'],
             'item-id' => ['required', 'exists:items,id'],
+            'indentRefNo' => ['required', 'exists:indents,reference_no'],
         ], $customMessages);
 
         if ($validator->passes()) {
             $itemId = $request->input('item-id');
             $itemTypeId = $request->input('item-type-id');
+            $indentRefNo = $request->input('indentRefNo');
 
             $item = Items::find($itemId);
             $itemName = $item ? $item->name : 'Unknown Item';
@@ -149,6 +152,7 @@ class AssignParameterValueController extends Controller
 
             $parameterGroups = ParameterGroup::with('assignParameterValues')
                 ->where('item_id', $itemId)
+                ->where('reference_no', $indentRefNo)
                 ->get();
 
             foreach ($parameterGroups as $parameterGroup) {

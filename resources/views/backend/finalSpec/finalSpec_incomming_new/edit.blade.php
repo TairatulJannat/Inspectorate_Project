@@ -28,7 +28,7 @@
                             <div class="form-group">
                                 <label for="sender">Sender</label>
 
-                                <input type="hidden" value=" {{ $finalspec->id }}" id="editId" name="editId">
+                                <input type="hidden" value=" {{ $finalSpec->id }}" id="editId" name="editId">
 
                                 <select class="form-control " id="sender" name="sender">
 
@@ -36,7 +36,7 @@
 
                                     @foreach ($dte_managments as $dte)
                                         <option value="{{ $dte->id }}"
-                                            {{ $dte->id == $finalspec->sender ? 'selected' : '' }}>{{ $dte->name }}
+                                            {{ $dte->id == $finalSpec->sender ? 'selected' : '' }}>{{ $dte->name }}
 
                                         </option>
                                     @endforeach
@@ -50,7 +50,7 @@
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
                                 <input type="text" class="form-control" id="reference_no" name="reference_no"
-                                    value="{{ $finalspec->reference_no ? $finalspec->reference_no : '' }}">
+                                    value="{{ $finalSpec->reference_no ? $finalSpec->reference_no : '' }}">
                                 <span id="error_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                             <div class="form-group">
                                 <label for="reference_date">Final Spec Reference Date</label>
                                 <input type="text" class="form-control" id="reference_date" name="reference_date"
-                                    value="{{ $finalspec->reference_date ? $finalspec->reference_date : '' }} ">
+                                    value="{{ $finalSpec->reference_date ? $finalSpec->reference_date : '' }} ">
                                 <span id="error_reference_date" class="text-danger error_field"></span>
                             </div>
 
@@ -71,7 +71,7 @@
                                 <label for="final_spec_receive_Ltr_dt">Final Spec Receive Date</label>
                                 <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
                                     name="final_spec_receive_Ltr_dt"
-                                    value="{{ $finalspec->final_spec_receive_Ltr_dt ? $finalspec->final_spec_receive_Ltr_dt : '' }} ">
+                                    value="{{ $finalSpec->final_spec_receive_Ltr_dt ? $finalSpec->final_spec_receive_Ltr_dt : '' }} ">
                                 <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
 
                                     @foreach ($offer_reference_numbers as $offer_reference_number)
                                         <option value="{{ $offer_reference_number->reference_no }}"
-                                            {{ $offer_reference_number->reference_no == $finalspec->offer_reference_no ? 'selected' : '' }}>
+                                            {{ $offer_reference_number->reference_no == $finalSpec->offer_reference_no ? 'selected' : '' }}>
                                             {{ $offer_reference_number->reference_no }}</option>
                                     @endforeach
 
@@ -101,11 +101,10 @@
                                 <label for="tender_reference_no">Tender Reference No</label>
                                 <input type="text" id="tender_reference_no" class="form-control"
                                     name="tender_reference_no"
-                                    value="{{ $finalspec->tender_reference_no ? $finalspec->tender_reference_no : '' }}">
+                                    value="{{ $finalSpec->tender_reference_no ? $finalSpec->tender_reference_no : '' }}">
                                 <span id="error_tender_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-
 
                         <div class="col-md-4 d-none">
                             <div class="form-group">
@@ -113,24 +112,22 @@
 
                                 <input type="text" id="indent_reference_no" class="form-control"
                                     name="indent_reference_no"
-                                    value="{{ $finalspec->indent_reference_no ? $finalspec->indent_reference_no : '' }}">
+                                    value="{{ $finalSpec->indent_reference_no ? $finalSpec->indent_reference_no : '' }}">
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
-
                         </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
-
-                                <label for="supplier_id">Suppiler</label>
-
+                                <label for="supplier_id">Supplier</label>
                                 <select class="form-control" id="supplier_id" name="supplier_id">
-                                    @if ($supplier)
-                                        <option
-                                            value="{{ $supplier->id == $finalspec->supplier_id ? $supplier->id : '' }}">
-                                            {{ $supplier->firm_name }} </option>
-                                    @endif
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}"
+                                            {{ $supplier->id == $finalSpec->supplier_id ? 'selected' : '' }}>
+                                            {{ $supplier->firm_name }}
+                                        </option>
+                                    @endforeach
                                 </select>
-
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -144,7 +141,7 @@
                                     <option selected disabled value="">Please Select</option>
                                     @if ($item_types)
                                         <option value="{{ $item_types->id }}"
-                                            {{ $item_types->id == $finalspec->item_type_id ? 'selected' : '' }}>
+                                            {{ $item_types->id == $finalSpec->item_type_id ? 'selected' : '' }}>
                                             {{ $item_types->name }}</option>
                                     @endif
                                 </select>
@@ -162,7 +159,7 @@
                                     {{-- <option value="">Please Select</option> --}}
                                     @if ($item)
                                         <option value="{{ $item->id }}"
-                                            {{ $item->id == $finalspec->item_id ? 'selected' : '' }}>
+                                            {{ $item->id == $finalSpec->item_id ? 'selected' : '' }}>
                                             {{ $item->name }}
                                         </option>
                                     @endif
@@ -181,7 +178,7 @@
                                     <option value="">Please Select Year </option>
                                     @foreach ($fin_years as $fin_year)
                                         <option value={{ $fin_year->id }}
-                                            {{ $fin_year->id == $finalspec->fin_year_id ? 'selected' : '' }}>
+                                            {{ $fin_year->id == $finalSpec->fin_year_id ? 'selected' : '' }}>
                                             {{ $fin_year->year }}
 
                                         </option>
@@ -207,7 +204,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="remark">Remark</label>
-                                <textarea name="remark" id="remark" class="form-control">{{ $finalspec->remark ? $finalspec->remark : '' }}</textarea>
+                                <textarea name="remark" id="remark" class="form-control">{{ $finalSpec->remark ? $finalSpec->remark : '' }}</textarea>
                                 <span id="error_remark" class="text-danger error_field"></span>
                             </div>
                         </div>

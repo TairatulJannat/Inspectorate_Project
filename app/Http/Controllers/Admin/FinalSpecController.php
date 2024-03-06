@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use App\Models\File;
 use App\Models\Items;
 use App\Models\Offer;
 use App\Models\Indent;
@@ -17,14 +18,15 @@ use Illuminate\Http\Request;
 use App\Models\DocumentTrack;
 use App\Models\Dte_managment;
 use App\Models\FinancialYear;
+use App\Models\ParameterGroup;
+use App\Models\SupplierSpecData;
+use Illuminate\Support\Facades\DB;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use App\Models\AssignParameterValue;
-use App\Models\File;
-use App\Models\SupplierSpecData;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class FinalSpecController extends Controller
 {
@@ -150,7 +152,7 @@ class FinalSpecController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -264,35 +266,37 @@ class FinalSpecController extends Controller
 
     public function edit($id)
     {
-        $finalspec = FinalSpec::find($id);
+        $finalSpec = FinalSpec::find($id);
+
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $dte_managments = Dte_managment::where('status', 1)->get();
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        $item_types = Item_type::where('id', $finalspec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
+        $item_types = Item_type::where('id', $finalSpec->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
 
         $item = Items::where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
             ->first();
 
         $fin_years = FinancialYear::all();
-        $supplier=Supplier::where('id', $finalspec->supplier_id)->first();
+
+        $supplierIds = SupplierSpecData::where('offer_reference_no', $finalSpec->offer_reference_no)
+            ->groupBy('supplier_id')
+            ->pluck('supplier_id');
+
+        $suppliers = Supplier::whereIn('id', $supplierIds)->get();
+
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::all();
 
-        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalspec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'supplier', 'offer_reference_numbers'));
-
+        return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalSpec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers'));
     }
 
     public function update(Request $request)
     {
-        // $insp_id = Auth::user()->inspectorate_id;
-        // $sec_id = $request->admin_section;
-
         $data = FinalSpec::findOrFail($request->editId);
-        // $data->insp_id = $insp_id;
-        // $data->sec_id = $sec_id;
+
         $data->sender = $request->sender;
         $data->reference_no = $request->reference_no;
         $data->offer_reference_no = $request->offer_reference_no;
@@ -302,19 +306,108 @@ class FinalSpecController extends Controller
         $data->contract_date = $request->contract_date;
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
-        $data->supplier_id = $request->supplier_id;
         $data->fin_year_id = $request->fin_year_id;
-
-
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;
         $data->created_at = Carbon::now()->format('Y-m-d');
         $data->updated_at = Carbon::now()->format('Y-m-d');
+
+        if ($data->supplier_id == null && $request->supplier_id == null) {
+            $data->supplier_id = null;
+            dd('Please select a supplier.');
+            // No change needed
+        } elseif ($data->supplier_id != null && $request->supplier_id == null) {
+            dd('Please select a supplier.');
+            // No change needed
+        } elseif ($data->supplier_id == null && $request->supplier_id != null && $request->offer_reference_no != null) {
+            // Begin a database transaction
+            DB::beginTransaction();
+
+            try {
+                // Fetch SupplierSpecData based on the request
+                $supplierSpecData = SupplierSpecData::where('supplier_id', $request->supplier_id)
+                    ->where('offer_reference_no', $request->offer_reference_no)
+                    ->get();
+
+                // If matching data is found, save it to AssignParameterValue table
+                if ($supplierSpecData->isNotEmpty()) {
+                    foreach ($supplierSpecData as $supplierSpecSingleData) {
+                        $assignParameterValue = new AssignParameterValue();
+                        $assignParameterValue->parameter_group_id = $supplierSpecSingleData->parameter_group_id;
+                        $assignParameterValue->parameter_name = $supplierSpecSingleData->parameter_name;
+                        $assignParameterValue->parameter_value = $supplierSpecSingleData->parameter_value;
+                        $assignParameterValue->doc_type_id = 6;
+                        $assignParameterValue->reference_no = $request->offer_reference_no;
+                        $assignParameterValue->save();
+                    }
+                } else {
+                    // No matching data found
+                }
+
+                // Update supplier_id
+                $data->supplier_id = $request->supplier_id;
+
+                // Commit the transaction
+                DB::commit();
+            } catch (\Exception $e) {
+                // Rollback the transaction in case of an error
+                DB::rollback();
+
+                // Handle the error
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        } elseif ($data->supplier_id == $request->supplier_id) {
+            // dd($data->supplier_id, $request->supplier_id, 'hello in 3');
+            // No change needed
+        } elseif ($data->supplier_id != $request->supplier_id && $request->offer_reference_no != null) {
+            // Begin a database transaction
+            DB::beginTransaction();
+            try {
+                // Delete previously entered data with reference_no and doc_type = 6
+                AssignParameterValue::where('reference_no', $request->offer_reference_no)
+                    ->where('doc_type_id', 6)
+                    ->delete();
+
+                // Fetch new data based on the request
+                $supplierSpecData = SupplierSpecData::where('supplier_id', $request->supplier_id)
+                    ->where('offer_reference_no', $request->offer_reference_no)
+                    ->get();
+
+                if ($supplierSpecData->isNotEmpty()) {
+                    // Enter new data
+                    foreach ($supplierSpecData as $supplierSpecSingleData) {
+                        $assignParameterValue = new AssignParameterValue();
+                        $assignParameterValue->parameter_group_id = $supplierSpecSingleData->parameter_group_id;
+                        $assignParameterValue->parameter_name = $supplierSpecSingleData->parameter_name;
+                        $assignParameterValue->parameter_value = $supplierSpecSingleData->parameter_value;
+                        $assignParameterValue->doc_type_id = 6;
+                        $assignParameterValue->reference_no = $request->offer_reference_no;
+                        $assignParameterValue->save();
+                    }
+                } else {
+                    // No matching data found
+                }
+
+                // Update supplier_id
+                $data->supplier_id = $request->supplier_id;
+
+                // Commit the transaction
+                DB::commit();
+            } catch (\Exception $e) {
+                // Rollback the transaction in case of an error
+                DB::rollback();
+
+                // Handle the error
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        }
+
         $data->save();
 
         //Multipule File Upload in files table
         $save_id = $data->id;
+
         if ($save_id) {
             $this->fileController->SaveFile($data->insp_id, $data->sec_id, $request->file_name, $request->file, 6,  $request->reference_no);
         }
@@ -406,7 +499,7 @@ class FinalSpecController extends Controller
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $doc_type_id = 6; //...... 5 for indent from offers table doc_serial.
         $doc_ref_id = $request->doc_ref_id;
-        $doc_reference_number =htmlspecialchars_decode($request->doc_reference_number);
+        $doc_reference_number = htmlspecialchars_decode($request->doc_reference_number);
         $remarks = $request->remarks;
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = FinalSpec::where('reference_no', $doc_reference_number)->pluck('sec_id')->first();
@@ -466,7 +559,7 @@ class FinalSpecController extends Controller
         $offer = Offer::where('reference_no', $offerReferenceNo)->first();
         $item = Items::where('id', $offer->item_id)->first();
         $item_type = Item_type::where('id', $offer->item_type_id)->first();
-        // dd($item);
+
         $tender_reference_no = Tender::where('reference_no', $offer->tender_reference_no)->first();
 
         $indent_reference_no = Indent::where('reference_no', $offer->indent_reference_no)->first();
@@ -487,14 +580,83 @@ class FinalSpecController extends Controller
 
             ->leftJoin('parameter_groups', 'supplier_spec_data.parameter_group_id', '=', 'parameter_groups.id')
             ->where('supplier_id', $finalspec->supplier_id)
-            // ->where('item_id', $offer->item_id)
             ->select('supplier_spec_data.*', 'parameter_groups.name as group_name')
             ->get();
-// dd( $supplierAssignValue);
+
         $groupedData = $supplierAssignValue->groupBy('parameter_group_id');
 
+        return view('backend/finalspec/parameter', compact('supplierAssignValue', 'groupedData'));
+    }
 
+    public function finalSpecParameter(Request $request)
+    {
+        $finalSpec = FinalSpec::where('reference_no', $request->final_spec_ref_no)->first();
+        $finalSpecRefNo = $request->final_spec_ref_no;
+        $item_id = $finalSpec->item_id;
+        $item_type_id = $finalSpec->item_type_id;
 
-        return view('backend/finalspec/parameter', compact('supplierAssignValue','groupedData'));
+        return view('backend.finalSpec.final-spec-parameter', compact('item_id', 'item_type_id', 'finalSpecRefNo'));
+    }
+
+    public function getSpecData(Request $request)
+    {
+        $customMessages = [
+            'item-type-id.required' => 'Please select an Item Type.',
+            'item-id.required' => 'Please select an Item.',
+            'finalSpecRefNo.required' => 'Final Spec Ref No. is required.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'item-type-id' => ['required', 'exists:item_types,id'],
+            'item-id' => ['required', 'exists:items,id'],
+            'finalSpecRefNo' => ['required', 'exists:final_specs,reference_no'],
+        ], $customMessages);
+
+        if ($validator->passes()) {
+            $itemId = $request->input('item-id');
+            $itemTypeId = $request->input('item-type-id');
+            $finalSpecRefNo = $request->input('finalSpecRefNo');
+
+            $finalSpec = FinalSpec::where('reference_no', $finalSpecRefNo)->first();
+
+            $indentRefNo = $finalSpec->indent_reference_no;
+
+            $item = Items::find($itemId);
+            $itemName = $item ? $item->name : 'Unknown Item';
+
+            $itemType = Item_Type::find($itemTypeId);
+            $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
+
+            $parameterGroups = ParameterGroup::with('supplierSpecData')
+                ->where('item_id', $itemId)
+                ->where('reference_no', $indentRefNo)
+                ->get();
+
+            foreach ($parameterGroups as $parameterGroup) {
+                $treeNode = [
+                    'parameterGroupId' => $parameterGroup->id,
+                    'parameterGroupName' => $parameterGroup->name,
+                    'parameterValues' => $parameterGroup->assignParameterValues->toArray(),
+                ];
+
+                $treeViewData[] = $treeNode;
+            }
+
+            return response()->json([
+                'isSuccess' => true,
+                'message' => 'Parameters Data successfully retrieved!',
+                'treeViewData' => $treeViewData,
+                'itemTypeId' => $itemTypeId,
+                'itemTypeName' => $itemTypeName,
+                'itemId' => $itemId,
+                'itemName' => $itemName,
+            ], 200);
+        } else {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => "Validation failed. Please check the inputs!",
+                'error' => $validator->errors()->toArray()
+            ], 200);
+        }
     }
 }

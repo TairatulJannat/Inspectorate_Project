@@ -521,9 +521,10 @@ class IndentController extends Controller
     public function parameter(Request $request)
     {
         $indent = Indent::find($request->indent_id);
+        $indentRefNo = $indent->reference_no;
         $item_id = $indent->item_id;
         $item_type_id = $indent->item_type_id;
-        return view('backend.indent.parameter', compact('item_id', 'item_type_id'));
+        return view('backend.indent.parameter', compact('item_id', 'item_type_id', 'indentRefNo'));
     }
 
     public function parameterPdf(Request $request)
