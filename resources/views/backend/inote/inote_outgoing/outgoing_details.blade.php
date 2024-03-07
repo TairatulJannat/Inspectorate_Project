@@ -154,7 +154,7 @@
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                                 class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                                 Letter</a>
-                            <button class="btn btn-warning text-light ml-2 mt-2" type="button" data-bs-toggle="modal"
+                            <button class="btn btn-warning text-light ml-2 mt-3" type="button" data-bs-toggle="modal"
                                 data-bs-target=".edit-modal-lg">Edit Cover
                                 Letter</button>
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
@@ -162,9 +162,19 @@
                         @endif
 
                         @if ($inote_letter)
-                            <a class="btn btn-success text-light ml-2 mt-2"
+                            <a class="btn btn-success text-light ml-2 mt-3"
                                 href="{{ url('admin/inote/generateinote') }}/{{ $inote_letter->id }}">Genarate I-Note</a>
                         @endif
+                        @if ($deviation)
+                            <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                                href="{{ url('admin/pdf/deviation') }}/{{ $details->reference_no }}">Deviation</a>
+                        @endif
+                        @if ($dpl_15)
+                            <a id="csrBtn" class="btn btn-success mt-3 btn-parameter"
+                                href="{{ url('admin/pdf/dpl15') }}/{{ $details->reference_no }}">DPL-15</a>
+                        @endif
+
+
                     </div>
                 </div>
 
@@ -210,16 +220,21 @@
                                                 </div>
                                                 <div class="d-flex">
 
-                                                    @if (!$inote_letter)
-                                                        <div
-                                                            class="col-md-6 m-2 d-flex justify-content-center align-items-center">
+                                                    {{-- @if (!$inote_letter) --}}
+                                                    <div
+                                                        class="col-md-6 m-2 d-flex justify-content-center align-items-center">
 
-                                                            <a class="btn btn-success text-light ml-2 pt-3"
-                                                                style='height: 60px'
-                                                                href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Approve
+                                                        <a class="btn btn-success text-light ml-2 pt-3" style='height: 60px'
+                                                            href="{{ url('admin/inote/issu_viewpage') }}/{{ $details->id }}">Approve
+                                                            I-Note</a>
+                                                        @if ($inote_letter)
+                                                            <a class="btn btn-primary text-light  ms-2 pt-3"
+                                                                style='height: 60px'"
+                                                                href="{{ url('admin/inote_letter/edit') }}/{{ $details->reference_no }}">Edit
                                                                 I-Note</a>
-                                                        </div>
-                                                    @endif
+                                                        @endif
+                                                    </div>
+                                                    {{-- @endif --}}
 
                                                     @if (!$cover_letter)
                                                         <div

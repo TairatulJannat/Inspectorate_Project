@@ -113,10 +113,8 @@
 
         .outgoing-header {
             background-color: #31D2F2 !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px !important;
+            color: #ffffff;
+
         }
 
         .outgoing-header h3 {
@@ -165,10 +163,7 @@
 
         .dispatch-header {
             background-color: #D22D3D !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px !important;
+            color: #ffffff;
         }
 
         .dispatch-header h3 {
@@ -239,6 +234,7 @@
             background-color: #FBA45A;
             color: #ffff;
         }
+
         #nav-offer-tab:hover {
             background-color: #FBA45A;
             color: #ffff;
@@ -263,6 +259,7 @@
             background-color: #AB8574;
             color: #ffff;
         }
+
         .chart-container {
             position: relative;
             margin: auto;
@@ -280,8 +277,10 @@
             font-size: 24px;
             font-weight: bold;
         }
-        .pichart, .myBarGraph {
-        height: 95%
+
+        .pichart,
+        .myBarGraph {
+            height: 95%
         }
     </style>
 @endpush
@@ -293,17 +292,18 @@
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-indent-tab" type="button"><a class="btn "
-                href="{{ url('admin/adminDashboard') }}">Indent </a></button>
+                    href="{{ url('admin/adminDashboard') }}">Indent ({{ $currentStatusCounts['IndentOverAll'] }}) </a></button>
             <button class="nav-link" id="nav-offer-tab" type="button"><a class="btn "
-                    href="{{ url('admin/multiDashboard/5') }}">Offer </a></button>
-            <button class="nav-link" id="nav-finalSpec-tab"
-                    type="button"><a href="{{ url('admin/multiDashboard/6') }}">Final Spec</a></button>
-            <button class="nav-link" id="nav-draftContract-tab"
-                    type="button"><a href="{{ url('admin/multiDashboard/9') }}">Draft Contract</a></button>
-           <button class="nav-link" id="nav-contact-tab"
-                    type="button"> <a href="{{ url('admin/multiDashboard/10') }}">Contract</a></button>
-           <button class="nav-link" id="nav-iNote-tab"
-                    type="button"> <a href="{{ url('admin/multiDashboard/13') }}">I-Note</a></button>
+                    href="{{ url('admin/multiDashboard/5') }}">Offer ({{ $currentStatusCounts['OfferOverAll'] }}) </a></button>
+            <button class="nav-link" id="nav-finalSpec-tab" type="button"><a
+                    href="{{ url('admin/multiDashboard/6') }}">Final Spec ({{ $currentStatusCounts['FinalSpecOverAll'] }})</a></button>
+            <button class="nav-link" id="nav-draftContract-tab" type="button"><a
+                    href="{{ url('admin/multiDashboard/9') }}">Draft
+                    Contract({{ $currentStatusCounts['DraftContractOverAll'] }})</a></button>
+            <button class="nav-link" id="nav-contact-tab" type="button"> <a
+                    href="{{ url('admin/multiDashboard/10') }}">Contract({{ $currentStatusCounts['ContractOverAll'] }})</a></button>
+            <button class="nav-link" id="nav-iNote-tab" type="button"> <a
+                    href="{{ url('admin/multiDashboard/13') }}">I-Note({{ $currentStatusCounts['I_NoteOverAll'] }})</a></button>
 
         </div>
     </nav>
@@ -312,95 +312,76 @@
             <div class="col-xl-12 box-col-12 des-xl-100 mt-4">
                 <div class="row">
                     <div class="col-xl-3 col-50 box-col-6 des-xl-50">
-                        <div class="card">
-                            <div class="card-header new-arrival-header">
-                                <div class="header-top d-sm-flex align-items-center">
-                                    <h3>New Arrival</h3>
-
-                                </div>
-                            </div>
-                            <div class="card-body new-arrival-body p-0">
-                                <div id="chart-dashbord"></div>
-                                <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelNew }} <sub>{{ $doc_type->doc_name }}</sub></h1>
-
-                                </div>
-                            </div>
-                            <div class="footer new-arrival-footer">
-                                <div class="code-box-copy">
-                                    <a href="{{ route('admin.indent/view') }}">View Details</a>
+                        <div class="card o-hidden border-0">
+                            <div class="bg-primary b-r-4 card-body">
+                                <div class="media static-top-widget">
+                                    <div class="align-self-center text-center"><i data-feather="file-text"
+                                            class="text-light"></i></div>
+                                    <div class="media-body"><span class="m-0">
+                                            <h2>New Arrival</h2>({{ $doc_type->doc_name }})
+                                        </span>
+                                        <h4 class="mb-0 counter">{{ $mulipleModelNew }}</h4><i class="icon-bg"
+                                            data-feather="shopping-bag"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-50 box-col-6 des-xl-50">
-                        <div class="card">
-                            <div class="card-header approved-header">
-                                <div class="header-top d-sm-flex align-items-center">
-                                    <h3>On Process</h3>
 
+
+                        <div class="card o-hidden border-0">
+                            <div class="bg-secondary b-r-4 card-body">
+                                <div class="media static-top-widget">
+                                    <div class="align-self-center text-center"><i data-feather="file-text"
+                                            class="text-light"></i></div>
+                                    <div class="media-body"><span class="m-0">
+                                            <h2>On Process</h2>({{ $doc_type->doc_name }})
+                                        </span>
+                                        <h4 class="mb-0 counter">{{ $mulipleModelOnProcess }}</h4><i class="icon-bg"
+                                            data-feather="message-circle"></i>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-body approved-body p-0">
-                                <div id="chart-dashbord"></div>
-                                <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelOnProcess }} <sub>{{ $doc_type->doc_name }}</sub></h1>
+                        </div>
 
-                                </div>
-                            </div>
-                            <div class="footer approved-footer">
-                                <div class="code-box-copy">
-                                    <a href="{{ route('admin.indent_approved/view') }}">View Details</a>
+                    </div>
+                    <div class="col-xl-3 col-50 box-col-6 des-xl-50">
+
+
+                        <div class="card o-hidden border-0">
+                            <div class="card-body outgoing-header">
+                                <div class="media static-top-widget">
+                                    <div class="align-self-center text-center"><i data-feather="file-text"
+                                            class="text-light"></i></div>
+                                    <div class="media-body"><span class="m-0">
+                                            <h2>Completed</h2>({{ $doc_type->doc_name }})
+                                        </span>
+                                        <h4 class="mb-0 counter">{{ $mulipleModelCompleted }}</h4><i class="icon-bg"
+                                            data-feather="shopping-bag"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-50 box-col-6 des-xl-50">
-                        <div class="card">
-                            <div class="card-header outgoing-header">
-                                <div class="header-top d-sm-flex align-items-center">
-                                    <h3>Completed</h3>
 
-                                </div>
-                            </div>
-                            <div class="card-body outgoing-body p-0">
-                                <div id="chart-dashbord"></div>
-                                <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelCompleted }} <sub>{{ $doc_type->doc_name }}</sub></h1>
 
-                                </div>
-                            </div>
-                            <div class="footer outgoing-footer">
-                                <div class="code-box-copy">
-                                    <a href="{{ route('admin.indent/outgoing') }}">View Details</a>
+                        <div class="card o-hidden border-0">
+                            <div class="card-body dispatch-header">
+                                <div class="media static-top-widget">
+                                    <div class="align-self-center text-center"><i data-feather="file-text"
+                                            class="text-light"></i></div>
+                                    <div class="media-body"><span class="m-0">
+                                            <h2>Dispatch</h2>({{ $doc_type->doc_name }})
+                                        </span>
+                                        <h4 class="mb-0 counter">{{ $mulipleModelDispatch }}</h4><i class="icon-bg"
+                                            data-feather="shopping-bag"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-50 box-col-6 des-xl-50">
-                        <div class="card">
-                            <div class="card-header dispatch-header">
-                                <div class="header-top d-sm-flex align-items-center">
-                                    <h3>Dispatch</h3>
-
-                                </div>
-                            </div>
-                            <div class="card-body dispatch-body p-0">
-                                <div id="chart-dashbord"></div>
-                                <div class="code-box-copy">
-                                    <h1>{{ $mulipleModelDispatch }} <sub>{{ $doc_type->doc_name }}</sub></h1>
-
-                                </div>
-                            </div>
-                            <div class="footer dispatch-footer">
-                                <div class="code-box-copy">
-                                    <a href="{{ route('admin.indent_dispatch/view') }}">View Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
 
                 </div>
             </div>
@@ -429,7 +410,7 @@
                 <div class="col-sm-12 col-xl-6 box-col-6">
                     <div class="card pichart">
                         <div class="card-header text-center pb-0">
-                            <h5 > Current Status</h5>
+                            <h5> Current Status</h5>
                             <hr>
                         </div>
                         <div class="card-body apex-chart">
@@ -590,7 +571,9 @@
                 strokeColor: vihoAdminConfig.primary,
                 highlightFill: "rgba(36, 105, 92, 0.6)",
                 highlightStroke: vihoAdminConfig.primary,
-                data: [35, 59, 80, 81, 56, 55, 40]
+                data: [{{ $mulipleModelNew }}, {{ $mulipleModelOnProcess }}, {{ $mulipleModelCompleted }},
+                    {{ $mulipleModelDispatch }}
+                ],
             }]
         };
 

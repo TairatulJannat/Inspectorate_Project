@@ -1,4 +1,6 @@
 
+
+@if ($anx)
 <div class="inote_boc mb-2">
     <div class="container">
         <form ction="" id='saveAnx' method="POST" enctype="multipart/form-data">
@@ -20,11 +22,15 @@
                 </div>
     
             </div>
-            <a href="#"  class="btn btn-primary px-4 py-3 me-2" id="prevBtn">Previous</a>
-            <button type="submit" class="btn btn-success px-4 py-3" >Save And Continue</button>
+            <button type="submit" class="btn btn-success px-4 py-3" >Update</button>
         </form>
     </div>
 
-    
-
+</div>   
+@else
+<div class="inote_boc mb-2">
+    <div class="p-5">
+        <h4>ANX is not created yet</h4>
+    </div>
 </div>
+@endif

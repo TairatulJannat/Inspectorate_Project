@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CoverLetter;
 use App\Models\InoteLetter;
+use App\Models\InoteLetterDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
@@ -51,28 +52,28 @@ class CoverLetterController extends Controller
     public function coverLetterGeneratePdf($doc_reference_id)
     {
         $cover_letter = CoverLetter::where('doc_reference_id', $doc_reference_id)->first();
-        if ($cover_letter) {
-            $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
-            return $pdf->stream('cover_letter.pdf');
-        }
+        // if ($cover_letter) {
+        //     $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
+        //     return $pdf->stream('cover_letter.pdf');
+        // }
         $fontPath = public_path('fonts');
 
-        // // Create an mPDF object
-        // $mpdf = new Mpdf([
-        //     'fontDir' => [public_path('fonts')],
-        //     'fontdata' => [
-        //         'nikosh' => [
-        //             'R' => 'Nikosh.ttf',
-        //         ],
-        //     ],
-        // ]);
+        // Create an mPDF object
+        $mpdf = new Mpdf([
+            'fontDir' => [public_path('fonts')],
+            'fontdata' => [
+                'nikosh' => [
+                    'R' => 'Nikosh.ttf',
+                ],
+            ],
+        ]);
 
-        // // Add content to the PDF
-        // $html = view('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->render();
-        // $mpdf->WriteHTML($html);
+        // Add content to the PDF
+        $html = view('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->render();
+        $mpdf->WriteHTML($html);
 
         // Output or download the PDF
-        // $mpdf->Output('sample.pdf', 'D');
+        $mpdf->Output('sample.pdf', 'D');
     }
 
     public function edit(Request $request)
@@ -111,8 +112,9 @@ class CoverLetterController extends Controller
     public function GenerateINotePdf($id)
     {
         $inote_letter=InoteLetter::find($id);
+        $inoteLetterDetails = InoteLetterDetails::where("inote_letter_id", $inote_letter->id)->get();
         // $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
         // return $pdf->stream('cover_letter.pdf');
-        return view('backend.pdf.inote', compact('inote_letter'));
+        return view('backend.pdf.inote', compact('inote_letter', 'inoteLetterDetails'));
     }
 }

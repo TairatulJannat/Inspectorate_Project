@@ -154,7 +154,6 @@
                             <textarea id="serial_2to4" name="serial_2to4" class="form-control"></textarea>
                         </td>
 
-
                         <td> <input type="text" id="serial_5" name="serial_5" class="form-control"></td>
                         <td> <input type="text" id="serial_6" name="serial_6" class="form-control"></td>
                         <td> <input type="text" id="serial_7" name="serial_7" class="form-control"></td>
@@ -163,8 +162,11 @@
                         <td> <input type="text" id="serial_10" name="serial_10" class="form-control"></td>
                         <td> <input type="text" id="serial_11" name="serial_11" class="form-control"></td>
                         <td> <input type="text" id="serial_12" name="serial_12" class="form-control"></td>
-                        <td rowspan="2"> <input type="text" id="serial_13" name="serial_13"
-                                class="form-control"></td>
+                        <td rowspan="2">
+                            <input type="text" id="serial_13" name="serial_13" class="form-control">
+                            <a href="#" class="btn btn-success m-2" id="cartItemBtn">+</a>
+
+                        </td>
                     </tr>
                     <tr>
 
@@ -174,8 +176,17 @@
 
 
                     </tr>
+
+
                 </tbody>
+                <tbody id="cartItem">
+
+                </tbody>
+
             </table>
+       
+
+
             <div class="d-flex col-4 mt-3">
                 <p class="">স্টেশন- </p><input type="text" class="form-control me-5" id="station"
                     name="station">
@@ -184,8 +195,9 @@
         </div>
 
         <div class="footer-box d-flex justify-content-center mt-3 pb-2">
-           
-            <button type="submit" class="btn btn-success px-4 py-3" id="form_submission_button"><b>Save & Next</b></button>
+
+            <button type="submit" class="btn btn-success px-4 py-3" id="form_submission_button"><b>Save &
+                    Continue</b></button>
         </div>
     </form>
 </div>
