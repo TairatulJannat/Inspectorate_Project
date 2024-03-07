@@ -724,28 +724,6 @@ class InoteController extends Controller
         return response()->json(['success' => 'Done']);
     }
 
-    // public function INoteANX(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $ins_id = Auth::user()->inspectorate_id;
-    //     $admin_id = Auth::user()->id;
-    //     $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-    //     $desig_position = Designation::where('id', $sender_designation_id)->first();
-    //     $inote_reference_no = $request->inote_reference_no;
-    //     $reciever_desig_id = $request->reciever_desig_id;
-    //     $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
-
-    //     $inote = new Inote();
-
-    //     // 
-    //     //Multipule File Upload in files table
-    //     $save_id = $inote->id;
-    //     if ($save_id) {
-    //         $this->fileController->SaveFile($inote->ins_id, $inote->section_id, $request->file_name, $request->file, 13, $inote->reference_no);
-    //     }
-    //     $inote->save();
-    //     return response()->json(['success' => 'Done']);
-    // }
 
     public function INoteANX(Request $request)
     {
