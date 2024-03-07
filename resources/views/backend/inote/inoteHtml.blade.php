@@ -89,6 +89,9 @@
                 event.preventDefault();
                 disableButton()
                 var formData = new FormData($('#saveInote')[0]);
+                let cart = localStorage.getItem('formData');
+                let items = JSON.parse(cart);
+                formData.append('items', JSON.stringify(items));
 
                 $.ajax({
                     url: "{{ url('admin/inote_letter/store') }}",
@@ -108,6 +111,7 @@
                             enableeButton()
                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
                             toastr.success('Information Saved', 'Saved');
+                            clearCart();
                         }
                         var $active = $('.nav-tabs .nav-link.active');
                         var $next = $active.parent().next().find('.nav-link');
@@ -124,7 +128,7 @@
                         error_notification('Please fill up the form correctly and try again')
                         $('#error_sender').text(response.responseJSON.errors.sender);
                         $('#error_reference_no').text(response.responseJSON.errors
-                        .reference_no);
+                            .reference_no);
                         $('#error_inote_received_date').text(response.responseJSON.errors
                             .inote_received_date);
                         $('#error_inote_reference_date').text(response.responseJSON.errors
@@ -206,6 +210,8 @@
                             enableeButton()
                             $('.yajra-datatable').DataTable().ajax.reload(null, false);
                             toastr.success('Information Saved', 'Saved');
+
+
                         }
                         var $active = $('.nav-tabs .nav-link.active');
                         var $next = $active.parent().next().find('.nav-link');
@@ -279,8 +285,7 @@
              })
             $('#cartItemBtn').on('click', function(event) {
                 event.preventDefault(); // Prevent default form submission
-                $("#cartItem").append('');
-                // Example of getting individual input values
+
                 var serial_1_value = $('#serial_1').val();
                 var serial_2to4_value = $('#serial_2to4').val();
                 var serial_5_value = $('#serial_5').val();
@@ -292,6 +297,7 @@
                 var serial_11_value = $('#serial_11').val();
                 var serial_12_value = $('#serial_12').val();
                 var serial_13_value = $('#serial_13').val();
+                var body_info_value = $('#body_info').val();
 
                 // Merge new data with existing data
                 var formData = {
@@ -305,7 +311,8 @@
                     serial_10: serial_10_value,
                     serial_11: serial_11_value,
                     serial_12: serial_12_value,
-                    serial_13: serial_13_value
+                    serial_13: serial_13_value,
+                    body_info: body_info_value
                 };
 
                 saveitem(formData);
@@ -316,10 +323,9 @@
                 event.preventDefault(); // Prevent default form submission
 
                 let id = $(this).data("id");
-                alert(id);
                 $("#cartItem").append('');
-                // delItem(id)
-                // printCart();
+                delItem(id)
+                printCart();
             });
 
 

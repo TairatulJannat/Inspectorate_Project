@@ -428,7 +428,9 @@ class ExcelController extends Controller
     {
         // Retrieve all parameter groups with their assigned parameter values for the given indent reference number
         $parameterGroups = ParameterGroup::where('reference_no', $indentRefNo)
-            ->with('assignParameterValues')
+            ->with(['assignParameterValues' => function ($query) {
+                $query->where('doc_type_id', 3);
+            }])
             ->get();
 
         // Initialize an array to store the Excel data
