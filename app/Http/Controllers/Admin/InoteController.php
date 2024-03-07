@@ -18,6 +18,7 @@ use App\Models\Items;
 use App\Models\inote;
 use App\Models\InoteDeviation;
 use App\Models\InoteDPL;
+use App\Models\InoteANX;
 use App\Models\InoteLetter;
 use App\Models\Section;
 use App\Models\Supplier;
@@ -155,7 +156,7 @@ class InoteController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -548,14 +549,14 @@ class InoteController extends Controller
     }
     public function EditInoteLetter($id)
     {
-       
+
         $inoteLetter = InoteLetter::where("inote_reference_no", $id)->first();
         // dd( $inoteLetter);
         $deviation = InoteDeviation::where("reference_no", $id)->first();
         $dpl_15 = InoteDPL::where("reference_no", $id)->first();
-        $anx = InoteDPL::where("reference_no", $id)->first();
-        
-        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx' ));
+        $anx = InoteANX::where("reference_no", $id)->first();
+
+        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx'));
     }
 
     public function InoteDeviation(Request $request)
@@ -595,26 +596,25 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-
     }
     public function deviation($id)
     {
 
         $inote = Inote::find($id);
-        $deviations = InoteDeviation::where('reference_no',$id)->first();
+        $deviations = InoteDeviation::where('reference_no', $id)->first();
         // dd($deviations);
-        
-        return view('backend.pdf.inote_deviation_pdf', compact('deviations'));
 
+        return view('backend.pdf.inote_deviation_pdf', compact('deviations'));
     }
     public function dpl15($id)
     {
-        $dpl15 = InoteDPL::where('reference_no',$id)->first();
+        $dpl15 = InoteDPL::where('reference_no', $id)->first();
 
         return view('backend.pdf.inote_dpl15_pdf', compact('dpl15'));
     }
 
-    public function UpdateInoteLetter(Request $request){
+    public function UpdateInoteLetter(Request $request)
+    {
 
 
         $inote = InoteLetter::findOrFail($request->inote_letter_id);
@@ -648,11 +648,11 @@ class InoteController extends Controller
         $inote->date = $request->date;
         $inote->update();
         return response()->json(['success' => 'Done']);
-        
     }
 
 
-    public function UpdateInoteDeviationLetter(Request $request){
+    public function UpdateInoteDeviationLetter(Request $request)
+    {
 
 
 
@@ -678,11 +678,11 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-        
     }
 
-    public function UpdateInoteDpl15Letter(Request $request){
-        
+    public function UpdateInoteDpl15Letter(Request $request)
+    {
+
         $inote = InoteDPL::findOrFail($request->dpl_15_id);
         $inote->firms_name = $request->firms_name;
         $inote->nomenclature = $request->nomenclature;
@@ -694,7 +694,6 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-        
     }
 
 
@@ -723,6 +722,53 @@ class InoteController extends Controller
         $inote->updated_at = Carbon::now('Asia/Dhaka');
         $inote->save();
         return response()->json(['success' => 'Done']);
-
     }
+
+    // public function INoteANX(Request $request)
+    // {
+    //     // dd($request->all());
+    //     $ins_id = Auth::user()->inspectorate_id;
+    //     $admin_id = Auth::user()->id;
+    //     $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+    //     $desig_position = Designation::where('id', $sender_designation_id)->first();
+    //     $inote_reference_no = $request->inote_reference_no;
+    //     $reciever_desig_id = $request->reciever_desig_id;
+    //     $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
+
+    //     $inote = new Inote();
+
+    //     // 
+    //     //Multipule File Upload in files table
+    //     $save_id = $inote->id;
+    //     if ($save_id) {
+    //         $this->fileController->SaveFile($inote->ins_id, $inote->section_id, $request->file_name, $request->file, 13, $inote->reference_no);
+    //     }
+    //     $inote->save();
+    //     return response()->json(['success' => 'Done']);
+    // }
+
+    public function INoteANX(Request $request)
+    {
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $inote_reference_no = $request->inote_reference_no;
+        $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
+
+        
+        // Save files if any
+
+        if ($request->hasFile('file')) {
+          
+                $this->fileController->AnxSaveFile($ins_id,  $section_id, $request->file_name, $request->file, 13, $inote_reference_no);
+        }
+
+        // $save_id = $inote->id;
+        // if ($inote->id) {
+       
+        // }
+        return response()->json(['success' => 'Done']);
+    }
+    
+
 }

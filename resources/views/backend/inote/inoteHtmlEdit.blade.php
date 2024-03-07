@@ -113,7 +113,7 @@
                     if ($next.length > 0) {
                         $next.tab('show');
                     }
-                   
+
                 },
                 error: function(response) {
                     enableeButton()
@@ -162,7 +162,7 @@
                     if ($next.length > 0) {
                         $next.tab('show');
                     }
-                   
+
                 },
                 error: function(response) {
                     enableeButton()
@@ -209,7 +209,7 @@
                     if ($next.length > 0) {
                         $next.tab('show');
                     }
-                   
+
                 },
                 error: function(response) {
                     enableeButton()
@@ -226,6 +226,8 @@
             });
         })
 
+        
+        //start update inote file
         $('#updateInote').off().on('submit', function(event) {
             event.preventDefault();
             var formData = new FormData($('#updateInote')[0]);
@@ -259,10 +261,10 @@
                         // Iterate over the validation errors and display them
                         $.each(response.responseJSON.errors, function(key, value) {
 
-                            var errorSpanId =  key + '_error';
+                            var errorSpanId = key + '_error';
 
                             $('.' + errorSpanId).text(value[
-                            0]); // Assuming you want to display only the first error
+                                0]); // Assuming you want to display only the first error
                         });
                     }
 
@@ -306,10 +308,10 @@
                         // Iterate over the validation errors and display them
                         $.each(response.responseJSON.errors, function(key, value) {
 
-                            var errorSpanId =  key + '_error';
+                            var errorSpanId = key + '_error';
 
                             $('.' + errorSpanId).text(value[
-                            0]); // Assuming you want to display only the first error
+                                0]); // Assuming you want to display only the first error
                         });
                     }
 
@@ -351,10 +353,10 @@
                         // Iterate over the validation errors and display them
                         $.each(response.responseJSON.errors, function(key, value) {
 
-                            var errorSpanId =  key + '_error';
+                            var errorSpanId = key + '_error';
 
                             $('.' + errorSpanId).text(value[
-                            0]); // Assuming you want to display only the first error
+                                0]); // Assuming you want to display only the first error
                         });
                     }
 
@@ -363,7 +365,7 @@
             });
         })
 
-
+        //end update inote file
         function disableButton() {
             var btn = document.getElementById('form_submission_button');
             btn.disabled = true;

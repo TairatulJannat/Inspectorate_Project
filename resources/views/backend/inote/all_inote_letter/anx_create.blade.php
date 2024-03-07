@@ -2,18 +2,19 @@
 <div class="inote_boc mb-2">
     <div class="container">
         <form ction="" id='saveAnx' method="POST" enctype="multipart/form-data">
+            <input type="hidden" id="inote_reference_no" name="inote_reference_no" value="{{ $inote->reference_no }}">
             <div class="card-body">
                 <h1 class="mb-4">Upload Document</h1>
     
                 <div class="file-container">
                     <div class="form-row mb-3">
                         <div class="col-md-6">
-                            <input type="text" class="form-control file-name" name="file_name[]" placeholder="File Name"
+                            <input type="text" class="form-control file-name" name="file_name" placeholder="File Name"
                                 id="file_name_0">
                         </div>
                         <div class="col-md-6 mt-2">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input file form-control" name="file[]" id="file_0">
+                                <input type="file" class="custom-file-input file form-control" name="file" id="file">
                             </div>
                         </div>
                     </div>
