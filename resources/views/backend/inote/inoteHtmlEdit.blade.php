@@ -226,6 +226,8 @@
             });
         })
 
+        
+        //start update inote file
         $('#updateInote').off().on('submit', function(event) {
             event.preventDefault();
             var formData = new FormData($('#updateInote')[0]);
@@ -363,7 +365,7 @@
             });
         })
 
-
+        //end update inote file
         function disableButton() {
             var btn = document.getElementById('form_submission_button');
             btn.disabled = true;

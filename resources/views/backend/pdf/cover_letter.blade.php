@@ -13,10 +13,8 @@
         }
 
         @font-face {
-            font-family: 'bengali';
-            src: url('/BengaliFont.ttf') format('truetype');
-            /* Replace with the actual path to your Bangla font file */
-        }
+
+           @font-face {font-family: nikosh; src: url('.public_path('fonts/Nikosh.ttf').') format("truetype");}
          /* @font-face {
             font-family: 'Nikosh';
             src: url('{{ public_path('fonts/Nikosh.ttf') }}') format('truetype');
@@ -105,7 +103,7 @@
                 <div style="float: left; width: 40%; position:fixed; top:105px; ">
                     {{ $cover_letter->letter_reference_no }}
                 </div>
-                <div class="header" style="float: right; width: 30%;">
+                <div class="header" style="float: right; width: 30%;font-family:nikosh;">
                     <p>{{ $cover_letter->inspectorate_name }}</p>
                     <p>{{ $cover_letter->inspectorate_place }}</p>
                     <p>Tel: {{ $cover_letter->mobile }}</p>
