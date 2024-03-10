@@ -173,7 +173,7 @@
                             Final Spec</a>
 
                         <form id="export-form"
-                            action="{{ url('admin/export-indent-spec-data', ['slug' => $details->reference_no]) }}"
+                            action="{{ url('admin/export-final-spec-data', ['slug' => $details->reference_no]) }}"
                             method="post" style="display: none;">
                             @csrf
                         </form>
