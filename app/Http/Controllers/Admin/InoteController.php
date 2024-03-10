@@ -20,6 +20,7 @@ use App\Models\InoteDeviation;
 use App\Models\InoteDPL;
 use App\Models\InoteANX;
 use App\Models\InoteLetter;
+use App\Models\InoteLetterDetails;
 use App\Models\Section;
 use App\Models\Supplier;
 use Carbon\Carbon;
@@ -530,33 +531,49 @@ class InoteController extends Controller
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
-        $inote->serial_1 = $request->serial_1;
-        $inote->serial_2to4 = $request->serial_2to4;
-        $inote->serial_5 = $request->serial_5;
-        $inote->serial_6 = $request->serial_6;
-        $inote->serial_7 = $request->serial_7;
-        $inote->serial_8 = $request->serial_8;
-        $inote->serial_9 = $request->serial_9;
-        $inote->serial_10 = $request->serial_10;
-        $inote->serial_11 = $request->serial_11;
-        $inote->serial_12 = $request->serial_12;
-        $inote->serial_13 = $request->serial_13;
-        $inote->body_info = $request->body_info;
         $inote->station = $request->station;
         $inote->date = $request->date;
+        $items = json_decode($request->items);
         $inote->save();
-        return response()->json(['success' => 'Done']);
+        $saveId = $inote->id;
+
+        if ($saveId) {
+            foreach ($items as $item) {
+                $details = new InoteLetterDetails();
+                $details->inote_letter_id = $saveId;
+                $details->serial_1 = $item->serial_1;
+                $details->serial_2to4 = $item->serial_2to4;
+                $details->serial_5 = $item->serial_5;
+                $details->serial_6 = $item->serial_6;
+                $details->serial_7 = $item->serial_7;
+                $details->serial_8 = $item->serial_8;
+                $details->serial_9 = $item->serial_9;
+                $details->serial_10 = $item->serial_10;
+                $details->serial_11 = $item->serial_11;
+                $details->serial_12 = $item->serial_12;
+                $details->serial_13 = $item->serial_13;
+                $details->body_info = $item->body_info;
+
+                $details->save();
+            }
+        }
+
+
+        return response()->json(['success' => $items]);
     }
     public function EditInoteLetter($id)
     {
 
         $inoteLetter = InoteLetter::where("inote_reference_no", $id)->first();
+        $inoteLetterDetails = InoteLetterDetails::where("inote_letter_id", $inoteLetter->id)->get();
+
         // dd( $inoteLetter);
         $deviation = InoteDeviation::where("reference_no", $id)->first();
         $dpl_15 = InoteDPL::where("reference_no", $id)->first();
-        $anx = InoteANX::where("reference_no", $id)->first();
+        $anx = InoteDPL::where("reference_no", $id)->first();
 
-        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx'));
+        return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx', 'inoteLetterDetails'));
+
     }
 
     public function InoteDeviation(Request $request)
@@ -632,18 +649,7 @@ class InoteController extends Controller
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
         $inote->slip_return = $request->slip_return;
-        $inote->serial_1 = $request->serial_1;
-        $inote->serial_2to4 = $request->serial_2to4;
-        $inote->serial_5 = $request->serial_5;
-        $inote->serial_6 = $request->serial_6;
-        $inote->serial_7 = $request->serial_7;
-        $inote->serial_8 = $request->serial_8;
-        $inote->serial_9 = $request->serial_9;
-        $inote->serial_10 = $request->serial_10;
-        $inote->serial_11 = $request->serial_11;
-        $inote->serial_12 = $request->serial_12;
-        $inote->serial_13 = $request->serial_13;
-        $inote->body_info = $request->body_info;
+
         $inote->station = $request->station;
         $inote->date = $request->date;
         $inote->update();
@@ -653,8 +659,6 @@ class InoteController extends Controller
 
     public function UpdateInoteDeviationLetter(Request $request)
     {
-
-
 
         $inote = InoteDeviation::findOrFail($request->deviation_id);
         $inote->file_no = $request->file_no;
@@ -725,6 +729,7 @@ class InoteController extends Controller
     }
 
 
+
     public function INoteANX(Request $request)
     {
         $ins_id = Auth::user()->inspectorate_id;
@@ -749,4 +754,39 @@ class InoteController extends Controller
     }
     
 
+
+
+
+    public function UpdateInoteLetterDetails(Request $request)
+    {
+
+        try {
+            $inote_letter_details = InoteLetterDetails::find($request->inoteLetterDetailsID);
+
+            // Check if the InoteLetterDetails object exists
+            if (!$inote_letter_details) {
+                return response()->json(['error' => 'InoteLetterDetails not found'], 404);
+            }
+            // Update each attribute individually
+            $inote_letter_details->serial_1 = $request->serial_1;
+            $inote_letter_details->serial_2to4 = $request->serial_2to4;
+            $inote_letter_details->serial_5 = $request->serial_5;
+            $inote_letter_details->serial_6 = $request->serial_6;
+            $inote_letter_details->serial_7 = $request->serial_7;
+            $inote_letter_details->serial_8 = $request->serial_8;
+            $inote_letter_details->serial_9 = $request->serial_9;
+            $inote_letter_details->serial_10 = $request->serial_10;
+            $inote_letter_details->serial_11 = $request->serial_11;
+            $inote_letter_details->serial_12 = $request->serial_12;
+            $inote_letter_details->serial_13 = $request->serial_13;
+            $inote_letter_details->body_info = $request->body_info;
+            // Save the changes
+            $inote_letter_details->update();
+            return response()->json(['success' => 'Successfully Updated']);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }
+

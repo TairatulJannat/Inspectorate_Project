@@ -16,26 +16,23 @@ class PdfController extends Controller
 {
     public function csrGeneratePdf(Request $request)
     {
-        // $tenderRefNo = $request->input('tenderRefNo');
-        // $tenderData = Tender::where('reference_no', $tenderRefNo)->first();
-
-        // $offerData = Offer::where('tender_reference_no', $tenderData->reference_no)->first();
         $offerData = Offer::where('reference_no', $request->offerRefNo)->first();
         $tenderData = Tender::where('reference_no', $offerData->tender_reference_no)->first();
         $tenderRefNo = $tenderData->reference_no;
 
         $item = Items::findOrFail($offerData->item_id);
-
         $itemName = $item ? $item->name : 'Unknown Item';
 
         $itemType = Item_Type::findOrFail($offerData->item_type_id);
         $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-        $supplierIds = SupplierSpecData::where('tender_id', $tenderData->id)
+        $supplierIds = SupplierSpecData::where('offer_reference_no', $offerData->reference_no)
             ->groupBy('supplier_id')
             ->pluck('supplier_id');
 
-        $suppliers = Supplier::with('supplierOffers')
+        $suppliers = Supplier::with(['supplierOffers' => function ($query) use ($offerData) {
+            $query->where('offer_reference_no', $offerData->reference_no)->get();
+        }])
             ->whereIn('id', $supplierIds)
             ->get();
 

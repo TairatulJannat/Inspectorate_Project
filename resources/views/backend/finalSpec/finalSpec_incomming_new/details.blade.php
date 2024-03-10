@@ -1,7 +1,10 @@
 @extends('backend.app')
+
 @section('title', 'Final Spec')
+
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
+
     <style>
         /* styles.css */
 
@@ -21,7 +24,6 @@
         }
 
         .card-body {
-
             margin: 30px 15px 30px 0
         }
 
@@ -45,7 +47,6 @@
             border-radius: 6px;
             padding: 20px;
             box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
-
         }
 
         h4 {
@@ -86,8 +87,11 @@
         }
     </style>
 @endpush
+
 @section('main_menu', 'Final Spec')
+
 @section('active_menu', 'Details')
+
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
@@ -98,7 +102,6 @@
             <div style="display: flex">
 
                 <div class="card-body col-4">
-
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <tr>
@@ -113,7 +116,6 @@
                                 <th>Offer Reference No</td>
                                 <td>{{ $details->offer_reference_no }}</td>
                             </tr>
-
                             <tr>
                                 <th>Tender Reference No</td>
                                 <td id="tenderRefNo">{{ $details->tender_reference_no }}</td>
@@ -130,12 +132,10 @@
                                 <th>Final Spec Receive Letter Date</td>
                                 <td>{{ $details->final_spec_receive_Ltr_dt }}</td>
                             </tr>
-
                             <tr>
                                 <th>Name of Eqpt</td>
                                 <td>{{ $details->item_type_name }}</td>
                             </tr>
-
                             <tr>
                                 <th>Financial Year</td>
                                 <td>{{ $details->fin_year_name }}</td>
@@ -153,28 +153,32 @@
                                         No supplier names available.
                                     @endif
                                 </td>
-                                {{-- {{ $details->supplier_id }} --}}
                             </tr>
-
-
-
                         </table>
+
                         {{-- Attached File start --}}
                         @include('backend.files.file')
                         {{-- Attached File end --}}
-                        <a  class="btn btn-success mt-3 btn-parameter"
-                            href="{{ url('admin/final_spec/parameter') }}/{{  $details->reference_no }}">Parameter</a>
+
+                        <a class="btn btn-success-gradien mt-3 btn-parameter"
+                            href="{{ route('admin.final-spec/parameter', ['final_spec_ref_no' => $details->reference_no]) }}">Parameter</a>
 
                         {{-- @if ($desig_id != 1)
                             <a class="btn btn-info mt-3 btn-parameter text-light"
                                 href="{{ asset('storage/' . $details->pdf_file) }}" target="_blank">Pdf Document</a>
                         @endif --}}
 
+                        <a href="#" class="btn btn-success-gradien mt-3"
+                            onclick="event.preventDefault(); document.getElementById('export-form').submit();">Export
+                            Final Spec</a>
 
+                        <form id="export-form"
+                            action="{{ url('admin/export-indent-spec-data', ['slug' => $details->reference_no]) }}"
+                            method="post" style="display: none;">
+                            @csrf
+                        </form>
                     </div>
                 </div>
-
-                {{-- @if (!$sender_designation_id) --}}
 
                 <div class="card-body">
                     <div class="row">
@@ -241,9 +245,7 @@
                                     </form>
                                 </div>
                             </div>
-
                         @endif
-
 
                         <div class="forward_status col-md-12">
                             <div>
@@ -283,15 +285,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 {{-- @endif --}}
             </div>
-
         </div>
     </div>
-
 @endsection
+
 @push('js')
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
@@ -303,14 +303,12 @@
     <script>
         $(document).ready(function() {
             var reciever_desig_text = '';
+
             $('#designations').on('change', function() {
-
                 reciever_desig_text = $(this).find('option:selected').text();
-
             });
 
             $('#submitBtn').off('click').on('click', function(event) {
-
                 event.preventDefault();
 
                 var reciever_desig_id = $('#designations').val()
@@ -341,7 +339,6 @@
                                 'doc_ref_id': doc_ref_id,
                                 'doc_reference_number': doc_reference_number,
                                 'remarks': remarks,
-
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -368,13 +365,10 @@
                                 )
                                 $('#error_designation').text(response.responseJSON.error
                                     .reciever_desig_id);
-
-
                             }
                         });
 
-                    }  else if (result.dismiss === swal.DismissReason.cancel) {
-
+                    } else if (result.dismiss === swal.DismissReason.cancel) {
                         swal(
                             'Cancelled',
                             'Your data is safe :)',
@@ -394,7 +388,6 @@
 
                 window.location.href = redirectUrl;
             });
-
         });
     </script>
 @endpush

@@ -6,8 +6,9 @@ use App\Models\Contract;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
-class ContractSpecImport implements ToModel, WithStartRow
+class ContractSpecImport implements ToModel, WithStartRow, WithCustomCsvSettings
 {
     /**
      * @return int
@@ -29,5 +30,15 @@ class ContractSpecImport implements ToModel, WithStartRow
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+
+    public function getCsvSettings(): array
+    {
+        return [
+            'delimiter' => ',',
+            'input_encoding' => 'UTF-8',
+            'enclosure' => '"',
+            'line_ending' => "\r\n", // This preserves line breaks
+        ];
     }
 }

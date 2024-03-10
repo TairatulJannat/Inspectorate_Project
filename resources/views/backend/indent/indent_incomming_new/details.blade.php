@@ -192,7 +192,7 @@
                         @include('backend.files.file')
                         {{-- additional file design end here --}}
                         @if ($desig_id != 1)
-                            <a class="btn btn-success mt-3 btn-parameter"
+                            <a class="btn btn-success-gradien mt-3 btn-parameter"
                                 href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
 
                             {{-- <a class="btn btn-info mt-3 btn-parameter text-light"
