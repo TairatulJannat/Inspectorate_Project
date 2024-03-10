@@ -7,6 +7,8 @@ use App\Models\AdminSection;
 use App\Models\Designation;
 use App\Models\DocType;
 use App\Models\Indent;
+use App\Models\ReportReturn;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,18 +70,18 @@ class ReportReturnController extends Controller
             $TotalVattedReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
                 ->whereBetween($table . '.created_at', [$startDate, $endDate])
                 ->where($table . '.' . $column, $insp_id)
-                ->whereIn('status', [1,2])
+                ->whereIn('status', [1, 2])
                 ->count();
             $TotalVattedCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
                 ->whereBetween($table . '.created_at', [$startDate, $endDate])
                 ->where($table . '.' . $column, $insp_id)
-                ->whereIn('status', [1,2])
+                ->whereIn('status', [1, 2])
                 ->where('items.attribute', 'controlled')
                 ->count();
             $TotalVattedUnCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
                 ->whereBetween($table . '.created_at', [$startDate, $endDate])
                 ->where($table . '.' . $column, $insp_id)
-                ->whereIn('status', [1,2])
+                ->whereIn('status', [1, 2])
                 ->where('items.attribute', 'uncontrolled')
                 ->count();
 
@@ -212,4 +214,41 @@ class ReportReturnController extends Controller
     }
 
 
+    public function store(Request $request)
+    {
+
+        $admin_id = Auth::user()->id;
+        $inspectorate_id = Auth::user()->inspectorate_id;
+        $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+
+        $data = new ReportReturn();
+        $data->inspectorate_id = $inspectorate_id;
+        $data->doc_type_id = $request->doc_type_id;
+        $data->section_id = '6';
+        $data->letter_reference_no = '23.01.901.051.' . $request->letter_reference_no . '.' . Carbon::now()->format('d.m.y');
+        $data->inspectorate_name = $request->inspectorate_name;
+        $data->inspectorate_place = $request->place;
+        $data->mobile = $request->mobile;
+        $data->fax = $request->fax;
+        $data->email = $request->email;
+        $data->letter_date = $request->date;
+        $data->subject = $request->subject;
+        $data->body_1 = $request->body_1;
+        $data->body_2 = $request->body_2;
+        $data->signature = $request->signature;
+        $data->anxs = $request->anxs;
+        $data->distr = $request->distr;
+        $data->extl = $request->extl;
+        $data->act = $request->act;
+        $data->info = $request->info;
+        $data->internal = $request->internal;
+        $data->internal_act = $request->internal_act;
+        $data->internal_info = $request->internal_info;
+        $data->page_size = $request->page_size;
+        $data->header_footer = $request->header_footer;
+
+        $data->save();
+
+        return response()->json(['success' => "Report saved"]);
+    }
 }
