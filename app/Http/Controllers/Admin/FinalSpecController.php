@@ -627,7 +627,9 @@ class FinalSpecController extends Controller
             $itemType = Item_Type::find($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-            $parameterGroups = ParameterGroup::with('supplierSpecData')
+            $parameterGroups = ParameterGroup::with(['assignParameterValues' => function ($query) {
+                $query->where('doc_type_id', 6);
+            }])
                 ->where('item_id', $itemId)
                 ->where('reference_no', $indentRefNo)
                 ->get();
