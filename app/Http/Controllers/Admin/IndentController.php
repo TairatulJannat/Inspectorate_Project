@@ -520,7 +520,7 @@ class IndentController extends Controller
 
     public function parameter(Request $request)
     {
-        $indent = Indent::find($request->indent_id);
+        $indent = Indent::where('reference_no', $request->indentRefNo)->first();
         $indentRefNo = $indent->reference_no;
         $item_id = $indent->item_id;
         $item_type_id = $indent->item_type_id;
