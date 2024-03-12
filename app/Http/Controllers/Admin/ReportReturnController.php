@@ -18,6 +18,7 @@ class ReportReturnController extends Controller
     {
         return view('backend.report_return.weekly_report');
     }
+
     public function report_data(Request $request)
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -254,9 +255,10 @@ class ReportReturnController extends Controller
 
 
 
-    public function monthly_report()
+    public function index()
     {
-        return view('backend.report_return.monthly_report');
+        $rr_lists = ReportReturn::orderBy('id', 'desc')->get();
+        return view('backend.report_return.index', compact('rr_lists'));
     }
 
     public function monthly_report_data(Request $request)
@@ -358,7 +360,7 @@ class ReportReturnController extends Controller
         // Returning JSON response
         return response()->json(['success' => "Data Found", 'reports' => $reports]);
     }
-    
+
     public function monthly_store(Request $request)
     {
 
