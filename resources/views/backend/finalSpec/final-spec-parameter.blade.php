@@ -26,11 +26,6 @@
 
         .card-body {}
 
-        /* .table thead {
-                                                                                                                                                                                    background-color: #1B4C43 !important;
-                                                                                                                                                                                    border-radius: 10px !important;
-                                                                                                                                                                                } */
-
         .table thead tr th {
             color: #ffff !important;
         }
@@ -87,11 +82,6 @@
             column-gap: 10px;
             margin-bottom: 25px
         }
-
-        /* .header {
-                                                            background-color: #006A4E;
-                                                            color: #F5F7FB;
-                                                        } */
     </style>
 @endpush
 
@@ -204,7 +194,7 @@
                     var groupId = $(this).data('group-id');
                     var groupName = $(this).data('group-name');
                     $.ajax({
-                        url: '{{ url('admin/assign-parameter-value/edit') }}',
+                        url: '{{ url('admin/final-spec/parameter-edit') }}',
                         method: 'post',
                         data: {
                             id: groupId,
@@ -272,10 +262,10 @@
                                 var newInputFields = $(
                                     '<div class="row mb-3" data-new-row="true">' +
                                     '<div class="col-md-5">' +
-                                    '<input type="text" class="form-control" name="parameter_name[]">' +
+                                    '<input type="text" class="form-control" name="parameter_name[]" value="">' +
                                     '</div>' +
                                     '<div class="col-md-5">' +
-                                    '<input type="text" class="form-control" name="parameter_value[]">' +
+                                    '<input type="text" class="form-control" name="parameter_value[]" value="">' +
                                     '</div>' +
                                     '<div class="col-md-2">' +
                                     '<button class="btn btn-danger-gradien btn-sm delete-new-row fa fa-trash-o" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">' +
@@ -363,6 +353,7 @@
                             }
                         } else {
                             toastr.error('No changes have been done!');
+                            flag = false;
                         }
 
                         // Delete Row From Database
@@ -370,6 +361,7 @@
                             if (initialData.hasOwnProperty(id) && initialData[id].deleted) {
                                 deleteRowFromDatabase(itemTypeId, itemId, groupId, id, initialData[id]
                                     .parameter_name);
+                                flag = true;
                             }
                         }
 
@@ -378,16 +370,20 @@
                         newDataRows.each(function() {
                             var parameterName = $(this).find('[name="parameter_name[]"]').val();
                             var parameterValue = $(this).find('[name="parameter_value[]"]').val();
-                            saveNewRowToDatabase(groupId, parameterName, parameterValue);
+                            saveNewRowToDatabase(groupId, parameterName, parameterValue,
+                                finalSpecRefNo);
+                            flag = true;
                         });
                     }
-                    // saveChangesButton.html(originalsaveChangesButtonHtml);
-                    performSearchWithParams(item_id, item_type_id);
+                    saveChangesButton.html(originalsaveChangesButtonHtml);
+                    if (flag == true) {
+                        location.reload();
+                    }
                 });
 
                 function updateRowInDatabase(itemTypeId, itemId, groupId, rowId, parameterName, parameterValue) {
                     $.ajax({
-                        url: '{{ url('admin/assign-parameter-value/update') }}',
+                        url: '{{ url('admin/final-spec/parameter-update') }}',
                         method: 'post',
                         data: {
                             id: rowId,
@@ -413,16 +409,15 @@
                     });
                 }
 
-                function deleteRowFromDatabase(itemTypeId, itemId, groupId, id, parameterName) {
+                function deleteRowFromDatabase(itemTypeId, itemId, groupId, id) {
                     $.ajax({
-                        url: '{{ url('admin/assign-parameter-value/destroy') }}',
+                        url: '{{ url('admin/final-spec/parameter-destroy') }}',
                         method: 'post',
                         data: {
                             id: id,
                             item_type_id: itemTypeId,
                             item_id: itemId,
                             group_id: groupId,
-                            parameter_name: parameterName,
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
@@ -440,14 +435,15 @@
                     });
                 }
 
-                function saveNewRowToDatabase(groupId, parameterName, parameterValue) {
+                function saveNewRowToDatabase(groupId, parameterName, parameterValue, finalSpecRefNo) {
                     $.ajax({
-                        url: '{{ url('admin/assign-parameter-value/store') }}',
+                        url: '{{ url('admin/final-spec/parameter-store') }}',
                         method: 'post',
                         data: {
                             assign_parameter_group_id: groupId,
                             parameter_name: parameterName,
                             parameter_value: parameterValue,
+                            finalSpecRefNo: finalSpecRefNo,
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
