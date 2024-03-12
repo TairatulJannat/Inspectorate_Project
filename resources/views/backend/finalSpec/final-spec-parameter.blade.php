@@ -27,9 +27,9 @@
         .card-body {}
 
         /* .table thead {
-                                                                                                                                                                                background-color: #1B4C43 !important;
-                                                                                                                                                                                border-radius: 10px !important;
-                                                                                                                                                                            } */
+                                                                                                                                                                                    background-color: #1B4C43 !important;
+                                                                                                                                                                                    border-radius: 10px !important;
+                                                                                                                                                                                } */
 
         .table thead tr th {
             color: #ffff !important;
@@ -89,9 +89,9 @@
         }
 
         /* .header {
-                                                        background-color: #006A4E;
-                                                        color: #F5F7FB;
-                                                    } */
+                                                            background-color: #006A4E;
+                                                            color: #F5F7FB;
+                                                        } */
     </style>
 @endpush
 
