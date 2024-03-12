@@ -237,7 +237,7 @@
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
                         <a href="" type="button" class="btn btn-secondary">Cancel</a>
-                        <button class="btn btn-primary" type="submit" id="form_submission_button">Save</button>
+                        <button class="btn btn-primary" type="submit" id="form_submission_button">Update</button>
                     </div>
                 </div>
             </form>

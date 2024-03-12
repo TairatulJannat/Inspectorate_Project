@@ -118,7 +118,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">*Item Type</label>
-                                <select class="form-control" id="item_type_id" name="item_type_id" >
+                                <select class="form-control" id="item_type_id" name="item_type_id">
 
                                     <option value="">Please Select</option>
 
@@ -156,7 +156,12 @@
                                     @foreach ($additional_documnets as $additional_document)
                                         @php
                                             $documentIds = json_decode($offer->additional_documents);
-                                            $isSelected = in_array($additional_document->id, $documentIds ? $documentIds : []) ? 'selected' : '';
+                                            $isSelected = in_array(
+                                                $additional_document->id,
+                                                $documentIds ? $documentIds : [],
+                                            )
+                                                ? 'selected'
+                                                : '';
                                         @endphp
                                         <option value="{{ $additional_document->id }}" {{ $isSelected }}>
                                             {{ $additional_document->name }}
@@ -178,7 +183,9 @@
                                     @foreach ($suppliers as $supplier)
                                         @php
                                             $supplierIds = json_decode($offer->supplier_id);
-                                            $isSelected = in_array($supplier->id, $supplierIds ? $supplierIds : []) ? 'selected' : '';
+                                            $isSelected = in_array($supplier->id, $supplierIds ? $supplierIds : [])
+                                                ? 'selected'
+                                                : '';
                                         @endphp
 
                                         <option value="{{ $supplier->id }}" {{ $isSelected }}>
@@ -240,7 +247,7 @@
                             </div>
                         </div>
 
-                      
+
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -289,7 +296,7 @@
                 <div class="card-footer text-end">
                     <div class="col-sm-9 offset-sm-3">
                         <a href="" type="button" class="btn btn-secondary">Cancel</a>
-                        <button class="btn btn-primary" type="submit" id="form_submission_button">Save</button>
+                        <button class="btn btn-primary" type="submit" id="form_submission_button">Update</button>
                     </div>
                 </div>
             </form>
@@ -329,8 +336,6 @@
                 window.location.href = redirectUrl;
             });
         });
-
-        
     </script>
     <script>
         $(document).ready(function() {

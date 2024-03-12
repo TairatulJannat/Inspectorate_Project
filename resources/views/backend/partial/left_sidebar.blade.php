@@ -316,7 +316,7 @@ $currentControllerName = Request::segment(2);
                                 <span>Report Return</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Inote/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('inote/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.rr/weekly') }}"
+                                    <li><a class="text-light" href="{{ route('admin.rr/monthly') }}"
                                             class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Monthly Report</a>
                                     </li>
                                 @endif

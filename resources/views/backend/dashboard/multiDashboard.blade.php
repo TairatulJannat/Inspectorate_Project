@@ -282,6 +282,18 @@
         .myBarGraph {
             height: 95%
         }
+
+        .nav-link.active {
+            font-weight: bold;
+            color: #2b219b;
+            background-color: #3b43df;
+            /* Change color to bold color of your choice */
+        }
+        .bold {
+    font-weight: bold;
+}
+
+
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -291,12 +303,15 @@
 
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-indent-tab" type="button"><a class="btn "
-                    href="{{ url('admin/adminDashboard') }}">Indent ({{ $currentStatusCounts['IndentOverAll'] }}) </a></button>
+            <button class="nav-link" id="nav-indent-tab" type="button"><a class="btn"
+                    href="{{ url('admin/adminDashboard') }}">Indent ({{ $currentStatusCounts['IndentOverAll'] }})
+                </a></button>
             <button class="nav-link" id="nav-offer-tab" type="button"><a class="btn "
-                    href="{{ url('admin/multiDashboard/5') }}">Offer ({{ $currentStatusCounts['OfferOverAll'] }}) </a></button>
+                    href="{{ url('admin/multiDashboard/5') }}">Offer ({{ $currentStatusCounts['OfferOverAll'] }})
+                </a></button>
             <button class="nav-link" id="nav-finalSpec-tab" type="button"><a
-                    href="{{ url('admin/multiDashboard/6') }}">Final Spec ({{ $currentStatusCounts['FinalSpecOverAll'] }})</a></button>
+                    href="{{ url('admin/multiDashboard/6') }}">Final Spec
+                    ({{ $currentStatusCounts['FinalSpecOverAll'] }})</a></button>
             <button class="nav-link" id="nav-draftContract-tab" type="button"><a
                     href="{{ url('admin/multiDashboard/9') }}">Draft
                     Contract({{ $currentStatusCounts['DraftContractOverAll'] }})</a></button>
@@ -304,8 +319,8 @@
                     href="{{ url('admin/multiDashboard/10') }}">Contract({{ $currentStatusCounts['ContractOverAll'] }})</a></button>
             <button class="nav-link" id="nav-iNote-tab" type="button"> <a
                     href="{{ url('admin/multiDashboard/13') }}">I-Note({{ $currentStatusCounts['I_NoteOverAll'] }})</a></button>
-
         </div>
+        
     </nav>
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-indent" role="tabpanel" aria-labelledby="nav-indent-tab">
@@ -321,7 +336,7 @@
                                             <h2>New Arrival</h2>({{ $doc_type->doc_name }})
                                         </span>
                                         <h4 class="mb-0 counter">{{ $mulipleModelNew }}</h4><i class="icon-bg"
-                                            data-feather="shopping-bag"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -339,7 +354,7 @@
                                             <h2>On Process</h2>({{ $doc_type->doc_name }})
                                         </span>
                                         <h4 class="mb-0 counter">{{ $mulipleModelOnProcess }}</h4><i class="icon-bg"
-                                            data-feather="message-circle"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -358,7 +373,7 @@
                                             <h2>Completed</h2>({{ $doc_type->doc_name }})
                                         </span>
                                         <h4 class="mb-0 counter">{{ $mulipleModelCompleted }}</h4><i class="icon-bg"
-                                            data-feather="shopping-bag"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -376,7 +391,7 @@
                                             <h2>Dispatch</h2>({{ $doc_type->doc_name }})
                                         </span>
                                         <h4 class="mb-0 counter">{{ $mulipleModelDispatch }}</h4><i class="icon-bg"
-                                            data-feather="shopping-bag"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -444,6 +459,8 @@
 
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
         //start piechart//
@@ -599,5 +616,24 @@
             data: barData,
             options: barOptions
         });
+
+     
+        document.addEventListener("DOMContentLoaded", function() {
+        var buttons = document.querySelectorAll('.nav-link');
+
+         buttons.forEach(function(button) {
+         button.addEventListener('click', function() {
+            // Remove bold class from all buttons
+            buttons.forEach(function(btn) {
+                btn.classList.remove('bold');
+            });
+
+            // Add bold class to the clicked button
+            this.classList.add('bold');
+        });
+     });
+    });
+
+
     </script>
 @endpush
