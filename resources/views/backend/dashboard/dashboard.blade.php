@@ -289,24 +289,27 @@
 @section('content')
 
 
-<nav class="mt-1">
-    <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-indent-tab" type="button"><a class="btn "
-                href="{{ url('admin/adminDashboard') }}">Indent ({{ $currentStatusCounts['IndentOverAll'] }}) </a></button>
-        <button class="nav-link" id="nav-offer-tab" type="button"><a class="btn "
-                href="{{ url('admin/multiDashboard/5') }}">Offer ({{ $currentStatusCounts['OfferOverAll'] }}) </a></button>
-        <button class="nav-link" id="nav-finalSpec-tab" type="button"><a
-                href="{{ url('admin/multiDashboard/6') }}">Final Spec ({{ $currentStatusCounts['FinalSpecOverAll'] }})</a></button>
-        <button class="nav-link" id="nav-draftContract-tab" type="button"><a
-                href="{{ url('admin/multiDashboard/9') }}">Draft
-                Contract({{ $currentStatusCounts['DraftContractOverAll'] }})</a></button>
-        <button class="nav-link" id="nav-contact-tab" type="button"> <a
-                href="{{ url('admin/multiDashboard/10') }}">Contract({{ $currentStatusCounts['ContractOverAll'] }})</a></button>
-        <button class="nav-link" id="nav-iNote-tab" type="button"> <a
-                href="{{ url('admin/multiDashboard/13') }}">I-Note({{ $currentStatusCounts['I_NoteOverAll'] }})</a></button>
+    <nav class="mt-1">
+        <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
+            <button class="nav-link" id="nav-indent-tab" type="button"><a class="btn "
+                    href="{{ url('admin/adminDashboard') }}">Indent ({{ $currentStatusCounts['IndentOverAll'] }})
+                </a></button>
+            <button class="nav-link" id="nav-offer-tab" type="button"><a class="btn "
+                    href="{{ url('admin/multiDashboard/5') }}">Offer ({{ $currentStatusCounts['OfferOverAll'] }})
+                </a></button>
+            <button class="nav-link" id="nav-finalSpec-tab" type="button"><a
+                    href="{{ url('admin/multiDashboard/6') }}">Final Spec
+                    ({{ $currentStatusCounts['FinalSpecOverAll'] }})</a></button>
+            <button class="nav-link" id="nav-draftContract-tab" type="button"><a
+                    href="{{ url('admin/multiDashboard/9') }}">Draft
+                    Contract({{ $currentStatusCounts['DraftContractOverAll'] }})</a></button>
+            <button class="nav-link" id="nav-contact-tab" type="button"> <a
+                    href="{{ url('admin/multiDashboard/10') }}">Contract({{ $currentStatusCounts['ContractOverAll'] }})</a></button>
+            <button class="nav-link" id="nav-iNote-tab" type="button"> <a
+                    href="{{ url('admin/multiDashboard/13') }}">I-Note({{ $currentStatusCounts['I_NoteOverAll'] }})</a></button>
 
-    </div>
-</nav>
+        </div>
+    </nav>
     {{-- <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-indent" role="tabpanel" aria-labelledby="nav-indent-tab">
             @include('backend.dashboard.indent')
@@ -343,7 +346,7 @@
                                             <h2>New Arrival</h2>(Indent)
                                         </span>
                                         <h4 class="mb-0 counter">{{ $indentNew }}</h4><i class="icon-bg"
-                                            data-feather="shopping-bag"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -361,7 +364,7 @@
                                             <h2>On Process</h2>(Indent)
                                         </span>
                                         <h4 class="mb-0 counter">{{ $indentOnProcess }}</h4><i class="icon-bg"
-                                            data-feather="message-circle"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -380,7 +383,7 @@
                                             <h2>Completed</h2>(Indent)
                                         </span>
                                         <h4 class="mb-0 counter">{{ $indentCompleted }}</h4><i class="icon-bg"
-                                            data-feather="shopping-bag"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -398,7 +401,7 @@
                                             <h2>Dispatch</h2>(Indent)
                                         </span>
                                         <h4 class="mb-0 counter">{{ $indentDispatch }}</h4><i class="icon-bg"
-                                            data-feather="shopping-bag"></i>
+                                            data-feather="file-text"></i>
                                     </div>
                                 </div>
                             </div>
@@ -466,161 +469,161 @@
 @endsection
 
 @push('js')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    //start piechart//
-    var docPieChart = {
-        series: [{{ $indentNew }}, {{ $indentOnProcess }}, {{ $indentCompleted }},
+    <script>
+        //start piechart//
+        var docPieChart = {
+            series: [{{ $indentNew }}, {{ $indentOnProcess }}, {{ $indentCompleted }},
                 {{ $indentDispatch }}
-        ],
-        chart: {
-            width: 380,
-            type: 'pie',
-        },
-        labels: ['New Arrivel', 'On Process', 'Completed', 'Dispatch'],
-        colors: ['#1B4C43', '#BA895D', '#31D2F2', '#D22D3D'],
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }]
-    };
-
-    var paichart = new ApexCharts(document.querySelector("#pichart"), docPieChart);
-    paichart.render();
-    //end piechart//
-
-    //start barchart//
-    var counts = <?php echo json_encode(array_values($counts)); ?>;
-    var monthlyReport = {
-        series: [{
-            data: counts
-        }],
-        chart: {
-            height: 350,
-            type: 'bar',
-            events: {
-                click: function(chart, w, e) {
-                    // console.log(chart, w, e)
-                }
-            },
-            toolbar: {
-                show: true,
-                tools: {
-                    download: false,
-                    selection: false,
-                    zoom: false,
-                    zoomin: false,
-                    zoomout: false,
-                    pan: false,
-                    reset: false
-                },
-                autoSelected: 'zoom'
-            },
-            zoom: {
-                enabled: false
-            }
-        },
-        title: {
-            text: 'Overall Report',
-            align: 'center',
-            style: {
-                fontSize: '20px'
-            }
-        },
-        plotOptions: {
-            bar: {
-                columnWidth: '45%',
-                distributed: true,
-                dataLabels: {
-                    position: 'top' // Show data values on top of bars
-                }
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function(val) {
-                return val;
-            },
-            offsetY: -20,
-            style: {
-                fontSize: '12px',
-                colors: ["#304758"]
-            }
-        },
-        legend: {
-            show: false
-        },
-        xaxis: {
-            categories: [
-                "Indent",
-                'Offer',
-                'Final Spec',
-                'Draft Contract',
-                'Contract',
-                'I-Note',
             ],
-            labels: {
+            chart: {
+                width: 380,
+                type: 'pie',
+            },
+            labels: ['New Arrivel', 'On Process', 'Completed', 'Dispatch'],
+            colors: ['#1B4C43', '#BA895D', '#31D2F2', '#D22D3D'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        var paichart = new ApexCharts(document.querySelector("#pichart"), docPieChart);
+        paichart.render();
+        //end piechart//
+
+        //start barchart//
+        var counts = <?php echo json_encode(array_values($counts)); ?>;
+        var monthlyReport = {
+            series: [{
+                data: counts
+            }],
+            chart: {
+                height: 350,
+                type: 'bar',
+                events: {
+                    click: function(chart, w, e) {
+                        // console.log(chart, w, e)
+                    }
+                },
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: false,
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false
+                    },
+                    autoSelected: 'zoom'
+                },
+                zoom: {
+                    enabled: false
+                }
+            },
+            title: {
+                text: 'Overall Report',
+                align: 'center',
                 style: {
-                    fontSize: '12px'
+                    fontSize: '20px'
+                }
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '45%',
+                    distributed: true,
+                    dataLabels: {
+                        position: 'top' // Show data values on top of bars
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val;
+                },
+                offsetY: -20,
+                style: {
+                    fontSize: '12px',
+                    colors: ["#304758"]
+                }
+            },
+            legend: {
+                show: false
+            },
+            xaxis: {
+                categories: [
+                    "Indent",
+                    'Offer',
+                    'Final Spec',
+                    'Draft Contract',
+                    'Contract',
+                    'I-Note',
+                ],
+                labels: {
+                    style: {
+                        fontSize: '12px'
+                    }
                 }
             }
-        }
-    };
+        };
 
-    var renderMonthlyReport = new ApexCharts(document.querySelector("#dasboard_barchart"), monthlyReport);
-    renderMonthlyReport.render();
-    //end barchart//
+        var renderMonthlyReport = new ApexCharts(document.querySelector("#dasboard_barchart"), monthlyReport);
+        renderMonthlyReport.render();
+        //end barchart//
 
 
-    var barData = {
-        labels: ["New Arrival", "On Process", "Completed", "Dispatch"],
-        datasets: [{
-            label: "Current status",
-            backgroundColor: [
-                '#1B4C43', // Color for "New Arrival"
-                '#BA895D', // Color for "On Process"
-                '#31D2F2', // Color for "Completed"
-                '#D22D3D' // Color for "Dispatch"
-            ],
-            fillColor: "rgba(40, 105, 92, 0.4)",
-            strokeColor: vihoAdminConfig.primary,
-            highlightFill: "rgba(36, 105, 92, 0.6)",
-            highlightStroke: vihoAdminConfig.primary,
-            data: [{{ $indentNew }}, {{ $indentOnProcess }}, {{ $indentCompleted }},
+        var barData = {
+            labels: ["New Arrival", "On Process", "Completed", "Dispatch"],
+            datasets: [{
+                label: "Current status",
+                backgroundColor: [
+                    '#1B4C43', // Color for "New Arrival"
+                    '#BA895D', // Color for "On Process"
+                    '#31D2F2', // Color for "Completed"
+                    '#D22D3D' // Color for "Dispatch"
+                ],
+                fillColor: "rgba(40, 105, 92, 0.4)",
+                strokeColor: vihoAdminConfig.primary,
+                highlightFill: "rgba(36, 105, 92, 0.6)",
+                highlightStroke: vihoAdminConfig.primary,
+                data: [{{ $indentNew }}, {{ $indentOnProcess }}, {{ $indentCompleted }},
                     {{ $indentDispatch }}
-            ],
-        }]
-    };
+                ],
+            }]
+        };
 
 
 
-    var barOptions = {
-        scaleBeginAtZero: true,
-        scaleShowGridLines: true,
-        scaleGridLineColor: "rgba(0,0,0,0.1)",
-        scaleGridLineWidth: 1,
-        scaleShowHorizontalLines: true,
-        scaleShowVerticalLines: true,
-        barShowStroke: true,
-        barStrokeWidth: 2,
-        barValueSpacing: 5,
-        barDatasetSpacing: 1,
-    };
+        var barOptions = {
+            scaleBeginAtZero: true,
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,0.1)",
+            scaleGridLineWidth: 1,
+            scaleShowHorizontalLines: true,
+            scaleShowVerticalLines: true,
+            barShowStroke: true,
+            barStrokeWidth: 2,
+            barValueSpacing: 5,
+            barDatasetSpacing: 1,
+        };
 
 
-    var barCtx = document.getElementById("myBarGraph").getContext("2d");
-    var myBarChart = new Chart(barCtx, {
-        type: 'bar',
-        data: barData,
-        options: barOptions
-    });
-</script>
+        var barCtx = document.getElementById("myBarGraph").getContext("2d");
+        var myBarChart = new Chart(barCtx, {
+            type: 'bar',
+            data: barData,
+            options: barOptions
+        });
+    </script>
 @endpush
