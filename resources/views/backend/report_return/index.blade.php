@@ -29,9 +29,6 @@
         .dt-buttons {
             margin-left: 8px;
         }
-
-
-
     </style>
 @endpush
 @section('main_menu', 'Index')
@@ -48,22 +45,49 @@
                         <thead>
                             <tr>
                                 <th>Sl No</th>
-                                <th>Report</th>
                                 <th>From Date</th>
                                 <th>End Date</th>
+                                <th>Report</th>
                                 <th>Act</th>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                {{-- <td>{{}}</td>
-                                <td>{{}}</td>
-                                <td>{{}}</td> --}}
-                                <td>
-
-                                </td>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php
+                            $i = 1;
+                            ?>
+                            @foreach ($rr_lists as $rr_list)
+                                <tr>
+                                    <td>{{ $i++ }}</td>
+                                    <td>{{ $rr_list->from_date }}</td>
+                                    <td>{{ $rr_list->to_date }}</td>
+                                    <td>{{ $rr_list->report_type == 1 ? 'Weekly' : 'Monthly' }}</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <form action="{{ route('admin.report_return/view', ['id' => $rr_list->id]) }}"
+                                                method="get" class="m-1">
+                                                @csrf
+                                                <button class="btn-sm btn-info text-light" type="submit">View</button>
+                                            </form>
+                                            <form action="{{ route('admin.report_return/details', ['id' => $rr_list->id]) }}"
+                                                method="get" class="m-1">
+                                                @csrf
+                                                <button class="btn-sm btn-success" type="submit">Details</button>
+                                            </form>
+                                            <form action="{{ route('admin.reportreturn/edit', ['id' => $rr_list->id]) }}"
+                                                method="get" class="m-1">
+                                                @csrf
+                                                <button class="btn-sm btn-secondary text-light" type="submit">Edit</button>
+                                            </form>
+                                            <form action="{{ route('admin.report_return/detete', ['id' => $rr_list->id]) }}"
+                                                method="post" class="m-1">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn-sm btn-danger" type="submit">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

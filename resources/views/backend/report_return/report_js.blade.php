@@ -6,7 +6,6 @@
     $('#myForm').submit(function(e) {
 
         e.preventDefault()
-        alert('ok')
 
         var formData = {}; // Object to store form data
 
@@ -15,6 +14,8 @@
             var fieldValue = $(this).val();
             formData[fieldId] = fieldValue;
         });
+        var report_html=$('#report_html').html();
+        formData['report_html'] = report_html;
 
         $.ajax({
             url: '{{ url('admin/report_returns/store') }}',
@@ -143,7 +144,7 @@
                                         <textarea class="form-control " name="body_1" id="body_1"></textarea>
                                     </div>
                         `
-        html += `<div class="row mt-2">
+        html += `<div class="row mt-2" id='report_html'>
             <div >
                 1. In It of ref ltr, weekly return/reports of this inspectorate is as under:
             </div>
