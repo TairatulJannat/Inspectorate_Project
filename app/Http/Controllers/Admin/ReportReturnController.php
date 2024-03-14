@@ -406,8 +406,9 @@ class ReportReturnController extends Controller
     }
     public function ReportReturnedit($id)
     {
+       
         $rr_list = ReportReturn::find($id);
-
+//  dd($rr_list);
 
         return view('backend.report_return.edit', compact('rr_list'));
     }

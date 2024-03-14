@@ -252,6 +252,7 @@ class OfferController extends Controller
             $data->sender = $request->sender;
             $data->reference_no = $request->reference_no;
             $data->offer_reference_date = $request->offer_reference_date;
+            $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
             $data->received_by = Auth::user()->id;
             $data->remark = $request->remark;
             $data->status = 0;
@@ -312,6 +313,7 @@ class OfferController extends Controller
             $data->sender = $request->sender;
             $data->reference_no = $request->reference_no;
             $data->offer_reference_date = $request->offer_reference_date;
+            $data->offer_rcv_ltr_dt = $request->offer_rcv_ltr_dt;
             $data->tender_reference_no = $request->tender_reference_no;
             $data->indent_reference_no = $request->indent_reference_no;
             $data->attribute = $request->attribute;
