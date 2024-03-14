@@ -1,3 +1,7 @@
+<?php
+$currentRouteid = Request::segment(3);
+
+?>
 @extends('backend.app')
 @section('title', 'Dashboard')
 @push('css')
@@ -217,7 +221,7 @@
             font-weight: bold;
             background-color: #ffff;
             border: none;
-            border-radius: none;
+            border-radius: 5px;
         }
 
         .nav-tabs button {
@@ -228,36 +232,43 @@
         #nav-indent-tab {
             background-color: #28A8BC;
             color: #ffff;
+
         }
 
         #nav-offer-tab {
             background-color: #FBA45A;
             color: #ffff;
+
         }
 
         #nav-offer-tab:hover {
             background-color: #FBA45A;
             color: #ffff;
+
         }
 
         #nav-finalSpec-tab {
             background-color: #28A744;
             color: #ffff;
+
         }
 
         #nav-draftContract-tab {
             background-color: #B87AEB;
             color: #ffff;
+
         }
 
         #nav-contact-tab {
             background-color: #007AFF;
             color: #ffff;
+
         }
 
         #nav-iNote-tab {
             background-color: #AB8574;
             color: #ffff;
+
         }
 
         .chart-container {
@@ -283,17 +294,19 @@
             height: 95%
         }
 
-        .nav-link.active {
-            font-weight: bold;
-            color: #2b219b;
-            background-color: #3b43df;
-            /* Change color to bold color of your choice */
+        .active_opacity a {
+
+           opacity: .2;
         }
-        .bold {
-    font-weight: bold;
-}
 
+        .active_button a {
 
+            opacity: 1;
+            border: 3px solid #1C6758;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        }
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -303,24 +316,28 @@
 
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-            <button class="nav-link" id="nav-indent-tab" type="button"><a class="btn"
-                    href="{{ url('admin/adminDashboard') }}">Indent ({{ $currentStatusCounts['IndentOverAll'] }})
+            <button class="nav-link {{ $currentRouteid == '3' ? 'active_button' : 'active_opacity' }}" id="nav-indent-tab" type="button"><a
+                    class="btn" href="{{ url('admin/adminDashboard') }}">Indent
+                    ({{ $currentStatusCounts['IndentOverAll'] }})
                 </a></button>
-            <button class="nav-link" id="nav-offer-tab" type="button"><a class="btn "
-                    href="{{ url('admin/multiDashboard/5') }}">Offer ({{ $currentStatusCounts['OfferOverAll'] }})
+            <button class="nav-link  {{ $currentRouteid == '5' ? 'active_button' : 'active_opacity' }}" id="nav-offer-tab"
+                type="button"><a class="btn " href="{{ url('admin/multiDashboard/5') }}">Offer
+                    ({{ $currentStatusCounts['OfferOverAll'] }})
                 </a></button>
-            <button class="nav-link" id="nav-finalSpec-tab" type="button"><a
-                    href="{{ url('admin/multiDashboard/6') }}">Final Spec
+            <button class="nav-link {{ $currentRouteid == '6' ? 'active_button' : 'active_opacity' }}" id="nav-finalSpec-tab"
+                type="button"><a href="{{ url('admin/multiDashboard/6') }}">Final Spec
                     ({{ $currentStatusCounts['FinalSpecOverAll'] }})</a></button>
-            <button class="nav-link" id="nav-draftContract-tab" type="button"><a
-                    href="{{ url('admin/multiDashboard/9') }}">Draft
+            <button class="nav-link {{ $currentRouteid == '9' ? 'active_button' : 'active_opacity' }}" id="nav-draftContract-tab"
+                type="button"><a href="{{ url('admin/multiDashboard/9') }}">Draft
                     Contract({{ $currentStatusCounts['DraftContractOverAll'] }})</a></button>
-            <button class="nav-link" id="nav-contact-tab" type="button"> <a
+            <button class="nav-link {{ $currentRouteid == '10' ? 'active_button' : 'active_opacity' }}" id="nav-contact-tab"
+                type="button"> <a
                     href="{{ url('admin/multiDashboard/10') }}">Contract({{ $currentStatusCounts['ContractOverAll'] }})</a></button>
-            <button class="nav-link" id="nav-iNote-tab" type="button"> <a
+            <button class="nav-link {{ $currentRouteid == '13' ? 'active_button' : 'active_opacity' }}" id="nav-iNote-tab"
+                type="button"> <a
                     href="{{ url('admin/multiDashboard/13') }}">I-Note({{ $currentStatusCounts['I_NoteOverAll'] }})</a></button>
         </div>
-        
+
     </nav>
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-indent" role="tabpanel" aria-labelledby="nav-indent-tab">
@@ -616,24 +633,5 @@
             data: barData,
             options: barOptions
         });
-
-     
-        document.addEventListener("DOMContentLoaded", function() {
-        var buttons = document.querySelectorAll('.nav-link');
-
-         buttons.forEach(function(button) {
-         button.addEventListener('click', function() {
-            // Remove bold class from all buttons
-            buttons.forEach(function(btn) {
-                btn.classList.remove('bold');
-            });
-
-            // Add bold class to the clicked button
-            this.classList.add('bold');
-        });
-     });
-    });
-
-
     </script>
 @endpush

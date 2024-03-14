@@ -26,6 +26,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/flatpickr.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/bootstrap-toggle.min.css') }}">
     <style>
+
+      
         .active_menu {
             background-color: #e5b805c1;
             color: white !important;
