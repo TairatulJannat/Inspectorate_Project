@@ -553,6 +553,7 @@ class FinalSpecController extends Controller
         }
         return response()->json(['success' => 'Done']);
     }
+
     public function get_offer_details($offerReferenceNo)
     {
 
@@ -627,7 +628,9 @@ class FinalSpecController extends Controller
             $itemType = Item_Type::find($itemTypeId);
             $itemTypeName = $itemType ? $itemType->name : 'Unknown Item Type';
 
-            $parameterGroups = ParameterGroup::with('supplierSpecData')
+            $parameterGroups = ParameterGroup::with(['assignParameterValues' => function ($query) {
+                $query->where('doc_type_id', 6);
+            }])
                 ->where('item_id', $itemId)
                 ->where('reference_no', $indentRefNo)
                 ->get();
@@ -656,6 +659,179 @@ class FinalSpecController extends Controller
                 'isSuccess' => false,
                 'message' => "Validation failed. Please check the inputs!",
                 'error' => $validator->errors()->toArray()
+            ], 200);
+        }
+    }
+
+    public function editSpec(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $data = AssignParameterValue::where('parameter_group_id', $id)->where('doc_type_id', 6)->get();
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Parameter Group Data not found'], 404);
+        }
+    }
+
+    public function storeSpec(Request $request)
+    {
+        $customMessages = [
+            'assign_parameter_group_id.required' => 'Please select a Parameter Group.',
+            'parameter_name.required' => 'Please enter a Parameter Name.',
+            'parameter_value.required' => 'Please enter a Parameter Value.',
+            'finalSpecRefNo.required' => 'Final Spec Ref. No. required.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'assign_parameter_group_id' => ['required', 'exists:parameter_groups,id'],
+            'parameter_name' => ['required', 'string', 'max:255'],
+            'parameter_value' => ['required', 'string', 'max:999'],
+            'finalSpecRefNo' => ['required', 'string', 'max:255'],
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Validation failed. Please check the inputs.',
+                'errors' => $validator->errors()->toArray(),
+            ], 200);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $parameterGroup = ParameterGroup::find($request->input('assign_parameter_group_id'));
+
+            if (!$parameterGroup) {
+                return response()->json([
+                    'isSuccess' => false,
+                    'message' => 'Invalid Parameter Group selected!',
+                ], 200);
+            }
+
+            $parameterNames = (array) $request->input('parameter_name');
+            $parameterValues = (array) $request->input('parameter_value');
+
+            $assignParameterValues = [];
+
+            $finalSpecData = FinalSpec::where("reference_no", $request->input('finalSpecRefNo'))->first();
+
+            foreach ($parameterNames as $key => $parameterName) {
+                $assignParameterValue = new AssignParameterValue();
+
+                $assignParameterValue->parameter_name = $parameterName;
+                $assignParameterValue->parameter_value = $parameterValues[$key];
+                $assignParameterValue->parameter_group_id = $parameterGroup->id;
+                $assignParameterValue->doc_type_id = 6;
+                $assignParameterValue->reference_no = $finalSpecData->offer_reference_no;
+
+                $assignParameterValues[] = $assignParameterValue;
+            }
+
+            foreach ($assignParameterValues as $assignParameterValue) {
+                if (!$assignParameterValue->save()) {
+                    DB::rollBack();
+
+                    return response()->json([
+                        'isSuccess' => false,
+                        'message' => 'Something went wrong while storing data!',
+                    ], 200);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'isSuccess' => true,
+                'message' => 'Parameter Names and Values saved successfully!',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log detailed error information for debugging purposes
+            \Log::error('Error in store method: ' . $e->getMessage());
+
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Something went wrong!',
+                'error' => $e->getMessage(),
+            ], 200);
+        }
+    }
+
+    public function updateSpec(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id' => 'required',
+            'parameter_name' => 'required',
+            'parameter_value' => 'required',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $parameterValue = AssignParameterValue::findOrFail($validatedData['id']);
+            $parameterValue->id = $validatedData['id'];
+            $parameterValue->parameter_name = $validatedData['parameter_name'];
+            $parameterValue->parameter_value = $validatedData['parameter_value'];
+
+            $result = $parameterValue->update();
+
+            if ($result) {
+                DB::commit();
+                return response()->json([
+                    'isSuccess' => true,
+                    'message' => 'Parameters updated successfully!'
+                ], 200);
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'isSuccess' => false,
+                    'message' => 'Failed to update Parameters!'
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Handle the exception, log the error, etc.
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Error updating Parameters!'
+            ], 200);
+        }
+    }
+
+    public function destroySpec(Request $request)
+    {
+        $id = $request->id;
+
+        DB::beginTransaction();
+
+        try {
+            $parameterValue = AssignParameterValue::findOrFail($id);
+
+            $result = $parameterValue->delete();
+
+
+            if ($result) {
+                DB::commit();
+                return response()->json([
+                    'isSuccess' => true,
+                    'message' => 'Parameters deleted successfully!'
+                ], 200);
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'isSuccess' => false,
+                    'message' => 'Failed to delete Parameters!'
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Handle the exception, log the error, etc.
+            return response()->json([
+                'isSuccess' => false,
+                'message' => 'Error deleting Parameters!'
             ], 200);
         }
     }

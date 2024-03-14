@@ -11,32 +11,40 @@
         <div class="card mt-2">
             <div class="row mt-2">
 
-                <div class="d-flex justify-content-center align-item-center">
 
-                    <div class="col-4">
-                        From: <input type="date" class="form-control" name="from_date" id="from_date">
-                    </div>
-                    <div class="col-4">
-                        To: <input type="date" class="form-control" name="to_date" id="to_date">
-                    </div>
-                    <div class="col-3 d-flex justify-content-center align-item-center">
-                        <button class='btn btn-success' id="rr_filter_btn">Filter</button>
-                    </div>
-
-                </div>
                 <div class="modal-body">
+                    <form action="" id="myForm">
+                        <div class="d-flex justify-content-center align-item-center">
 
-                    <div class="row">
-                        <form action="" id="myForm" >
+                            <div class="col-3">
+                                Type:<select name="report_type" id="report_type" class="form-control">
+                                    <option value="">Select Type</option>
+                                    <option value="0">Weekly</option>
+                                    <option value="1">Monthly</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                From: <input type="date" class="form-control" name="from_date" id="from_date">
+                            </div>
+                            <div class="col-3">
+                                To: <input type="date" class="form-control" name="to_date" id="to_date">
+                            </div>
+                            <div class="col-3 d-flex justify-content-center align-item-center">
+                                <button class='btn btn-success' id="rr_filter_btn">Filter</button>
+                            </div>
+
+                        </div>
+                        <div class="row">
+
                             @csrf
                             <div id="report">
 
 
                             </div>
 
-                        </form>
-                    </div>
 
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -50,7 +58,5 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.report_return.report_js')
-    <script>
-        
-    </script>
+    <script></script>
 @endpush

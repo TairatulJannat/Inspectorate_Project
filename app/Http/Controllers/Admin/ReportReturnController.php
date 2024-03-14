@@ -18,6 +18,7 @@ class ReportReturnController extends Controller
     {
         return view('backend.report_return.weekly_report');
     }
+
     public function report_data(Request $request)
     {
         $insp_id = Auth::user()->inspectorate_id;
@@ -234,7 +235,7 @@ class ReportReturnController extends Controller
         $data->letter_date = $request->date;
         $data->subject = $request->subject;
         $data->body_1 = $request->body_1;
-        $data->body_2 = $request->body_2;
+        $data->body_2 = $request->report_html;
         $data->signature = $request->signature;
         $data->anxs = $request->anxs;
         $data->distr = $request->distr;
@@ -246,17 +247,21 @@ class ReportReturnController extends Controller
         $data->internal_info = $request->internal_info;
         $data->page_size = $request->page_size;
         $data->header_footer = $request->header_footer;
+        $data->report_type = $request->report_type;
+        $data->from_date = $request->from_date;
+        $data->to_date = $request->to_date;
 
         $data->save();
 
-        return response()->json(['success' => "Report saved"]);
+        return response()->json(['success' => $request->all()]);
     }
 
 
 
-    public function monthly_report()
+    public function index()
     {
-        return view('backend.report_return.monthly_report');
+        $rr_lists = ReportReturn::orderBy('id', 'desc')->get();
+        return view('backend.report_return.index', compact('rr_lists'));
     }
 
     public function monthly_report_data(Request $request)
@@ -358,7 +363,7 @@ class ReportReturnController extends Controller
         // Returning JSON response
         return response()->json(['success' => "Data Found", 'reports' => $reports]);
     }
-    
+
     public function monthly_store(Request $request)
     {
 
@@ -395,5 +400,22 @@ class ReportReturnController extends Controller
         $data->save();
 
         return response()->json(['success' => "Report saved"]);
+    }
+    public function ReportReturnView($id)
+    {
+    }
+    public function ReportReturnedit($id)
+    {
+        $rr_list = ReportReturn::find($id);
+
+
+        return view('backend.report_return.edit', compact('rr_list'));
+    }
+
+    public function ReportReturndetails($id)
+    {
+    }
+    public function ReportReturndetete($id)
+    {
     }
 }

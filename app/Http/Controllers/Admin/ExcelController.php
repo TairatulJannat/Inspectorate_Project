@@ -1137,6 +1137,68 @@ class ExcelController extends Controller
         ]);
     }
 
+    protected function exportFinalSpecData($finalSpecRefNo)
+    {
+        $finalSpecData = FinalSpec::where('reference_no', $finalSpecRefNo)->first();
+
+        $indentRefNo = $finalSpecData->indent_reference_no;
+
+        // Retrieve all parameter groups with their assigned parameter values for the given indent reference number
+        $parameterGroups = ParameterGroup::where('reference_no', $indentRefNo)
+            ->with(['assignParameterValues' => function ($query) {
+                $query->where('doc_type_id', 6);
+            }])
+            ->get();
+
+        // Initialize an array to store the Excel data
+        $excelData = [];
+        // Initialize a counter for the serial number
+        $sNo = 1;
+
+        // Iterate through each parameter group
+        foreach ($parameterGroups as $group) {
+            // Initialize a flag to check if it's the first parameter value in the group
+            $first = true;
+
+            // If the group has assigned parameter values, iterate through each value
+            if (count($group->assignParameterValues) > 0) {
+                foreach ($group->assignParameterValues as $value) {
+                    // If it's the first parameter value in the group, add a row with the group name
+                    if ($first) {
+                        $excelData[] = [
+                            'S. No.' => $sNo++,
+                            'Parameter Group Name' => $group->name,
+                            'Parameter Name' => '',
+                            'Parameter Value' => '',
+                        ];
+                        $first = false;
+                    }
+                    // Add a row with the parameter name and value
+                    $excelData[] = [
+                        'S. No.' => '',
+                        'Parameter Group Name' => '',
+                        'Parameter Name' => $value->parameter_name,
+                        'Parameter Value' => $value->parameter_value,
+                    ];
+                }
+            } else {
+                // If the group has no assigned parameter values, add a row with the group name
+                $excelData[] = [
+                    'S. No.' => $sNo++,
+                    'Parameter Group Name' => $group->name,
+                    'Parameter Name' => '',
+                    'Parameter Value' => '',
+                ];
+            }
+        }
+
+        // Define the file name for the Excel file
+        $fileName = "final_spec_data_{$finalSpecRefNo}.xlsx";
+
+        // Download the Excel file with the data
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FinalSpecExport($excelData), $fileName);
+    }
+
     public function getOfferedSuppliers(Request $request)
     {
         try {
