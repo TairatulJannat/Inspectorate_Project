@@ -378,36 +378,60 @@
                             offerReferenceNo,
                         type: 'GET',
                         success: function(response) {
-                            var item_html = '<option value="' + response.item.id + '">' +
-                                response.item.name + '</option>';
-                            var itemType_html = '<option value="' + response.itemType.id +
-                                '">' + response.itemType.name + '</option>';
-                            // var tenderReferenceNo_html = '<option value="' + response
-                            //     .tenderReferenceNo.reference_no + '">' + response
-                            //     .tenderReferenceNo
-                            //     .reference_no + '</option>';
-                            // var indentReferenceNo_html = '<option value="' + response
-                            //     .indentReferenceNo.reference_no + '">' + response
-                            //     .indentReferenceNo
-                            //     .reference_no + '</option>';
 
-                            var suppliers_html = "";
+                            if (response.item) {
+                                var item_html = '<option value="' + response.item.id + '">' +
+                                    response.item.name + '</option>';
+                                $('#item_id').html(item_html);
 
-                            $.each(response.suppliernames, function(index, supplierName) {
-                                suppliers_html += '<option value="' + supplierName.id +
-                                    '">' + supplierName.firm_name + '</option>';
-                            });
+                            } else {
+                                var item_html =
+                                    '<option value="">No nomenclature found</option>';
+                                $('#item_id').html(item_html);
+                                error_notification('No Nomenclature Found')
+                            }
+
+                            if (response.itemType) {
+                                var itemType_html = '<option value="' + response.itemType.id +
+                                    '">' + response.itemType.name + '</option>';
+                                $('#item_type_id').html(itemType_html);
+                            } else {
+                                var itemType_html =
+                                    '<option value="">No item type found</option>';
+                                $('#item_type_id').html(itemType_html);
+                                error_notification('No Item Type Found')
+                            }
 
 
+                            if (response.suppliernames) {
+                                var suppliers_html = "";
 
-                            $('#item_id').html(item_html);
-                            $('#item_type_id').html(itemType_html);
-                            $('#tender_reference_no').val(response.tenderReferenceNo
-                                .reference_no);
-                            $('#indent_reference_no').val(response.indentReferenceNo
-                                .reference_no);
-                            $('#supplier_id').html(suppliers_html);
+                                $.each(response.suppliernames, function(index, supplierName) {
+                                    suppliers_html += '<option value="' + supplierName
+                                        .id +
+                                        '">' + supplierName.firm_name + '</option>';
+                                });
+                                $('#supplier_id').html(suppliers_html);
+                            } else {
+                                var suppliers_html =
+                                    '<option value="">No Supplier Found</option>';
+                                $('#supplier_id').html(suppliers_html);
+                                error_notification('No Supplier Found')
+                            }
 
+
+                            if (response.tenderReferenceNo) {
+                                $('#tender_reference_no').val(response.tenderReferenceNo
+                                    .reference_no);
+                            } else {
+                                $('#tender_reference_no').val('');
+                            }
+                            if (response.indentReferenceNo) {
+                                $('#indent_reference_no').val(response.indentReferenceNo
+                                    .reference_no);
+                            } else {
+                                $('#indent_reference_no').val('');
+                            }
 
                         },
                         error: function(error) {

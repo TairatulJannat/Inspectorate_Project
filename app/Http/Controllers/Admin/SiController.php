@@ -117,7 +117,7 @@ class SiController extends Controller
                     ->where('stage_inspections.inspectorate_id', $insp_id)
                     ->where('stage_inspections.status', 0)
                     ->whereIn('stage_inspections.section_id', $section_ids)
-                    ->select('stage_inspections.*','items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*', 'items.name as item_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->get();
             } else {
 
@@ -155,7 +155,7 @@ class SiController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -167,6 +167,14 @@ class SiController extends Controller
                         return '<button class="btn btn-success btn-sm">New</button>';
                     } else {
                         return '<button class="btn btn-success btn-sm">None</button>';
+                    }
+                })
+                ->addColumn('provationally_status', function ($data) {
+
+                    if ($data->provisionally_status == 0) {
+                        return "<div class='bg-success text-light p-1 rounded'>Accepted</div>";
+                    } else {
+                        return "<div class='bg-danger text-light p-1 rounded'>Rejected</div>";
                     }
                 })
 
@@ -211,7 +219,7 @@ class SiController extends Controller
 
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status', 'provationally_status'])
                 ->make(true);
         }
     }
@@ -286,25 +294,24 @@ class SiController extends Controller
         // $selected_document =$indent->additional_documents;
         $item_types = Item_type::where('id', $si->item_type_id)->where('status', 1)->where('inspectorate_id', $inspectorate_id)->first();
 
-            // if ($item_types) {
-            //     // dd($item_types);
-            //      $itemTypeName = $item_types->name;
+        // if ($item_types) {
+        //     // dd($item_types);
+        //      $itemTypeName = $item_types->name;
 
-            // } else{
-            //     $itemTypeName = Null;
-            // }
+        // } else{
+        //     $itemTypeName = Null;
+        // }
 
         $item = Items::where('inspectorate_id', $inspectorate_id)
-         ->whereIn('section_id', $section_ids)
-        ->first();
+            ->whereIn('section_id', $section_ids)
+            ->first();
 
         $fin_years = FinancialYear::all();
 
         $contracts = Contract::all();
-        $supplier=Supplier::where('id', $si->supplier_id)->first();
+        $supplier = Supplier::where('id', $si->supplier_id)->first();
 
-        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years','contracts', 'supplier'));
-
+        return view('backend.si.si_incomming_new.edit', compact('si', 'item', 'dte_managments', 'item_types', 'fin_years', 'contracts', 'supplier'));
     }
 
     public function update(Request $request)

@@ -178,7 +178,7 @@ class IndentController extends Controller
                             if ($designation_id == 3) {
                                 $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
-                            $actionBtn .= '<a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            $actionBtn .= '
                             <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit ">Forward</a>
                             </div>';
                         } else {
@@ -187,7 +187,7 @@ class IndentController extends Controller
                                 $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
                             $actionBtn .= '
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            
                             <a href="' . url('admin/indent/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
@@ -198,7 +198,7 @@ class IndentController extends Controller
                                 $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                             }
                             $actionBtn .= '
-                            <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                            
                             <a href="' . url('admin/indent/details/' . $data->id) . '" class="update">Forwarded</a>
                             </div>';
                         }
@@ -208,7 +208,7 @@ class IndentController extends Controller
                             $actionBtn .= '<a href="' . url('admin/indent/edit/' . $data->id) . '" class="edit2 ">Update</a>';
                         }
                         $actionBtn .= '
-                        <a href="' . url('admin/indent/doc_status/' . $data->id) . '" class="doc">Doc Status</a>
+                        
                         <a href="' . url('admin/indent/details/' . $data->id) . '" class="edit ">Forward</a>
                         </div>';
                     }
@@ -292,7 +292,9 @@ class IndentController extends Controller
                 ->where('inspectorate_id', $inspectorate_id)
                 ->whereIn('section_id', $section_ids)
                 ->get();
-            $item = Items::where('id', $indent->item_id)->first();
+            $item = Items::where('inspectorate_id', $inspectorate_id)
+                ->whereIn('section_id', $section_ids)
+                ->get();
             $fin_years = FinancialYear::all();
             return view('backend.indent.indent_incomming_new.edit', compact('indent', 'item', 'dte_managments', 'additional_documnets', 'item_types', 'fin_years'));
         } catch (\Exception $e) {

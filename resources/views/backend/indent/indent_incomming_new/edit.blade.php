@@ -141,7 +141,12 @@
                                 <select class="form-control select2" id="item_id" name="item_id">
                                     <option value="">Please Select</option>
                                     @if ($item)
-                                        <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
+                                        @foreach ($item as $nomenclature)
+                                            <option value="{{ $nomenclature->id }}"
+                                                {{ $nomenclature->id == $indent->item_id ? 'selected' : '' }}>
+                                                {{ $nomenclature->name }}</option>
+                                        @endforeach
+
                                     @endif
                                 </select>
 

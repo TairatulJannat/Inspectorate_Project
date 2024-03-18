@@ -145,6 +145,14 @@ class SiOutgoingController extends Controller
                         return '<button class="btn btn-info text-white  btn-sm">None</button>';
                     }
                 })
+                ->addColumn('provationally_status', function ($data) {
+
+                    if ($data->provisionally_status == 0) {
+                        return "<div class='bg-success text-light p-1 rounded'>Accepted</div>";
+                    } else {
+                        return "<div class='bg-danger text-light p-1 rounded'>Rejected</div>";
+                    }
+                })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
                     $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id',  11)->latest()->first();
@@ -180,7 +188,7 @@ class SiOutgoingController extends Controller
                     return $actionBtn;
                 })
 
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status','provationally_status'])
                 ->make(true);
         }
     }

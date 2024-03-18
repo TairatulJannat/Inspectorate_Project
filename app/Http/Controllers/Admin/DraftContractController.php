@@ -280,7 +280,9 @@ class DraftContractController extends Controller
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         // $sections = Section::whereIn('id', $section_ids)->get();
-        $finalSpecs = FinalSpec::all();
+        $finalSpecs = FinalSpec::where('insp_id', $inspectorate_id)
+            ->whereIn('sec_id', $section_ids)
+            ->get();
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 

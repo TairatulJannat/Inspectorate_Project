@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="draft_contract_no">Draft Contract Number</label>
                                 <input type="text" class="form-control" id="draft_contract_no" name="draft_contract_no"
@@ -78,7 +78,7 @@
                                     value="{{ $draft_contract->draft_contract_date ? $draft_contract->draft_contract_date : '' }}">
                                 <span id="error_draft_contract_date" class="text-danger error_field"></span>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="draft_contract_received_date">Draft Contract Received Date</label>

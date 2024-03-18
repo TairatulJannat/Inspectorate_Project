@@ -432,9 +432,13 @@ class ReportReturnController extends Controller
                 $column = 'insp_id';
             } elseif (in_array('inspectorate_id', $tableColumns)) {
                 $column = 'inspectorate_id';
-            } else {
-                continue; // Skip if neither column exists
-            }
+            } 
+
+            if (in_array('sec_id', $tableColumns)) {
+                $sec_column = 'sec_id';
+            } elseif (in_array('section_id', $tableColumns)) {
+                $sec_column = 'section_id';
+            } 
 
             // dd($rr_list->insp_id);
             $TotalReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
@@ -444,12 +448,25 @@ class ReportReturnController extends Controller
                 ->where($table . '.' . $column, $rr_list->inspectorate_id)
                 ->get();
 
+            $SigSec = $TotalReceivedData->where("$sec_column", '3');
+            $EnggSec = $TotalReceivedData->where("$sec_column", '4');
+            $FicSec = $TotalReceivedData->where("$sec_column", '5');
+            $EmSec = $TotalReceivedData->where("$sec_column", '1');
+            $DevSec = $TotalReceivedData->where("$sec_column", '2');
+
+            
             $reports[$doc_name] = [
-                'receive' => $TotalReceivedData,
+                'TotalReceived' => $TotalReceivedData,
+                'SIG Sec'=> $SigSec,
+                'ENGG Sec'=> $EnggSec,
+                'FIC Sec'=> $FicSec,
+                'EM Sec'=> $EmSec,
+                'DEV Sec'=> $DevSec,
             ]; // Add count to data array with table name as key
 
         }
-        dd($reports);
+        
+        // return response()->json($reports);
         return view('backend.report_return.details', compact('rr_list', 'reports'));
     }
     public function ReportReturndetete($id)
