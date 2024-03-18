@@ -316,10 +316,8 @@ $currentRouteid = Request::segment(3);
 
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-            <button class="nav-link {{ $currentRouteid == '3' ? 'active_button' : 'active_opacity' }}" id="nav-indent-tab" type="button"><a
-                    class="btn" href="{{ url('admin/adminDashboard') }}">Indent
-                    ({{ $currentStatusCounts['IndentOverAll'] }})
-                </a></button>
+            <button class="nav-link {{ $currentRouteid == '3' ? 'active_button' : 'active_opacity' }}" id="nav-indent-tab" type="button"><a class="btn" href="{{ url('admin/adminDashboard') }}">Indent
+                ({{ $currentStatusCounts['IndentOverAll'] }}) </a></button>
             <button class="nav-link  {{ $currentRouteid == '5' ? 'active_button' : 'active_opacity' }}" id="nav-offer-tab"
                 type="button"><a class="btn " href="{{ url('admin/multiDashboard/5') }}">Offer
                     ({{ $currentStatusCounts['OfferOverAll'] }})

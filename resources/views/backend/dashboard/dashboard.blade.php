@@ -1,6 +1,7 @@
 <?php
 $currentRouteid = Request::segment(3);
-
+$currentRouteidIndent = Request::segment(2);
+// dd($currentRouteidIndent);
 ?>
 @extends('backend.app')
 @section('title', 'Dashboard')
@@ -232,13 +233,13 @@ $currentRouteid = Request::segment(3);
         #nav-indent-tab {
             background-color: #28A8BC;
             color: #ffff;
-            opacity: .3;
+          
         }
 
         #nav-offer-tab {
             background-color: #FBA45A;
             color: #ffff;
-            opacity: .3;
+            
         }
 
         #nav-offer-tab:hover {
@@ -249,25 +250,25 @@ $currentRouteid = Request::segment(3);
         #nav-finalSpec-tab {
             background-color: #28A744;
             color: #ffff;
-            opacity: .3;
+          
         }
 
         #nav-draftContract-tab {
             background-color: #B87AEB;
             color: #ffff;
-            opacity: .3;
+            
         }
 
         #nav-contact-tab {
             background-color: #007AFF;
             color: #ffff;
-            opacity: .3;
+            
         }
 
         #nav-iNote-tab {
             background-color: #AB8574;
             color: #ffff;
-            opacity: .3;
+            
         }
 
         .chart-container {
@@ -296,16 +297,16 @@ $currentRouteid = Request::segment(3);
         .active_opacity a {
 
             opacity: .2;
-            }
+        }
 
-            .active_button a {
+        .active_button a {
 
             opacity: 1;
             border: 3px solid #1C6758;
             border-radius: 5px;
             overflow: hidden;
             box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-            }
+        }
     </style>
 @endpush
 @section('main_menu', 'Dashboard')
@@ -315,21 +316,23 @@ $currentRouteid = Request::segment(3);
 
     <nav class="mt-1">
         <div class="nav nav-tabs justify-content-between" id="nav-tab" role="tablist">
-            <button class="nav-link {{ $currentRouteid == '3' ? 'active_button' : 'active_opacity' }}" id="nav-indent-tab" type="button"><a class="btn "
-                    href="{{ url('admin/adminDashboard') }}">Indent ({{ $currentStatusCounts['IndentOverAll'] }})
+            <button class="nav-link active_button" id="nav-indent-tab" type="button"><a class="btn " href="{{ url('admin/adminDashboard') }}">Indent
+                    ({{ $currentStatusCounts['IndentOverAll'] }})</a></button>
+            <button class="nav-link {{ $currentRouteid == '5' ? 'active_button' : 'active_opacity' }}" id="nav-offer-tab"
+                type="button"><a class="btn " href="{{ url('admin/multiDashboard/5') }}">Offer
+                    ({{ $currentStatusCounts['OfferOverAll'] }})
                 </a></button>
-            <button class="nav-link {{ $currentRouteid == '5' ? 'active_button' : 'active_opacity' }}" id="nav-offer-tab" type="button"><a class="btn "
-                    href="{{ url('admin/multiDashboard/5') }}">Offer ({{ $currentStatusCounts['OfferOverAll'] }})
-                </a></button>
-            <button class="nav-link {{ $currentRouteid == '6' ? 'active_button' : 'active_opacity' }}" id="nav-finalSpec-tab" type="button"><a
-                    href="{{ url('admin/multiDashboard/6') }}">Final Spec
+            <button class="nav-link {{ $currentRouteid == '6' ? 'active_button' : 'active_opacity' }}"
+                id="nav-finalSpec-tab" type="button"><a href="{{ url('admin/multiDashboard/6') }}">Final Spec
                     ({{ $currentStatusCounts['FinalSpecOverAll'] }})</a></button>
-            <button class="nav-link {{ $currentRouteid == '9' ? 'active_button' : 'active_opacity' }}" id="nav-draftContract-tab" type="button"><a
-                    href="{{ url('admin/multiDashboard/9') }}">Draft
+            <button class="nav-link {{ $currentRouteid == '9' ? 'active_button' : 'active_opacity' }}"
+                id="nav-draftContract-tab" type="button"><a href="{{ url('admin/multiDashboard/9') }}">Draft
                     Contract({{ $currentStatusCounts['DraftContractOverAll'] }})</a></button>
-            <button class="nav-link {{ $currentRouteid == '10' ? 'active_button' : 'active_opacity' }}" id="nav-contact-tab" type="button"> <a
+            <button class="nav-link {{ $currentRouteid == '10' ? 'active_button' : 'active_opacity' }}"
+                id="nav-contact-tab" type="button"> <a
                     href="{{ url('admin/multiDashboard/10') }}">Contract({{ $currentStatusCounts['ContractOverAll'] }})</a></button>
-            <button class="nav-link {{ $currentRouteid == '13' ? 'active_button' : 'active_opacity' }}" id="nav-iNote-tab" type="button"> <a
+            <button class="nav-link {{ $currentRouteid == '13' ? 'active_button' : 'active_opacity' }}" id="nav-iNote-tab"
+                type="button"> <a
                     href="{{ url('admin/multiDashboard/13') }}">I-Note({{ $currentStatusCounts['I_NoteOverAll'] }})</a></button>
 
         </div>
@@ -496,7 +499,6 @@ $currentRouteid = Request::segment(3);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-
         //start piechart//
         var docPieChart = {
             series: [{{ $indentNew }}, {{ $indentOnProcess }}, {{ $indentCompleted }},
@@ -650,7 +652,5 @@ $currentRouteid = Request::segment(3);
             data: barData,
             options: barOptions
         });
-
-        
     </script>
 @endpush

@@ -94,7 +94,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
 
-                                <label for="offer_rcv_ltr_dt">Offer Receive Letter Date</label>
+                                <label for="offer_rcv_ltr_dt">Offer Receive Date</label>
                                 <input type="date" class="form-control" id="offer_rcv_ltr_dt" name="offer_rcv_ltr_dt" value={{ \Carbon\Carbon::now()->format('Y-m-d') }}>
 
                                 <span id="error_offer_rcv_ltr_dt" class="text-danger error_field"></span>

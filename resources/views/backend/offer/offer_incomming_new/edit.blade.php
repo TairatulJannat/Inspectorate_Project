@@ -311,6 +311,7 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.offer.offer_incomming_new.index_js')
     <script>
+         $('.select2').select2();
         let fileCount = 1;
         $("#addFile").click(function() {
             var newFileInput =
@@ -324,7 +325,7 @@
             fileCount++;
         });
         $(document).ready(function() {
-            $('.select2').select2();
+           
 
             $('#importExcelBtn').on('click', function(event) {
                 event.preventDefault();
@@ -336,47 +337,38 @@
                 window.location.href = redirectUrl;
             });
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-
-            $('.select2').select2();
-
-            $('#indent_reference_no').off('change').on('change', function() {
-                var indentReferenceNo = $(this).val();
-                if (indentReferenceNo) {
-                    $.ajax({
-                        url: "{{ url('admin/offer/get_indent_details') }}" + '/' +
-                            indentReferenceNo,
-                        type: 'GET',
-                        success: function(response) {
-                            if (response.item) {
-                                var item_html = '<option value="' + response.item.id + '">' +
-                                    response.item.name + '</option>';
-                                $('#item_id').html(item_html);
-                            }
-
-                            if (response.itemType) {
-                                var itemType_html = '<option value="' + response.itemType.id +
-                                    '">' + response.itemType.name + '</option>';
-
-
-                                $('#item_type_id').html(itemType_html);
-                            }
-
-
-
-
-                        },
-                        error: function(error) {
-                            console.log(error);
+        $('#indent_reference_no').off('change').on('change', function() {
+            var indentReferenceNo = $(this).val();
+            if (indentReferenceNo) {
+                $.ajax({
+                    url: "{{ url('admin/offer/get_indent_details') }}" + '/' +
+                        indentReferenceNo,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.item) {
+                            var item_html = '<option value="' + response.item.id + '">' +
+                                response.item.name + '</option>';
+                            $('#item_id').html(item_html);
                         }
-                    });
-                }
-            });
+
+                        if (response.itemType) {
+                            var itemType_html = '<option value="' + response.itemType.id +
+                                '">' + response.itemType.name + '</option>';
+
+
+                            $('#item_type_id').html(itemType_html);
+                        }
 
 
 
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     </script>
+
 @endpush

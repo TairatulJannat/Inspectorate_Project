@@ -15,19 +15,19 @@
                 <div class="modal-body">
                     <form action="" id="myForm">
                         <div class="d-flex justify-content-center align-item-center">
-
+                            
                             <div class="col-3">
-                                Type:<select name="report_type" id="report_type" class="form-control">
-                                    <option value="">Select Type</option>
-                                    <option value="0">Weekly</option>
-                                    <option value="1">Monthly</option>
+                                Type:<select name="report_type" value=" {{ $rr_list->id }}"id="report_type" class="form-control">
+                                    <option>Select Type</option>
+                                    <option value="0" {{ $rr_list->report_type == '0' ? 'selected' : '' }}>Weekly</option>
+                                    <option value="1" {{ $rr_list->report_type == '1' ? 'selected' : '' }}>Monthly</option>
                                 </select>
                             </div>
                             <div class="col-3">
-                                From: <input type="date" class="form-control" name="from_date" id="from_date">
+                                From: <input type="date" class="form-control" name="from_date" id="from_date" {{ $rr_list->from_date == 'from_date' ? 'selected' : '' }}>
                             </div>
                             <div class="col-3">
-                                To: <input type="date" class="form-control" name="to_date" id="to_date">
+                                To: <input type="date" class="form-control" name="to_date" id="to_date" {{ $rr_list->to_date == 'to_date' ? 'selected' : '' }}>
                             </div>
                             <div class="col-3 d-flex justify-content-center align-item-center">
                                 <button class='btn btn-success' id="rr_filter_btn">Filter</button>
@@ -38,6 +38,7 @@
 
                             @csrf
                             <div id="report">
+                                <input type="hidden" name="edit_reportReturn_id" id="edit_reportReturn_id">
                                 <div class="">
                                     <div class="">
                                         <div class="">
@@ -55,10 +56,9 @@
                                                                 <select name="page_size"
                                                                     class="form-control bg-success text-light"
                                                                     id="page_size">
-                                                                    <option value="A4">Select Page Size</option>
-                                                                    <option value="A4">A4</option>
-                                                                    <option value="Legal">Legal</option>
-                                                                    <option value="Letter">Letter</option>
+                                                                    <option value="A4" {{ $rr_list->page_size == 'A4' ? 'selected' : '' }}>Select Page Size</option>
+                                                                    <option value="Legal" {{ $rr_list->page_size== 'Legal' ? 'selected' : '' }}>Legal</option>
+                                                                    <option value="Letter" {{ $rr_list->page_size == 'Letter' ? 'selected' : '' }}>Letter</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-2 m-2">
@@ -193,7 +193,7 @@
                                                     {{-- <div class="col-12 text-center">RESTRICTED</div> --}}
 
                                                     <div class="mt-2">
-                                                        <button type="submit" class="btn btn-success"> Save </button>
+                                                        <button type="submit" class="btn btn-success"> Update </button>
                                                     </div>
 
 
