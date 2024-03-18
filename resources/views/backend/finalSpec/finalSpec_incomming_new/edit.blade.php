@@ -69,9 +69,9 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="final_spec_receive_Ltr_dt">Final Spec Receive Date</label>
-                                <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
+                                <input type="text" class="form-control" id="final_spec_receive_Ltr_dt"
                                     name="final_spec_receive_Ltr_dt"
-                                    value="{{ $finalSpec->final_spec_receive_Ltr_dt ? $finalSpec->final_spec_receive_Ltr_dt : '' }} ">
+                                    value="{{ $finalSpec->final_spec_receive_Ltr_dt ? $finalSpec->final_spec_receive_Ltr_dt : $finalSpec->final_spec_receive_Ltr_dt }} ">
                                 <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -157,11 +157,15 @@
 
                                 <select class="form-control" id="item_id" name="item_id">
                                     {{-- <option value="">Please Select</option> --}}
+
                                     @if ($item)
-                                        <option value="{{ $item->id }}"
-                                            {{ $item->id == $finalSpec->item_id ? 'selected' : '' }}>
-                                            {{ $item->name }}
-                                        </option>
+                                        @foreach ($item as $nomenclature)
+                                            <option value="{{ $nomenclature->id }}"
+                                                {{ $nomenclature->id == $finalSpec->item_id ? 'selected' : '' }}>
+                                                {{ $nomenclature->name }}
+                                            </option>
+                                        @endforeach
+
                                     @endif
                                 </select>
 

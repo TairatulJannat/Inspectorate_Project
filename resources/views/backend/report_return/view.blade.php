@@ -10,7 +10,7 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-body">
-
+                {!!$rr_list->body_2!!}
             </div>
         </div>
     </div>

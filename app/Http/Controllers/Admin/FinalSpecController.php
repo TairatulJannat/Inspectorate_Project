@@ -276,7 +276,7 @@ class FinalSpecController extends Controller
 
         $item = Items::where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
-            ->first();
+            ->get();
 
         $fin_years = FinancialYear::all();
 
@@ -289,7 +289,7 @@ class FinalSpecController extends Controller
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::all();
-
+        // dd($finalSpec);
         return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalSpec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers'));
     }
 
@@ -307,6 +307,7 @@ class FinalSpecController extends Controller
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->fin_year_id = $request->fin_year_id;
+        $data->final_spec_receive_Ltr_dt = $request->final_spec_receive_Ltr_dt;
         $data->received_by = Auth::user()->id;
         $data->remark = $request->remark;
         $data->status = 0;

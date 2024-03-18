@@ -9,6 +9,12 @@
 
     <div class="col-sm-12 col-xl-12">
 
+        @foreach ($reports as $report)
+
+        tab
+
+        @endforeach
+
     </div>
 @endsection
 @push('js')
