@@ -407,6 +407,9 @@ class ReportReturnController extends Controller
     {
 
         $rr_list = ReportReturn::find($id);
+
+
+        $rr_list = ReportReturn::find($id);
         return view('backend.report_return.edit', compact('rr_list'));
     }
 
