@@ -22,6 +22,7 @@ use App\Models\ParameterGroup;
 use App\Models\Additional_document;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class TenderController extends Controller
@@ -153,17 +154,19 @@ class TenderController extends Controller
 
     public function store(Request $request)
     {
-        dd( $request->sender);
-        // $this->validate($request, [
-        //     'sender' => 'required',
-        //     'admin_section' => 'required',
-        //     'reference_no' => 'required',
-        //     'spec_type' => 'required',
-        //     'additional_documents' => 'required',
-        //     'item_type_id' => 'required',
-        //     'spec_received_date' => 'required',
 
-        // ]);
+        $this->validate($request, [
+            'sender' => 'required',
+            'admin_section' => 'required',
+            'reference_no' => [
+                'required',
+                Rule::unique('tenders')->where(function ($query) {
+                    return $query->where('insp_id', Auth::user()->inspectorate_id);
+                }),
+            ],
+            'indent_reference_date' => 'required',
+        ]);
+
         $insp_id = Auth::user()->inspectorate_id;
         $sec_id = $request->admin_section;
 
