@@ -121,8 +121,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="offer_reference_no">Offer Reference No</label>
-                                <input type="text" id="offer_reference_no" class="form-control"
-                                    name="offer_reference_no"
+                                <input type="text" id="offer_reference_no" class="form-control" name="offer_reference_no"
                                     value="{{ $draft_contract->offer_reference_no ? $draft_contract->offer_reference_no : '' }}">
 
                                 <span id="error_offer_reference_no" class="text-danger error_field"></span>
@@ -300,8 +299,8 @@
                 event.preventDefault();
 
                 var url = $(this).attr('href');
-                var draftContractNo = $('#draft_contract_no').val();
-                var redirectUrl = url + '?draftContractNo=' + encodeURIComponent(draftContractNo);
+                var draftContractRefNo = $('#reference_no').val();
+                var redirectUrl = url + '?draftContractRefNo=' + encodeURIComponent(draftContractRefNo);
 
                 window.location.href = redirectUrl;
             });
