@@ -289,6 +289,12 @@
             .catch(error => {
 
             });
+
+        ClassicEditor
+        .create(document.querySelector('#anxsEdit'))
+        .catch(error => {
+
+        });
         ClassicEditor
             .create(document.querySelector('#distr'))
             .catch(error => {
