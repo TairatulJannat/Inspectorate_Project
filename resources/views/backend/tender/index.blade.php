@@ -9,7 +9,7 @@
 
         }
         .table{
-            border-radius:10px !important; 
+            border-radius:10px !important;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
         }
         .table thead{
@@ -17,7 +17,7 @@
             color: #ffff
         }
         .table thead tr th{
-         
+
             color: #ffff
         }
     </style>
@@ -26,7 +26,7 @@
 @section('active_menu', 'Incoming')
 @section('content')
 
-    
+
 
     <div class="col-sm-12 col-xl-12">
         <div class="card">
@@ -55,16 +55,17 @@
                             <tr>
                                 <th>SL No</th>
                                 <th>Reference Number</th>
-                                <th>Financial Year</th>
-                                <th>Name of Eqpt</th>
-                                <th>User Directorate</th>
-                                <th>Receive Date</th>
+                                {{-- <th>Financial Year</th> --}}
+                                {{-- <th>Name of Eqpt</th> --}}
                                 <th>Section Name</th>
-                                <th>Remark</th>
-                                <th>Present state of spec</th>
+                                <th>Indent Reference No</th>
+                                <th>Receive Date</th>
+
+                                {{-- <th>Remark</th> --}}
+                                {{-- <th>Present state of spec</th>
                                 <th>Tender Date</th>
                                 <th>Opening Date</th>
-                                <th>Action</th>
+                                <th>Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>

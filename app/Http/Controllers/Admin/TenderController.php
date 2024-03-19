@@ -153,6 +153,7 @@ class TenderController extends Controller
 
     public function store(Request $request)
     {
+        dd( $request->sender);
         // $this->validate($request, [
         //     'sender' => 'required',
         //     'admin_section' => 'required',
@@ -170,6 +171,7 @@ class TenderController extends Controller
         $data->insp_id = $insp_id;
         $data->sec_id = $sec_id;
         $data->sender = $request->sender;
+
         $data->reference_no = $request->reference_no;
         $data->tender_number = $request->tender_number;
         $data->indent_reference_no = $request->indent_reference_no;

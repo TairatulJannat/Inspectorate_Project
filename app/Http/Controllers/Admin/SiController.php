@@ -171,12 +171,12 @@ class SiController extends Controller
                 })
                 ->addColumn('provationally_status', function ($data) {
 
-                    if ($data->provisionally_status == '0') {
+                    if ($data->provisionally_status = 0) {
                         return "<div class='bg-success text-light p-1 rounded'>Accepted</div>";
-                    } elseif ($data->provisionally_status == '1') {
+                    } elseif ($data->provisionally_status = 1) {
                         return "<div class='bg-danger text-light p-1 rounded'>Rejected</div>";
                     } else {
-                        return "<div class='bg-warning text-light p-1 rounded'>None</div>";
+                        return "<div class='bg-warning text-light p-1 rounded'>Nil</div>";
                     }
                 })
 
