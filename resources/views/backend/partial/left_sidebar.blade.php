@@ -316,13 +316,15 @@ $currentControllerName = Request::segment(2);
                                 <span>Report Return</span></a>
                             <ul class="nav-submenu menu-content {{ Request::is('*/Inote/*') ? 'open_menu' : '' }}">
                                 @if (sub_menu_check('inote/view') !== null)
-                                    <li><a class="text-light" href="{{ route('admin.rr/weekly') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Monthly Report</a>
+
+                                    <li><a class="text-light" href="{{ route('admin.rr/list') }}"
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Report List</a>
+
                                     </li>
                                 @endif
                                 @if (sub_menu_check('inote/create') !== null)
                                     <li><a class="text-light" href="{{ route('admin.rr/weekly') }}"
-                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Weekly Report</a></li>
+                                            class="{{ Request::is('*/*/all_menu') ? 'active' : '' }}">Create Report</a></li>
                                 @endif
                             </ul>
                         </li>

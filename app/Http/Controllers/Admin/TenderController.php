@@ -94,7 +94,7 @@ class TenderController extends Controller
                 }
                 //......End for showing data for receiver designation
             }
-
+            $query = $query->sortByDesc('id');
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
                 ->addIndexColumn()
@@ -114,12 +114,12 @@ class TenderController extends Controller
 
                     if ($data->status == '2') {
                         $actionBtn = '<div class="btn-group" role="group">
-                       
+
                         <a href="" class="edit btn btn-success btn-sm" disable>Completed</a>';
                     } else {
 
                         $actionBtn = '<div class="btn-group" role="group">
-                        
+
                         <a href="' . url('admin/tender/details/' . $data->id) . '" class="edit btn btn-secondary btn-sm">Forward</a>
                         </div>';
                     }
@@ -134,6 +134,7 @@ class TenderController extends Controller
     public function create()
     {
         $admin_id = Auth::user()->id;
+        $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $sections = Section::whereIn('id', $section_ids)->get();
 
@@ -141,7 +142,11 @@ class TenderController extends Controller
         $additional_documents = Additional_document::where('status', 1)->get();
         $item_types = Item_type::where('status', 1)->get();
         $fin_years = FinancialYear::all();
-        $indent_reference_numbers = Indent::all();
+        $indent_reference_numbers = Indent::where('insp_id', $inspectorate_id)
+            ->whereIn('sec_id', $section_ids)
+            ->orderBy('id', 'desc')
+            ->get();
+
 
         return view('backend.tender.create', compact('dte_managments', 'additional_documents', 'item_types', 'sections', 'fin_years', 'indent_reference_numbers'));
     }

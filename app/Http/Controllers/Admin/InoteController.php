@@ -18,6 +18,7 @@ use App\Models\Items;
 use App\Models\inote;
 use App\Models\InoteDeviation;
 use App\Models\InoteDPL;
+use App\Models\InoteANX;
 use App\Models\InoteLetter;
 use App\Models\InoteLetterDetails;
 use App\Models\Section;
@@ -572,6 +573,7 @@ class InoteController extends Controller
         $anx = InoteDPL::where("reference_no", $id)->first();
 
         return view('backend.inote.inoteHtmlEdit', compact('inoteLetter',  'deviation', 'dpl_15', 'anx', 'inoteLetterDetails'));
+
     }
 
     public function InoteDeviation(Request $request)
@@ -726,6 +728,35 @@ class InoteController extends Controller
         return response()->json(['success' => 'Done']);
     }
 
+
+
+    public function INoteANX(Request $request)
+    {
+        $ins_id = Auth::user()->inspectorate_id;
+        $admin_id = Auth::user()->id;
+        $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+        $inote_reference_no = $request->inote_reference_no;
+        $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
+
+        
+        // Save files if any
+
+        if ($request->hasFile('file')) {
+          
+                $this->fileController->AnxSaveFile($ins_id,  $section_id, $request->file_name, $request->file, 13, $inote_reference_no);
+        }
+
+        // $save_id = $inote->id;
+        // if ($inote->id) {
+       
+        // }
+        return response()->json(['success' => 'Done']);
+    }
+    
+
+
+
+
     public function UpdateInoteLetterDetails(Request $request)
     {
 
@@ -758,3 +789,4 @@ class InoteController extends Controller
         }
     }
 }
+

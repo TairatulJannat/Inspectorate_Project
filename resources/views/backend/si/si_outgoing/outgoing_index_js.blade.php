@@ -51,11 +51,15 @@
                     data: 'dte_managment_name',
                     name: 'sender',
                 },
-
+                
 
                 {
                     data: 'received_date',
                     name: 'received_date',
+                },
+                {
+                    data: 'provationally_status',
+                    name: 'provationally_status',
                 },
                 {
                     data: 'section_name',

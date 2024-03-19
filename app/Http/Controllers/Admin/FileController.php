@@ -39,4 +39,27 @@ class FileController extends Controller
         }
 
     }
+
+    public function AnxSaveFile($insp_id, $sec_id, $file_names, $file, $doc_type_id, $reference_no)
+    {
+        if ($file) {
+            if ($file->isValid()) {
+                $path = $file->store('uploads', 'public');
+
+                File::create([
+                    'file_name' => $file_names, // Corrected variable name
+                    'path' => $path,
+                    'doc_type_id' => $doc_type_id,
+                    'reference_no' => $reference_no,
+                    'inspectorate_id' => $insp_id,
+                    'section_id' => $sec_id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+        } else {
+            return response()->json(['success' => 'No File Found']);
+        }
+
+    }
 }

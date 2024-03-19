@@ -83,6 +83,7 @@
                                 <th>Nomenclature</th>
                                 <th>User Dte</th>
                                 <th>Receive Date</th>
+                                <th>Provationally Status</th>
                                 <th>SecName</th>
                                 <th>Present State Of SI</th>
                                 <th>Act</th>

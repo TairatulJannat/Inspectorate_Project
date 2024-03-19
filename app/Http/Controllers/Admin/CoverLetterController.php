@@ -9,6 +9,9 @@ use App\Models\InoteLetterDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+
 use PDF;
 
 
@@ -51,20 +54,33 @@ class CoverLetterController extends Controller
     }
     public function coverLetterGeneratePdf($doc_reference_id)
     {
+
+        // dd(new ConfigVariables());
         $cover_letter = CoverLetter::where('doc_reference_id', $doc_reference_id)->first();
         // if ($cover_letter) {
         //     $pdf = PDF::loadView('backend.pdf.cover_letter',  ['cover_letter' => $cover_letter])->setPaper('a4');
         //     return $pdf->stream('cover_letter.pdf');
         // }
-        $fontPath = public_path('fonts');
+     
+        $path =  public_path('fonts');
+       
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
 
-        // Create an mPDF object
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+
         $mpdf = new Mpdf([
-            'fontDir' => [public_path('fonts')],
-            'fontdata' => [
+            'tempDir' => $path,
+            'mode'        => 'utf-8',
+            'format'      => 'A4',
+            'orientation' => 'P',
+            'fontDir' => array_merge($fontDirs, [public_path('fonts')]),
+            'fontdata' => $fontData + [ // lowercase letters only in font key
                 'nikosh' => [
                     'R' => 'Nikosh.ttf',
-                ],
+                    'useOTL' => 0xFF,
+                ]
             ],
         ]);
 
@@ -73,8 +89,39 @@ class CoverLetterController extends Controller
         $mpdf->WriteHTML($html);
 
         // Output or download the PDF
-        $mpdf->Output('sample.pdf', 'D');
+        $mpdf->Output();
     }
+
+
+
+    // function initializeMpdf()
+    // {
+    //     $path = createDirectory("public/datta-able/pdf");
+    //     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    //     $fontDirs = $defaultConfig['fontDir'];
+
+    //     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    //     $fontData = $defaultFontConfig['fontdata'];
+    //     $mpdf = new \Mpdf\Mpdf([
+    //         'tempDir' => $path,
+    //         'mode'        => 'utf-8',
+    //         'format'      => 'A4',
+    //         'orientation' => 'P',
+    //         'fontDir' => array_merge($fontDirs,[public_path('datta-able/pdf/fonts/')]),
+    //         'fontdata' => $fontData + [ // lowercase letters only in font key
+    //             'nikosh' => [
+    //                 'R' => 'Nikosh.ttf',
+    //                 'useOTL' => 0xFF,
+    //             ]
+    //         ],
+    //     ]);
+
+    //     $mpdf->autoScriptToLang         = true;
+    //     $mpdf->autoLangToFont           = true;
+    //     $mpdf->allow_charset_conversion = false;
+
+    //     return $mpdf;
+    // }
 
     public function edit(Request $request)
     {
@@ -111,7 +158,7 @@ class CoverLetterController extends Controller
 
     public function GenerateINotePdf($id)
     {
-        $inote_letter=InoteLetter::find($id);
+        $inote_letter = InoteLetter::find($id);
         $inoteLetterDetails = InoteLetterDetails::where("inote_letter_id", $inote_letter->id)->get();
         // $pdf = PDF::loadView('backend.pdf.inote')->setPaper('a4', 'landscape');
         // return $pdf->stream('cover_letter.pdf');

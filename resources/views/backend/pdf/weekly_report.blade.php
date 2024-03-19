@@ -13,8 +13,10 @@
         }
 
         @font-face {
-
-           @font-face {font-family: nikosh; src: url('.public_path('fonts/Nikosh.ttf').') format("truetype");}
+            font-family: 'bengali';
+            src: url('/BengaliFont.ttf') format('truetype');
+            /* Replace with the actual path to your Bangla font file */
+        }
          /* @font-face {
             font-family: 'Nikosh';
             src: url('{{ public_path('fonts/Nikosh.ttf') }}') format('truetype');
@@ -91,70 +93,70 @@
 
 <body>
     <header>
-        <p> {!! $cover_letter->header_footer !!}</p>
+        <p> </p>
     </header>
     <footer>
-        <p>{!! $cover_letter->header_footer !!}</p>
+        <p></p>
     </footer>
     <div class="row">
 
         <div class="content">
             <div style="overflow: auto;">
                 <div style="float: left; width: 40%; position:fixed; top:105px; ">
-                    {{ $cover_letter->letter_reference_no }}
+
                 </div>
-                <div class="header" style="float: right; width: 30%;font-family:nikosh;">
-                    <p>{{ $cover_letter->inspectorate_name }}</p>
-                    <p>{{ $cover_letter->inspectorate_place }}</p>
-                    <p>Tel: {{ $cover_letter->mobile }}</p>
-                    <p>Fax: {{ $cover_letter->fax }}</p>
-                    <p>E-mail: {{ $cover_letter->email }}</p>
-                    <p>{{ $cover_letter->letter_date }}</p>
+                <div class="header" style="float: right; width: 30%;">
+                    <p></p>
+                    <p></p>
+                    <p>Tel: </p>
+                    <p>Fax: </p>
+                    <p>E-mail: </p>
+                    <p></p>
                 </div>
 
                 <div style="clear: both; text-decoration: underline;">
-                    <h4 style="padding:0px; margin-top:8px ; text-align: justify;">{{ $cover_letter->subject }}</h4>
+                    <h4 style="padding:0px; margin-top:8px ; text-align: justify;"></h4>
                 </div>
                 <div style="padding:0px; margin:0px">
                     <p style="padding:0px; margin:0px">Refs:</p>
-                    <div class='refs_body_1' style="text-align: justify;">{!! $cover_letter->body_1 !!}</div>
+                    <div class='refs_body_1' style="text-align: justify;"></div>
                     <div style="text-align: justify;">
-                        {!! $cover_letter->body_2 !!}
+
                     </div>
                 </div>
             </div>
 
             <div class="signature" style="float: right; width: 30%; margin-top:70px;">
-                {!! $cover_letter->signature !!}
+
 
             </div>
 
             <div style="clear: both;">
                 <p style="margin: 10px 0;">Anxs / Enclosures:</p>
-                <div>{!! $cover_letter->anxs !!}</div>
+                <div></div>
             </div>
             {{-- @if ($cover_letter->distr) --}}
                 <div>
                     <p style="margin: 10px 0;">Distr:</p>
-                    <div>{!! $cover_letter->distr !!}</div>
+                    <div></div>
                 </div>
             {{-- @endif --}}
             {{-- @if ($cover_letter->extl) --}}
                 <div>
                     <p style="margin: 10px 0;">Extl:</p>
-                    <div>{!! $cover_letter->extl !!}</div>
+                    <div></div>
                 </div>
             {{-- @endif --}}
             {{-- @if ($cover_letter->act) --}}
                 <div>
                     <p style="margin: 10px 0;">Act:</p>
-                    <div>{!! $cover_letter->act !!}</div>
+                    <div></div>
                 </div>
             {{-- @endif --}}
             {{-- @if ($cover_letter->info) --}}
                 <div>
                     <p style="margin: 10px 0;">Info:</p>
-                    <div>{!! $cover_letter->info !!}</div>
+                    <div></div>
                 </div>
             {{-- @endif --}}
 
@@ -162,15 +164,15 @@
             @if ($cover_letter->internal)
                 <div>
                     <p style="margin: 10px 0;">Internal:</p>
-                    <div>{!! $cover_letter->internal !!}</div>
+                    <div></div>
                 </div>
                 <div>
                     <p style="margin: 10px 0;">Act:</p>
-                    <div>{!! $cover_letter->internal_act !!}</div>
+                    <div></div>
                 </div>
                 <div>
                     <p style="margin: 10px 0;">Info:</p>
-                    <div>{!! $cover_letter->internal_info !!}</div>
+                    <div></div>
                 </div>
             @endif
 
