@@ -8,7 +8,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            
+
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -92,8 +92,6 @@
         event.preventDefault();
 
         var formData = new FormData($('#save_info')[0]);
-
-
         disableButton()
         $.ajax({
             url: "{{ url('admin/inote/store') }}",
@@ -127,6 +125,8 @@
                     .inote_received_date);
                 $('#error_inote_reference_date').text(response.responseJSON.errors
                     .inote_reference_date);
+                $('#error_admin_section').text(response.responseJSON.errors
+                    .admin_section);
 
             }
         });
@@ -191,6 +191,7 @@
         $('#error_reference_no').text("");
         $('#error_inote_received_date').text("");
         $('#error_inote_reference_date').text("");
+        $('#error_admin_section').text("");
 
     }
 

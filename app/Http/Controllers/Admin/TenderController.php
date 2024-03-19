@@ -156,7 +156,6 @@ class TenderController extends Controller
     {
 
         $this->validate($request, [
-            'sender' => 'required',
             'admin_section' => 'required',
             'reference_no' => [
                 'required',
@@ -164,7 +163,9 @@ class TenderController extends Controller
                     return $query->where('insp_id', Auth::user()->inspectorate_id);
                 }),
             ],
-            'indent_reference_date' => 'required',
+            'indent_reference_no' => 'required',
+            'tender_date' => 'required',
+            'receive_date' => 'required',
         ]);
 
         $insp_id = Auth::user()->inspectorate_id;

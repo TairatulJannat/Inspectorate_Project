@@ -8,7 +8,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            
+
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -44,8 +44,8 @@
                 },
 
                 {
-                    data: 'item_type_name',
-                    name: 'item_type_id',
+                    data: 'item_name',
+                    name: 'item_name',
 
                 },
                 {

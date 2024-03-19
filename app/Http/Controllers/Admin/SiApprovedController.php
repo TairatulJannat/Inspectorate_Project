@@ -117,9 +117,10 @@ class SiApprovedController extends Controller
                     ->whereIn('stage_inspections.section_id', $section_ids)->pluck('stage_inspections.id', 'stage_inspections.id')->toArray();
 
                 $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.section_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*','items.name as item_name', 'item_types.name as item_type_name',  'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('stage_inspections.id', $siIds)
                     ->where('stage_inspections.status', 3)
                     ->get();
@@ -143,7 +144,7 @@ class SiApprovedController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -198,7 +199,7 @@ class SiApprovedController extends Controller
 
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status','provationally_status'])
+                ->rawColumns(['action', 'status', 'provationally_status'])
                 ->make(true);
         }
     }
