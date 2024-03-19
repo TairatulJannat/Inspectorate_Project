@@ -80,6 +80,7 @@
                                 <th>Nomenclature</th>
                                 <th>User Dte</th>
                                 <th>Receive Date</th>
+                                <th>Provationally Status</th>
                                 <th>Sec Name</th>
                                 <th>Present State of Si</th>
                                 <th>Act</th>

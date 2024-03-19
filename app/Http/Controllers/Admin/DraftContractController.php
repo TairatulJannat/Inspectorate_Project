@@ -280,7 +280,9 @@ class DraftContractController extends Controller
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         // $sections = Section::whereIn('id', $section_ids)->get();
-        $finalSpecs = FinalSpec::all();
+        $finalSpecs = FinalSpec::where('insp_id', $inspectorate_id)
+            ->whereIn('sec_id', $section_ids)
+            ->get();
 
         $dte_managments = Dte_managment::where('status', 1)->get();
 
@@ -321,7 +323,7 @@ class DraftContractController extends Controller
         $data->item_id = $request->item_id;
         $data->item_type_id = $request->item_type_id;
         $data->received_date = $request->draft_contract_received_date;
-        $data->reference_date = $request->draft_contract_reference_date;
+        $data->reference_date = $request->reference_date;
         $data->draft_contract_no = $request->draft_contract_no;
         $data->draft_contract_date = $request->draft_contract_date;
         $data->fin_year_id = $request->fin_year_id;

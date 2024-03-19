@@ -222,8 +222,6 @@ class OfferController extends Controller
         $section_ids = $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
         $sections = Section::whereIn('id', $section_ids)->get();
         $dte_managments = Dte_managment::where('status', 1)->get();
-
-
         return view('backend.offer.offer_incomming_new.create', compact('sections',  'dte_managments'));
     }
 
@@ -280,9 +278,12 @@ class OfferController extends Controller
         $item_types = Item_type::where('status', 1)
             ->where('inspectorate_id', $inspectorate_id)
             ->whereIn('section_id', $section_ids)
-            ->first();
+            ->get();
         // dd($item_types);
-        $items = Items::where('id', $offer->item_id)->first();
+        $items = Items::where('inspectorate_id', $inspectorate_id)
+            ->whereIn('section_id', $section_ids)
+            ->get();
+
         $fin_years = FinancialYear::all();
         $suppliers = Supplier::all();
         $tender_reference_numbers = Tender::where('insp_id',  $inspectorate_id)->whereIn('sec_id',  $section_ids)->orderBy('id', 'desc')->get();
@@ -543,12 +544,15 @@ class OfferController extends Controller
     {
 
         $indent = Indent::where('reference_no', $indentReferenceNo)->first();
-        $item = Items::where('id', $indent->item_id)->first();
-        $item_type = Item_type::where('id', $indent->item_type_id)->first();
 
+        if ($indent) {
 
+            $item = Items::where('id', $indent->item_id)->first();
+            $item_type = Item_type::where('id', $indent->item_type_id)->first();
 
-
-        return response()->json(['item' => $item, 'itemType' => $item_type]);
+            return response()->json(['item' => $item, 'itemType' => $item_type]);
+        } else {
+            return response()->json(['error' => "indent Reference No Not Found"]);
+        }
     }
 }

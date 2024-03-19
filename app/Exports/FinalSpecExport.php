@@ -28,7 +28,8 @@ class FinalSpecExport implements FromCollection, WithHeadings, WithEvents
             'Parameter Group Name',
             'Parameter Name',
             'Final Spec Parameter Value',
-            'Remarks',
+            'Draft Contract',
+            'Contract',
         ];
     }
 
@@ -41,18 +42,21 @@ class FinalSpecExport implements FromCollection, WithHeadings, WithEvents
                 $event->sheet->getDelegate()->getProtection()->setPassword('123456');
                 $event->sheet->getDelegate()->getProtection()->setSheet(true);
 
-                $event->sheet->getStyle('E6:E' . $event->sheet->getHighestRow())->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+                $event->sheet->getStyle('E7:E' . $event->sheet->getHighestRow())->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+                $event->sheet->getStyle('F7:F' . $event->sheet->getHighestRow())->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
 
                 $event->sheet->getDelegate()->getColumnDimension('A')->setWidth(10);
                 $event->sheet->getDelegate()->getColumnDimension('B')->setWidth(40);
                 $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(40);
                 $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(40);
                 $event->sheet->getDelegate()->getColumnDimension('E')->setWidth(40);
+                $event->sheet->getDelegate()->getColumnDimension('F')->setWidth(40);
 
                 $event->sheet->getDelegate()->getStyle('B')->getAlignment()->setWrapText(true);
                 $event->sheet->getDelegate()->getStyle('C')->getAlignment()->setWrapText(true);
                 $event->sheet->getDelegate()->getStyle('D')->getAlignment()->setWrapText(true);
                 $event->sheet->getDelegate()->getStyle('E')->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('F')->getAlignment()->setWrapText(true);
             },
         ];
     }

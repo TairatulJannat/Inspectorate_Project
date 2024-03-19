@@ -69,9 +69,9 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="final_spec_receive_Ltr_dt">Final Spec Receive Date</label>
-                                <input type="date" class="form-control" id="final_spec_receive_Ltr_dt"
+                                <input type="text" class="form-control" id="final_spec_receive_Ltr_dt"
                                     name="final_spec_receive_Ltr_dt"
-                                    value="{{ $finalSpec->final_spec_receive_Ltr_dt ? $finalSpec->final_spec_receive_Ltr_dt : '' }} ">
+                                    value="{{ $finalSpec->final_spec_receive_Ltr_dt ? $finalSpec->final_spec_receive_Ltr_dt : $finalSpec->final_spec_receive_Ltr_dt }} ">
                                 <span id="error_final_spec_receive_Ltr_dt" class="text-danger error_field"></span>
                             </div>
                         </div>
@@ -157,11 +157,15 @@
 
                                 <select class="form-control" id="item_id" name="item_id">
                                     {{-- <option value="">Please Select</option> --}}
+
                                     @if ($item)
-                                        <option value="{{ $item->id }}"
-                                            {{ $item->id == $finalSpec->item_id ? 'selected' : '' }}>
-                                            {{ $item->name }}
-                                        </option>
+                                        @foreach ($item as $nomenclature)
+                                            <option value="{{ $nomenclature->id }}"
+                                                {{ $nomenclature->id == $finalSpec->item_id ? 'selected' : '' }}>
+                                                {{ $nomenclature->name }}
+                                            </option>
+                                        @endforeach
+
                                     @endif
                                 </select>
 
@@ -374,36 +378,60 @@
                             offerReferenceNo,
                         type: 'GET',
                         success: function(response) {
-                            var item_html = '<option value="' + response.item.id + '">' +
-                                response.item.name + '</option>';
-                            var itemType_html = '<option value="' + response.itemType.id +
-                                '">' + response.itemType.name + '</option>';
-                            // var tenderReferenceNo_html = '<option value="' + response
-                            //     .tenderReferenceNo.reference_no + '">' + response
-                            //     .tenderReferenceNo
-                            //     .reference_no + '</option>';
-                            // var indentReferenceNo_html = '<option value="' + response
-                            //     .indentReferenceNo.reference_no + '">' + response
-                            //     .indentReferenceNo
-                            //     .reference_no + '</option>';
 
-                            var suppliers_html = "";
+                            if (response.item) {
+                                var item_html = '<option value="' + response.item.id + '">' +
+                                    response.item.name + '</option>';
+                                $('#item_id').html(item_html);
 
-                            $.each(response.suppliernames, function(index, supplierName) {
-                                suppliers_html += '<option value="' + supplierName.id +
-                                    '">' + supplierName.firm_name + '</option>';
-                            });
+                            } else {
+                                var item_html =
+                                    '<option value="">No nomenclature found</option>';
+                                $('#item_id').html(item_html);
+                                error_notification('No Nomenclature Found')
+                            }
+
+                            if (response.itemType) {
+                                var itemType_html = '<option value="' + response.itemType.id +
+                                    '">' + response.itemType.name + '</option>';
+                                $('#item_type_id').html(itemType_html);
+                            } else {
+                                var itemType_html =
+                                    '<option value="">No item type found</option>';
+                                $('#item_type_id').html(itemType_html);
+                                error_notification('No Item Type Found')
+                            }
 
 
+                            if (response.suppliernames) {
+                                var suppliers_html = "";
 
-                            $('#item_id').html(item_html);
-                            $('#item_type_id').html(itemType_html);
-                            $('#tender_reference_no').val(response.tenderReferenceNo
-                                .reference_no);
-                            $('#indent_reference_no').val(response.indentReferenceNo
-                                .reference_no);
-                            $('#supplier_id').html(suppliers_html);
+                                $.each(response.suppliernames, function(index, supplierName) {
+                                    suppliers_html += '<option value="' + supplierName
+                                        .id +
+                                        '">' + supplierName.firm_name + '</option>';
+                                });
+                                $('#supplier_id').html(suppliers_html);
+                            } else {
+                                var suppliers_html =
+                                    '<option value="">No Supplier Found</option>';
+                                $('#supplier_id').html(suppliers_html);
+                                error_notification('No Supplier Found')
+                            }
 
+
+                            if (response.tenderReferenceNo) {
+                                $('#tender_reference_no').val(response.tenderReferenceNo
+                                    .reference_no);
+                            } else {
+                                $('#tender_reference_no').val('');
+                            }
+                            if (response.indentReferenceNo) {
+                                $('#indent_reference_no').val(response.indentReferenceNo
+                                    .reference_no);
+                            } else {
+                                $('#indent_reference_no').val('');
+                            }
 
                         },
                         error: function(error) {

@@ -101,12 +101,9 @@
                                 <select class="form-control select2" id="indent_reference_no" name="indent_reference_no">
 
                                     <option value="">Please Select</option>
-                                    @if ($offer->indent_reference_no)
-                                        <option value={{ $offer->indent_reference_no }} selected>
-                                            {{ $offer->indent_reference_no }}</option>
-                                    @endif
+
                                     @foreach ($indent_reference_numbers as $indent_reference_number)
-                                        <option value="{{ $indent_reference_number->reference_no }}">
+                                        <option value="{{ $indent_reference_number->reference_no }}" {{$indent_reference_number->reference_no==$offer->indent_reference_no? "selected": ""}}>
                                             {{ $indent_reference_number->reference_no }}</option>
                                     @endforeach
 
@@ -122,11 +119,12 @@
 
                                     <option value="">Please Select</option>
 
-                                    @if ($item_types)
-                                        <option
-                                            value="{{ $item_types->id == $offer->item_type_id ? $item_types->id : '' }}">
-                                            {{ $item_types->name }} </option>
-                                    @endif
+                                    @foreach ($item_types as $item_type)
+                                        <option value="{{ $item_type->id }}"
+                                            {{ $item_type->id == $offer->item_type_id ? 'selected' : '' }}>
+                                            {{ $item_type->name }}
+                                        </option>
+                                    @endforeach
 
                                 </select>
                                 <span id="error_item_type_id" class="text-danger error_field"></span>
@@ -137,9 +135,14 @@
                             <div class="form-group">
                                 <label for="item_id">*Nomenclature</label>
                                 <select class="form-control" id="item_id" name="item_id">
+                                    <option value="">Select indent reference no field</option>
                                     @if ($items)
-                                        <option value="{{ $items->id == $offer->item_id ? $items->id : '' }}">
-                                            {{ $items->name }} </option>
+                                        @foreach ($items as $nomenclature)
+                                            <option value="{{ $nomenclature->id }}"
+                                                {{ $nomenclature->id == $offer->item_id ? 'selected' : '' }}>
+                                                {{ $nomenclature->name }}</option>
+                                        @endforeach
+
                                     @endif
                                 </select>
 
@@ -311,7 +314,7 @@
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.offer.offer_incomming_new.index_js')
     <script>
-         $('.select2').select2();
+        $('.select2').select2();
         let fileCount = 1;
         $("#addFile").click(function() {
             var newFileInput =
@@ -325,7 +328,6 @@
             fileCount++;
         });
         $(document).ready(function() {
-           
 
             $('#importExcelBtn').on('click', function(event) {
                 event.preventDefault();
@@ -349,14 +351,24 @@
                             var item_html = '<option value="' + response.item.id + '">' +
                                 response.item.name + '</option>';
                             $('#item_id').html(item_html);
+                        } else {
+                            var item_html =
+                                '<option value=""><span  class="text-danger"> Select Valid Indent Ref No </span> </option>';
+                            $('#item_id').html(item_html);
+                            error_notification('Nomenclature not found in selected indent')
                         }
 
                         if (response.itemType) {
                             var itemType_html = '<option value="' + response.itemType.id +
                                 '">' + response.itemType.name + '</option>';
-
-
                             $('#item_type_id').html(itemType_html);
+
+                        } else {
+
+                            var itemType_html =
+                                '<option value="" ><span  class="text-danger"> Select Valid Indent Ref No </span></option>';
+                            $('#item_type_id').html(itemType_html);
+                            error_notification('Item Type not found in selected indent')
                         }
 
 
@@ -370,5 +382,4 @@
             }
         });
     </script>
-
 @endpush

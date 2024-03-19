@@ -8,9 +8,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            "order": [
-                [1, 'desc']
-            ],
+
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -44,20 +42,18 @@
                     name: 'reference_no',
                     orderable: false
                 },
+
+
                 {
-                    data: 'fin_years_name',
-                    name: 'fin_year_id',
+                    data: 'section_name',
+                    name: 'section_name',
                     orderable: false
                 },
 
+
                 {
-                    data: 'item_type_name',
-                    name: 'item_type_id',
-                    orderable: false
-                },
-                {
-                    data: 'dte_managment_name',
-                    name: 'sender',
+                    data: 'indent_reference_no',
+                    name: 'indent_reference_no',
                     orderable: false
                 },
 
@@ -66,39 +62,10 @@
                     name: 'receive_date',
                     orderable: false
                 },
-                {
-                    data: 'section_name',
-                    name: 'section_name',
-                    orderable: false
-                },
-                {
-                    data: 'remark',
-                    name: 'remark',
-                    orderable: false
-                },
 
-                {
-                    data: 'status',
-                    name: 'status',
-                    orderable: false
-                },
 
-                {
-                    data: 'tender_date',
-                    name: 'tender_date',
-                    orderable: false
-                },
-                {
-                    data: 'opening_date',
-                    name: 'opening_date',
-                    orderable: false
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: true
-                },
-                
+
+
 
             ],
             dom: 'lBfrtip',
@@ -153,7 +120,7 @@
                 //     .additional_documents);
                 // $('#error_item_type_id').text(response.responseJSON.errors.item_type_id);
                 // $('#error_spec_received_date').text(response.responseJSON.errors
-                    // .spec_received_date);
+                // .spec_received_date);
 
             }
         });

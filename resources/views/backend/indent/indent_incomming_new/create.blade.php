@@ -108,8 +108,6 @@
                                 <span id="error_indent_received_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        
-
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -118,9 +116,7 @@
                                     readonly class="form-control" id="received_by" name="received_by">
                                 <span id="error_received_by" class="text-danger error_field"></span>
                             </div>
-                        </div>
-
-                        
+                        </div>   
 
                     </div>
                 </div>
@@ -141,12 +137,5 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.indent.indent_incomming_new.index_js')
-    <script>
-        $(document).ready(function() {
 
-            $('.select2').select2();
-
-
-        });
-    </script>
 @endpush

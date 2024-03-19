@@ -27,9 +27,7 @@
     $(function() {
         var table = $('.yajra-datatable').DataTable({
             searching: true,
-            "order": [
-                [1, 'desc']
-            ],
+
             "bFilter": false,
             "columnDefs": [{
                 "className": "dt-center",
@@ -207,7 +205,7 @@
                     .indent_reference_no);
                 $('#error_tender_reference_no').text(response.responseJSON.errors
                     .tender_reference_no);
-                
+
             }
         });
     })

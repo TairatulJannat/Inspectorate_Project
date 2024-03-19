@@ -8,6 +8,39 @@
 @section('content')
 
     <div class="col-sm-12 col-xl-12">
+        <div class="m-3">
+            <?php
+            $i = 1;
+            ?>
+            @foreach ($reports as $doc_name => $report)
+                <h3>{{ $i = $i++ }}. {{ $doc_name }} Vetting Report</h3>
+
+                <h5>SIG Sec</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Reference No</th>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($report['SIG Sec'] as $sigData)
+                            <tr>
+                                <td>{{ $sigData->item_id }}</td>
+                                <td>{{ $sigData->reference_no }}</td>
+                                <!-- Display more columns based on your data structure -->
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <!-- Repeat the above structure for other sections like ENGG Sec, FIC Sec, etc. -->
+            @endforeach
+        </div>
+
+
+
 
     </div>
 @endsection

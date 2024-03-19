@@ -79,10 +79,6 @@
             min-height: 250px
         }
 
-
-
-
-
         .documents {
             display: flex;
             justify-content: center;

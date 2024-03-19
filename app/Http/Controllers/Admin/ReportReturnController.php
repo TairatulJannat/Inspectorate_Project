@@ -256,8 +256,6 @@ class ReportReturnController extends Controller
         return response()->json(['success' => $request->all()]);
     }
 
-
-
     public function index()
     {
         $rr_lists = ReportReturn::orderBy('id', 'desc')->get();
@@ -409,15 +407,70 @@ class ReportReturnController extends Controller
     {
 
         $rr_list = ReportReturn::find($id);
-        // dd($rr_list);
 
+
+        $rr_list = ReportReturn::find($id);
         return view('backend.report_return.edit', compact('rr_list'));
     }
 
     public function ReportReturndetails($id)
     {
-        $rr_list = ReportReturn::details($id);
-        return view('backend.report_return.details', compact('rr_list'));
+        $rr_list = ReportReturn::find($id);
+        $doc_types = DocType::all();
+
+        foreach ($doc_types as $doc_type) {
+            $modelClass = 'App\\Models\\' . $doc_type->name;
+            $table = $doc_type->table_name;
+            $doc_name = $doc_type->doc_name;
+
+            // Check if the class exists before proceeding
+            if (!class_exists($modelClass) || $modelClass == 'App\\Models\\Tender') {
+                continue; // Skip this iteration if class not found
+            }
+
+            $tableColumns = \Schema::getColumnListing($table);
+
+            // Check if insp_id or inspectorate_id exists in the table
+            if (in_array('insp_id', $tableColumns)) {
+                $column = 'insp_id';
+            } elseif (in_array('inspectorate_id', $tableColumns)) {
+                $column = 'inspectorate_id';
+            } 
+
+            if (in_array('sec_id', $tableColumns)) {
+                $sec_column = 'sec_id';
+            } elseif (in_array('section_id', $tableColumns)) {
+                $sec_column = 'section_id';
+            } 
+
+            // dd($rr_list->insp_id);
+            $TotalReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+                // ->whereBetween($table . '.created_at', [$rr_list->from_date, $rr_list->to_date])
+                ->whereDate($table . '.created_at', '>=', date($rr_list->from_date))
+                ->whereDate($table . '.created_at', '<=', date($rr_list->to_date))
+                ->where($table . '.' . $column, $rr_list->inspectorate_id)
+                ->get();
+
+            $SigSec = $TotalReceivedData->where("$sec_column", '3');
+            $EnggSec = $TotalReceivedData->where("$sec_column", '4');
+            $FicSec = $TotalReceivedData->where("$sec_column", '5');
+            $EmSec = $TotalReceivedData->where("$sec_column", '1');
+            $DevSec = $TotalReceivedData->where("$sec_column", '2');
+
+            
+            $reports[$doc_name] = [
+                'TotalReceived' => $TotalReceivedData,
+                'SIG Sec'=> $SigSec,
+                'ENGG Sec'=> $EnggSec,
+                'FIC Sec'=> $FicSec,
+                'EM Sec'=> $EmSec,
+                'DEV Sec'=> $DevSec,
+            ]; // Add count to data array with table name as key
+
+        }
+        
+        // return response()->json($reports);
+        return view('backend.report_return.details', compact('rr_list', 'reports'));
     }
     public function ReportReturndetete($id)
     {

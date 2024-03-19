@@ -145,17 +145,19 @@
                                     </div>
                         `
         html += `<div class="row mt-2" id='report_html'>
-            <div >
+            <div class="body_2_serial">
                 1. In It of ref ltr, weekly return/reports of this inspectorate is as under:
             </div>
     <div class="col-12">`;
-
+        let i=97
         for (const [category, values] of Object.entries(reports)) {
+            const serial = String.fromCharCode(i++);
             html += `
-        <table class="table table-bordered">
-            <p><b> ${category} Vetting</b></p>
-            <tr>
-                <th>Documents</th>
+            <p class=" m-0 pt-3"><b> ${serial}. ${category} Vetting</b></p>
+        <table class="table table-bordered m-0 p-0">
+            
+            <tr class="m-0 p-0">
+                <th>Sl no</th>
                 <th>Received</th>
                 <th>Vetted</th>
                 <th>Under Vetted</th>

@@ -66,7 +66,8 @@
                                                 @csrf
                                                 <button class="btn-sm btn-info text-light" type="submit">View</button>
                                             </form>
-                                            <form action="{{ route('admin.report_return/details', ['id' => $rr_list->id]) }}"
+                                            <form
+                                                action="{{ route('admin.report_return/details', ['id' => $rr_list->id]) }}"
                                                 method="get" class="m-1">
                                                 @csrf
                                                 <button class="btn-sm btn-success" type="submit">Details</button>
