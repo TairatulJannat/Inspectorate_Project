@@ -194,7 +194,8 @@ class InoteOutgoingController extends Controller
         $details = Inote::leftJoin('item_types', 'inotes.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'inotes.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'inotes.item_id', '=', 'items.id')
-            ->select('inotes.*', 'item_types.name as item_type_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
+            ->leftJoin('fin_years', 'inotes.fin_year_id', '=', 'fin_years.id')
+            ->select('inotes.*', 'item_types.name as item_type_name', 'fin_years.year as fin_year_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
             ->where('inotes.id', $id)
             ->where('inotes.status', 1)
             ->first();

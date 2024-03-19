@@ -54,8 +54,8 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="sender">Sender</label>
-                                <select class="form-control " id="sender" name="sender">
+                                <label for="sender_id">Sender</label>
+                                <select class="form-control " id="sender_id" name="sender_id">
 
                                     <option value="">Please Select</option>
 
@@ -64,7 +64,7 @@
                                     @endforeach
 
                                 </select>
-                                <span id="error_sender" class="text-danger error_field"></span>
+                                <span id="error_sender_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 

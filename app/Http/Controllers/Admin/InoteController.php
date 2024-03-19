@@ -235,13 +235,14 @@ class InoteController extends Controller
 
     public function store(Request $request)
     {
+        
         $this->validate($request, [
-            'sender' => 'required',
+            'sender_id' => 'required',
             'admin_section' => 'required',
             'reference_no' => [
                 'required',
                 Rule::unique('inotes')->where(function ($query) {
-                    return $query->where('inspectorate', Auth::user()->inspectorate_id);
+                    return $query->where('inspectorate_id', Auth::user()->inspectorate_id);
                 }),
             ],
             'inote_received_date' => 'required',
@@ -254,7 +255,7 @@ class InoteController extends Controller
             $data = new inote();
             $data->inspectorate_id = $insp_id;
             $data->section_id = $request->admin_section;
-            $data->sender_id = $request->sender;
+            $data->sender_id = $request->sender_id;
             $data->reference_no = $request->reference_no;
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;

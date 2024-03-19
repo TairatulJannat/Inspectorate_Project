@@ -119,7 +119,7 @@
                 enableeButton()
                 clear_error_field();
                 error_notification('Please fill up the form correctly and try again')
-                $('#error_sender').text(response.responseJSON.errors.sender);
+                $('#error_sender_id').text(response.responseJSON.errors.sender_id);
                 $('#error_reference_no').text(response.responseJSON.errors.reference_no);
                 $('#error_inote_received_date').text(response.responseJSON.errors
                     .inote_received_date);
