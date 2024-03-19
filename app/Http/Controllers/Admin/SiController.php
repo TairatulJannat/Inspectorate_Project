@@ -171,10 +171,12 @@ class SiController extends Controller
                 })
                 ->addColumn('provationally_status', function ($data) {
 
-                    if ($data->provisionally_status == 0) {
+                    if ($data->provisionally_status == '0') {
                         return "<div class='bg-success text-light p-1 rounded'>Accepted</div>";
-                    } else {
+                    } elseif ($data->provisionally_status == '1') {
                         return "<div class='bg-danger text-light p-1 rounded'>Rejected</div>";
+                    } else {
+                        return "<div class='bg-warning text-light p-1 rounded'>None</div>";
                     }
                 })
 
@@ -260,7 +262,6 @@ class SiController extends Controller
             $data->received_date = $request->received_date;
             $data->supplier_id = $request->supplier_id;
             $data->reference_date = $request->reference_date;
-            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;

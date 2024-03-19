@@ -280,15 +280,22 @@ class FinalSpecController extends Controller
 
         $fin_years = FinancialYear::all();
 
-        $supplierIds = SupplierSpecData::where('offer_reference_no', $finalSpec->offer_reference_no)
-            ->groupBy('supplier_id')
-            ->pluck('supplier_id');
 
-        $suppliers = Supplier::whereIn('id', $supplierIds)->get();
 
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
         $offer_reference_numbers = Offer::where('insp_id', $inspectorate_id)->whereIn('sec_id', $section_ids)->get();
+
+        $offerSupplierId=$offer_reference_numbers->supplier_id;
+        dd(  $offerSupplierId);
+        $supplierIds = SupplierSpecData::where('offer_reference_no', $finalSpec->offer_reference_no)
+        ->groupBy('supplier_id')
+        ->pluck('supplier_id');
+
+
+
+    $suppliers = Supplier::whereIn('id',  $offerSupplierId)->get();
+
         // dd($finalSpec);
         return view('backend.finalSpec.finalSpec_incomming_new.edit', compact('finalSpec', 'item', 'dte_managments',  'item_types', 'fin_years', 'tender_reference_numbers', 'indent_reference_numbers', 'suppliers', 'offer_reference_numbers'));
     }
@@ -569,13 +576,13 @@ class FinalSpecController extends Controller
         $indent_reference_no = Indent::where('reference_no', $offer->indent_reference_no)->first();
 
         $offer->suppliers = json_decode($offer->supplier_id, true);
-        if( $offer->suppliers){
+        if ($offer->suppliers) {
             $suppliers = Supplier::whereIn('id',  $offer->suppliers)->get();
-        }else{
+        } else {
             $suppliers = null;
         }
 
-       
+
 
         return response()->json(['item' => $item, 'itemType' => $item_type, 'tenderReferenceNo' => $tender_reference_no, 'indentReferenceNo' => $indent_reference_no, 'suppliernames' => $suppliers]);
     }
