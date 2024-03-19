@@ -370,7 +370,6 @@ class ReportReturnController extends Controller
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-
         $data = new ReportReturn();
         $data->inspectorate_id = $inspectorate_id;
         $data->doc_type_id = $request->doc_type_id;
@@ -403,6 +402,8 @@ class ReportReturnController extends Controller
     }
     public function ReportReturnView($id)
     {
+        $rr_list = ReportReturn::find($id);
+        return view('backend.report_return.view', compact('rr_list'));
     }
     public function ReportReturnedit($id)
     {
@@ -415,6 +416,8 @@ class ReportReturnController extends Controller
 
     public function ReportReturndetails($id)
     {
+        $rr_list = ReportReturn::details($id);
+        return view('backend.report_return.details', compact('rr_list'));
     }
     public function ReportReturndetete($id)
     {
