@@ -35,37 +35,6 @@
                     </div>
                     <div class="row">
 
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="sender">Sender</label>
-                                <select class="form-control " id="sender" name="sender">
-
-                                    <option value="">Please Select</option>
-
-                                    @foreach ($dte_managments as $dte)
-                                        <option value="{{ $dte->id }}">{{ $dte->name }}</option>
-                                    @endforeach
-
-                                </select>
-                                <span id="error_sender" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="fin_year_id">Financial Year </label>
-
-                                <select class="form-control" id="fin_year_id" name="fin_year_id">
-
-                                    <option value="">Please Select Year </option>
-                                    @foreach ($fin_years as $fin_year)
-                                        <option value={{ $fin_year->id }}>{{ $fin_year->year }} </option>
-                                    @endforeach
-
-                                </select>
-
-                                <span id="error_item_id" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="receive_date">Tender Received Date</label>
@@ -73,7 +42,6 @@
                                 <span id="error_receive_date" class="text-danger error_field"></span>
                             </div>
                         </div>
-
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -99,13 +67,7 @@
                                 <span id="error_indent_reference_no" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="opening_date">Opening Date</label>
-                                <input type="date" class="form-control" id="opening_date" name="opening_date">
-                                <span id="error_opening_date" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="reference_no">Reference No.</label>
@@ -121,60 +83,6 @@
                                 <span id="error_tender_number" class="text-danger error_field"></span>
                             </div>
                         </div>
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="additional_documents">Additional Documents</label>
-                                <select class="form-control select2" id="additional_documents" name="additional_documents[]"
-                                    multiple>
-                                    <option value="">Please Select</option>
-                                    @foreach ($additional_documents as $additional_document)
-                                        <option value="{{ $additional_document->id }}">{{ $additional_document->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <span id="error_additional_documents" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="item_type_id">Item Type</label>
-                                <select class="form-control " id="item_type_id" name="item_type_id">
-
-                                    <option selected disabled value="">Please Select</option>
-
-                                    @foreach ($item_types as $item_type)
-                                        <option value="{{ $item_type->id }}">{{ $item_type->name }}</option>
-                                    @endforeach
-
-                                </select>
-
-
-                                <span id="error_item_type_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="item_id">Item</label>
-
-                                <select class="form-control" id="item_id" name="item_id">
-
-                                    <option value="">Please Select </option>
-
-
-                                </select>
-
-                                <span id="error_item_id" class="text-danger error_field"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="qty">Item Quantity</label>
-                                <input type="text" class="form-control" id="qty" name="qty">
-                                <span id="error_qty" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -184,14 +92,6 @@
                                 <span id="error_received_by" class="text-danger error_field"></span>
                             </div>
                         </div>
-
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="remark">Remark</label>
-                                <textarea name="remark" id="remark" class="form-control"></textarea>
-                                <span id="error_remark" class="text-danger error_field"></span>
-                            </div>
-                        </div> --}}
 
                     </div>
                 </div>
