@@ -255,7 +255,6 @@ class ReportReturnController extends Controller
 
         return response()->json(['success' => $request->all()]);
     }
-
     public function index()
     {
         $rr_lists = ReportReturn::orderBy('id', 'desc')->get();
@@ -435,21 +434,28 @@ class ReportReturnController extends Controller
                 $column = 'insp_id';
             } elseif (in_array('inspectorate_id', $tableColumns)) {
                 $column = 'inspectorate_id';
-            } 
+            }
 
             if (in_array('sec_id', $tableColumns)) {
                 $sec_column = 'sec_id';
             } elseif (in_array('section_id', $tableColumns)) {
                 $sec_column = 'section_id';
-            } 
+            }
+            if (in_array('sender', $tableColumns)) {
+                $sender_column = 'sender';
+            } elseif (in_array('sender_id', $tableColumns)) {
+                $sender_column = 'sender_id';
+            }
 
             // dd($rr_list->insp_id);
             $TotalReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-                // ->whereBetween($table . '.created_at', [$rr_list->from_date, $rr_list->to_date])
-                ->whereDate($table . '.created_at', '>=', date($rr_list->from_date))
-                ->whereDate($table . '.created_at', '<=', date($rr_list->to_date))
-                ->where($table . '.' . $column, $rr_list->inspectorate_id)
-                ->get();
+            ->leftJoin('dte_managments',  $table.".".$sender_column, '=', 'dte_managments.id')
+            ->whereDate($table . '.created_at', '>=', date($rr_list->from_date))
+            ->whereDate($table . '.created_at', '<=', date($rr_list->to_date))
+            ->where($table . '.' . $column, $rr_list->inspectorate_id)
+            ->select("$table.*", "items.name as item_name","items.attribute as item_attribute","dte_managments.name as userDte" )
+            ->get();
+
 
             $SigSec = $TotalReceivedData->where("$sec_column", '3');
             $EnggSec = $TotalReceivedData->where("$sec_column", '4');
@@ -457,7 +463,7 @@ class ReportReturnController extends Controller
             $EmSec = $TotalReceivedData->where("$sec_column", '1');
             $DevSec = $TotalReceivedData->where("$sec_column", '2');
 
-            
+
             $reports[$doc_name] = [
                 'TotalReceived' => $TotalReceivedData,
                 'SIG Sec'=> $SigSec,
@@ -468,7 +474,7 @@ class ReportReturnController extends Controller
             ]; // Add count to data array with table name as key
 
         }
-        
+
         // return response()->json($reports);
         return view('backend.report_return.details', compact('rr_list', 'reports'));
     }

@@ -284,11 +284,16 @@ class FinalSpecController extends Controller
             ->groupBy('supplier_id')
             ->pluck('supplier_id');
 
-        $offerSupplierIds = Offer::where('reference_no',  $finalSpec->offer_reference_no)->first();
-        $supplierIdsArray = json_decode($offerSupplierIds->supplier_id);
+        // $offerSupplierIds = Offer::where('reference_no',  $finalSpec->offer_reference_no)->first();
+
+        // $supplierIdsArray = json_decode($offerSupplierIds->supplier_id);
+
+        // if ($supplierIdsArray) {
+        //     # code...
+        // }
 
         // Fetch suppliers based on the decoded IDs
-        $suppliers = Supplier::whereIn('id', $supplierIdsArray)->get();
+        $suppliers = Supplier::whereIn('id', $supplierIds)->get();
 
         $tender_reference_numbers = Tender::all();
         $indent_reference_numbers = Indent::all();
