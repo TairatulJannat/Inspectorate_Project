@@ -158,6 +158,9 @@
                 @endforeach
 
             </div>
+            <div class="d-flex justify-content-center mt-2" >
+                <button class="btn btn-success borderd mb-2 col-1 ">Print</button>
+            </div>
         </div>
 
     </div>

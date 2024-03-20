@@ -430,13 +430,14 @@ class FinalSpecController extends Controller
     public function details($id)
     {
         $details = FinalSpec::leftJoin('item_types', 'final_specs.item_type_id', '=', 'item_types.id')
+            ->leftJoin('items', 'final_specs.item_id', '=', 'items.id')
             ->leftJoin('dte_managments', 'final_specs.sender', '=', 'dte_managments.id')
             ->leftJoin('fin_years', 'final_specs.fin_year_id', '=', 'fin_years.id')
             ->leftJoin('suppliers', 'final_specs.supplier_id', '=', 'suppliers.id')
             ->select(
                 'final_specs.*',
                 'item_types.name as item_type_name',
-                'final_specs.*',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
                 'fin_years.year as fin_year_name',
                 'suppliers.firm_name as suppliers_name'
