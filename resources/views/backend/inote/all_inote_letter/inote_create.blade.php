@@ -173,20 +173,11 @@
                         <td colspan="8">
                             <textarea id="body_info" name="body_info" class="form-control"></textarea>
                         </td>
-
-
                     </tr>
-
-
                 </tbody>
                 <tbody id="cartItem">
-
                 </tbody>
-
             </table>
-       
-
-
             <div class="d-flex col-4 mt-3">
                 <p class="">স্টেশন- </p><input type="text" class="form-control me-5" id="station"
                     name="station">
