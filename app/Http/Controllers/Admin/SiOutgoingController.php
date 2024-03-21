@@ -148,10 +148,12 @@ class SiOutgoingController extends Controller
                 })
                 ->addColumn('provationally_status', function ($data) {
 
-                    if ($data->provisionally_status == 0) {
-                        return "<div class='bg-success text-light p-1 rounded'>Accepted</div>";
+                    if ($data->provationally_status == 0) {
+                        return '<div class="btn btn-success btn-sm" >Accepted</div>';
+                    } elseif ($data->provationally_status == 1) {
+                        return '<div class="btn btn-danger btn-sm">Rejected</div>';
                     } else {
-                        return "<div class='bg-danger text-light p-1 rounded'>Rejected</div>";
+                        return '<div class="btn btn-warning btn-sm">Nil</div>';
                     }
                 })
                 ->addColumn('action', function ($data) {

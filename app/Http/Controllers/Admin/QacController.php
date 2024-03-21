@@ -171,6 +171,16 @@ class QacController extends Controller
                         return '<button class="btn btn-success btn-sm">None</button>';
                     }
                 })
+                ->addColumn('provationally_status', function ($data) {
+
+                    if ($data->provationally_status == 0) {
+                        return '<div class="btn btn-success btn-sm" >Accepted</div>';
+                    } elseif ($data->provationally_status == 1) {
+                        return '<div class="btn btn-danger btn-sm">Rejected</div>';
+                    } else {
+                        return '<div class="btn btn-warning btn-sm">Nil</div>';
+                    }
+                })
 
                 ->addColumn('action', function ($data) {
                     $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('doc_type_id', 7)->latest()->first();
@@ -213,7 +223,7 @@ class QacController extends Controller
 
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status','provationally_status'])
                 ->make(true);
         }
     }
@@ -253,8 +263,8 @@ class QacController extends Controller
             $data->reference_no = $request->reference_no;
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
+            $data->provationally_status = 'nil';
             $data->received_date = $request->qac_received_date;
-            $data->provationally_status = $request->provationally_status;
             $data->fin_year_id = $request->fin_year_id;
             $data->created_by = Auth::user()->id;
             $data->updated_by = Auth::user()->id;

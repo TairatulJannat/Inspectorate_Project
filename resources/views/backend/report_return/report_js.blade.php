@@ -33,7 +33,42 @@
             }
         });
     });
+//start update
+    $('#update_form').off().on('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData($('#update_form')[0]);
+        $.ajax({
+            url: "{{ url('admin/reportreturn/update') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function(response) {
+                if (response.error) {
+                    error_notification(response.error)
+                    
+                }
+                if (response.success) {
+                    // enableeButton()
+                    $('.yajra-datatable').DataTable().ajax.reload(null, false);
+                    toastr.success('Information Updated', 'Saved');
+                    // $('#edit_model').modal('hide');
+                }
+                setTimeout(window.location.href = "", 40000);
+            },
+            error: function(response) {
+                
+                // clear_error_field();
+                error_notification('Please fill up the form correctly and try again')
+                
 
+            }
+        });
+    })
+//end update
     $('#rr_filter_btn').click(function(event) {
         event.preventDefault();
         var fromDate = $('input[name="from_date"]').val();
@@ -143,6 +178,10 @@
                                     <div class="my-2">
                                         <label for="body_1">Refs: </label>
                                         <textarea class="form-control " name="body_1" id="body_1"></textarea>
+                                    </div>
+                                    <div class="my-2">
+                                        <label for="body_2">Body </label>
+                                        <textarea class="form-control " name="body_2" id="body_2"></textarea>
                                     </div>
                         `
         html += `<div class="row mt-2" id='report_html'>

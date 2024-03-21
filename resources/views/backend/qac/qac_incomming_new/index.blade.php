@@ -86,6 +86,7 @@
                                 <th>User Dte</th>
                                 <th>Receive Date</th>
                                 <th>Sec Name</th>
+                                <th>Provationally Status</th>
                                 <th>Present State Of Qac</th>
                                 <th>Act</th>
                             </tr>

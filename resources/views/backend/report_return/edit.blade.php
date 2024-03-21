@@ -13,7 +13,7 @@
 
 
                 <div class="modal-body">
-                    <form action="" id="myForm">
+                    <form action="" id="update_form">
                         <div class="d-flex justify-content-center align-item-center">
 
                             <div class="col-3">
@@ -41,7 +41,7 @@
 
                             @csrf
                             <div id="report">
-                                <input type="hidden" name="edit_reportReturn_id" id="edit_reportReturn_id">
+                                <input type="hidden" name="edit_reportReturn_id" id="edit_reportReturn_id"value="{{ $rr_list->id }}">
                                 <div class="">
                                     <div class="">
                                         <div class="">
@@ -119,10 +119,10 @@
                                                     </div>
                                                     <div class="my-2">
                                                         <label for="body_1">Refs: </label>
-                                                        <textarea class="form-control " name="body_1" id="body_2">{{ strip_tags($rr_list->body_1) }}</textarea>
+                                                        <textarea class="form-control " name="body_1" id="editbody_1">{{ strip_tags($rr_list->body_1) }}</textarea>
                                                     </div>
 
-                                                    <div class="row mt-2" id='report_html'>
+                                                    <div class="row mt-2"  name="body_2" id="report_html">
                                                         {{ strip_tags($rr_list->body_2) }}
                                                     </div>
 
@@ -227,15 +227,22 @@
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
     @include('backend.report_return.report_js')
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <script>
-        function ckEditor() {
+
+    document.addEventListener("DOMContentLoaded", function() {
         ClassicEditor
-            .create(document.querySelector('#body_1'))
+            .create(document.querySelector('#body_2'))
             .catch(error => {
 
             });
         ClassicEditor
-            .create(document.querySelector('#body_2'))
+            .create(document.querySelector('#editbody_1'))
+            .catch(error => {
+
+            });
+            ClassicEditor
+            .create(document.querySelector('#report_html'))
             .catch(error => {
 
             });
@@ -289,6 +296,6 @@
 
 
 
-    }
+        });
     </script>
 @endpush
