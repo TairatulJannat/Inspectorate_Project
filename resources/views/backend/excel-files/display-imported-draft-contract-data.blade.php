@@ -59,7 +59,6 @@
                                 <tr>
                                     <th style="background-color: #bdf5fb">Sl No.</th>
                                     <th style="background-color: #bdf5fb">Parameter name</th>
-                                    <th style="background-color: #bdf5fb">Indent Parameter value</th>
                                     <th style="background-color: #b0e0bc">Final Spec value</th>
                                     <th style="background-color: #b0e0bc">Draft Contract Spec value</th>
                                     <th style="background-color: #b0e0bc">Remarks</th>
@@ -70,7 +69,7 @@
                                 <tbody>
                                     <tr>
                                         <td style="background-color: #bdf5fb"></td>
-                                        <td colspan="5" style="background-color: #c3d0ff;">
+                                        <td colspan="4" style="background-color: #c3d0ff;">
                                             <input type="text" class="form-control bg-body text-body"
                                                 name="editedData[{{ $groupName }}][parameter_group_name]"
                                                 value="{{ $groupName }}" disabled>
@@ -83,10 +82,6 @@
                                             <td class="col-md-3 py-1" style="background-color: #bdf5fb">
                                                 <textarea class="form-control"
                                                     name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][parameter_name]">{{ $parameter['parameter_name'] }}</textarea>
-                                            </td>
-                                            <td class="col-md-2 py-1" style="background-color: #bdf5fb">
-                                                <textarea class="form-control"
-                                                    name="editedData[{{ $groupName }}][{{ $parameter['parameter_name'] }}][indent_parameter_value]">{{ $parameter['indent_parameter_value'] }}</textarea>
                                             </td>
                                             <td class="col-md-2 py-1" style="background-color: #b0e0bc">
                                                 <textarea class="form-control supplier-parameter-value" id="supplier-{{ $parameter['parameter_name'] }}"
@@ -116,8 +111,7 @@
             @endif
         </div>
         <div class="card-footer py-3" style="background-color: teal !important;">
-            <a href="{{ url('admin/draft_contract/view') }}"
-                class="btn btn-danger-gradien float-end">Cancel</a>
+            <a href="{{ url('admin/draft_contract/view') }}" class="btn btn-danger-gradien float-end">Cancel</a>
         </div>
     </div>
 @endsection

@@ -23,9 +23,8 @@ class DraftContractSpecImport implements ToModel, WithStartRow, WithCustomCsvSet
         return new DraftContract([
             'parameter_group_name' => $row[1],
             'parameter_name' => $row[2],
-            'indent_parameter_value' => $row[3],
-            'supplier_parameter_value' => $row[4],
-            'draft_contract_parameter_value' => $row[5],
+            'supplier_parameter_value' => $row[3],
+            'draft_contract_parameter_value' => $row[4],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
