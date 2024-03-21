@@ -144,6 +144,16 @@ class PsiOutgoingController extends Controller
                         return '<button class="btn btn-info text-white  btn-sm">None</button>';
                     }
                 })
+                ->addColumn('provationally_status', function ($data) {
+
+                    if ($data->provationally_status == 0) {
+                        return '<div class="btn btn-success btn-sm" >Accepted</div>';
+                    } elseif ($data->provationally_status == 1) {
+                        return '<div class="btn btn-danger btn-sm">Rejected</div>';
+                    } else {
+                        return '<div class="btn btn-warning btn-sm">Nil</div>';
+                    }
+                })
                 ->addColumn('action', function ($data) {
                     // start Forward Btn Change for index
                     $DocumentTrack = DocumentTrack::where('doc_ref_id', $data->id)->where('document_tracks.doc_type_id', 8)->latest()->first();
