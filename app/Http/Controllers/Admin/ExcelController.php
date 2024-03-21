@@ -1244,8 +1244,8 @@ class ExcelController extends Controller
     {
         try {
             // Retrieve all data from the database
-            $draftContractNo = $request->query('draftContractNo');
-            $dcData = DraftContract::where('draft_contract_no', $draftContractNo)->first();
+            $draftContractRefNo = $request->query('draftContractRefNo');
+            $dcData = DraftContract::where('reference_no', $draftContractRefNo)->first();
         } catch (\Exception $e) {
             // If an exception occurs, return back to the previous page with an error message
             return back()->withError('Failed to retrieve from Database.');
@@ -1310,15 +1310,13 @@ class ExcelController extends Controller
 
                 // Retrieve the parameter name, indent parameter value, and parameter value from the row
                 $parameterName = trim($row[2]);
-                $indentParameterValue = trim($row[3]);
                 // Set the parameter value to "No data found against this parameter!" if it's empty
-                $supplierParameterValue = trim($row[4]) ? trim($row[4]) : "No data found against this parameter!";
-                $draftContractParameterValue = trim($row[5]) ? trim($row[5]) : "No data found against this parameter!";
+                $supplierParameterValue = trim($row[3]) ? trim($row[3]) : "No data found against this parameter!";
+                $draftContractParameterValue = trim($row[4]) ? trim($row[4]) : "No data found against this parameter!";
 
                 // Add the parameter to the parameter group
                 $parameterGroups[$groupName][] = [
                     'parameter_name' => $parameterName,
-                    'indent_parameter_value' => $indentParameterValue,
                     'supplier_parameter_value' => $supplierParameterValue,
                     'draft_contract_parameter_value' => $draftContractParameterValue,
                 ];
@@ -1512,16 +1510,14 @@ class ExcelController extends Controller
 
                 // Retrieve the parameter name, indent parameter value, and parameter value from the row
                 $parameterName = trim($row[2]);
-                $indentParameterValue = trim($row[3]);
                 // Set the parameter value to "No data found against this parameter!" if it's empty
-                $supplierParameterValue = trim($row[4]) ? trim($row[4]) : "No data found against this parameter!";
-                $draftContractParameterValue = trim($row[5]) ? trim($row[5]) : "No data found against this parameter!";
-                $contractParameterValue = trim($row[6]) ? trim($row[6]) : "No data found against this parameter!";
+                $supplierParameterValue = trim($row[3]) ? trim($row[3]) : "No data found against this parameter!";
+                $draftContractParameterValue = trim($row[4]) ? trim($row[4]) : "No data found against this parameter!";
+                $contractParameterValue = trim($row[5]) ? trim($row[5]) : "No data found against this parameter!";
 
                 // Add the parameter to the parameter group
                 $parameterGroups[$groupName][] = [
                     'parameter_name' => $parameterName,
-                    'indent_parameter_value' => $indentParameterValue,
                     'supplier_parameter_value' => $supplierParameterValue,
                     'draft_contract_parameter_value' => $draftContractParameterValue,
                     'contract_parameter_value' => $contractParameterValue,
