@@ -100,10 +100,10 @@
 
         <div class="content">
             <div style="overflow: auto;">
-                <div style="float: left; width: 40%; position:fixed; top:105px; ">
+                <div style="float: left; width: 40%; padding-top:107px">
                     {{ $cover_letter->letter_reference_no }}
                 </div>
-                <div class="header" style="float: right; width: 30%;font-family:nikosh;">
+                <div class="header" style="float: right; width: 30%; ">
                     <p>{{ $cover_letter->inspectorate_name }}</p>
                     <p>{{ $cover_letter->inspectorate_place }}</p>
                     <p>Tel: {{ $cover_letter->mobile }}</p>

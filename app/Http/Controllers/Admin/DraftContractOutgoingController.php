@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\ComparisonRemark;
 use App\Models\CoverLetter;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
@@ -243,9 +244,10 @@ class DraftContractOutgoingController extends Controller
         $cover_letter = CoverLetter::where('doc_reference_id', $details->reference_no)->first();
 
         // end cover letter start
+        $comparison_remarks=ComparisonRemark::where("draft_contract_ref_no",  $details->reference_no)->first();
 
 
-        return view('backend.draft_contract.draft_contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
+        return view('backend.draft_contract.draft_contract_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter','comparison_remarks', 'files'));
     }
 
     public function OutgoingTracking(Request $request)

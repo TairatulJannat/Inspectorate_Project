@@ -282,6 +282,17 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($comparison_remarks)
+                            <div class="forward_status col-md-12 mt-3">
+                                <div>
+                                    <h4 class="text-success">Comparison Remarks</h4>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        {!! $comparison_remarks->remarks !!}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
 
