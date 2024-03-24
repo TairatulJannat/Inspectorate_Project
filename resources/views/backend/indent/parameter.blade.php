@@ -26,11 +26,6 @@
 
         .card-body {}
 
-        /* .table thead {
-                                                                                                                                                                                                                                                                background-color: #1B4C43 !important;
-                                                                                                                                                                                                                                                                border-radius: 10px !important;
-                                                                                                                                                                                                                                                            } */
-
         .table thead tr th {
             color: #ffff !important;
         }
@@ -87,11 +82,6 @@
             column-gap: 10px;
             margin-bottom: 25px
         }
-
-        /* .header {
-                                                                                                                                        background-color: #006A4E;
-                                                                                                                                        color: #F5F7FB;
-                                                                                                                                    } */
     </style>
 @endpush
 

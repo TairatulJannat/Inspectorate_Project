@@ -84,7 +84,8 @@
 @endsection
 
 @push('custom-scripts')
-    <script src="{{ asset('assets/backend/js/ckeditor5/ckeditor.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/backend/js/ckeditor5/ckeditor.min.js') }}"></script> --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#offer_summary'))
