@@ -309,10 +309,13 @@ class TenderController extends Controller
 
             $organizedSupplierData = $this->organizeData($supplierParameterGroups);
 
-            $parameterGroups = ParameterGroup::with('assignParameterValues')
+            $parameterGroups = ParameterGroup::with(['assignParameterValues' => function ($query) {
+                $query->where('doc_type_id', 3);
+            }])
                 ->where('item_id', $itemId)
                 ->where('reference_no', $indentRefNo)
                 ->get();
+
 
             $responseData = $parameterGroups->map(function ($parameterGroup) {
                 $groupName = $parameterGroup->name;
