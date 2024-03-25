@@ -173,8 +173,8 @@
                         @include('backend.files.file')
                         {{-- Attached File end --}}
 
-                        <a class="btn btn-success mt-3 btn-parameter"
-                            href="{{ route('admin.indent/parameter', ['indent_id' => $details->id]) }}">Parameter</a>
+                        <a class="btn btn-success-gradien mt-3 btn-parameter"
+                        href="{{ route('admin.indent/parameter', ['indentRefNo' => $details->reference_no]) }}">Parameter</a>
                         <a href="#" class="btn btn-success-gradien mt-3"
                             onclick="event.preventDefault(); document.getElementById('export-form').submit();">Export
                             Indent Spec</a>
