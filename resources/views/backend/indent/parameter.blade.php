@@ -353,6 +353,7 @@
                                     .parameter_name,
                                     rowToUpdate.parameter_value);
                             }
+                            flag = true;
                         } else {
                             toastr.error('No changes have been done!');
                             flag = false;
