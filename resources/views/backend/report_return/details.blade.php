@@ -108,7 +108,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                @foreach ($report['FIC Sec'] as $sigData)
+                                @foreach ($report['FCI Sec'] as $sigData)
                                     <tr>
                                         <td>{{ $j++ }}</td>
                                         <td>{{ $sigData->item_name }}</td>

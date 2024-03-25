@@ -190,7 +190,8 @@ class ContractOutgoingController extends Controller
         $details = Contract::leftJoin('item_types', 'contracts.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'contracts.sender_id', '=', 'dte_managments.id')
             ->leftJoin('items', 'contracts.item_id', '=', 'items.id')
-            ->select('contracts.*', 'item_types.name as item_type_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name')
+            ->leftJoin('fin_years', 'contracts.fin_year_id', '=', 'fin_years.id')
+            ->select('contracts.*', 'item_types.name as item_type_name', 'items.name as item_name', 'dte_managments.name as dte_managment_name','fin_years.year as fin_year_name')
             ->where('contracts.id', $id)
             ->where('contracts.status', 1)
             ->first();

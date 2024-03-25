@@ -139,6 +139,21 @@
                                 <span id="error_supplier_id" class="text-danger error_field"></span>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="checked_standard">Provationally status </label>
+                                <select class="form-control" name="provationally_status" id="provationally_status">
+                                    <option value="">Please Select</option>
+                                    <option value="0"{{ $jpsi->provationally_status == '0' ? 'selected' : '' }}>
+                                        Provationally Accepted
+                                    </option>
+                                    <option value="1" {{ $jpsi->provationally_status == '1' ? 'selected' : '' }}>Provationally Rejected</option>
+                                </select>
+                                <span id="error_checked_standard" class="text-danger error_field"></span>
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="item_type_id">Item Type</label>

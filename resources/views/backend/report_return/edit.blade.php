@@ -114,16 +114,20 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <textarea class="form-control my-2" name="subject" value="{{ $rr_list->subject ? $rr_list->subject : '' }}"  id="subject" placeholder="Subject"></textarea>
+                                                        <textarea class="form-control my-2" name="subject" value=""  id="subject" placeholder="Subject">{{ $rr_list->subject ? $rr_list->subject : '' }}</textarea>
                                                         {{-- <input type="text" id="subject" class="form-control my-2" placeholder="Subject"> --}}
                                                     </div>
                                                     <div class="my-2">
                                                         <label for="body_1">Refs: </label>
-                                                        <textarea class="form-control " name="body_1" id="editbody_1">{{ strip_tags($rr_list->body_1) }}</textarea>
+                                                        <textarea class="form-control" name="body_1" id="editbody_1">{{ ($rr_list->body_1) }}</textarea>
+                                                    </div>
+                                                    <div class="my-2">
+                                                        <label for="body_2">Body: </label>
+                                                        <textarea class="form-control" name="body_2" id="body_2">{{ strip_tags($rr_list->body_2) }}</textarea>
                                                     </div>
 
-                                                    <div class="row mt-2"  name="body_2" id="report_html">
-                                                        {{ strip_tags($rr_list->body_2) }}
+                                                    <div class="row mt-2" id="report_html">
+                                                        
                                                     </div>
 
                                                     <div class="row">
@@ -150,7 +154,7 @@
                                                         <div class="col-12 mt-2">
                                                             <div>
                                                                 <label for="distr">Distr: </label>
-                                                                <textarea class="form-control" name="distr" id="distr">{{ strip_tags($rr_list->distr) }} </textarea>
+                                                                <textarea class="form-control" name="distr" id="distr">{{ strip_tags($rr_list->distr) }}</textarea>
                                                             </div>
                                                             <div>
                                                                 <label for="extl">Extl: </label>
@@ -175,8 +179,7 @@
                                                     <div class="row mt-2">
                                                         <div>
                                                             <label for="anxs">Internal: </label>
-                                                            <textarea class="form-control" name="internal" value="{{ $rr_list->internal ? $rr_list->internal : '' }}" id="internal">
-                                                                </textarea>
+                                                            <textarea class="form-control" name="internal" value="" id="internal">{{ $rr_list->internal ? $rr_list->internal : '' }} </textarea>
                                                         </div>
 
                                                     </div>
@@ -184,11 +187,11 @@
                                                         <div class="col-12 mt-2">
                                                             <div>
                                                                 <label for="anxs">Act: </label>
-                                                                <textarea class="form-control" name="internal_act" value="{{ $rr_list->internal_act ? $rr_list->internal_act : '' }}" id="internal_act"></textarea>
+                                                                <textarea class="form-control" name="internal_act" value="" id="internal_act">{{ $rr_list->internal_act ? $rr_list->internal_act : '' }}</textarea>
                                                             </div>
                                                             <div>
                                                                 <label for="anxs">Info: </label>
-                                                                <textarea class="form-control" value="{{ $rr_list->internal_info ? $rr_list->internal_info : '' }}" name="internal_info" id="internal_info"> </textarea>
+                                                                <textarea class="form-control" value="" name="internal_info" id="internal_info">{{ $rr_list->internal_info ? $rr_list->internal_info : '' }}</textarea>
                                                             </div>
                                                             {{-- <input type="text" class="form-control" id="internal_act" placeholder="Act">
                                                                     <input type="text" class="form-control" id="internal_info" placeholder="Info"> --}}
@@ -241,11 +244,11 @@
             .catch(error => {
 
             });
-            ClassicEditor
-            .create(document.querySelector('#report_html'))
-            .catch(error => {
+            // ClassicEditor
+            // .create(document.querySelector('#report_html'))
+            // .catch(error => {
 
-            });
+            // });
         ClassicEditor
             .create(document.querySelector('#anxsEdit'))
             .catch(error => {

@@ -14,7 +14,7 @@
             var fieldValue = $(this).val();
             formData[fieldId] = fieldValue;
         });
-        var report_html=$('#report_html').html();
+        var report_html = $('#report_html').html();
         formData['report_html'] = report_html;
 
         $.ajax({
@@ -28,15 +28,15 @@
                 toastr.success('Information Saved', 'Saved');
                 setTimeout(window.location.href = "{{ route('admin.rr/list') }}", 2000);
             },
-            error: function(error) {
-                console.error('Error sending data:', error);
+            error: function(response) {
+                error_notification('Please fill up the form correctly and try again')
             }
         });
     });
-//start update
-    $('#update_form').off().on('submit', function(event) {
+    //start update
+    $('#update_form').on('submit', function(event) {
         event.preventDefault();
-        var formData = new FormData($('#update_form')[0]);
+        var formData = new FormData($(this)[0]);
         $.ajax({
             url: "{{ url('admin/reportreturn/update') }}",
             type: "POST",
@@ -48,27 +48,26 @@
             },
             success: function(response) {
                 if (response.error) {
-                    error_notification(response.error)
-                    
+                    error_notification(response.error);
                 }
                 if (response.success) {
-                    // enableeButton()
                     $('.yajra-datatable').DataTable().ajax.reload(null, false);
-                    toastr.success('Information Updated', 'Saved');
-                    // $('#edit_model').modal('hide');
-                }
-                setTimeout(window.location.href = "", 40000);
-            },
-            error: function(response) {
-                
-                // clear_error_field();
-                error_notification('Please fill up the form correctly and try again')
-                
+                    toastr.success('Report Return updated successfully');
+                    location.reload();
+                    // Optionally, reload the data table or redirect the user
 
+                    // window.location.href = ""; // Redirect the user
+                }
+            },
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText;
+                console.error('AJAX Error: ' + errorMessage);
+                // Handle the error, show a message to the user, etc.
+                // error_notification('Failed to update Report Return: ' + error);
             }
         });
-    })
-//end update
+    });
+    //end update
     $('#rr_filter_btn').click(function(event) {
         event.preventDefault();
         var fromDate = $('input[name="from_date"]').val();
@@ -107,6 +106,7 @@
             }
         });
     });
+
 
     function report(reports) {
         var html = `
@@ -177,25 +177,23 @@
                                     </div>
                                     <div class="my-2">
                                         <label for="body_1">Refs: </label>
-                                        <textarea class="form-control " name="body_1" id="body_1"></textarea>
+                                        <textarea class="form-control" name="body_1" id="body_1"></textarea>
                                     </div>
                                     <div class="my-2">
-                                        <label for="body_2">Body </label>
-                                        <textarea class="form-control " name="body_2" id="body_2"></textarea>
+                                        <label for="body_2">Body: </label>
+                                        <textarea class="form-control" name="body_2" id="body_2"></textarea>
                                     </div>
                         `
         html += `<div class="row mt-2" id='report_html'>
-            <div class="body_2_serial">
-                1. In It of ref ltr, weekly return/reports of this inspectorate is as under:
-            </div>
+
     <div class="col-12">`;
-        let i=97
+        let i = 97
         for (const [category, values] of Object.entries(reports)) {
             const serial = String.fromCharCode(i++);
             html += `
             <p class=" m-0 pt-3"><b> ${serial}. ${category} Vetting</b></p>
         <table class="table table-bordered m-0 p-0">
-            
+
             <tr class="m-0 p-0">
                 <th>Sl no</th>
                 <th>Received</th>
@@ -326,6 +324,11 @@
             .catch(error => {
 
             });
+        // ClassicEditor
+        // .create(document.querySelector('#report_html'))
+        // .catch(error => {
+
+        // });
         ClassicEditor
             .create(document.querySelector('#anxs'))
             .catch(error => {
@@ -333,10 +336,10 @@
             });
 
         ClassicEditor
-        .create(document.querySelector('#anxsEdit'))
-        .catch(error => {
+            .create(document.querySelector('#anxsEdit'))
+            .catch(error => {
 
-        });
+            });
         ClassicEditor
             .create(document.querySelector('#distr'))
             .catch(error => {

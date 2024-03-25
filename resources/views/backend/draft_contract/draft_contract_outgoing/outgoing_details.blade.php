@@ -157,7 +157,7 @@
                             <a href="{{ url('admin/cover_letter/pdf') }}/{{ $details->reference_no }}"
                                 class="btn btn-warning mt-3" target="blank"> <i class="fas fa-file-alt"></i> Genarate Cover
                                 Letter</a>
-                            <button class="btn btn-warning text-light ml-2 mt-2" type="button" data-bs-toggle="modal"
+                            <button class="btn btn-warning text-light ml-2 mt-3" type="button" data-bs-toggle="modal"
                                 data-bs-target=".edit-modal-lg">Edit Cover
                                 Letter</button>
                             {{-- <a href="{{ url('admin/cover_letter/edit') }}" class="btn btn-warning mt-3">  Edit Cover
@@ -340,6 +340,17 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($comparison_remarks)
+                            <div class="forward_status col-md-12 mt-3">
+                                <div>
+                                    <h4 class="text-success">Comparison Remarks</h4>
+                                    <hr>
+                                    <div class="table-responsive">
+                                        {!! $comparison_remarks->remarks !!}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         @if ($details->delay_cause !== null)
                             <div class="delay_cause col-md-12  mb-3">
                                 <div>

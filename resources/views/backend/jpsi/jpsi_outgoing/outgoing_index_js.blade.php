@@ -61,7 +61,10 @@
                     data: 'section_name',
                     name: 'section_name',
                 },
-
+                {
+                    data: 'provationally_status',
+                    name: 'provationally_status',
+                },
 
                 {
                     data: 'status',

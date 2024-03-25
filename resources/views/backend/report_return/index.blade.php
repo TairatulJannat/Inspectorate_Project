@@ -45,7 +45,6 @@
                                 <th>Sl No</th>
                                 <th>From Date</th>
                                 <th>End Date</th>
-                                <th>Report</th>
                                 <th>Act</th>
                             </tr>
                         </thead>
@@ -58,7 +57,7 @@
                                     <td>{{ $i++ }}</td>
                                     <td>{{ $rr_list->from_date }}</td>
                                     <td>{{ $rr_list->to_date }}</td>
-                                    <td>{{ $rr_list->report_type == 1 ? 'Weekly' : 'Monthly' }}</td>
+                                    {{-- <td>{{ $rr_list->report_type == 1 ? 'Weekly' : 'Monthly' }}</td> --}}
                                     <td>
                                         <div class="d-flex">
                                             <form action="{{ route('admin.report_return/view', ['id' => $rr_list->id]) }}"
@@ -77,12 +76,13 @@
                                                 @csrf
                                                 <button class="btn-sm btn-secondary text-light" type="submit">Edit</button>
                                             </form>
-                                            <form action="{{ route('admin.report_return/detete', ['id' => $rr_list->id]) }}"
-                                                method="post" class="m-1">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn-sm btn-danger" type="submit">Delete</button>
-                                            </form>
+                                            <!-- Your HTML -->
+                                                <form id="deleteForm_{{ $rr_list->id }}" class="m-1">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn-sm btn-danger deleteBtn" data-id="{{ $rr_list->id }}" type="button">Delete</button>
+                                                </form>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -101,4 +101,43 @@
     <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
     <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.deleteBtn').on('click', function() {
+            var resourceId = $(this).data('id');
+
+            $.ajax({
+                url: '{{ url('admin/report_return/detete') }}/' + resourceId,
+                type: 'get',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    // Handle success response
+                    if (response) {
+                            if (response.permission == false) {
+                                toastr.warning('you dont have that Permission',
+                                    'Permission Denied');
+                            } else {
+                                // $('.yajra-datatable').DataTable().ajax.reload(null, false);
+                                toastr.success('Deleted Successful', 'Deleted');
+                                location.reload();
+
+                            }
+                        };
+                    // You may update the UI or perform additional actions as needed
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error(xhr.responseText);
+                    // You may display an error message to the user or perform additional error handling
+                }
+            });
+        });
+    });
+</script>
+
 @endpush
+
+

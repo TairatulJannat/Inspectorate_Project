@@ -220,7 +220,7 @@ class jpsiController extends Controller
 
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status','provationally_status'])
                 ->make(true);
         }
     }
