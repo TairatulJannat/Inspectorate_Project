@@ -221,7 +221,7 @@ class ReportReturnController extends Controller
 
     public function store(Request $request)
     {
-
+        // dd($request->all());
         $admin_id = Auth::user()->id;
         $inspectorate_id = Auth::user()->inspectorate_id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
@@ -238,8 +238,8 @@ class ReportReturnController extends Controller
         $data->email = $request->email;
         $data->letter_date = $request->date;
         $data->subject = $request->subject;
-        $data->body_1 = $request->body_1;
-        $data->body_2 = $request->body_2;
+        $data->body_1 = $request->input('body_1');
+        $data->body_2 = $request->input('body_2');
         $data->report_summery = $request->report_html;
         $data->signature = $request->signature;
         $data->anxs = $request->anxs;
@@ -419,6 +419,7 @@ class ReportReturnController extends Controller
 
     public function ReportReturnupdate(Request $request)
     {
+        // dd($request->all());
         // Validate incoming request
         $validator = Validator::make($request->all(), [
             'edit_reportReturn_id' => 'required|exists:report_returns,id',
@@ -426,16 +427,17 @@ class ReportReturnController extends Controller
         ], [
             'edit_reportReturn_id.required' => 'The edit report return id field is required.'
         ]);
-    
+
         // Check if validation fails
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
-    
+
         try {
             // Find the ReportReturn model
             $data = ReportReturn::findOrFail($request->edit_reportReturn_id);
-    
+            
+           
             // Update model attributes
             $data->letter_reference_no = '23.01.901.051.' . $request->letter_reference_no . '.' . Carbon::now()->format('d.m.y');
             $data->inspectorate_place = $request->place;
@@ -444,8 +446,8 @@ class ReportReturnController extends Controller
             $data->email = $request->email;
             $data->letter_date = $request->date;
             $data->subject = $request->subject;
-            $data->body_1 = $request->body_1;
-            $data->body_2 = $request->body_2;
+            $data->body_1 = $request->input('body_1');
+            $data->body_2 = $request->input('body_2');
             $data->signature = $request->signature;
             $data->anxs = $request->anxs;
             $data->distr = $request->distr;
@@ -460,15 +462,29 @@ class ReportReturnController extends Controller
             $data->report_type = $request->report_type;
             $data->from_date = $request->from_date;
             $data->to_date = $request->to_date;
-    
+
             // Save the updated model
             $data->save();
-    
+
             return response()->json(['success' => 'Report Return updated successfully']);
         } catch (\Exception $e) {
             // Handle exceptions, such as model not found
             return response()->json(['error' => 'Failed to update Report Return: ' . $e->getMessage()], 500);
         }
+    }
+
+
+    public function ReportReturndetete(Request $request, $id)
+    {
+        $resource = ReportReturn::find($id);
+
+        if (!$resource) {
+            return response()->json(['message' => 'Resource not found'], 404);
+        }
+
+        $resource->delete();
+
+        return response()->json(['message' => 'Resource deleted successfully'], 200);
     }
 
     public function ReportReturndetails($id)
@@ -500,11 +516,13 @@ class ReportReturnController extends Controller
             } elseif (in_array('section_id', $tableColumns)) {
                 $sec_column = 'section_id';
             }
+
             if (in_array('sender', $tableColumns)) {
                 $sender_column = 'sender';
             } elseif (in_array('sender_id', $tableColumns)) {
                 $sender_column = 'sender_id';
             }
+
 
             // dd($rr_list->insp_id);
             $TotalReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
@@ -537,6 +555,7 @@ class ReportReturnController extends Controller
         // return response()->json($reports);
         return view('backend.report_return.details', compact('rr_list', 'reports'));
     }
+
     public function detailsPrint(Request $request)
     {
         $reportsRequest = $request->input('reports');
@@ -571,4 +590,5 @@ class ReportReturnController extends Controller
         // Output or download the PDF
         $mpdf->Output('report_details.pdf', \Mpdf\Output\Destination::DOWNLOAD);
     }
+
 }

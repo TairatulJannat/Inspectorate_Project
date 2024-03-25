@@ -59,15 +59,14 @@
                     name: 'received_date',
                 },
                 {
-                    data: 'provationally_status',
-                    name: 'provationally_status',
-                },
-                {
                     data: 'section_name',
                     name: 'section_name',
                 },
-
-
+                {
+                    data: 'provationally_status',
+                    name: 'provationally_status',
+                },
+                
                 {
                     data: 'status',
                     name: 'status',
