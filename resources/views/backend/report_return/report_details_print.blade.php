@@ -18,7 +18,7 @@
         .custom-table th,
         .custom-table td {
             border: 1px solid #3a3a3aef;
-            padding: 0px;
+            padding: 5px;
         }
     </style>
 </head>
