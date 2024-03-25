@@ -80,7 +80,8 @@
                                 <th>Nomenclature</th>
                                 <th>User Dte</th>
                                 <th>Receive Date</th>
-                                <th>Sec Name</th>
+                                <th>Sec Name</th>  
+                                <th>Provationally Status</th>
                                 <th>Present State Of JPSI</th>
                                 <th>Act</th>
                             </tr>
