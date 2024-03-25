@@ -55,7 +55,7 @@
                     toastr.success('Report Return updated successfully');
                     location.reload();
                     // Optionally, reload the data table or redirect the user
-                    
+
                     // window.location.href = ""; // Redirect the user
                 }
             },
@@ -185,9 +185,7 @@
                                     </div>
                         `
         html += `<div class="row mt-2" id='report_html'>
-            <div class="body_2_serial">
-                1. In It of ref ltr, weekly return/reports of this inspectorate is as under:
-            </div>
+
     <div class="col-12">`;
         let i = 97
         for (const [category, values] of Object.entries(reports)) {
@@ -195,7 +193,7 @@
             html += `
             <p class=" m-0 pt-3"><b> ${serial}. ${category} Vetting</b></p>
         <table class="table table-bordered m-0 p-0">
-            
+
             <tr class="m-0 p-0">
                 <th>Sl no</th>
                 <th>Received</th>

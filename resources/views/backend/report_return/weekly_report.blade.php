@@ -16,13 +16,13 @@
                     <form action="" id="myForm">
                         <div class="d-flex justify-content-center align-item-center">
 
-                            <div class="col-3">
+                            {{-- <div class="col-3">
                                 Type:<select name="report_type" id="report_type" class="form-control">
                                     <option value="">Select Type</option>
                                     <option value="0">Weekly</option>
                                     <option value="1">Monthly</option>
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="col-3">
                                 From: <input type="date" class="form-control" name="from_date" id="from_date">
                             </div>

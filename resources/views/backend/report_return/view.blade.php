@@ -26,14 +26,14 @@
     <div class="col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-body" id="printTableCart">
-                {!! $rr_list->body_2 !!}
+                {!! $rr_list->report_summery !!}
             </div>
-            
+
         </div>
         <div class="d-flex justify-content-center">
             <button class="btn btn-success borderd mb-2 col-1 ">Print</button>
         </div>
-       
+
     </div>
 
 @endsection

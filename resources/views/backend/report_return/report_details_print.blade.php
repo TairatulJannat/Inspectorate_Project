@@ -6,6 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Report Return Details</title>
+    <style>
+        *{
+            font-size: 10px;
+        }
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid #3a3a3aef;
+            padding: 0px;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,7 +33,7 @@
                 @foreach ($reports as $doc_name => $report)
                     <div class="mt-3">
                         <h5>{{ $serial = chr($i++) }}. {{ $doc_name }} Vetting Report</h5>
-                        <table class="table table-bordered table-fixed">
+                        <table class="table custom-table table-bordered table-fixed">
                             <thead>
                                 <tr>
                                     <th>Ser No</th>
@@ -34,125 +49,41 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="table-row-fixed">
-                                    <td colspan="2"><strong>SIG Sec</strong> </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-
-                                <?php
-                                $j = 1;
-                                ?>
+                                @php
+                                    $j = 1;
+                                @endphp
                                 @foreach ($report['SIG Sec'] as $sigData)
                                     <tr>
                                         <td>{{ $j++ }}</td>
-                                        <td>{{ $sigData->item_name }}</td>
-                                        <td>{{ $sigData->tender_reference_no }}</td>
-                                        <td>{{ $sigData->qty }}</td>
-                                        <td>{{ $sigData->userDte }}</td>
+                                        <td>{{ $sigData['item_name'] }}</td>
+                                        <td></td>
+                                        <td>{{ $sigData['qty'] }}</td>
+                                        <td>{{ $sigData['userDte'] }}</td>
                                         <td>Local\Foreign</td>
-                                        <td>{{ $sigData->created_at }}</td>
+                                        <td>{{ $sigData['created_at'] }}</td>
                                         <td>
-                                            {{ $sigData->status == 0 ? 'New Arrival' : ($sigData->status == 2 ? 'On Process' : ($sigData->status == 1 ? 'Completed' : ($sigData->status == 4 ? 'Dispatched' : ''))) }}
+                                            @if ($sigData['status'] == 0)
+                                                New Arrival
+                                            @elseif ($sigData['status'] == 2)
+                                                On Process
+                                            @elseif ($sigData['status'] == 1)
+                                                Completed
+                                            @elseif ($sigData['status'] == 4)
+                                                Dispatched
+                                            @endif
                                         </td>
-                                        <td>{{ $sigData->item_attribute }}</td>
-
+                                        <td>{{ $sigData['item_attribute'] }}</td>
                                         <!-- Display more columns based on your data structure -->
                                     </tr>
                                 @endforeach
-                                <tr class="table-row-fixed">
-                                    <td colspan="2"><strong>ENGG Sec</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                @foreach ($report['ENGG Sec'] as $sigData)
-                                    <tr>
-                                        <td>{{ $j++ }}</td>
-                                        <td>{{ $sigData->item_name }}</td>
-                                        <td>{{ $sigData->tender_reference_no }}</td>
-                                        <td>{{ $sigData->qty }}</td>
-                                        <td>{{ $sigData->userDte }}</td>
-                                        <td>Local\Foreign</td>
-                                        <td>{{ $sigData->created_at }}</td>
-                                        <td>
-                                            {{ $sigData->status == 0 ? 'New Arrival' : ($sigData->status == 2 ? 'On Process' : ($sigData->status == 1 ? 'Completed' : ($sigData->status == 4 ? 'Dispatched' : ''))) }}
-                                        </td>
-                                        <td>{{ $sigData->item_attribute }}</td>
-
-                                        <!-- Display more columns based on your data structure -->
-                                    </tr>
-                                @endforeach
-                                <tr class="table-row-fixed">
-                                    <td colspan="2"><strong>FIC Sec</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                @foreach ($report['FIC Sec'] as $sigData)
-                                    <tr>
-                                        <td>{{ $j++ }}</td>
-                                        <td>{{ $sigData->item_name }}</td>
-                                        <td>{{ $sigData->tender_reference_no }}</td>
-                                        <td>{{ $sigData->qty }}</td>
-                                        <td>{{ $sigData->userDte }}</td>
-                                        <td>Local\Foreign</td>
-                                        <td>{{ $sigData->created_at }}</td>
-                                        <td>
-                                            {{ $sigData->status == 0 ? 'New Arrival' : ($sigData->status == 2 ? 'On Process' : ($sigData->status == 1 ? 'Completed' : ($sigData->status == 4 ? 'Dispatched' : ''))) }}
-                                        </td>
-                                        <td>{{ $sigData->item_attribute }}</td>
-
-                                        <!-- Display more columns based on your data structure -->
-                                    </tr>
-                                @endforeach
-                                <tr class="table-row-fixed">
-                                    <td colspan="2"><strong>EM Sec</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                @foreach ($report['EM Sec'] as $sigData)
-                                    <tr>
-                                        <td>{{ $j++ }}</td>
-                                        <td>{{ $sigData->item_name }}</td>
-                                        <td>{{ $sigData->tender_reference_no }}</td>
-                                        <td>{{ $sigData->qty }}</td>
-                                        <td>{{ $sigData->userDte }}</td>
-                                        <td>Local\Foreign</td>
-                                        <td>{{ $sigData->created_at }}</td>
-                                        <td>
-                                            {{ $sigData->status == 0 ? 'New Arrival' : ($sigData->status == 2 ? 'On Process' : ($sigData->status == 1 ? 'Completed' : ($sigData->status == 4 ? 'Dispatched' : ''))) }}
-                                        </td>
-                                        <td>{{ $sigData->item_attribute }}</td>
-
-                                        <!-- Display more columns based on your data structure -->
-                                    </tr>
-                                @endforeach
+                                <!-- Add more sections and their respective data -->
                             </tbody>
                         </table>
                     </div>
                 @endforeach
-
             </div>
-          
+
+
         </div>
 
     </div>

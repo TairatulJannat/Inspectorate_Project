@@ -120,103 +120,103 @@ class ReportReturnController extends Controller
         // Returning JSON response
         return response()->json(['success' => "Data Found", 'reports' => $reports]);
     }
-    public function weekly_report_pdf(Request $request)
-    {
-        // $insp_id = Auth::user()->inspectorate_id;
-        // $admin_id = Auth::user()->id;
-        // $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
-        // $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-        // $desig_position = Designation::where('id', $designation_id)->first();
+    // public function weekly_report_pdf(Request $request)
+    // {
+    //     $insp_id = Auth::user()->inspectorate_id;
+    //     $admin_id = Auth::user()->id;
+    //     $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();
+    //     $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
+    //     $desig_position = Designation::where('id', $designation_id)->first();
 
-        // $startDate = $request->fromDate;
-        // $endDate = $request->toDate;
-        // $doc_types = DocType::all();
+    //     $startDate = $request->fromDate;
+    //     $endDate = $request->toDate;
+    //     $doc_types = DocType::all();
 
-        // foreach ($doc_types as $doc_type) {
-        //     $modelClass = 'App\\Models\\' . $doc_type->name;
-        //     $table = $doc_type->table_name;
-        //     $doc_name = $doc_type->doc_name;
+    //     foreach ($doc_types as $doc_type) {
+    //         $modelClass = 'App\\Models\\' . $doc_type->name;
+    //         $table = $doc_type->table_name;
+    //         $doc_name = $doc_type->doc_name;
 
-        //     // Check if the class exists before proceeding
-        //     if (!class_exists($modelClass) || $modelClass == 'App\\Models\\Tender') {
-        //         continue; // Skip this iteration if class not found
-        //     }
+    //         // Check if the class exists before proceeding
+    //         if (!class_exists($modelClass) || $modelClass == 'App\\Models\\Tender') {
+    //             continue; // Skip this iteration if class not found
+    //         }
 
 
-        //     $tableColumns = \Schema::getColumnListing($table);
+    //         $tableColumns = \Schema::getColumnListing($table);
 
-        //     // Check if insp_id or inspectorate_id exists in the table
-        //     if (in_array('insp_id', $tableColumns)) {
-        //         $column = 'insp_id';
-        //     } elseif (in_array('inspectorate_id', $tableColumns)) {
-        //         $column = 'inspectorate_id';
-        //     } else {
-        //         continue; // Skip if neither column exists
-        //     }
+    //         // Check if insp_id or inspectorate_id exists in the table
+    //         if (in_array('insp_id', $tableColumns)) {
+    //             $column = 'insp_id';
+    //         } elseif (in_array('inspectorate_id', $tableColumns)) {
+    //             $column = 'inspectorate_id';
+    //         } else {
+    //             continue; // Skip if neither column exists
+    //         }
 
-        //     $TotalReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->count();
-        //     $TotalCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->where('items.attribute', 'controlled')
-        //         ->count();
-        //     $TotalUnCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->where('items.attribute', 'uncontrolled')
-        //         ->count();
+    //         $TotalReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->count();
+    //         $TotalCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->where('items.attribute', 'controlled')
+    //             ->count();
+    //         $TotalUnCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->where('items.attribute', 'uncontrolled')
+    //             ->count();
 
-        //     $TotalVattedReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->whereIn('status', [0, 1, 3])
-        //         ->count();
-        //     $TotalVattedCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->whereIn('status', [0, 1, 3])
-        //         ->where('items.attribute', 'controlled')
-        //         ->count();
-        //     $TotalVattedUnCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->whereIn('status', [0, 1, 3])
-        //         ->where('items.attribute', 'uncontrolled')
-        //         ->count();
+    //         $TotalVattedReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->whereIn('status', [0, 1, 3])
+    //             ->count();
+    //         $TotalVattedCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->whereIn('status', [0, 1, 3])
+    //             ->where('items.attribute', 'controlled')
+    //             ->count();
+    //         $TotalVattedUnCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->whereIn('status', [0, 1, 3])
+    //             ->where('items.attribute', 'uncontrolled')
+    //             ->count();
 
-        //     $TotalVattedReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->whereIn('status', [2, 4])
-        //         ->count();
-        //     $TotalVattedCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->whereIn('status', [2, 4])
-        //         ->where('items.attribute', 'controlled')
-        //         ->count();
-        //     $TotalVattedUnCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-        //         ->whereBetween($table . '.created_at', [$startDate, $endDate])
-        //         ->where($table . '.' . $column, $insp_id)
-        //         ->whereIn('status', [2, 4])
-        //         ->where('items.attribute', 'uncontrolled')
-        //         ->count();
+    //         $TotalVattedReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->whereIn('status', [2, 4])
+    //             ->count();
+    //         $TotalVattedCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->whereIn('status', [2, 4])
+    //             ->where('items.attribute', 'controlled')
+    //             ->count();
+    //         $TotalVattedUnCtrlData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
+    //             ->whereBetween($table . '.created_at', [$startDate, $endDate])
+    //             ->where($table . '.' . $column, $insp_id)
+    //             ->whereIn('status', [2, 4])
+    //             ->where('items.attribute', 'uncontrolled')
+    //             ->count();
 
-        //     $reports[$doc_name] = [
-        //         'receive' => ['total' => $TotalReceivedData, 'controll' => $TotalCtrlData, 'uncontroll' => $TotalUnCtrlData],
-        //         'vetted' => ['total' => $TotalVattedReceivedData, 'controll' => $TotalVattedCtrlData, 'uncontroll' => $TotalVattedUnCtrlData],
-        //         'undervetted' => ['total' => $TotalVattedReceivedData, 'controll' => $TotalVattedCtrlData, 'uncontroll' => $TotalVattedUnCtrlData],
+    //         $reports[$doc_name] = [
+    //             'receive' => ['total' => $TotalReceivedData, 'controll' => $TotalCtrlData, 'uncontroll' => $TotalUnCtrlData],
+    //             'vetted' => ['total' => $TotalVattedReceivedData, 'controll' => $TotalVattedCtrlData, 'uncontroll' => $TotalVattedUnCtrlData],
+    //             'undervetted' => ['total' => $TotalVattedReceivedData, 'controll' => $TotalVattedCtrlData, 'uncontroll' => $TotalVattedUnCtrlData],
 
-        //     ]; // Add count to data array with table name as key
+    //         ]; // Add count to data array with table name as key
 
-        // }
+    //     }
 
-        // Returning JSON response
-        return response()->json(['success' => "Data Found", 'reports' => $reports]);
-    }
+    //     // Returning JSON response
+    //     return response()->json(['success' => "Data Found", 'reports' => $reports]);
+    // }
 
 
     public function store(Request $request)
@@ -436,8 +436,8 @@ class ReportReturnController extends Controller
         try {
             // Find the ReportReturn model
             $data = ReportReturn::findOrFail($request->edit_reportReturn_id);
-            
-           
+
+
             // Update model attributes
             $data->letter_reference_no = '23.01.901.051.' . $request->letter_reference_no . '.' . Carbon::now()->format('d.m.y');
             $data->inspectorate_place = $request->place;
@@ -545,7 +545,7 @@ class ReportReturnController extends Controller
                 'TotalReceived' => $TotalReceivedData,
                 'SIG Sec' => $SigSec,
                 'ENGG Sec' => $EnggSec,
-                'FIC Sec' => $FicSec,
+                'FCI Sec' => $FicSec,
                 'EM Sec' => $EmSec,
                 'DEV Sec' => $DevSec,
             ]; // Add count to data array with table name as key
@@ -559,7 +559,7 @@ class ReportReturnController extends Controller
     public function detailsPrint(Request $request)
     {
         $reportsRequest = $request->input('reports');
-        $reports=json_decode($reportsRequest, true); // Convert JSON string back to PHP array
+        $reports = json_decode($reportsRequest, true); // Convert JSON string back to PHP array
 
         $path =  public_path('fonts');
 
@@ -573,7 +573,7 @@ class ReportReturnController extends Controller
             'tempDir' => $path,
             'mode'        => 'utf-8',
             'format'      => 'A4',
-            'orientation' => 'P',
+            'orientation' => 'L',
             'fontDir' => array_merge($fontDirs, [public_path('fonts')]),
             'fontdata' => $fontData + [ // lowercase letters only in font key
                 'nikosh' => [
@@ -582,7 +582,7 @@ class ReportReturnController extends Controller
                 ]
             ],
         ]);
-
+        // dd($reports);
         // Add content to the PDF
         $html = view('backend.report_return.report_details_print',  ['reports' => $reports])->render();
         $mpdf->WriteHTML($html);
@@ -590,5 +590,4 @@ class ReportReturnController extends Controller
         // Output or download the PDF
         $mpdf->Output('report_details.pdf', \Mpdf\Output\Destination::DOWNLOAD);
     }
-
 }

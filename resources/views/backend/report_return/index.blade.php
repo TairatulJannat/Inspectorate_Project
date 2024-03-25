@@ -45,7 +45,6 @@
                                 <th>Sl No</th>
                                 <th>From Date</th>
                                 <th>End Date</th>
-                                <th>Report</th>
                                 <th>Act</th>
                             </tr>
                         </thead>
@@ -58,7 +57,7 @@
                                     <td>{{ $i++ }}</td>
                                     <td>{{ $rr_list->from_date }}</td>
                                     <td>{{ $rr_list->to_date }}</td>
-                                    <td>{{ $rr_list->report_type == 1 ? 'Weekly' : 'Monthly' }}</td>
+                                    {{-- <td>{{ $rr_list->report_type == 1 ? 'Weekly' : 'Monthly' }}</td> --}}
                                     <td>
                                         <div class="d-flex">
                                             <form action="{{ route('admin.report_return/view', ['id' => $rr_list->id]) }}"
@@ -107,7 +106,7 @@
     $(document).ready(function() {
         $('.deleteBtn').on('click', function() {
             var resourceId = $(this).data('id');
-            
+
             $.ajax({
                 url: '{{ url('admin/report_return/detete') }}/' + resourceId,
                 type: 'get',
@@ -124,7 +123,7 @@
                                 // $('.yajra-datatable').DataTable().ajax.reload(null, false);
                                 toastr.success('Deleted Successful', 'Deleted');
                                 location.reload();
-                                
+
                             }
                         };
                     // You may update the UI or perform additional actions as needed
@@ -138,7 +137,7 @@
         });
     });
 </script>
-   
+
 @endpush
 
 
