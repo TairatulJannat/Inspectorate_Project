@@ -23,10 +23,9 @@ class ContractSpecImport implements ToModel, WithStartRow, WithCustomCsvSettings
         return new Contract([
             'parameter_group_name' => $row[1],
             'parameter_name' => $row[2],
-            'indent_parameter_value' => $row[3],
-            'supplier_parameter_value' => $row[4],
-            'draft_contract_parameter_value' => $row[5],
-            'contract_parameter_value' => $row[6],
+            'supplier_parameter_value' => $row[3],
+            'draft_contract_parameter_value' => $row[4],
+            'contract_parameter_value' => $row[5],
             'created_at' => now(),
             'updated_at' => now(),
         ]);

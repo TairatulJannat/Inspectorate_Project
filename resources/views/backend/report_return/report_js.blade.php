@@ -26,6 +26,7 @@
             },
             success: function(response) {
                 toastr.success('Information Saved', 'Saved');
+                setTimeout(window.location.href = "{{ route('admin.rr/list') }}", 2000);
             },
             error: function(response) {
                 error_notification('Please fill up the form correctly and try again')

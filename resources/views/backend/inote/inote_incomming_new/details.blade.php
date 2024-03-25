@@ -153,11 +153,11 @@
 
                         </table>
 
-                       {{-- additional file design start here --}}
-                       @include('backend.files.file')
-                       {{-- additional file design end here --}}
+                        {{-- additional file design start here --}}
+                        @include('backend.files.file')
+                        {{-- additional file design end here --}}
 
-                       
+
 
                     </div>
                 </div>
@@ -368,9 +368,6 @@
                         });
 
                     } else if (result.dismiss === swal.DismissReason.cancel) {
-                        enableeButton()
-                        swal.close();
-                    }{
 
                         swal(
                             'Cancelled',

@@ -131,7 +131,7 @@
                             </tr>
                             <tr>
                                 <th>Supplier</td>
-                                <td>{{ $details->firm_name_name }}</td>
+                                <td>{{ $details->firm_name }}</td>
                             </tr>
 
 

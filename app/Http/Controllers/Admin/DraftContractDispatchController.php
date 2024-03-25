@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Additional_document;
 use App\Models\AdminSection;
+use App\Models\ComparisonRemark;
 use App\Models\Designation;
 use App\Models\DocumentTrack;
 use App\Models\DraftContract;
@@ -253,8 +254,9 @@ class DraftContractDispatchController extends Controller
             ->where('doc_type_id', 9)->latest()->first();
 
         //End blade forward on off section....
+        $comparison_remarks=ComparisonRemark::where("draft_contract_ref_no",  $details->reference_no)->first();
 
-        return view('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position',  'DocumentTrack_hidden', 'files'));
+        return view('backend.draft_contract.draft_contract_dispatch.draft_contract_dispatch_details', compact('details', 'designations', 'document_tracks', 'desig_id',  'auth_designation_id', 'sender_designation_id', 'desig_position','comparison_remarks',  'DocumentTrack_hidden', 'files'));
     }
 
     public function DispatchTracking(Request $request)

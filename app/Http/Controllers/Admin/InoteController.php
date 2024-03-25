@@ -26,6 +26,7 @@ use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -234,10 +235,16 @@ class InoteController extends Controller
 
     public function store(Request $request)
     {
+        
         $this->validate($request, [
-            'sender' => 'required',
+            'sender_id' => 'required',
             'admin_section' => 'required',
-            'reference_no' => 'required',
+            'reference_no' => [
+                'required',
+                Rule::unique('inotes')->where(function ($query) {
+                    return $query->where('inspectorate_id', Auth::user()->inspectorate_id);
+                }),
+            ],
             'inote_received_date' => 'required',
             'inote_reference_date' => 'required',
         ]);
@@ -248,7 +255,7 @@ class InoteController extends Controller
             $data = new inote();
             $data->inspectorate_id = $insp_id;
             $data->section_id = $request->admin_section;
-            $data->sender_id = $request->sender;
+            $data->sender_id = $request->sender_id;
             $data->reference_no = $request->reference_no;
             $data->item_id = $request->item_id;
             $data->item_type_id = $request->item_type_id;
@@ -299,7 +306,6 @@ class InoteController extends Controller
 
     public function update(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'editId' => 'required',
             'reference_no' => 'required',
@@ -380,7 +386,6 @@ class InoteController extends Controller
         if ($auth_designation_id) {
             $desig_id = $auth_designation_id->desig_id;
         }
-
         //Start close forward Status...
 
         $sender_designation_id = '';
@@ -390,10 +395,7 @@ class InoteController extends Controller
                 break;
             }
         }
-
         //End close forward Status...
-
-
         //Start blade forward on off section....
         $DocumentTrack_hidden = DocumentTrack::where('doc_ref_id',  $details->id)
             ->where('doc_type_id', 13)
@@ -738,21 +740,21 @@ class InoteController extends Controller
         $inote_reference_no = $request->inote_reference_no;
         $section_id = Inote::where('reference_no', $inote_reference_no)->pluck('section_id')->first();
 
-        
+
         // Save files if any
 
         if ($request->hasFile('file')) {
-          
+
                 $this->fileController->AnxSaveFile($ins_id,  $section_id, $request->file_name, $request->file, 13, $inote_reference_no);
         }
 
         // $save_id = $inote->id;
         // if ($inote->id) {
-       
+
         // }
         return response()->json(['success' => 'Done']);
     }
-    
+
 
 
 

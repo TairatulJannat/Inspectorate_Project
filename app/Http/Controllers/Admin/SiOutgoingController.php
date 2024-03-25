@@ -103,9 +103,10 @@ class SiOutgoingController extends Controller
                     ->whereIn('stage_inspections.section_id', $section_ids)->pluck('stage_inspections.id', 'stage_inspections.id')->toArray();
 
                 $query = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
+                    ->leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
                     ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
                     ->leftJoin('sections', 'stage_inspections.section_id', '=', 'sections.id')
-                    ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                    ->select('stage_inspections.*','items.name as item_name', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
                     ->whereIn('stage_inspections.id', $siIds)
                     ->where('stage_inspections.status', '=', 1)
                     ->get();
@@ -131,7 +132,7 @@ class SiOutgoingController extends Controller
                 //......End for showing data for receiver designation
             }
 
-            $query=$query->sortByDesc('id');
+            $query = $query->sortByDesc('id');
 
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -190,7 +191,7 @@ class SiOutgoingController extends Controller
                     return $actionBtn;
                 })
 
-                ->rawColumns(['action', 'status','provationally_status'])
+                ->rawColumns(['action', 'status', 'provationally_status'])
                 ->make(true);
         }
     }
@@ -200,9 +201,10 @@ class SiOutgoingController extends Controller
 
         $details = Si::leftJoin('item_types', 'stage_inspections.item_type_id', '=', 'item_types.id')
             ->leftJoin('dte_managments', 'stage_inspections.sender_id', '=', 'dte_managments.id')
+            ->leftJoin('items', 'stage_inspections.item_id', '=', 'items.id')
             ->leftJoin('fin_years', 'stage_inspections.fin_year_id', '=', 'fin_years.id')
             ->leftJoin('suppliers', 'stage_inspections.supplier_id', '=', 'suppliers.id')
-            ->select('stage_inspections.*', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'fin_years.year as fin_year_name', 'suppliers.firm_name as firm_name_name')
+            ->select('stage_inspections.*','items.name as item_name', 'item_types.name as item_type_name', 'dte_managments.name as dte_managment_name', 'fin_years.year as fin_year_name', 'suppliers.firm_name as firm_name_name')
             ->where('stage_inspections.id', $id)
             ->where('stage_inspections.status', 1)
             ->first();
@@ -255,7 +257,7 @@ class SiOutgoingController extends Controller
         // end cover letter start
 
 
-        return view('backend.si.si_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter' ,'files'));
+        return view('backend.si.si_outgoing.outgoing_details', compact('details', 'designations', 'document_tracks', 'desig_id', 'desig_position',  'auth_designation_id', 'sender_designation_id', 'DocumentTrack_hidden', 'cover_letter', 'files'));
     }
 
     public function OutgoingsiTracking(Request $request)
@@ -273,7 +275,7 @@ class SiOutgoingController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        
+
         $ins_id = Auth::user()->inspectorate_id;
         $admin_id = Auth::user()->id;
         $section_ids = AdminSection::where('admin_id', $admin_id)->pluck('sec_id')->toArray();

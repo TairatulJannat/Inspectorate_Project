@@ -338,8 +338,8 @@
                 event.preventDefault();
 
                 var url = $(this).attr('href');
-                var contractNo = $('#contract_no').val();
-                var redirectUrl = url + '?contractNo=' + encodeURIComponent(contractNo);
+                var contractRefNo = $('#reference_no').val();
+                var redirectUrl = url + '?contractRefNo=' + encodeURIComponent(contractRefNo);
 
                 window.location.href = redirectUrl;
             });

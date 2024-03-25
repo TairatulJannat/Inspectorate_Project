@@ -208,9 +208,10 @@ class SiDispatchController extends Controller
             ->leftJoin('suppliers', 'stage_inspections.supplier_id', '=', 'suppliers.id')
             ->select(
                 'stage_inspections.*',
-                'item_types.name as item_type_name',
+                'items.name as item_name',
                 'dte_managments.name as dte_managment_name',
-                'fin_years.year as fin_year_name'
+                'fin_years.year as fin_year_name',
+                'suppliers.firm_name as firm_name'
 
             )
             ->where('stage_inspections.id', $id)
@@ -298,7 +299,7 @@ class SiDispatchController extends Controller
         $reciever_desig_id = $request->reciever_desig_id;
         $section_id = $section_ids[0];
         $sender_designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
-        
+
         if ($validator) {
             if ($reciever_desig_id == $sender_designation_id) {
                 return response()->json(['error' => ['reciever_desig_id' => ['You cannot send to your own designation.']]], 422);

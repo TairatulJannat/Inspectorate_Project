@@ -38,15 +38,15 @@
                         <div class="col-md-3">
                             <div class="form-group d-flex">
                                 <label class="col-6 pt-2" for="">Select Section:</label>
-                                <select class="form-control" id="admin_section" name="admin_section">
+                                <select class="form-control bg-success text-light" id="admin_section" name="admin_section" >
+                                    <option value="">Please Select</option>
                                     @foreach ($sections as $section)
-                                        <option value="">Please Select</option>
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
 
                                 </select>
-                                <span id="error_admin_section" class="text-danger error_field"></span>
                             </div>
+                            <span id="error_admin_section" class="text-danger error_field"></span>
                         </div>
 
                     </div>
@@ -54,8 +54,8 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="sender">Sender</label>
-                                <select class="form-control " id="sender" name="sender">
+                                <label for="sender_id">Sender</label>
+                                <select class="form-control " id="sender_id" name="sender_id">
 
                                     <option value="">Please Select</option>
 
@@ -64,7 +64,7 @@
                                     @endforeach
 
                                 </select>
-                                <span id="error_sender" class="text-danger error_field"></span>
+                                <span id="error_sender_id" class="text-danger error_field"></span>
                             </div>
                         </div>
 

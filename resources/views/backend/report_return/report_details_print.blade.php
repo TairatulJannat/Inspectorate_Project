@@ -1,20 +1,14 @@
-@extends('backend.app')
-@section('title', 'Report Return Destails')
-@push('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/backend/css/datatables.css') }}">
-    <style>
-        .table-row-fixed td {
-            width: calc(100% / 9);
-            /* Assuming 9 columns, adjust the value accordingly */
-            white-space: nowrap;
-            /* Optional: Prevent wrapping text */
-        }
-    </style>
-@endpush
-@section('main_menu', 'Report Return ')
-@section('active_menu', 'details')
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Report Return Details</title>
+</head>
+
+<body>
     <div class="col-sm-12 col-xl-12">
         <div class="card p-3">
             <div class="mt-3 pt-3">
@@ -158,24 +152,10 @@
                 @endforeach
 
             </div>
-            <div class="d-flex justify-content-center mt-2">
-                <!-- Form for sending reports data via POST -->
-                <form id="printForm" method="POST" action="{{ url('admin/report_returns/detailsprint') }}">
-                    @csrf <!-- CSRF protection -->
-                    <input type="hidden" name="reports" value="{{ json_encode($reports) }}">
-                    <button type="submit" class="btn btn-success borderd mb-2 ">Print</button>
-                </form>
-            </div>
+          
         </div>
 
     </div>
-@endsection
-@push('js')
-    <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/js/datatable/datatables/plugin/datatables.min.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
-    <script src="{{ asset('assets/backend/js/select2/select2.full.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/js/notify/bootstrap-notify.min.js') }}"></script>
-    @include('backend.report_return.report_js')
-    <script></script>
-@endpush
+</body>
+
+</html>

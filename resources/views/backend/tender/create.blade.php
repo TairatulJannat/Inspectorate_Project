@@ -24,6 +24,7 @@
                             <div class="form-group">
                                 <label for="additional_documents">Select Section</label>
                                 <select class="form-control bg-success text-light" id="admin_section" name="admin_section">
+                                    <option value="">Select Section</option>
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                                     @endforeach
@@ -39,7 +40,7 @@
                             <div class="form-group">
                                 <label for="receive_date">Tender Received Date</label>
                                 <input type="date" class="form-control" id="receive_date" name="receive_date">
-                                <span id="error_receive_date" class="text-danger error_field"></span>
+                                <span id="error_tender_receive_date" class="text-danger error_field"></span>
                             </div>
                         </div>
 

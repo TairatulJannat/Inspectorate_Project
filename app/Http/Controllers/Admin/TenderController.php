@@ -44,57 +44,15 @@ class TenderController extends Controller
             $designation_id = AdminSection::where('admin_id', $admin_id)->pluck('desig_id')->first();
             $desig_position = Designation::where('id', $designation_id)->first();
 
-            if (Auth::user()->id == 92) {
-                $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
-                    ->leftJoin('fin_years', 'tenders.fin_year_id', '=', 'fin_years.id')
-                    ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
-                    ->where('tenders.status', 0)
-                    ->select('tenders.*', 'item_types.name as item_type_name', 'fin_years.year as fin_years_name', 'tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->get();
-            } elseif ($desig_position->id == 1) {
+            $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
+                ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
+                ->leftJoin('fin_years', 'tenders.fin_year_id', '=', 'fin_years.id')
+                ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
+                ->where('tenders.status', 0)
+                ->whereIn('tenders.sec_id', $section_ids)
+                ->select('tenders.*', 'item_types.name as item_type_name', 'fin_years.year as fin_years_name', 'tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
+                ->get();
 
-                $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
-                    ->leftJoin('fin_years', 'tenders.fin_year_id', '=', 'fin_years.id')
-                    ->select('tenders.*', 'item_types.name as item_type_name', 'fin_years.year as fin_years_name', 'tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->where('tenders.status', 0)
-                    ->get();
-            } else {
-
-                $tenderIds = Tender::leftJoin('document_tracks', 'tenders.id', '=', 'document_tracks.doc_ref_id')
-                    ->where('document_tracks.reciever_desig_id', $designation_id)
-                    ->where('tenders.insp_id', $insp_id)
-                    ->where('tenders.status', 0)
-                    ->whereIn('tenders.sec_id', $section_ids)->pluck('tenders.id', 'tenders.id')->toArray();
-
-                $query = Tender::leftJoin('item_types', 'tenders.item_type_id', '=', 'item_types.id')
-                    ->leftJoin('dte_managments', 'tenders.sender', '=', 'dte_managments.id')
-                    ->leftJoin('sections', 'tenders.sec_id', '=', 'sections.id')
-                    ->leftJoin('fin_years', 'tenders.fin_year_id', '=', 'fin_years.id')
-                    ->select('tenders.*', 'item_types.name as item_type_name', 'fin_years.year as fin_years_name', 'tenders.*', 'dte_managments.name as dte_managment_name', 'sections.name as section_name')
-                    ->whereIn('tenders.id', $tenderIds)
-                    ->where('tenders.status', 0)
-                    ->get();
-
-                //......Start for DataTable Forward and Details btn change
-                $tenderId = [];
-                if ($query) {
-                    foreach ($query as $tender) {
-                        array_push($tenderId, $tender->id);
-                    }
-                }
-
-                $document_tracks_receiver_id = DocumentTrack::whereIn('doc_ref_id', $tenderId)
-                    ->where('reciever_desig_id', $designation_id)
-                    ->first();
-
-                if (!$document_tracks_receiver_id) {
-                    $query = Tender::where('id', 'no data')->get();
-                }
-                //......End for showing data for receiver designation
-            }
             $query = $query->sortByDesc('id');
             return DataTables::of($query)
                 ->setTotalRecords($query->count())
@@ -156,7 +114,6 @@ class TenderController extends Controller
     {
 
         $this->validate($request, [
-            'sender' => 'required',
             'admin_section' => 'required',
             'reference_no' => [
                 'required',
@@ -164,7 +121,9 @@ class TenderController extends Controller
                     return $query->where('insp_id', Auth::user()->inspectorate_id);
                 }),
             ],
-            'indent_reference_date' => 'required',
+            'indent_reference_no' => 'required',
+            'tender_date' => 'required',
+            'receive_date' => 'required',
         ]);
 
         $insp_id = Auth::user()->inspectorate_id;

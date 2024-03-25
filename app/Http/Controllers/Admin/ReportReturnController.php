@@ -9,6 +9,9 @@ use App\Models\DocType;
 use App\Models\Indent;
 use App\Models\ReportReturn;
 use Carbon\Carbon;
+use Mpdf\Mpdf;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -257,7 +260,6 @@ class ReportReturnController extends Controller
 
         return response()->json(['success' => $request->all()]);
     }
-
     public function index()
     {
         $rr_lists = ReportReturn::orderBy('id', 'desc')->get();
@@ -515,13 +517,22 @@ class ReportReturnController extends Controller
                 $sec_column = 'section_id';
             }
 
+            if (in_array('sender', $tableColumns)) {
+                $sender_column = 'sender';
+            } elseif (in_array('sender_id', $tableColumns)) {
+                $sender_column = 'sender_id';
+            }
+
+
             // dd($rr_list->insp_id);
             $TotalReceivedData = $modelClass::leftJoin('items', $table . '.item_id', '=', 'items.id')
-                // ->whereBetween($table . '.created_at', [$rr_list->from_date, $rr_list->to_date])
+                ->leftJoin('dte_managments',  $table . "." . $sender_column, '=', 'dte_managments.id')
                 ->whereDate($table . '.created_at', '>=', date($rr_list->from_date))
                 ->whereDate($table . '.created_at', '<=', date($rr_list->to_date))
                 ->where($table . '.' . $column, $rr_list->inspectorate_id)
+                ->select("$table.*", "items.name as item_name", "items.attribute as item_attribute", "dte_managments.name as userDte")
                 ->get();
+
 
             $SigSec = $TotalReceivedData->where("$sec_column", '3');
             $EnggSec = $TotalReceivedData->where("$sec_column", '4');
@@ -544,4 +555,40 @@ class ReportReturnController extends Controller
         // return response()->json($reports);
         return view('backend.report_return.details', compact('rr_list', 'reports'));
     }
+
+    public function detailsPrint(Request $request)
+    {
+        $reportsRequest = $request->input('reports');
+        $reports=json_decode($reportsRequest, true); // Convert JSON string back to PHP array
+
+        $path =  public_path('fonts');
+
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+
+        $mpdf = new Mpdf([
+            'tempDir' => $path,
+            'mode'        => 'utf-8',
+            'format'      => 'A4',
+            'orientation' => 'P',
+            'fontDir' => array_merge($fontDirs, [public_path('fonts')]),
+            'fontdata' => $fontData + [ // lowercase letters only in font key
+                'nikosh' => [
+                    'R' => 'Nikosh.ttf',
+                    'useOTL' => 0xFF,
+                ]
+            ],
+        ]);
+
+        // Add content to the PDF
+        $html = view('backend.report_return.report_details_print',  ['reports' => $reports])->render();
+        $mpdf->WriteHTML($html);
+
+        // Output or download the PDF
+        $mpdf->Output('report_details.pdf', \Mpdf\Output\Destination::DOWNLOAD);
+    }
+
 }

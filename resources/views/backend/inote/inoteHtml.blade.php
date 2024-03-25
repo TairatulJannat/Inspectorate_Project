@@ -388,19 +388,19 @@
                         let $html = `<tr>
                             <td rowspan="2"> ${item.serial_1} </td>
                             <td rowspan="2" colspan="3">
-                                ${item.serial_1}
+                                ${item.serial_2to4}
                             </td>
 
-                            <td> ${item.serial_1}</td>
-                            <td> ${item.serial_1}</td>
-                            <td> ${item.serial_1}</td>
-                            <td> ${item.serial_1}</td>
-                            <td> ${item.serial_1}</td>
-                            <td> ${item.serial_1}</td>
-                            <td> ${item.serial_1}</td>
-                            <td> ${item.serial_1}</td>
+                            <td> ${item.serial_5}</td>
+                            <td> ${item.serial_6}</td>
+                            <td> ${item.serial_7}</td>
+                            <td> ${item.serial_8}</td>
+                            <td> ${item.serial_9}</td>
+                            <td> ${item.serial_10}</td>
+                            <td> ${item.serial_11}</td>
+                            <td> ${item.serial_12}</td>
                             <td rowspan="2">
-                                ${item.serial_1} <br>
+                                ${item.serial_13} <br>
                                 <a href="#" class="delete btn btn-danger m-2"  data-id="${item.serial_1}">x</a>
 
 
@@ -409,7 +409,7 @@
                         <tr>
 
                             <td colspan="8">
-                                ${item.serial_1}
+                                ${item.body_info}
                             </td>
 
 

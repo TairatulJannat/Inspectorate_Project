@@ -134,7 +134,7 @@
                             </tr>
                             <tr>
                                 <th>Name of Eqpt</td>
-                                <td>{{ $details->item_type_name }}</td>
+                                <td>{{ $details->item_name }}</td>
                             </tr>
                             <tr>
                                 <th>Financial Year</td>
@@ -142,17 +142,9 @@
                             </tr>
                             <tr>
                                 <th>Supplier Name</th>
-                                <td>
-                                    @if (!empty($supplier_names_names))
-                                        <ul>
-                                            @foreach ($supplier_names_names as $supplierName)
-                                                <li>{{ $supplierName }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        No supplier names available.
-                                    @endif
-                                </td>
+
+                                <td>{{ $details->suppliers_name }}</td>
+
                             </tr>
                         </table>
 
